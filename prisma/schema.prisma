@@ -1,3 +1,20 @@
+// GeneCode — schema de dados
+//
+// Princípio que atravessa todo este arquivo: isto é dado genético, que a LGPD
+// classifica como dado pessoal sensível. Três consequências estruturais:
+//
+//   1. Identidade e dado genômico ficam em entidades separadas (User × Subject),
+//      ligadas por vínculo explícito. Permite BI de prevalência de marcadores sem
+//      tocar em identidade, e reduz a superfície de um vazamento.
+//   2. Nada de laudo é sobrescrito. Interpretações e painéis são versionados, e o
+//      laudo guarda a versão que usou — um laudo de 2026 precisa ser reproduzível
+//      em 2030 mesmo que a base científica mude.
+//   3. Consentimento e auditoria existem desde a primeira migration, não são
+//      adicionados depois.
+//
+// Banco: MySQL 8 (a VPS já roda MySQL em Docker). Onde o Postgres usaria jsonb e
+// arrays, aqui usamos Json e tabelas de junção.
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -7,80 +24,293 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id               Int               @id @default(autoincrement())
-  name             String
-  email            String            @unique
-  document         String?           @unique @db.VarChar(18)
-  phone            String?           @unique
-  password         String
-  code             String?           @db.VarChar(4)
-  codeExpiresIn    DateTime?
-  role             Role              @default(User)
-  status           Status            @default(Pending)
-  fileUrl          String?           @db.VarChar(1500)
-  fileKey          String?           @db.VarChar(1500)
-  createdAt        DateTime          @default(now())
-  updatedAt        DateTime          @updatedAt
-  adminPermissions AdminPermission[]
-  files            File[]
+// ============================================================================
+// IDENTIDADE
+// ============================================================================
 
+/// Conta de acesso. Guarda quem a pessoa é — nunca o dado genético dela.
+model User {
+  id       String  @id @default(uuid()) @db.Char(36)
+  email    String  @unique @db.VarChar(255)
+  password String  @db.VarChar(255)
+  name     String  @db.VarChar(160)
+  document String? @unique @db.VarChar(18) // CPF ou CNPJ
+  phone    String? @db.VarChar(20)
+
+  /// Imutáveis após o cadastro — a Área do Paciente os exibe como "dados protegidos".
+  birthDate     DateTime?      @db.Date
+  biologicalSex BiologicalSex?
+
+  status           UserStatus @default(PENDING)
+  emailVerifiedAt  DateTime?
+  twoFactorEnabled Boolean    @default(false)
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  /// Exclusão lógica: pedido de exclusão da LGPD não pode destruir a trilha de auditoria.
+  deletedAt DateTime?
+
+  roles             UserRole[]
+  refreshTokens     RefreshToken[]
+  passwordResets    PasswordReset[]
+  verificationCodes VerificationCode[]
+  consents          Consent[]
+  auditLogs         AuditLog[]
+  subjectLinks      SubjectLink[]
+
+  @@index([status])
+  @@index([deletedAt])
   @@map("users")
 }
 
-model AdminPermission {
-  id        Int              @id @default(autoincrement())
-  name      AdminPermissions @unique()
-  createdAt DateTime         @default(now())
-  updatedAt DateTime         @updatedAt
-  admin     User[]
-
-  @@map("admin_permissions")
+enum UserStatus {
+  PENDING
+  ACTIVE
+  INACTIVE
+  BLOCKED
 }
 
-model File {
-  id        Int      @id @default(autoincrement())
-  fileUrl   String?  @db.VarChar(1500)
-  fileKey   String?  @db.VarChar(1500)
-  user      User     @relation(fields: [userId], references: [id])
-  userId    Int
+enum BiologicalSex {
+  FEMALE
+  MALE
+}
+
+/// Papel. Tabela, não enum — adicionar um papel não pode exigir migração de schema.
+model Role {
+  id          String  @id @default(uuid()) @db.Char(36)
+  slug        String  @unique @db.VarChar(64) // patient, professional, affiliate, admin, master
+  name        String  @db.VarChar(120)
+  description String? @db.VarChar(255)
+
+  users       UserRole[]
+  permissions RolePermission[]
+
+  @@map("roles")
+}
+
+/// Permissão granular. Também tabela: o admin vai precisar de dezenas delas
+/// (orders, kits, samples, lab, reports, products, payments, partners, audit…).
+model Permission {
+  id          String  @id @default(uuid()) @db.Char(36)
+  slug        String  @unique @db.VarChar(64)
+  name        String  @db.VarChar(120)
+  description String? @db.VarChar(255)
+
+  roles RolePermission[]
+
+  @@map("permissions")
+}
+
+model UserRole {
+  userId String @db.Char(36)
+  roleId String @db.Char(36)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role   Role   @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  assignedAt DateTime @default(now())
+
+  @@id([userId, roleId])
+  @@index([roleId])
+  @@map("user_roles")
+}
+
+model RolePermission {
+  roleId       String     @db.Char(36)
+  permissionId String     @db.Char(36)
+  role         Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permission   Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  @@id([roleId, permissionId])
+  @@index([permissionId])
+  @@map("role_permissions")
+}
+
+// ============================================================================
+// SESSÃO E CREDENCIAIS
+// ============================================================================
+
+/// Refresh token rotativo, persistido para permitir revogação real.
+///
+/// O boilerplate anterior emitia JWT de 360 dias com o papel embutido — rebaixar
+/// um admin não revogava nada por até um ano. Aqui o access token é curto e a
+/// sessão vive nesta tabela.
+model RefreshToken {
+  id     String @id @default(uuid()) @db.Char(36)
+  userId String @db.Char(36)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  /// SHA-256 do token. O valor em claro só existe no cliente.
+  tokenHash String    @unique @db.Char(64)
+  expiresAt DateTime
+  revokedAt DateTime?
+  /// Rotação: aponta para o token que substituiu este. Reuso de um token já
+  /// rotacionado indica roubo de sessão e derruba a cadeia inteira.
+  replacedById String? @db.Char(36)
+
+  userAgent String?  @db.VarChar(255)
+  ipAddress String?  @db.VarChar(45)
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([expiresAt])
+  @@map("refresh_tokens")
+}
+
+/// Redefinição de senha por token opaco de alta entropia, hasheado e de uso único.
+///
+/// Substitui o código de 4 dígitos do boilerplate, cujo espaço amostral era de
+/// apenas 5.040 combinações e que era consultado sem vínculo com o usuário.
+model PasswordReset {
+  id     String @id @default(uuid()) @db.Char(36)
+  userId String @db.Char(36)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  tokenHash String    @unique @db.Char(64)
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([userId])
+  @@map("password_resets")
+}
+
+/// Código de 6 dígitos das telas de verificação (cadastro, troca de e-mail, 2FA).
+/// Sempre vinculado ao usuário e ao propósito — nunca consultável isoladamente.
+model VerificationCode {
+  id     String @id @default(uuid()) @db.Char(36)
+  userId String @db.Char(36)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  purpose   VerificationPurpose
+  codeHash  String              @db.Char(64)
+  expiresAt DateTime
+  usedAt    DateTime?
+  attempts  Int                 @default(0)
+  createdAt DateTime            @default(now())
+
+  @@index([userId, purpose])
+  @@map("verification_codes")
+}
+
+enum VerificationPurpose {
+  EMAIL_VERIFICATION
+  TWO_FACTOR
+  EMAIL_CHANGE
+  ACCOUNT_DELETION
+  BANK_DETAILS_CHANGE
+}
+
+// ============================================================================
+// TITULAR DO DADO GENÉTICO
+// ============================================================================
+
+/// Titular do dado genético, separado da conta de acesso.
+///
+/// Existe por dois motivos. O primeiro é de negócio: o comprador pode não ser o
+/// paciente — o cliente foi explícito em 01/06 de que o kit pode ser presente, e
+/// que quem registra é quem coleta. O segundo é de privacidade: consultas de
+/// prevalência de marcadores para o BI operam aqui sem tocar em `users`.
+model Subject {
+  id        String   @id @default(uuid()) @db.Char(36)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@map("files")
+  links SubjectLink[]
+
+  @@map("subjects")
 }
 
-model Text {
-  id        Int      @id @default(autoincrement())
-  type      TextType
-  text      String   @db.LongText()
+/// Vínculo entre a conta e o titular do dado. Normalmente 1:1, mas modelado como
+/// N:N para suportar o caso do kit presenteado e, no futuro, dependentes.
+model SubjectLink {
+  id        String  @id @default(uuid()) @db.Char(36)
+  userId    String  @db.Char(36)
+  subjectId String  @db.Char(36)
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  subject   Subject @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+
+  relation  SubjectRelation @default(SELF)
+  createdAt DateTime        @default(now())
+
+  @@unique([userId, subjectId])
+  @@index([subjectId])
+  @@map("subject_links")
+}
+
+enum SubjectRelation {
+  SELF
+  DEPENDENT
+  GIFTED
+}
+
+// ============================================================================
+// LGPD — CONSENTIMENTO E AUDITORIA
+// ============================================================================
+
+/// Versão de um documento legal. O texto aceito precisa ser recuperável tal como
+/// estava no dia do aceite — por isso o conteúdo é copiado aqui, não referenciado.
+model ConsentDocument {
+  id          String      @id @default(uuid()) @db.Char(36)
+  type        ConsentType
+  version     String      @db.VarChar(20)
+  content     String      @db.LongText
+  publishedAt DateTime
+  createdAt   DateTime    @default(now())
+
+  consents Consent[]
+
+  @@unique([type, version])
+  @@map("consent_documents")
+}
+
+enum ConsentType {
+  TERMS_OF_USE
+  PRIVACY_POLICY
+  GENETIC_DATA_PROCESSING
+  DATA_SHARING_PROFESSIONAL
+  PARTNER_PROGRAM
+  MARKETING
+}
+
+/// Aceite ou revogação, com data, hora e IP. Nunca sofre UPDATE: revogar cria um
+/// novo registro com `revokedAt`, preservando a linha do tempo.
+model Consent {
+  id         String          @id @default(uuid()) @db.Char(36)
+  userId     String          @db.Char(36)
+  documentId String          @db.Char(36)
+  user       User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  document   ConsentDocument @relation(fields: [documentId], references: [id])
+
+  grantedAt DateTime  @default(now())
+  revokedAt DateTime?
+  ipAddress String?   @db.VarChar(45)
+  userAgent String?   @db.VarChar(255)
+
+  @@index([userId])
+  @@index([documentId])
+  @@map("consents")
+}
+
+/// Trilha de auditoria. Quem acessou qual laudo, quando e em que papel.
+/// Append-only: não existe caso de uso legítimo para editar ou apagar uma linha.
+model AuditLog {
+  id     String  @id @default(uuid()) @db.Char(36)
+  userId String? @db.Char(36)
+  user   User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  action     String  @db.VarChar(80) // report.viewed, sharing.revoked, csv.uploaded…
+  resource   String  @db.VarChar(80) // report, sample, subject…
+  resourceId String? @db.Char(36)
+  /// Contexto adicional. Em MySQL é JSON; para filtrar por uma chave específica,
+  /// criar coluna gerada + índice secundário na migration.
+  metadata   Json?
+
+  ipAddress String?  @db.VarChar(45)
+  userAgent String?  @db.VarChar(255)
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 
-  @@map("texts")
-}
-
-enum Role {
-  Master
-  Admin
-  User
-}
-
-enum Status {
-  Active
-  Pending
-  Inactive
-}
-
-enum AdminPermissions {
-  Dashboard
-  Settings
-}
-
-enum TextType {
-  About
-  Policies
-  Terms
-  Tips
-  Cookies
+  @@index([userId])
+  @@index([resource, resourceId])
+  @@index([createdAt])
+  @@map("audit_logs")
 }

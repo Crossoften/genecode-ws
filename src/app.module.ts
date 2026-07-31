@@ -1,40 +1,51 @@
 import { Module } from '@nestjs/common';
-import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
-import { PrismaModule } from '@database/prisma.module';
-import { AuthModule } from './modules/auth/auth.module';
-import { LoginModule } from './modules/login/login.module';
-import { APP_GUARD } from '@nestjs/core';
-import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard';
-import { UploadModule } from './modules/upload/upload.module';
 import { ConfigModule } from '@nestjs/config';
-import { MailModule } from './modules/mail/mail.module';
-import { NoAuthModule } from './modules/no-auth/no-auth.module';
-import { AdminModule } from './modules/admin/admin.module';
-import { MobileModule } from './modules/mobile/mobile.module';
-import { WebModule } from './modules/web/web.module';
+import { APP_FILTER, APP_GUARD } from '@nestjs/core';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 
+import { IdentityModule } from '@contexts/identity/identity.module';
+import { JwtAuthGuard } from '@contexts/identity/presentation/guards/jwt-auth.guard';
+import { AuthorizationGuard } from '@contexts/identity/presentation/guards/authorization.guard';
+import { PrismaModule } from '@infra/database/prisma.module';
+import { DomainExceptionFilter } from '@infra/http/filters/domain-exception.filter';
+import { validateEnv } from '@shared/config/env.schema';
+
+import { HealthController } from './health.controller';
+
+/**
+ * Application root.
+ *
+ * The guard order below is the security posture of the whole API, so it is worth
+ * being explicit about it. Nest runs `APP_GUARD` providers in declaration order:
+ *
+ *   1. `ThrottlerGuard`    — rate limit before doing any work
+ *   2. `JwtAuthGuard`      — authenticate; every route is protected unless it
+ *                            carries `@IsPublic()`
+ *   3. `AuthorizationGuard` — check roles and permissions
+ *
+ * Secure by default is the point: forgetting a decorator locks an endpoint down
+ * rather than exposing it. The previous backend had the same global guard but
+ * opted out so liberally that a public route ended up returning every user's
+ * password reset code.
+ */
 @Module({
   imports: [
-    ThrottlerModule.forRoot([
-      {
-        ttl: 60000,
-        limit: 100,
-      },
-    ]),
-    ConfigModule.forRoot({ isGlobal: true }),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      cache: true,
+      // Boot fails loudly on a bad or incomplete environment.
+      validate: validateEnv,
+    }),
+    ThrottlerModule.forRoot([{ name: 'default', ttl: 60_000, limit: 100 }]),
     PrismaModule,
-    AuthModule,
-    LoginModule,
-    UploadModule,
-    MailModule,
-    NoAuthModule,
-    AdminModule,
-    MobileModule,
-    WebModule,
+    IdentityModule,
   ],
+  controllers: [HealthController],
   providers: [
     { provide: APP_GUARD, useClass: ThrottlerGuard },
     { provide: APP_GUARD, useClass: JwtAuthGuard },
+    { provide: APP_GUARD, useClass: AuthorizationGuard },
+    { provide: APP_FILTER, useClass: DomainExceptionFilter },
   ],
 })
 export class AppModule {}

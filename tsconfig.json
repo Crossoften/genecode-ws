@@ -1,35 +1,43 @@
 {
   "compilerOptions": {
     "module": "commonjs",
+    "target": "ES2022",
+    "lib": ["ES2022"],
     "declaration": true,
-    "removeComments": true,
+    "removeComments": false,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
-    "target": "ES2021",
+    "esModuleInterop": true,
     "sourceMap": true,
     "outDir": "./dist",
     "baseUrl": "./",
     "incremental": true,
     "skipLibCheck": true,
-    "strictNullChecks": false,
-    "noImplicitAny": false,
-    "strictBindCallApply": false,
-    "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false,
+
+    // O boilerplate rodava com strict desligado — praticamente sem type-safety.
+    // Num sistema que calcula escore genético, o compilador é a primeira linha
+    // de defesa: um `undefined` silencioso vira um laudo errado.
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictBindCallApply": true,
+    "noImplicitOverride": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "forceConsistentCasingInFileNames": true,
+
+    // Desligado de propósito: o padrão de injeção do Nest declara propriedades
+    // via parâmetro de construtor, o que o strictPropertyInitialization não entende.
+    "strictPropertyInitialization": false,
+
     "paths": {
-      "@database/*": [
-        "./src/database/*"
-      ],
-      "@interfaces/*": [
-        "./src/interfaces/*"
-      ],
-      "@enums/*": [
-        "./src/enums/*"
-      ],
-      "@utils/*": [
-        "./src/utils/*"
-      ]
+      "@shared/*": ["./src/shared/*"],
+      "@contexts/*": ["./src/contexts/*"],
+      "@infra/*": ["./src/infrastructure/*"]
     }
-  }
+  },
+  "include": ["src/**/*", "prisma/**/*"],
+  "exclude": ["node_modules", "dist"]
 }
