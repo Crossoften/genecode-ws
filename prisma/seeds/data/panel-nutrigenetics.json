@@ -1,0 +1,11196 @@
+{
+ "slug": "nutrigenetics",
+ "version": "1.0.0",
+ "name": "GeneCode Nutrigenética",
+ "kind": "NUTRIGENETICS",
+ "scoringModel": "MULTIPLICATIVE",
+ "snps": [
+  {
+   "rsId": "rs9939609",
+   "gene": "FTO"
+  },
+  {
+   "rsId": "rs7903146",
+   "gene": "TCF7L2"
+  },
+  {
+   "rsId": "rs1801282",
+   "gene": "PPARG"
+  },
+  {
+   "rsId": "rs1801278",
+   "gene": "IRS1"
+  },
+  {
+   "rsId": "rs1042713",
+   "gene": "ADRB2"
+  },
+  {
+   "rsId": "rs2241766",
+   "gene": "ADIPOQ"
+  },
+  {
+   "rsId": "rs7412",
+   "gene": "APOE_rs429358"
+  },
+  {
+   "rsId": "rs11591147",
+   "gene": "PCSK9"
+  },
+  {
+   "rsId": "rs688",
+   "gene": "LDLR"
+  },
+  {
+   "rsId": "rs4253778",
+   "gene": "PPARA"
+  },
+  {
+   "rsId": "rs708272",
+   "gene": "CETP"
+  },
+  {
+   "rsId": "rs1800629",
+   "gene": "TNF"
+  },
+  {
+   "rsId": "rs1205",
+   "gene": "CRP"
+  },
+  {
+   "rsId": "rs4988235",
+   "gene": "LCT"
+  },
+  {
+   "rsId": "rs2228570",
+   "gene": "VDR"
+  },
+  {
+   "rsId": "rs33972313",
+   "gene": "SLC23A1"
+  },
+  {
+   "rsId": "GSTM1_delecao",
+   "gene": "GSTM1"
+  },
+  {
+   "rsId": "rs762551",
+   "gene": "CYP1A2"
+  },
+  {
+   "rsId": "rs1799930",
+   "gene": "NAT2"
+  },
+  {
+   "rsId": "rs4880",
+   "gene": "SOD2"
+  },
+  {
+   "rsId": "rs1695",
+   "gene": "GSTP1"
+  },
+  {
+   "rsId": "rs4680",
+   "gene": "COMT"
+  },
+  {
+   "rsId": "SLC6A4_5HTTLPR",
+   "gene": "SLC6A4"
+  },
+  {
+   "rsId": "rs1800497",
+   "gene": "DRD2"
+  },
+  {
+   "rsId": "rs6265",
+   "gene": "BDNF"
+  },
+  {
+   "rsId": "rs1801260",
+   "gene": "CLOCK"
+  }
+ ],
+ "categories": [
+  {
+   "slug": "metabolismo_energetico",
+   "name": "Metabolismo Energético",
+   "position": 0,
+   "markers": [
+    {
+     "rsId": "rs9939609",
+     "weight": 0.3,
+     "position": 0,
+     "genotypeScores": [
+      {
+       "genotype": "TT",
+       "score": 100.0,
+       "classification": "FAVORAVEL"
+      },
+      {
+       "genotype": "AT",
+       "score": 50.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "TA",
+       "score": 50.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "AA",
+       "score": 0.0,
+       "classification": "DESFAVORAVEL"
+      }
+     ]
+    },
+    {
+     "rsId": "rs7903146",
+     "weight": 0.25,
+     "position": 1,
+     "genotypeScores": [
+      {
+       "genotype": "CC",
+       "score": 100.0,
+       "classification": "FAVORAVEL"
+      },
+      {
+       "genotype": "CT",
+       "score": 50.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "TC",
+       "score": 50.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "TT",
+       "score": 0.0,
+       "classification": "DESFAVORAVEL"
+      }
+     ]
+    },
+    {
+     "rsId": "rs1801282",
+     "weight": 0.2,
+     "position": 2,
+     "genotypeScores": [
+      {
+       "genotype": "GG",
+       "score": 100.0,
+       "classification": "FAVORAVEL"
+      },
+      {
+       "genotype": "CG",
+       "score": 65.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "GC",
+       "score": 65.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "CC",
+       "score": 30.0,
+       "classification": "DESFAVORAVEL"
+      }
+     ]
+    },
+    {
+     "rsId": "rs1801278",
+     "weight": 0.1,
+     "position": 3,
+     "genotypeScores": [
+      {
+       "genotype": "GG",
+       "score": 100.0,
+       "classification": "FAVORAVEL"
+      },
+      {
+       "genotype": "GA",
+       "score": 55.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "AG",
+       "score": 55.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "AA",
+       "score": 15.0,
+       "classification": "DESFAVORAVEL"
+      }
+     ]
+    },
+    {
+     "rsId": "rs1042713",
+     "weight": 0.1,
+     "position": 4,
+     "genotypeScores": [
+      {
+       "genotype": "GG",
+       "score": 100.0,
+       "classification": "FAVORAVEL"
+      },
+      {
+       "genotype": "AG",
+       "score": 55.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "GA",
+       "score": 55.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "AA",
+       "score": 20.0,
+       "classification": "DESFAVORAVEL"
+      }
+     ]
+    },
+    {
+     "rsId": "rs2241766",
+     "weight": 0.05,
+     "position": 5,
+     "genotypeScores": [
+      {
+       "genotype": "GG",
+       "score": 100.0,
+       "classification": "FAVORAVEL"
+      },
+      {
+       "genotype": "GT",
+       "score": 60.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "TG",
+       "score": 60.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "TT",
+       "score": 20.0,
+       "classification": "DESFAVORAVEL"
+      }
+     ]
+    }
+   ],
+   "percentileCurve": [
+    {
+     "rawScore": 10.5,
+     "percentile": 0.0005
+    },
+    {
+     "rawScore": 12.5,
+     "percentile": 0.0007
+    },
+    {
+     "rawScore": 14.0,
+     "percentile": 0.0021
+    },
+    {
+     "rawScore": 14.5,
+     "percentile": 0.0178
+    },
+    {
+     "rawScore": 16.0,
+     "percentile": 0.0183
+    },
+    {
+     "rawScore": 16.5,
+     "percentile": 0.0239
+    },
+    {
+     "rawScore": 17.5,
+     "percentile": 0.024
+    },
+    {
+     "rawScore": 18.0,
+     "percentile": 0.0662
+    },
+    {
+     "rawScore": 18.5,
+     "percentile": 0.0676
+    },
+    {
+     "rawScore": 19.0,
+     "percentile": 0.1869
+    },
+    {
+     "rawScore": 19.5,
+     "percentile": 0.1869
+    },
+    {
+     "rawScore": 20.0,
+     "percentile": 0.2019
+    },
+    {
+     "rawScore": 20.5,
+     "percentile": 0.2022
+    },
+    {
+     "rawScore": 21.0,
+     "percentile": 0.2451
+    },
+    {
+     "rawScore": 21.5,
+     "percentile": 0.2482
+    },
+    {
+     "rawScore": 22.0,
+     "percentile": 0.2495
+    },
+    {
+     "rawScore": 22.5,
+     "percentile": 0.5976
+    },
+    {
+     "rawScore": 23.0,
+     "percentile": 0.6042
+    },
+    {
+     "rawScore": 23.5,
+     "percentile": 0.6053
+    },
+    {
+     "rawScore": 24.5,
+     "percentile": 0.7295
+    },
+    {
+     "rawScore": 25.0,
+     "percentile": 0.7388
+    },
+    {
+     "rawScore": 25.5,
+     "percentile": 0.7406
+    },
+    {
+     "rawScore": 26.0,
+     "percentile": 0.7642
+    },
+    {
+     "rawScore": 26.5,
+     "percentile": 0.7826
+    },
+    {
+     "rawScore": 27.0,
+     "percentile": 1.0835
+    },
+    {
+     "rawScore": 27.5,
+     "percentile": 1.0841
+    },
+    {
+     "rawScore": 28.0,
+     "percentile": 1.0925
+    },
+    {
+     "rawScore": 28.5,
+     "percentile": 1.0953
+    },
+    {
+     "rawScore": 29.0,
+     "percentile": 1.2058
+    },
+    {
+     "rawScore": 29.5,
+     "percentile": 1.3202
+    },
+    {
+     "rawScore": 30.0,
+     "percentile": 1.3215
+    },
+    {
+     "rawScore": 30.5,
+     "percentile": 1.5455
+    },
+    {
+     "rawScore": 31.0,
+     "percentile": 1.5613
+    },
+    {
+     "rawScore": 31.5,
+     "percentile": 2.2356
+    },
+    {
+     "rawScore": 32.0,
+     "percentile": 2.2362
+    },
+    {
+     "rawScore": 32.5,
+     "percentile": 2.3163
+    },
+    {
+     "rawScore": 33.0,
+     "percentile": 2.4416
+    },
+    {
+     "rawScore": 33.5,
+     "percentile": 2.6754
+    },
+    {
+     "rawScore": 34.0,
+     "percentile": 3.0806
+    },
+    {
+     "rawScore": 34.5,
+     "percentile": 3.0878
+    },
+    {
+     "rawScore": 35.0,
+     "percentile": 4.9808
+    },
+    {
+     "rawScore": 35.5,
+     "percentile": 5.006
+    },
+    {
+     "rawScore": 36.0,
+     "percentile": 5.1513
+    },
+    {
+     "rawScore": 36.5,
+     "percentile": 5.1637
+    },
+    {
+     "rawScore": 37.0,
+     "percentile": 5.8272
+    },
+    {
+     "rawScore": 37.5,
+     "percentile": 6.8832
+    },
+    {
+     "rawScore": 38.0,
+     "percentile": 6.9052
+    },
+    {
+     "rawScore": 38.5,
+     "percentile": 7.0349
+    },
+    {
+     "rawScore": 39.0,
+     "percentile": 7.1034
+    },
+    {
+     "rawScore": 39.5,
+     "percentile": 8.7295
+    },
+    {
+     "rawScore": 40.0,
+     "percentile": 8.7568
+    },
+    {
+     "rawScore": 40.5,
+     "percentile": 8.8036
+    },
+    {
+     "rawScore": 41.0,
+     "percentile": 8.8784
+    },
+    {
+     "rawScore": 41.5,
+     "percentile": 9.379
+    },
+    {
+     "rawScore": 42.0,
+     "percentile": 10.6179
+    },
+    {
+     "rawScore": 42.5,
+     "percentile": 10.6232
+    },
+    {
+     "rawScore": 43.0,
+     "percentile": 10.9462
+    },
+    {
+     "rawScore": 43.5,
+     "percentile": 11.0005
+    },
+    {
+     "rawScore": 44.0,
+     "percentile": 12.2847
+    },
+    {
+     "rawScore": 44.5,
+     "percentile": 12.5199
+    },
+    {
+     "rawScore": 45.0,
+     "percentile": 12.6299
+    },
+    {
+     "rawScore": 45.5,
+     "percentile": 13.2885
+    },
+    {
+     "rawScore": 46.0,
+     "percentile": 13.6451
+    },
+    {
+     "rawScore": 46.5,
+     "percentile": 15.8148
+    },
+    {
+     "rawScore": 47.0,
+     "percentile": 15.826
+    },
+    {
+     "rawScore": 47.5,
+     "percentile": 18.5168
+    },
+    {
+     "rawScore": 48.0,
+     "percentile": 18.6416
+    },
+    {
+     "rawScore": 48.5,
+     "percentile": 19.3993
+    },
+    {
+     "rawScore": 49.0,
+     "percentile": 19.84
+    },
+    {
+     "rawScore": 49.5,
+     "percentile": 20.7372
+    },
+    {
+     "rawScore": 50.0,
+     "percentile": 26.1957
+    },
+    {
+     "rawScore": 50.5,
+     "percentile": 26.2761
+    },
+    {
+     "rawScore": 51.0,
+     "percentile": 26.6001
+    },
+    {
+     "rawScore": 51.5,
+     "percentile": 26.6947
+    },
+    {
+     "rawScore": 52.0,
+     "percentile": 30.1462
+    },
+    {
+     "rawScore": 52.5,
+     "percentile": 31.0123
+    },
+    {
+     "rawScore": 53.0,
+     "percentile": 31.0945
+    },
+    {
+     "rawScore": 53.5,
+     "percentile": 31.4761
+    },
+    {
+     "rawScore": 54.0,
+     "percentile": 32.2167
+    },
+    {
+     "rawScore": 54.5,
+     "percentile": 36.6376
+    },
+    {
+     "rawScore": 55.0,
+     "percentile": 36.6635
+    },
+    {
+     "rawScore": 55.5,
+     "percentile": 36.7987
+    },
+    {
+     "rawScore": 56.0,
+     "percentile": 36.915
+    },
+    {
+     "rawScore": 56.5,
+     "percentile": 38.425
+    },
+    {
+     "rawScore": 57.0,
+     "percentile": 40.1227
+    },
+    {
+     "rawScore": 57.5,
+     "percentile": 40.137
+    },
+    {
+     "rawScore": 58.0,
+     "percentile": 41.0297
+    },
+    {
+     "rawScore": 58.5,
+     "percentile": 41.1853
+    },
+    {
+     "rawScore": 59.0,
+     "percentile": 44.5315
+    },
+    {
+     "rawScore": 59.5,
+     "percentile": 44.6836
+    },
+    {
+     "rawScore": 60.0,
+     "percentile": 44.9974
+    },
+    {
+     "rawScore": 60.5,
+     "percentile": 45.494
+    },
+    {
+     "rawScore": 61.0,
+     "percentile": 46.542
+    },
+    {
+     "rawScore": 61.5,
+     "percentile": 48.6719
+    },
+    {
+     "rawScore": 62.0,
+     "percentile": 48.7009
+    },
+    {
+     "rawScore": 62.5,
+     "percentile": 56.0065
+    },
+    {
+     "rawScore": 63.0,
+     "percentile": 56.1018
+    },
+    {
+     "rawScore": 63.5,
+     "percentile": 56.8501
+    },
+    {
+     "rawScore": 64.0,
+     "percentile": 57.027
+    },
+    {
+     "rawScore": 64.5,
+     "percentile": 59.5861
+    },
+    {
+     "rawScore": 65.0,
+     "percentile": 63.6534
+    },
+    {
+     "rawScore": 65.5,
+     "percentile": 63.7319
+    },
+    {
+     "rawScore": 66.0,
+     "percentile": 64.2926
+    },
+    {
+     "rawScore": 66.5,
+     "percentile": 64.5266
+    },
+    {
+     "rawScore": 67.0,
+     "percentile": 70.3696
+    },
+    {
+     "rawScore": 67.5,
+     "percentile": 70.4669
+    },
+    {
+     "rawScore": 68.0,
+     "percentile": 70.6524
+    },
+    {
+     "rawScore": 68.5,
+     "percentile": 70.9543
+    },
+    {
+     "rawScore": 69.0,
+     "percentile": 72.671
+    },
+    {
+     "rawScore": 69.5,
+     "percentile": 76.7471
+    },
+    {
+     "rawScore": 70.0,
+     "percentile": 76.7638
+    },
+    {
+     "rawScore": 70.5,
+     "percentile": 76.8709
+    },
+    {
+     "rawScore": 71.0,
+     "percentile": 77.024
+    },
+    {
+     "rawScore": 71.5,
+     "percentile": 78.469
+    },
+    {
+     "rawScore": 72.0,
+     "percentile": 79.2475
+    },
+    {
+     "rawScore": 72.5,
+     "percentile": 79.2588
+    },
+    {
+     "rawScore": 73.0,
+     "percentile": 79.9117
+    },
+    {
+     "rawScore": 73.5,
+     "percentile": 80.054
+    },
+    {
+     "rawScore": 74.0,
+     "percentile": 82.9734
+    },
+    {
+     "rawScore": 74.5,
+     "percentile": 82.9787
+    },
+    {
+     "rawScore": 75.0,
+     "percentile": 83.2109
+    },
+    {
+     "rawScore": 75.5,
+     "percentile": 83.2288
+    },
+    {
+     "rawScore": 76.0,
+     "percentile": 84.2
+    },
+    {
+     "rawScore": 76.5,
+     "percentile": 84.7919
+    },
+    {
+     "rawScore": 77.0,
+     "percentile": 84.8126
+    },
+    {
+     "rawScore": 77.5,
+     "percentile": 89.9935
+    },
+    {
+     "rawScore": 78.0,
+     "percentile": 90.079
+    },
+    {
+     "rawScore": 78.5,
+     "percentile": 90.2896
+    },
+    {
+     "rawScore": 79.0,
+     "percentile": 90.3277
+    },
+    {
+     "rawScore": 79.5,
+     "percentile": 92.1745
+    },
+    {
+     "rawScore": 80.0,
+     "percentile": 92.2984
+    },
+    {
+     "rawScore": 80.5,
+     "percentile": 92.3199
+    },
+    {
+     "rawScore": 81.0,
+     "percentile": 92.727
+    },
+    {
+     "rawScore": 81.5,
+     "percentile": 92.8916
+    },
+    {
+     "rawScore": 82.0,
+     "percentile": 96.1242
+    },
+    {
+     "rawScore": 82.5,
+     "percentile": 96.1252
+    },
+    {
+     "rawScore": 83.0,
+     "percentile": 96.267
+    },
+    {
+     "rawScore": 83.5,
+     "percentile": 96.2927
+    },
+    {
+     "rawScore": 84.0,
+     "percentile": 97.434
+    },
+    {
+     "rawScore": 84.5,
+     "percentile": 98.4571
+    },
+    {
+     "rawScore": 85.0,
+     "percentile": 98.4697
+    },
+    {
+     "rawScore": 85.5,
+     "percentile": 98.4789
+    },
+    {
+     "rawScore": 86.0,
+     "percentile": 98.5803
+    },
+    {
+     "rawScore": 86.5,
+     "percentile": 98.9452
+    },
+    {
+     "rawScore": 87.0,
+     "percentile": 98.9513
+    },
+    {
+     "rawScore": 87.5,
+     "percentile": 98.9523
+    },
+    {
+     "rawScore": 88.0,
+     "percentile": 98.9696
+    },
+    {
+     "rawScore": 88.5,
+     "percentile": 99.0022
+    },
+    {
+     "rawScore": 89.0,
+     "percentile": 99.6346
+    },
+    {
+     "rawScore": 89.5,
+     "percentile": 99.6346
+    },
+    {
+     "rawScore": 90.0,
+     "percentile": 99.6408
+    },
+    {
+     "rawScore": 91.0,
+     "percentile": 99.8658
+    },
+    {
+     "rawScore": 91.5,
+     "percentile": 99.9164
+    },
+    {
+     "rawScore": 92.0,
+     "percentile": 99.917
+    },
+    {
+     "rawScore": 93.0,
+     "percentile": 99.937
+    },
+    {
+     "rawScore": 93.5,
+     "percentile": 99.9551
+    },
+    {
+     "rawScore": 95.5,
+     "percentile": 99.9567
+    },
+    {
+     "rawScore": 96.0,
+     "percentile": 99.9879
+    },
+    {
+     "rawScore": 98.0,
+     "percentile": 99.999
+    },
+    {
+     "rawScore": 100.0,
+     "percentile": 100.0
+    }
+   ]
+  },
+  {
+   "slug": "saude_cardiometabolica",
+   "name": "Saúde Cardiometabólica",
+   "position": 1,
+   "markers": [
+    {
+     "rsId": "rs7412",
+     "weight": 0.294118,
+     "position": 0,
+     "genotypeScores": [
+      {
+       "genotype": "E2/E2",
+       "score": 100.0,
+       "classification": "FAVORAVEL"
+      },
+      {
+       "genotype": "E2/E3",
+       "score": 100.0,
+       "classification": "FAVORAVEL"
+      },
+      {
+       "genotype": "E3/E3",
+       "score": 70.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "E2/E4",
+       "score": 50.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "E3/E4",
+       "score": 30.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "E4/E4",
+       "score": 20.0,
+       "classification": "DESFAVORAVEL"
+      }
+     ]
+    },
+    {
+     "rsId": "rs11591147",
+     "weight": 0.176471,
+     "position": 1,
+     "genotypeScores": [
+      {
+       "genotype": "GT",
+       "score": 100.0,
+       "classification": "FAVORAVEL"
+      },
+      {
+       "genotype": "TG",
+       "score": 100.0,
+       "classification": "FAVORAVEL"
+      },
+      {
+       "genotype": "GG",
+       "score": 50.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "TT",
+       "score": 0.0,
+       "classification": "DESFAVORAVEL"
+      }
+     ]
+    },
+    {
+     "rsId": "rs688",
+     "weight": 0.141176,
+     "position": 2,
+     "genotypeScores": [
+      {
+       "genotype": "TT",
+       "score": 100.0,
+       "classification": "FAVORAVEL"
+      },
+      {
+       "genotype": "CT",
+       "score": 60.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "TC",
+       "score": 60.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "CC",
+       "score": 20.0,
+       "classification": "DESFAVORAVEL"
+      }
+     ]
+    },
+    {
+     "rsId": "rs4253778",
+     "weight": 0.141176,
+     "position": 3,
+     "genotypeScores": [
+      {
+       "genotype": "GG",
+       "score": 100.0,
+       "classification": "FAVORAVEL"
+      },
+      {
+       "genotype": "GC",
+       "score": 55.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "CG",
+       "score": 55.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "CC",
+       "score": 20.0,
+       "classification": "DESFAVORAVEL"
+      }
+     ]
+    },
+    {
+     "rsId": "rs708272",
+     "weight": 0.117647,
+     "position": 4,
+     "genotypeScores": [
+      {
+       "genotype": "GG",
+       "score": 100.0,
+       "classification": "FAVORAVEL"
+      },
+      {
+       "genotype": "AG",
+       "score": 60.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "GA",
+       "score": 60.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "AA",
+       "score": 25.0,
+       "classification": "DESFAVORAVEL"
+      }
+     ]
+    },
+    {
+     "rsId": "rs1800629",
+     "weight": 0.070588,
+     "position": 5,
+     "genotypeScores": [
+      {
+       "genotype": "GG",
+       "score": 100.0,
+       "classification": "FAVORAVEL"
+      },
+      {
+       "genotype": "AG",
+       "score": 50.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "GA",
+       "score": 50.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "AA",
+       "score": 10.0,
+       "classification": "DESFAVORAVEL"
+      }
+     ]
+    },
+    {
+     "rsId": "rs1205",
+     "weight": 0.058824,
+     "position": 6,
+     "genotypeScores": [
+      {
+       "genotype": "CC",
+       "score": 100.0,
+       "classification": "FAVORAVEL"
+      },
+      {
+       "genotype": "CT",
+       "score": 55.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "TC",
+       "score": 55.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "TT",
+       "score": 20.0,
+       "classification": "DESFAVORAVEL"
+      }
+     ]
+    }
+   ],
+   "percentileCurve": [
+    {
+     "rawScore": 16.9,
+     "percentile": 0.0
+    },
+    {
+     "rawScore": 18.65,
+     "percentile": 0.0
+    },
+    {
+     "rawScore": 19.3,
+     "percentile": 0.0
+    },
+    {
+     "rawScore": 19.4,
+     "percentile": 0.0
+    },
+    {
+     "rawScore": 20.4,
+     "percentile": 0.0
+    },
+    {
+     "rawScore": 20.9,
+     "percentile": 0.0
+    },
+    {
+     "rawScore": 21.05,
+     "percentile": 0.0
+    },
+    {
+     "rawScore": 21.1,
+     "percentile": 0.0
+    },
+    {
+     "rawScore": 21.15,
+     "percentile": 0.0
+    },
+    {
+     "rawScore": 21.7,
+     "percentile": 0.0
+    },
+    {
+     "rawScore": 21.8,
+     "percentile": 0.0
+    },
+    {
+     "rawScore": 22.15,
+     "percentile": 0.0
+    },
+    {
+     "rawScore": 22.3,
+     "percentile": 0.0
+    },
+    {
+     "rawScore": 22.8,
+     "percentile": 0.0
+    },
+    {
+     "rawScore": 22.85,
+     "percentile": 0.0
+    },
+    {
+     "rawScore": 22.9,
+     "percentile": 0.0
+    },
+    {
+     "rawScore": 23.3,
+     "percentile": 0.0
+    },
+    {
+     "rawScore": 23.4,
+     "percentile": 0.0
+    },
+    {
+     "rawScore": 23.45,
+     "percentile": 0.0
+    },
+    {
+     "rawScore": 23.5,
+     "percentile": 0.0
+    },
+    {
+     "rawScore": 23.55,
+     "percentile": 0.0
+    },
+    {
+     "rawScore": 23.6,
+     "percentile": 0.0
+    },
+    {
+     "rawScore": 23.65,
+     "percentile": 0.0
+    },
+    {
+     "rawScore": 24.05,
+     "percentile": 0.0
+    },
+    {
+     "rawScore": 24.1,
+     "percentile": 0.0
+    },
+    {
+     "rawScore": 24.2,
+     "percentile": 0.0
+    },
+    {
+     "rawScore": 24.4,
+     "percentile": 0.0
+    },
+    {
+     "rawScore": 24.4,
+     "percentile": 0.0
+    },
+    {
+     "rawScore": 24.55,
+     "percentile": 0.0
+    },
+    {
+     "rawScore": 24.6,
+     "percentile": 0.0
+    },
+    {
+     "rawScore": 24.65,
+     "percentile": 0.0
+    },
+    {
+     "rawScore": 24.8,
+     "percentile": 0.0
+    },
+    {
+     "rawScore": 25.1,
+     "percentile": 0.0
+    },
+    {
+     "rawScore": 25.2,
+     "percentile": 0.0
+    },
+    {
+     "rawScore": 25.25,
+     "percentile": 0.0
+    },
+    {
+     "rawScore": 25.3,
+     "percentile": 0.0
+    },
+    {
+     "rawScore": 25.35,
+     "percentile": 0.0
+    },
+    {
+     "rawScore": 25.4,
+     "percentile": 0.0
+    },
+    {
+     "rawScore": 25.7,
+     "percentile": 0.0
+    },
+    {
+     "rawScore": 25.8,
+     "percentile": 0.0
+    },
+    {
+     "rawScore": 25.85,
+     "percentile": 0.0
+    },
+    {
+     "rawScore": 25.9,
+     "percentile": 0.0
+    },
+    {
+     "rawScore": 25.95,
+     "percentile": 0.0
+    },
+    {
+     "rawScore": 26.0,
+     "percentile": 0.0
+    },
+    {
+     "rawScore": 26.05,
+     "percentile": 0.0
+    },
+    {
+     "rawScore": 26.15,
+     "percentile": 0.0001
+    },
+    {
+     "rawScore": 26.15,
+     "percentile": 0.0001
+    },
+    {
+     "rawScore": 26.3,
+     "percentile": 0.0001
+    },
+    {
+     "rawScore": 26.35,
+     "percentile": 0.0001
+    },
+    {
+     "rawScore": 26.5,
+     "percentile": 0.0001
+    },
+    {
+     "rawScore": 26.55,
+     "percentile": 0.0001
+    },
+    {
+     "rawScore": 26.6,
+     "percentile": 0.0001
+    },
+    {
+     "rawScore": 26.8,
+     "percentile": 0.0004
+    },
+    {
+     "rawScore": 26.8,
+     "percentile": 0.0004
+    },
+    {
+     "rawScore": 26.9,
+     "percentile": 0.0005
+    },
+    {
+     "rawScore": 26.9,
+     "percentile": 0.0005
+    },
+    {
+     "rawScore": 26.95,
+     "percentile": 0.0005
+    },
+    {
+     "rawScore": 27.0,
+     "percentile": 0.0005
+    },
+    {
+     "rawScore": 27.05,
+     "percentile": 0.0005
+    },
+    {
+     "rawScore": 27.1,
+     "percentile": 0.0005
+    },
+    {
+     "rawScore": 27.1,
+     "percentile": 0.0005
+    },
+    {
+     "rawScore": 27.15,
+     "percentile": 0.0005
+    },
+    {
+     "rawScore": 27.5,
+     "percentile": 0.0005
+    },
+    {
+     "rawScore": 27.55,
+     "percentile": 0.0005
+    },
+    {
+     "rawScore": 27.6,
+     "percentile": 0.0005
+    },
+    {
+     "rawScore": 27.6,
+     "percentile": 0.0005
+    },
+    {
+     "rawScore": 27.65,
+     "percentile": 0.0005
+    },
+    {
+     "rawScore": 27.7,
+     "percentile": 0.0005
+    },
+    {
+     "rawScore": 27.75,
+     "percentile": 0.0005
+    },
+    {
+     "rawScore": 27.8,
+     "percentile": 0.0005
+    },
+    {
+     "rawScore": 27.85,
+     "percentile": 0.0005
+    },
+    {
+     "rawScore": 27.9,
+     "percentile": 0.0006
+    },
+    {
+     "rawScore": 28.1,
+     "percentile": 0.0006
+    },
+    {
+     "rawScore": 28.2,
+     "percentile": 0.0006
+    },
+    {
+     "rawScore": 28.25,
+     "percentile": 0.0006
+    },
+    {
+     "rawScore": 28.3,
+     "percentile": 0.0006
+    },
+    {
+     "rawScore": 28.3,
+     "percentile": 0.0006
+    },
+    {
+     "rawScore": 28.35,
+     "percentile": 0.0006
+    },
+    {
+     "rawScore": 28.4,
+     "percentile": 0.0007
+    },
+    {
+     "rawScore": 28.4,
+     "percentile": 0.0007
+    },
+    {
+     "rawScore": 28.45,
+     "percentile": 0.0007
+    },
+    {
+     "rawScore": 28.55,
+     "percentile": 0.0018
+    },
+    {
+     "rawScore": 28.55,
+     "percentile": 0.0018
+    },
+    {
+     "rawScore": 28.6,
+     "percentile": 0.0019
+    },
+    {
+     "rawScore": 28.65,
+     "percentile": 0.0026
+    },
+    {
+     "rawScore": 28.65,
+     "percentile": 0.0026
+    },
+    {
+     "rawScore": 28.75,
+     "percentile": 0.0026
+    },
+    {
+     "rawScore": 28.8,
+     "percentile": 0.0026
+    },
+    {
+     "rawScore": 28.85,
+     "percentile": 0.0026
+    },
+    {
+     "rawScore": 28.85,
+     "percentile": 0.0026
+    },
+    {
+     "rawScore": 28.9,
+     "percentile": 0.0026
+    },
+    {
+     "rawScore": 29.0,
+     "percentile": 0.0026
+    },
+    {
+     "rawScore": 29.05,
+     "percentile": 0.0026
+    },
+    {
+     "rawScore": 29.2,
+     "percentile": 0.0027
+    },
+    {
+     "rawScore": 29.3,
+     "percentile": 0.0048
+    },
+    {
+     "rawScore": 29.3,
+     "percentile": 0.0048
+    },
+    {
+     "rawScore": 29.35,
+     "percentile": 0.0048
+    },
+    {
+     "rawScore": 29.4,
+     "percentile": 0.0048
+    },
+    {
+     "rawScore": 29.45,
+     "percentile": 0.0048
+    },
+    {
+     "rawScore": 29.5,
+     "percentile": 0.0048
+    },
+    {
+     "rawScore": 29.55,
+     "percentile": 0.0048
+    },
+    {
+     "rawScore": 29.6,
+     "percentile": 0.0048
+    },
+    {
+     "rawScore": 29.6,
+     "percentile": 0.0048
+    },
+    {
+     "rawScore": 29.65,
+     "percentile": 0.0051
+    },
+    {
+     "rawScore": 29.8,
+     "percentile": 0.0058
+    },
+    {
+     "rawScore": 29.8,
+     "percentile": 0.0058
+    },
+    {
+     "rawScore": 29.9,
+     "percentile": 0.0058
+    },
+    {
+     "rawScore": 30.0,
+     "percentile": 0.0058
+    },
+    {
+     "rawScore": 30.05,
+     "percentile": 0.0058
+    },
+    {
+     "rawScore": 30.05,
+     "percentile": 0.0058
+    },
+    {
+     "rawScore": 30.1,
+     "percentile": 0.0059
+    },
+    {
+     "rawScore": 30.15,
+     "percentile": 0.0059
+    },
+    {
+     "rawScore": 30.2,
+     "percentile": 0.0059
+    },
+    {
+     "rawScore": 30.25,
+     "percentile": 0.0059
+    },
+    {
+     "rawScore": 30.3,
+     "percentile": 0.0066
+    },
+    {
+     "rawScore": 30.35,
+     "percentile": 0.0071
+    },
+    {
+     "rawScore": 30.4,
+     "percentile": 0.0076
+    },
+    {
+     "rawScore": 30.5,
+     "percentile": 0.0076
+    },
+    {
+     "rawScore": 30.6,
+     "percentile": 0.0076
+    },
+    {
+     "rawScore": 30.65,
+     "percentile": 0.0076
+    },
+    {
+     "rawScore": 30.7,
+     "percentile": 0.0076
+    },
+    {
+     "rawScore": 30.75,
+     "percentile": 0.0076
+    },
+    {
+     "rawScore": 30.8,
+     "percentile": 0.0088
+    },
+    {
+     "rawScore": 30.8,
+     "percentile": 0.0088
+    },
+    {
+     "rawScore": 30.85,
+     "percentile": 0.0088
+    },
+    {
+     "rawScore": 30.9,
+     "percentile": 0.0097
+    },
+    {
+     "rawScore": 30.9,
+     "percentile": 0.0097
+    },
+    {
+     "rawScore": 30.95,
+     "percentile": 0.0097
+    },
+    {
+     "rawScore": 31.0,
+     "percentile": 0.0109
+    },
+    {
+     "rawScore": 31.05,
+     "percentile": 0.0204
+    },
+    {
+     "rawScore": 31.05,
+     "percentile": 0.0204
+    },
+    {
+     "rawScore": 31.1,
+     "percentile": 0.0204
+    },
+    {
+     "rawScore": 31.1,
+     "percentile": 0.0212
+    },
+    {
+     "rawScore": 31.15,
+     "percentile": 0.0212
+    },
+    {
+     "rawScore": 31.25,
+     "percentile": 0.0213
+    },
+    {
+     "rawScore": 31.3,
+     "percentile": 0.0213
+    },
+    {
+     "rawScore": 31.3,
+     "percentile": 0.0213
+    },
+    {
+     "rawScore": 31.35,
+     "percentile": 0.0213
+    },
+    {
+     "rawScore": 31.35,
+     "percentile": 0.0213
+    },
+    {
+     "rawScore": 31.4,
+     "percentile": 0.0213
+    },
+    {
+     "rawScore": 31.55,
+     "percentile": 0.0246
+    },
+    {
+     "rawScore": 31.55,
+     "percentile": 0.0246
+    },
+    {
+     "rawScore": 31.6,
+     "percentile": 0.0249
+    },
+    {
+     "rawScore": 31.7,
+     "percentile": 0.0251
+    },
+    {
+     "rawScore": 31.75,
+     "percentile": 0.0251
+    },
+    {
+     "rawScore": 31.8,
+     "percentile": 0.0251
+    },
+    {
+     "rawScore": 31.85,
+     "percentile": 0.0251
+    },
+    {
+     "rawScore": 31.85,
+     "percentile": 0.0251
+    },
+    {
+     "rawScore": 31.9,
+     "percentile": 0.0254
+    },
+    {
+     "rawScore": 31.95,
+     "percentile": 0.0254
+    },
+    {
+     "rawScore": 32.0,
+     "percentile": 0.0254
+    },
+    {
+     "rawScore": 32.05,
+     "percentile": 0.0289
+    },
+    {
+     "rawScore": 32.1,
+     "percentile": 0.0292
+    },
+    {
+     "rawScore": 32.15,
+     "percentile": 0.0316
+    },
+    {
+     "rawScore": 32.3,
+     "percentile": 0.0383
+    },
+    {
+     "rawScore": 32.35,
+     "percentile": 0.0383
+    },
+    {
+     "rawScore": 32.4,
+     "percentile": 0.0383
+    },
+    {
+     "rawScore": 32.45,
+     "percentile": 0.0383
+    },
+    {
+     "rawScore": 32.5,
+     "percentile": 0.0383
+    },
+    {
+     "rawScore": 32.55,
+     "percentile": 0.0383
+    },
+    {
+     "rawScore": 32.6,
+     "percentile": 0.0383
+    },
+    {
+     "rawScore": 32.6,
+     "percentile": 0.0388
+    },
+    {
+     "rawScore": 32.65,
+     "percentile": 0.0388
+    },
+    {
+     "rawScore": 32.7,
+     "percentile": 0.0388
+    },
+    {
+     "rawScore": 32.75,
+     "percentile": 0.0442
+    },
+    {
+     "rawScore": 32.8,
+     "percentile": 0.051
+    },
+    {
+     "rawScore": 32.85,
+     "percentile": 0.0547
+    },
+    {
+     "rawScore": 32.9,
+     "percentile": 0.0547
+    },
+    {
+     "rawScore": 33.0,
+     "percentile": 0.0548
+    },
+    {
+     "rawScore": 33.05,
+     "percentile": 0.0548
+    },
+    {
+     "rawScore": 33.1,
+     "percentile": 0.0548
+    },
+    {
+     "rawScore": 33.1,
+     "percentile": 0.0548
+    },
+    {
+     "rawScore": 33.15,
+     "percentile": 0.0548
+    },
+    {
+     "rawScore": 33.2,
+     "percentile": 0.0549
+    },
+    {
+     "rawScore": 33.25,
+     "percentile": 0.0549
+    },
+    {
+     "rawScore": 33.3,
+     "percentile": 0.0678
+    },
+    {
+     "rawScore": 33.35,
+     "percentile": 0.0689
+    },
+    {
+     "rawScore": 33.4,
+     "percentile": 0.069
+    },
+    {
+     "rawScore": 33.45,
+     "percentile": 0.0697
+    },
+    {
+     "rawScore": 33.5,
+     "percentile": 0.0803
+    },
+    {
+     "rawScore": 33.55,
+     "percentile": 0.0803
+    },
+    {
+     "rawScore": 33.6,
+     "percentile": 0.0804
+    },
+    {
+     "rawScore": 33.6,
+     "percentile": 0.0804
+    },
+    {
+     "rawScore": 33.65,
+     "percentile": 0.0807
+    },
+    {
+     "rawScore": 33.7,
+     "percentile": 0.0807
+    },
+    {
+     "rawScore": 33.7,
+     "percentile": 0.0807
+    },
+    {
+     "rawScore": 33.75,
+     "percentile": 0.0807
+    },
+    {
+     "rawScore": 33.8,
+     "percentile": 0.0845
+    },
+    {
+     "rawScore": 33.8,
+     "percentile": 0.0845
+    },
+    {
+     "rawScore": 33.85,
+     "percentile": 0.0845
+    },
+    {
+     "rawScore": 33.85,
+     "percentile": 0.0858
+    },
+    {
+     "rawScore": 34.0,
+     "percentile": 0.0897
+    },
+    {
+     "rawScore": 34.05,
+     "percentile": 0.1193
+    },
+    {
+     "rawScore": 34.1,
+     "percentile": 0.1214
+    },
+    {
+     "rawScore": 34.15,
+     "percentile": 0.1214
+    },
+    {
+     "rawScore": 34.2,
+     "percentile": 0.1214
+    },
+    {
+     "rawScore": 34.2,
+     "percentile": 0.1214
+    },
+    {
+     "rawScore": 34.25,
+     "percentile": 0.1215
+    },
+    {
+     "rawScore": 34.3,
+     "percentile": 0.1262
+    },
+    {
+     "rawScore": 34.35,
+     "percentile": 0.1262
+    },
+    {
+     "rawScore": 34.35,
+     "percentile": 0.1262
+    },
+    {
+     "rawScore": 34.4,
+     "percentile": 0.1293
+    },
+    {
+     "rawScore": 34.45,
+     "percentile": 0.1293
+    },
+    {
+     "rawScore": 34.45,
+     "percentile": 0.1296
+    },
+    {
+     "rawScore": 34.5,
+     "percentile": 0.1335
+    },
+    {
+     "rawScore": 34.55,
+     "percentile": 0.1637
+    },
+    {
+     "rawScore": 34.6,
+     "percentile": 0.1644
+    },
+    {
+     "rawScore": 34.6,
+     "percentile": 0.1671
+    },
+    {
+     "rawScore": 34.65,
+     "percentile": 0.1672
+    },
+    {
+     "rawScore": 34.7,
+     "percentile": 0.1672
+    },
+    {
+     "rawScore": 34.8,
+     "percentile": 0.1672
+    },
+    {
+     "rawScore": 34.8,
+     "percentile": 0.1672
+    },
+    {
+     "rawScore": 34.85,
+     "percentile": 0.1672
+    },
+    {
+     "rawScore": 34.85,
+     "percentile": 0.1672
+    },
+    {
+     "rawScore": 34.9,
+     "percentile": 0.1672
+    },
+    {
+     "rawScore": 34.95,
+     "percentile": 0.1672
+    },
+    {
+     "rawScore": 35.0,
+     "percentile": 0.1731
+    },
+    {
+     "rawScore": 35.05,
+     "percentile": 0.1839
+    },
+    {
+     "rawScore": 35.1,
+     "percentile": 0.1847
+    },
+    {
+     "rawScore": 35.1,
+     "percentile": 0.1889
+    },
+    {
+     "rawScore": 35.15,
+     "percentile": 0.1893
+    },
+    {
+     "rawScore": 35.2,
+     "percentile": 0.1899
+    },
+    {
+     "rawScore": 35.25,
+     "percentile": 0.2367
+    },
+    {
+     "rawScore": 35.3,
+     "percentile": 0.237
+    },
+    {
+     "rawScore": 35.35,
+     "percentile": 0.237
+    },
+    {
+     "rawScore": 35.4,
+     "percentile": 0.2372
+    },
+    {
+     "rawScore": 35.45,
+     "percentile": 0.2372
+    },
+    {
+     "rawScore": 35.45,
+     "percentile": 0.2372
+    },
+    {
+     "rawScore": 35.5,
+     "percentile": 0.2372
+    },
+    {
+     "rawScore": 35.55,
+     "percentile": 0.2372
+    },
+    {
+     "rawScore": 35.55,
+     "percentile": 0.2372
+    },
+    {
+     "rawScore": 35.6,
+     "percentile": 0.2384
+    },
+    {
+     "rawScore": 35.6,
+     "percentile": 0.2384
+    },
+    {
+     "rawScore": 35.65,
+     "percentile": 0.2384
+    },
+    {
+     "rawScore": 35.7,
+     "percentile": 0.2393
+    },
+    {
+     "rawScore": 35.75,
+     "percentile": 0.2566
+    },
+    {
+     "rawScore": 35.8,
+     "percentile": 0.2791
+    },
+    {
+     "rawScore": 35.85,
+     "percentile": 0.2887
+    },
+    {
+     "rawScore": 35.9,
+     "percentile": 0.2899
+    },
+    {
+     "rawScore": 35.95,
+     "percentile": 0.2899
+    },
+    {
+     "rawScore": 35.95,
+     "percentile": 0.2899
+    },
+    {
+     "rawScore": 36.0,
+     "percentile": 0.2899
+    },
+    {
+     "rawScore": 36.05,
+     "percentile": 0.2942
+    },
+    {
+     "rawScore": 36.1,
+     "percentile": 0.2942
+    },
+    {
+     "rawScore": 36.1,
+     "percentile": 0.2961
+    },
+    {
+     "rawScore": 36.15,
+     "percentile": 0.2981
+    },
+    {
+     "rawScore": 36.2,
+     "percentile": 0.2981
+    },
+    {
+     "rawScore": 36.2,
+     "percentile": 0.2981
+    },
+    {
+     "rawScore": 36.25,
+     "percentile": 0.3152
+    },
+    {
+     "rawScore": 36.3,
+     "percentile": 0.3481
+    },
+    {
+     "rawScore": 36.35,
+     "percentile": 0.3515
+    },
+    {
+     "rawScore": 36.35,
+     "percentile": 0.3635
+    },
+    {
+     "rawScore": 36.4,
+     "percentile": 0.3651
+    },
+    {
+     "rawScore": 36.5,
+     "percentile": 0.3992
+    },
+    {
+     "rawScore": 36.55,
+     "percentile": 0.3994
+    },
+    {
+     "rawScore": 36.55,
+     "percentile": 0.3994
+    },
+    {
+     "rawScore": 36.6,
+     "percentile": 0.3994
+    },
+    {
+     "rawScore": 36.6,
+     "percentile": 0.3994
+    },
+    {
+     "rawScore": 36.65,
+     "percentile": 0.3994
+    },
+    {
+     "rawScore": 36.7,
+     "percentile": 0.3994
+    },
+    {
+     "rawScore": 36.7,
+     "percentile": 0.3998
+    },
+    {
+     "rawScore": 36.75,
+     "percentile": 0.3998
+    },
+    {
+     "rawScore": 36.8,
+     "percentile": 0.4389
+    },
+    {
+     "rawScore": 36.85,
+     "percentile": 0.4424
+    },
+    {
+     "rawScore": 36.9,
+     "percentile": 0.4431
+    },
+    {
+     "rawScore": 36.95,
+     "percentile": 0.4456
+    },
+    {
+     "rawScore": 37.0,
+     "percentile": 0.4793
+    },
+    {
+     "rawScore": 37.05,
+     "percentile": 0.4794
+    },
+    {
+     "rawScore": 37.1,
+     "percentile": 0.4862
+    },
+    {
+     "rawScore": 37.1,
+     "percentile": 0.4863
+    },
+    {
+     "rawScore": 37.15,
+     "percentile": 0.4867
+    },
+    {
+     "rawScore": 37.2,
+     "percentile": 0.4867
+    },
+    {
+     "rawScore": 37.2,
+     "percentile": 0.4867
+    },
+    {
+     "rawScore": 37.25,
+     "percentile": 0.4867
+    },
+    {
+     "rawScore": 37.3,
+     "percentile": 0.5015
+    },
+    {
+     "rawScore": 37.3,
+     "percentile": 0.5015
+    },
+    {
+     "rawScore": 37.35,
+     "percentile": 0.5015
+    },
+    {
+     "rawScore": 37.35,
+     "percentile": 0.5015
+    },
+    {
+     "rawScore": 37.4,
+     "percentile": 0.5019
+    },
+    {
+     "rawScore": 37.45,
+     "percentile": 0.5019
+    },
+    {
+     "rawScore": 37.5,
+     "percentile": 0.5665
+    },
+    {
+     "rawScore": 37.55,
+     "percentile": 0.6667
+    },
+    {
+     "rawScore": 37.6,
+     "percentile": 0.6736
+    },
+    {
+     "rawScore": 37.6,
+     "percentile": 0.6736
+    },
+    {
+     "rawScore": 37.65,
+     "percentile": 0.6776
+    },
+    {
+     "rawScore": 37.7,
+     "percentile": 0.6776
+    },
+    {
+     "rawScore": 37.7,
+     "percentile": 0.6776
+    },
+    {
+     "rawScore": 37.75,
+     "percentile": 0.6779
+    },
+    {
+     "rawScore": 37.8,
+     "percentile": 0.6808
+    },
+    {
+     "rawScore": 37.8,
+     "percentile": 0.6808
+    },
+    {
+     "rawScore": 37.85,
+     "percentile": 0.6808
+    },
+    {
+     "rawScore": 37.85,
+     "percentile": 0.6825
+    },
+    {
+     "rawScore": 37.9,
+     "percentile": 0.6825
+    },
+    {
+     "rawScore": 37.95,
+     "percentile": 0.6826
+    },
+    {
+     "rawScore": 38.0,
+     "percentile": 0.7018
+    },
+    {
+     "rawScore": 38.05,
+     "percentile": 0.7018
+    },
+    {
+     "rawScore": 38.05,
+     "percentile": 0.7018
+    },
+    {
+     "rawScore": 38.1,
+     "percentile": 0.7149
+    },
+    {
+     "rawScore": 38.15,
+     "percentile": 0.7218
+    },
+    {
+     "rawScore": 38.2,
+     "percentile": 0.7218
+    },
+    {
+     "rawScore": 38.2,
+     "percentile": 0.7218
+    },
+    {
+     "rawScore": 38.25,
+     "percentile": 0.8733
+    },
+    {
+     "rawScore": 38.3,
+     "percentile": 0.8891
+    },
+    {
+     "rawScore": 38.35,
+     "percentile": 0.8891
+    },
+    {
+     "rawScore": 38.35,
+     "percentile": 0.8891
+    },
+    {
+     "rawScore": 38.4,
+     "percentile": 0.8913
+    },
+    {
+     "rawScore": 38.45,
+     "percentile": 0.8915
+    },
+    {
+     "rawScore": 38.45,
+     "percentile": 0.8917
+    },
+    {
+     "rawScore": 38.5,
+     "percentile": 0.915
+    },
+    {
+     "rawScore": 38.55,
+     "percentile": 0.9394
+    },
+    {
+     "rawScore": 38.6,
+     "percentile": 0.9432
+    },
+    {
+     "rawScore": 38.6,
+     "percentile": 0.9587
+    },
+    {
+     "rawScore": 38.65,
+     "percentile": 0.9623
+    },
+    {
+     "rawScore": 38.75,
+     "percentile": 1.1121
+    },
+    {
+     "rawScore": 38.8,
+     "percentile": 1.1167
+    },
+    {
+     "rawScore": 38.8,
+     "percentile": 1.1168
+    },
+    {
+     "rawScore": 38.85,
+     "percentile": 1.1468
+    },
+    {
+     "rawScore": 38.85,
+     "percentile": 1.1469
+    },
+    {
+     "rawScore": 38.9,
+     "percentile": 1.161
+    },
+    {
+     "rawScore": 38.95,
+     "percentile": 1.161
+    },
+    {
+     "rawScore": 38.95,
+     "percentile": 1.161
+    },
+    {
+     "rawScore": 39.0,
+     "percentile": 1.161
+    },
+    {
+     "rawScore": 39.05,
+     "percentile": 1.1747
+    },
+    {
+     "rawScore": 39.05,
+     "percentile": 1.1747
+    },
+    {
+     "rawScore": 39.1,
+     "percentile": 1.1792
+    },
+    {
+     "rawScore": 39.1,
+     "percentile": 1.1795
+    },
+    {
+     "rawScore": 39.15,
+     "percentile": 1.1795
+    },
+    {
+     "rawScore": 39.2,
+     "percentile": 1.1826
+    },
+    {
+     "rawScore": 39.2,
+     "percentile": 1.1826
+    },
+    {
+     "rawScore": 39.25,
+     "percentile": 1.238
+    },
+    {
+     "rawScore": 39.3,
+     "percentile": 1.2476
+    },
+    {
+     "rawScore": 39.35,
+     "percentile": 1.2783
+    },
+    {
+     "rawScore": 39.35,
+     "percentile": 1.2784
+    },
+    {
+     "rawScore": 39.4,
+     "percentile": 1.2864
+    },
+    {
+     "rawScore": 39.45,
+     "percentile": 1.2864
+    },
+    {
+     "rawScore": 39.5,
+     "percentile": 1.2876
+    },
+    {
+     "rawScore": 39.55,
+     "percentile": 1.2927
+    },
+    {
+     "rawScore": 39.6,
+     "percentile": 1.2927
+    },
+    {
+     "rawScore": 39.6,
+     "percentile": 1.2938
+    },
+    {
+     "rawScore": 39.65,
+     "percentile": 1.2939
+    },
+    {
+     "rawScore": 39.7,
+     "percentile": 1.2939
+    },
+    {
+     "rawScore": 39.75,
+     "percentile": 1.2939
+    },
+    {
+     "rawScore": 39.8,
+     "percentile": 1.4223
+    },
+    {
+     "rawScore": 39.8,
+     "percentile": 1.4223
+    },
+    {
+     "rawScore": 39.85,
+     "percentile": 1.4333
+    },
+    {
+     "rawScore": 39.85,
+     "percentile": 1.4333
+    },
+    {
+     "rawScore": 39.9,
+     "percentile": 1.4425
+    },
+    {
+     "rawScore": 39.95,
+     "percentile": 1.4425
+    },
+    {
+     "rawScore": 39.95,
+     "percentile": 1.4426
+    },
+    {
+     "rawScore": 40.0,
+     "percentile": 1.5515
+    },
+    {
+     "rawScore": 40.05,
+     "percentile": 1.6019
+    },
+    {
+     "rawScore": 40.1,
+     "percentile": 1.6022
+    },
+    {
+     "rawScore": 40.1,
+     "percentile": 1.6039
+    },
+    {
+     "rawScore": 40.15,
+     "percentile": 1.6039
+    },
+    {
+     "rawScore": 40.2,
+     "percentile": 1.6039
+    },
+    {
+     "rawScore": 40.2,
+     "percentile": 1.6041
+    },
+    {
+     "rawScore": 40.25,
+     "percentile": 1.6257
+    },
+    {
+     "rawScore": 40.3,
+     "percentile": 1.6259
+    },
+    {
+     "rawScore": 40.35,
+     "percentile": 1.6259
+    },
+    {
+     "rawScore": 40.35,
+     "percentile": 1.6356
+    },
+    {
+     "rawScore": 40.4,
+     "percentile": 1.6448
+    },
+    {
+     "rawScore": 40.45,
+     "percentile": 1.6448
+    },
+    {
+     "rawScore": 40.5,
+     "percentile": 1.8132
+    },
+    {
+     "rawScore": 40.55,
+     "percentile": 1.831
+    },
+    {
+     "rawScore": 40.55,
+     "percentile": 1.8316
+    },
+    {
+     "rawScore": 40.6,
+     "percentile": 1.8531
+    },
+    {
+     "rawScore": 40.6,
+     "percentile": 1.8538
+    },
+    {
+     "rawScore": 40.65,
+     "percentile": 1.9142
+    },
+    {
+     "rawScore": 40.7,
+     "percentile": 1.9145
+    },
+    {
+     "rawScore": 40.7,
+     "percentile": 1.9148
+    },
+    {
+     "rawScore": 40.75,
+     "percentile": 1.9157
+    },
+    {
+     "rawScore": 40.8,
+     "percentile": 1.9519
+    },
+    {
+     "rawScore": 40.85,
+     "percentile": 1.9547
+    },
+    {
+     "rawScore": 40.85,
+     "percentile": 1.9563
+    },
+    {
+     "rawScore": 40.9,
+     "percentile": 1.9604
+    },
+    {
+     "rawScore": 40.95,
+     "percentile": 1.9624
+    },
+    {
+     "rawScore": 40.95,
+     "percentile": 1.9624
+    },
+    {
+     "rawScore": 41.0,
+     "percentile": 2.1563
+    },
+    {
+     "rawScore": 41.05,
+     "percentile": 2.2002
+    },
+    {
+     "rawScore": 41.1,
+     "percentile": 2.2336
+    },
+    {
+     "rawScore": 41.1,
+     "percentile": 2.2358
+    },
+    {
+     "rawScore": 41.15,
+     "percentile": 2.2705
+    },
+    {
+     "rawScore": 41.2,
+     "percentile": 2.2706
+    },
+    {
+     "rawScore": 41.2,
+     "percentile": 2.2721
+    },
+    {
+     "rawScore": 41.25,
+     "percentile": 2.273
+    },
+    {
+     "rawScore": 41.3,
+     "percentile": 2.3267
+    },
+    {
+     "rawScore": 41.3,
+     "percentile": 2.3277
+    },
+    {
+     "rawScore": 41.35,
+     "percentile": 2.3279
+    },
+    {
+     "rawScore": 41.35,
+     "percentile": 2.3299
+    },
+    {
+     "rawScore": 41.4,
+     "percentile": 2.3299
+    },
+    {
+     "rawScore": 41.45,
+     "percentile": 2.33
+    },
+    {
+     "rawScore": 41.5,
+     "percentile": 2.4055
+    },
+    {
+     "rawScore": 41.55,
+     "percentile": 2.4819
+    },
+    {
+     "rawScore": 41.55,
+     "percentile": 2.4819
+    },
+    {
+     "rawScore": 41.6,
+     "percentile": 2.5215
+    },
+    {
+     "rawScore": 41.6,
+     "percentile": 2.5216
+    },
+    {
+     "rawScore": 41.65,
+     "percentile": 2.5437
+    },
+    {
+     "rawScore": 41.7,
+     "percentile": 2.5437
+    },
+    {
+     "rawScore": 41.7,
+     "percentile": 2.5442
+    },
+    {
+     "rawScore": 41.75,
+     "percentile": 3.0301
+    },
+    {
+     "rawScore": 41.8,
+     "percentile": 3.0713
+    },
+    {
+     "rawScore": 41.85,
+     "percentile": 3.0714
+    },
+    {
+     "rawScore": 41.85,
+     "percentile": 3.0724
+    },
+    {
+     "rawScore": 41.9,
+     "percentile": 3.1152
+    },
+    {
+     "rawScore": 41.95,
+     "percentile": 3.1156
+    },
+    {
+     "rawScore": 42.0,
+     "percentile": 3.1299
+    },
+    {
+     "rawScore": 42.05,
+     "percentile": 3.1306
+    },
+    {
+     "rawScore": 42.05,
+     "percentile": 3.1306
+    },
+    {
+     "rawScore": 42.1,
+     "percentile": 3.1448
+    },
+    {
+     "rawScore": 42.1,
+     "percentile": 3.1457
+    },
+    {
+     "rawScore": 42.15,
+     "percentile": 3.1522
+    },
+    {
+     "rawScore": 42.2,
+     "percentile": 3.1523
+    },
+    {
+     "rawScore": 42.3,
+     "percentile": 3.2354
+    },
+    {
+     "rawScore": 42.3,
+     "percentile": 3.2358
+    },
+    {
+     "rawScore": 42.35,
+     "percentile": 3.332
+    },
+    {
+     "rawScore": 42.35,
+     "percentile": 3.3334
+    },
+    {
+     "rawScore": 42.4,
+     "percentile": 3.3769
+    },
+    {
+     "rawScore": 42.45,
+     "percentile": 3.3769
+    },
+    {
+     "rawScore": 42.45,
+     "percentile": 3.3781
+    },
+    {
+     "rawScore": 42.5,
+     "percentile": 3.4033
+    },
+    {
+     "rawScore": 42.55,
+     "percentile": 3.4195
+    },
+    {
+     "rawScore": 42.6,
+     "percentile": 3.4195
+    },
+    {
+     "rawScore": 42.6,
+     "percentile": 3.4332
+    },
+    {
+     "rawScore": 42.65,
+     "percentile": 3.435
+    },
+    {
+     "rawScore": 42.7,
+     "percentile": 3.4351
+    },
+    {
+     "rawScore": 42.75,
+     "percentile": 3.5561
+    },
+    {
+     "rawScore": 42.8,
+     "percentile": 3.5943
+    },
+    {
+     "rawScore": 42.8,
+     "percentile": 3.5949
+    },
+    {
+     "rawScore": 42.85,
+     "percentile": 3.6054
+    },
+    {
+     "rawScore": 42.9,
+     "percentile": 3.6886
+    },
+    {
+     "rawScore": 42.95,
+     "percentile": 3.6886
+    },
+    {
+     "rawScore": 42.95,
+     "percentile": 3.6954
+    },
+    {
+     "rawScore": 43.0,
+     "percentile": 3.6992
+    },
+    {
+     "rawScore": 43.05,
+     "percentile": 3.8553
+    },
+    {
+     "rawScore": 43.05,
+     "percentile": 3.86
+    },
+    {
+     "rawScore": 43.1,
+     "percentile": 3.8639
+    },
+    {
+     "rawScore": 43.1,
+     "percentile": 3.8705
+    },
+    {
+     "rawScore": 43.15,
+     "percentile": 3.8709
+    },
+    {
+     "rawScore": 43.2,
+     "percentile": 3.873
+    },
+    {
+     "rawScore": 43.2,
+     "percentile": 3.8731
+    },
+    {
+     "rawScore": 43.25,
+     "percentile": 3.9429
+    },
+    {
+     "rawScore": 43.3,
+     "percentile": 3.9955
+    },
+    {
+     "rawScore": 43.3,
+     "percentile": 3.9955
+    },
+    {
+     "rawScore": 43.35,
+     "percentile": 4.02
+    },
+    {
+     "rawScore": 43.35,
+     "percentile": 4.0203
+    },
+    {
+     "rawScore": 43.4,
+     "percentile": 4.0603
+    },
+    {
+     "rawScore": 43.4,
+     "percentile": 4.0603
+    },
+    {
+     "rawScore": 43.45,
+     "percentile": 4.0604
+    },
+    {
+     "rawScore": 43.45,
+     "percentile": 4.0628
+    },
+    {
+     "rawScore": 43.5,
+     "percentile": 4.0914
+    },
+    {
+     "rawScore": 43.55,
+     "percentile": 4.2549
+    },
+    {
+     "rawScore": 43.6,
+     "percentile": 4.2557
+    },
+    {
+     "rawScore": 43.6,
+     "percentile": 4.2585
+    },
+    {
+     "rawScore": 43.65,
+     "percentile": 4.4481
+    },
+    {
+     "rawScore": 43.7,
+     "percentile": 4.4619
+    },
+    {
+     "rawScore": 43.75,
+     "percentile": 4.4871
+    },
+    {
+     "rawScore": 43.8,
+     "percentile": 4.572
+    },
+    {
+     "rawScore": 43.8,
+     "percentile": 4.572
+    },
+    {
+     "rawScore": 43.85,
+     "percentile": 4.5808
+    },
+    {
+     "rawScore": 43.85,
+     "percentile": 4.5862
+    },
+    {
+     "rawScore": 43.9,
+     "percentile": 4.6164
+    },
+    {
+     "rawScore": 43.95,
+     "percentile": 4.6164
+    },
+    {
+     "rawScore": 44.0,
+     "percentile": 5.2432
+    },
+    {
+     "rawScore": 44.05,
+     "percentile": 5.3808
+    },
+    {
+     "rawScore": 44.05,
+     "percentile": 5.3826
+    },
+    {
+     "rawScore": 44.1,
+     "percentile": 5.3826
+    },
+    {
+     "rawScore": 44.1,
+     "percentile": 5.3894
+    },
+    {
+     "rawScore": 44.15,
+     "percentile": 5.583
+    },
+    {
+     "rawScore": 44.2,
+     "percentile": 5.5888
+    },
+    {
+     "rawScore": 44.25,
+     "percentile": 5.6031
+    },
+    {
+     "rawScore": 44.3,
+     "percentile": 5.6261
+    },
+    {
+     "rawScore": 44.35,
+     "percentile": 5.6261
+    },
+    {
+     "rawScore": 44.35,
+     "percentile": 5.6312
+    },
+    {
+     "rawScore": 44.4,
+     "percentile": 5.641
+    },
+    {
+     "rawScore": 44.45,
+     "percentile": 5.6411
+    },
+    {
+     "rawScore": 44.5,
+     "percentile": 5.642
+    },
+    {
+     "rawScore": 44.55,
+     "percentile": 5.7239
+    },
+    {
+     "rawScore": 44.55,
+     "percentile": 5.7239
+    },
+    {
+     "rawScore": 44.6,
+     "percentile": 5.8478
+    },
+    {
+     "rawScore": 44.6,
+     "percentile": 5.8572
+    },
+    {
+     "rawScore": 44.65,
+     "percentile": 5.9264
+    },
+    {
+     "rawScore": 44.7,
+     "percentile": 5.9323
+    },
+    {
+     "rawScore": 44.75,
+     "percentile": 5.9366
+    },
+    {
+     "rawScore": 44.8,
+     "percentile": 6.0582
+    },
+    {
+     "rawScore": 44.8,
+     "percentile": 6.0616
+    },
+    {
+     "rawScore": 44.85,
+     "percentile": 6.0622
+    },
+    {
+     "rawScore": 44.85,
+     "percentile": 6.0766
+    },
+    {
+     "rawScore": 44.9,
+     "percentile": 6.0799
+    },
+    {
+     "rawScore": 44.95,
+     "percentile": 6.0799
+    },
+    {
+     "rawScore": 45.0,
+     "percentile": 6.2607
+    },
+    {
+     "rawScore": 45.05,
+     "percentile": 6.2859
+    },
+    {
+     "rawScore": 45.05,
+     "percentile": 6.2859
+    },
+    {
+     "rawScore": 45.1,
+     "percentile": 6.2974
+    },
+    {
+     "rawScore": 45.15,
+     "percentile": 6.3076
+    },
+    {
+     "rawScore": 45.15,
+     "percentile": 6.3077
+    },
+    {
+     "rawScore": 45.2,
+     "percentile": 6.3077
+    },
+    {
+     "rawScore": 45.2,
+     "percentile": 6.3167
+    },
+    {
+     "rawScore": 45.25,
+     "percentile": 6.4486
+    },
+    {
+     "rawScore": 45.3,
+     "percentile": 6.6195
+    },
+    {
+     "rawScore": 45.3,
+     "percentile": 6.6248
+    },
+    {
+     "rawScore": 45.35,
+     "percentile": 6.6256
+    },
+    {
+     "rawScore": 45.35,
+     "percentile": 6.6346
+    },
+    {
+     "rawScore": 45.4,
+     "percentile": 6.7716
+    },
+    {
+     "rawScore": 45.4,
+     "percentile": 6.7716
+    },
+    {
+     "rawScore": 45.45,
+     "percentile": 6.8304
+    },
+    {
+     "rawScore": 45.5,
+     "percentile": 6.9328
+    },
+    {
+     "rawScore": 45.55,
+     "percentile": 6.9336
+    },
+    {
+     "rawScore": 45.55,
+     "percentile": 6.9337
+    },
+    {
+     "rawScore": 45.6,
+     "percentile": 6.9609
+    },
+    {
+     "rawScore": 45.6,
+     "percentile": 6.9704
+    },
+    {
+     "rawScore": 45.65,
+     "percentile": 6.9982
+    },
+    {
+     "rawScore": 45.7,
+     "percentile": 6.9982
+    },
+    {
+     "rawScore": 45.7,
+     "percentile": 7.001
+    },
+    {
+     "rawScore": 45.75,
+     "percentile": 7.3926
+    },
+    {
+     "rawScore": 45.8,
+     "percentile": 7.6524
+    },
+    {
+     "rawScore": 45.8,
+     "percentile": 7.6527
+    },
+    {
+     "rawScore": 45.85,
+     "percentile": 7.6537
+    },
+    {
+     "rawScore": 45.85,
+     "percentile": 7.6841
+    },
+    {
+     "rawScore": 45.9,
+     "percentile": 7.8946
+    },
+    {
+     "rawScore": 45.9,
+     "percentile": 7.897
+    },
+    {
+     "rawScore": 45.95,
+     "percentile": 7.922
+    },
+    {
+     "rawScore": 46.0,
+     "percentile": 7.9577
+    },
+    {
+     "rawScore": 46.05,
+     "percentile": 7.9608
+    },
+    {
+     "rawScore": 46.1,
+     "percentile": 7.9705
+    },
+    {
+     "rawScore": 46.1,
+     "percentile": 7.9904
+    },
+    {
+     "rawScore": 46.15,
+     "percentile": 7.9994
+    },
+    {
+     "rawScore": 46.2,
+     "percentile": 7.9994
+    },
+    {
+     "rawScore": 46.25,
+     "percentile": 8.0032
+    },
+    {
+     "rawScore": 46.3,
+     "percentile": 8.1672
+    },
+    {
+     "rawScore": 46.3,
+     "percentile": 8.1695
+    },
+    {
+     "rawScore": 46.35,
+     "percentile": 8.2463
+    },
+    {
+     "rawScore": 46.35,
+     "percentile": 8.2796
+    },
+    {
+     "rawScore": 46.4,
+     "percentile": 8.5298
+    },
+    {
+     "rawScore": 46.45,
+     "percentile": 8.5514
+    },
+    {
+     "rawScore": 46.5,
+     "percentile": 8.6437
+    },
+    {
+     "rawScore": 46.55,
+     "percentile": 9.1573
+    },
+    {
+     "rawScore": 46.55,
+     "percentile": 9.1724
+    },
+    {
+     "rawScore": 46.6,
+     "percentile": 9.1748
+    },
+    {
+     "rawScore": 46.6,
+     "percentile": 9.1882
+    },
+    {
+     "rawScore": 46.65,
+     "percentile": 9.1903
+    },
+    {
+     "rawScore": 46.7,
+     "percentile": 9.2319
+    },
+    {
+     "rawScore": 46.75,
+     "percentile": 9.3135
+    },
+    {
+     "rawScore": 46.8,
+     "percentile": 9.4351
+    },
+    {
+     "rawScore": 46.8,
+     "percentile": 9.4351
+    },
+    {
+     "rawScore": 46.85,
+     "percentile": 9.4362
+    },
+    {
+     "rawScore": 46.9,
+     "percentile": 9.5307
+    },
+    {
+     "rawScore": 46.9,
+     "percentile": 9.5307
+    },
+    {
+     "rawScore": 46.95,
+     "percentile": 9.5374
+    },
+    {
+     "rawScore": 47.0,
+     "percentile": 9.6328
+    },
+    {
+     "rawScore": 47.05,
+     "percentile": 9.6331
+    },
+    {
+     "rawScore": 47.1,
+     "percentile": 9.6331
+    },
+    {
+     "rawScore": 47.1,
+     "percentile": 9.6702
+    },
+    {
+     "rawScore": 47.15,
+     "percentile": 10.2778
+    },
+    {
+     "rawScore": 47.15,
+     "percentile": 10.2778
+    },
+    {
+     "rawScore": 47.2,
+     "percentile": 10.3201
+    },
+    {
+     "rawScore": 47.25,
+     "percentile": 10.3577
+    },
+    {
+     "rawScore": 47.3,
+     "percentile": 10.3862
+    },
+    {
+     "rawScore": 47.3,
+     "percentile": 10.3863
+    },
+    {
+     "rawScore": 47.35,
+     "percentile": 10.4025
+    },
+    {
+     "rawScore": 47.4,
+     "percentile": 10.4318
+    },
+    {
+     "rawScore": 47.4,
+     "percentile": 10.4319
+    },
+    {
+     "rawScore": 47.45,
+     "percentile": 10.432
+    },
+    {
+     "rawScore": 47.45,
+     "percentile": 10.4324
+    },
+    {
+     "rawScore": 47.5,
+     "percentile": 10.5761
+    },
+    {
+     "rawScore": 47.55,
+     "percentile": 10.9602
+    },
+    {
+     "rawScore": 47.55,
+     "percentile": 10.9614
+    },
+    {
+     "rawScore": 47.6,
+     "percentile": 10.962
+    },
+    {
+     "rawScore": 47.6,
+     "percentile": 10.9871
+    },
+    {
+     "rawScore": 47.65,
+     "percentile": 10.988
+    },
+    {
+     "rawScore": 47.65,
+     "percentile": 10.9983
+    },
+    {
+     "rawScore": 47.7,
+     "percentile": 11.0794
+    },
+    {
+     "rawScore": 47.75,
+     "percentile": 11.1383
+    },
+    {
+     "rawScore": 47.8,
+     "percentile": 11.148
+    },
+    {
+     "rawScore": 47.8,
+     "percentile": 11.148
+    },
+    {
+     "rawScore": 47.85,
+     "percentile": 11.148
+    },
+    {
+     "rawScore": 47.85,
+     "percentile": 11.1951
+    },
+    {
+     "rawScore": 47.9,
+     "percentile": 11.2307
+    },
+    {
+     "rawScore": 47.9,
+     "percentile": 11.2307
+    },
+    {
+     "rawScore": 47.95,
+     "percentile": 11.2311
+    },
+    {
+     "rawScore": 48.0,
+     "percentile": 11.6664
+    },
+    {
+     "rawScore": 48.05,
+     "percentile": 11.738
+    },
+    {
+     "rawScore": 48.05,
+     "percentile": 11.7402
+    },
+    {
+     "rawScore": 48.1,
+     "percentile": 11.7402
+    },
+    {
+     "rawScore": 48.1,
+     "percentile": 11.7759
+    },
+    {
+     "rawScore": 48.15,
+     "percentile": 11.9322
+    },
+    {
+     "rawScore": 48.2,
+     "percentile": 11.9599
+    },
+    {
+     "rawScore": 48.25,
+     "percentile": 12.3866
+    },
+    {
+     "rawScore": 48.3,
+     "percentile": 12.4045
+    },
+    {
+     "rawScore": 48.3,
+     "percentile": 12.4334
+    },
+    {
+     "rawScore": 48.35,
+     "percentile": 12.4334
+    },
+    {
+     "rawScore": 48.35,
+     "percentile": 12.4838
+    },
+    {
+     "rawScore": 48.4,
+     "percentile": 12.4971
+    },
+    {
+     "rawScore": 48.4,
+     "percentile": 12.4971
+    },
+    {
+     "rawScore": 48.45,
+     "percentile": 12.6816
+    },
+    {
+     "rawScore": 48.5,
+     "percentile": 12.7966
+    },
+    {
+     "rawScore": 48.55,
+     "percentile": 12.8954
+    },
+    {
+     "rawScore": 48.55,
+     "percentile": 12.8954
+    },
+    {
+     "rawScore": 48.6,
+     "percentile": 12.9808
+    },
+    {
+     "rawScore": 48.6,
+     "percentile": 13.0241
+    },
+    {
+     "rawScore": 48.65,
+     "percentile": 13.1114
+    },
+    {
+     "rawScore": 48.65,
+     "percentile": 13.1117
+    },
+    {
+     "rawScore": 48.7,
+     "percentile": 13.1411
+    },
+    {
+     "rawScore": 48.75,
+     "percentile": 13.5475
+    },
+    {
+     "rawScore": 48.8,
+     "percentile": 14.1731
+    },
+    {
+     "rawScore": 48.8,
+     "percentile": 14.1934
+    },
+    {
+     "rawScore": 48.85,
+     "percentile": 14.1966
+    },
+    {
+     "rawScore": 48.85,
+     "percentile": 14.2922
+    },
+    {
+     "rawScore": 48.9,
+     "percentile": 14.3305
+    },
+    {
+     "rawScore": 48.9,
+     "percentile": 14.3305
+    },
+    {
+     "rawScore": 48.95,
+     "percentile": 14.5189
+    },
+    {
+     "rawScore": 49.0,
+     "percentile": 14.5951
+    },
+    {
+     "rawScore": 49.05,
+     "percentile": 14.6153
+    },
+    {
+     "rawScore": 49.05,
+     "percentile": 14.6154
+    },
+    {
+     "rawScore": 49.1,
+     "percentile": 14.6379
+    },
+    {
+     "rawScore": 49.15,
+     "percentile": 14.6704
+    },
+    {
+     "rawScore": 49.15,
+     "percentile": 14.6704
+    },
+    {
+     "rawScore": 49.2,
+     "percentile": 14.6794
+    },
+    {
+     "rawScore": 49.25,
+     "percentile": 14.6962
+    },
+    {
+     "rawScore": 49.3,
+     "percentile": 14.6989
+    },
+    {
+     "rawScore": 49.3,
+     "percentile": 14.6998
+    },
+    {
+     "rawScore": 49.35,
+     "percentile": 14.7853
+    },
+    {
+     "rawScore": 49.4,
+     "percentile": 15.5689
+    },
+    {
+     "rawScore": 49.4,
+     "percentile": 15.5764
+    },
+    {
+     "rawScore": 49.45,
+     "percentile": 15.6438
+    },
+    {
+     "rawScore": 49.5,
+     "percentile": 15.6725
+    },
+    {
+     "rawScore": 49.55,
+     "percentile": 15.6818
+    },
+    {
+     "rawScore": 49.55,
+     "percentile": 15.682
+    },
+    {
+     "rawScore": 49.6,
+     "percentile": 15.727
+    },
+    {
+     "rawScore": 49.65,
+     "percentile": 15.7471
+    },
+    {
+     "rawScore": 49.65,
+     "percentile": 15.7472
+    },
+    {
+     "rawScore": 49.7,
+     "percentile": 15.7491
+    },
+    {
+     "rawScore": 49.75,
+     "percentile": 15.7491
+    },
+    {
+     "rawScore": 49.8,
+     "percentile": 16.2652
+    },
+    {
+     "rawScore": 49.8,
+     "percentile": 16.268
+    },
+    {
+     "rawScore": 49.85,
+     "percentile": 16.2686
+    },
+    {
+     "rawScore": 49.85,
+     "percentile": 16.2769
+    },
+    {
+     "rawScore": 49.9,
+     "percentile": 16.278
+    },
+    {
+     "rawScore": 49.9,
+     "percentile": 16.2894
+    },
+    {
+     "rawScore": 49.95,
+     "percentile": 16.2924
+    },
+    {
+     "rawScore": 50.0,
+     "percentile": 16.619
+    },
+    {
+     "rawScore": 50.05,
+     "percentile": 16.6306
+    },
+    {
+     "rawScore": 50.05,
+     "percentile": 16.7595
+    },
+    {
+     "rawScore": 50.1,
+     "percentile": 16.8086
+    },
+    {
+     "rawScore": 50.15,
+     "percentile": 16.8187
+    },
+    {
+     "rawScore": 50.15,
+     "percentile": 16.8187
+    },
+    {
+     "rawScore": 50.2,
+     "percentile": 16.9518
+    },
+    {
+     "rawScore": 50.25,
+     "percentile": 16.9778
+    },
+    {
+     "rawScore": 50.3,
+     "percentile": 17.0848
+    },
+    {
+     "rawScore": 50.3,
+     "percentile": 17.0871
+    },
+    {
+     "rawScore": 50.35,
+     "percentile": 17.1164
+    },
+    {
+     "rawScore": 50.4,
+     "percentile": 17.348
+    },
+    {
+     "rawScore": 50.4,
+     "percentile": 17.348
+    },
+    {
+     "rawScore": 50.45,
+     "percentile": 17.3751
+    },
+    {
+     "rawScore": 50.5,
+     "percentile": 17.8351
+    },
+    {
+     "rawScore": 50.55,
+     "percentile": 18.2349
+    },
+    {
+     "rawScore": 50.55,
+     "percentile": 18.2508
+    },
+    {
+     "rawScore": 50.6,
+     "percentile": 18.2527
+    },
+    {
+     "rawScore": 50.6,
+     "percentile": 18.3654
+    },
+    {
+     "rawScore": 50.65,
+     "percentile": 18.5356
+    },
+    {
+     "rawScore": 50.65,
+     "percentile": 18.5357
+    },
+    {
+     "rawScore": 50.7,
+     "percentile": 18.7413
+    },
+    {
+     "rawScore": 50.75,
+     "percentile": 18.9326
+    },
+    {
+     "rawScore": 50.8,
+     "percentile": 19.0658
+    },
+    {
+     "rawScore": 50.8,
+     "percentile": 19.0662
+    },
+    {
+     "rawScore": 50.85,
+     "percentile": 19.0687
+    },
+    {
+     "rawScore": 50.9,
+     "percentile": 19.1979
+    },
+    {
+     "rawScore": 50.9,
+     "percentile": 19.1983
+    },
+    {
+     "rawScore": 50.95,
+     "percentile": 19.2059
+    },
+    {
+     "rawScore": 51.0,
+     "percentile": 19.7373
+    },
+    {
+     "rawScore": 51.05,
+     "percentile": 19.7377
+    },
+    {
+     "rawScore": 51.05,
+     "percentile": 19.7415
+    },
+    {
+     "rawScore": 51.1,
+     "percentile": 19.7415
+    },
+    {
+     "rawScore": 51.1,
+     "percentile": 19.8521
+    },
+    {
+     "rawScore": 51.15,
+     "percentile": 20.3433
+    },
+    {
+     "rawScore": 51.15,
+     "percentile": 20.3763
+    },
+    {
+     "rawScore": 51.2,
+     "percentile": 20.6201
+    },
+    {
+     "rawScore": 51.25,
+     "percentile": 20.6268
+    },
+    {
+     "rawScore": 51.3,
+     "percentile": 20.6471
+    },
+    {
+     "rawScore": 51.3,
+     "percentile": 20.7405
+    },
+    {
+     "rawScore": 51.35,
+     "percentile": 20.9038
+    },
+    {
+     "rawScore": 51.4,
+     "percentile": 20.9489
+    },
+    {
+     "rawScore": 51.4,
+     "percentile": 20.9489
+    },
+    {
+     "rawScore": 51.45,
+     "percentile": 20.9502
+    },
+    {
+     "rawScore": 51.5,
+     "percentile": 20.9763
+    },
+    {
+     "rawScore": 51.55,
+     "percentile": 21.2857
+    },
+    {
+     "rawScore": 51.55,
+     "percentile": 21.2882
+    },
+    {
+     "rawScore": 51.6,
+     "percentile": 21.4006
+    },
+    {
+     "rawScore": 51.65,
+     "percentile": 21.4057
+    },
+    {
+     "rawScore": 51.65,
+     "percentile": 21.4058
+    },
+    {
+     "rawScore": 51.7,
+     "percentile": 21.4978
+    },
+    {
+     "rawScore": 51.75,
+     "percentile": 22.8416
+    },
+    {
+     "rawScore": 51.8,
+     "percentile": 22.8466
+    },
+    {
+     "rawScore": 51.8,
+     "percentile": 22.9404
+    },
+    {
+     "rawScore": 51.85,
+     "percentile": 22.9431
+    },
+    {
+     "rawScore": 51.9,
+     "percentile": 23.0629
+    },
+    {
+     "rawScore": 51.9,
+     "percentile": 23.063
+    },
+    {
+     "rawScore": 51.95,
+     "percentile": 23.6548
+    },
+    {
+     "rawScore": 52.0,
+     "percentile": 23.6946
+    },
+    {
+     "rawScore": 52.05,
+     "percentile": 23.7527
+    },
+    {
+     "rawScore": 52.05,
+     "percentile": 23.7544
+    },
+    {
+     "rawScore": 52.1,
+     "percentile": 23.7661
+    },
+    {
+     "rawScore": 52.15,
+     "percentile": 23.8681
+    },
+    {
+     "rawScore": 52.15,
+     "percentile": 23.8681
+    },
+    {
+     "rawScore": 52.2,
+     "percentile": 23.8888
+    },
+    {
+     "rawScore": 52.25,
+     "percentile": 23.9042
+    },
+    {
+     "rawScore": 52.3,
+     "percentile": 23.9046
+    },
+    {
+     "rawScore": 52.3,
+     "percentile": 24.0503
+    },
+    {
+     "rawScore": 52.35,
+     "percentile": 24.348
+    },
+    {
+     "rawScore": 52.4,
+     "percentile": 24.4725
+    },
+    {
+     "rawScore": 52.4,
+     "percentile": 24.4725
+    },
+    {
+     "rawScore": 52.45,
+     "percentile": 24.4757
+    },
+    {
+     "rawScore": 52.5,
+     "percentile": 24.5878
+    },
+    {
+     "rawScore": 52.55,
+     "percentile": 24.6588
+    },
+    {
+     "rawScore": 52.55,
+     "percentile": 24.6592
+    },
+    {
+     "rawScore": 52.6,
+     "percentile": 24.6979
+    },
+    {
+     "rawScore": 52.65,
+     "percentile": 24.7449
+    },
+    {
+     "rawScore": 52.65,
+     "percentile": 24.7456
+    },
+    {
+     "rawScore": 52.7,
+     "percentile": 24.7784
+    },
+    {
+     "rawScore": 52.75,
+     "percentile": 25.1416
+    },
+    {
+     "rawScore": 52.8,
+     "percentile": 25.5657
+    },
+    {
+     "rawScore": 52.8,
+     "percentile": 25.5833
+    },
+    {
+     "rawScore": 52.85,
+     "percentile": 25.5855
+    },
+    {
+     "rawScore": 52.85,
+     "percentile": 25.6045
+    },
+    {
+     "rawScore": 52.9,
+     "percentile": 25.7911
+    },
+    {
+     "rawScore": 52.9,
+     "percentile": 25.7914
+    },
+    {
+     "rawScore": 52.95,
+     "percentile": 25.9437
+    },
+    {
+     "rawScore": 53.0,
+     "percentile": 26.0044
+    },
+    {
+     "rawScore": 53.05,
+     "percentile": 26.0398
+    },
+    {
+     "rawScore": 53.05,
+     "percentile": 26.4567
+    },
+    {
+     "rawScore": 53.1,
+     "percentile": 26.4894
+    },
+    {
+     "rawScore": 53.15,
+     "percentile": 26.5632
+    },
+    {
+     "rawScore": 53.15,
+     "percentile": 26.5633
+    },
+    {
+     "rawScore": 53.2,
+     "percentile": 26.5751
+    },
+    {
+     "rawScore": 53.25,
+     "percentile": 26.6518
+    },
+    {
+     "rawScore": 53.3,
+     "percentile": 26.7738
+    },
+    {
+     "rawScore": 53.3,
+     "percentile": 26.7824
+    },
+    {
+     "rawScore": 53.35,
+     "percentile": 26.8632
+    },
+    {
+     "rawScore": 53.4,
+     "percentile": 27.4074
+    },
+    {
+     "rawScore": 53.4,
+     "percentile": 27.4505
+    },
+    {
+     "rawScore": 53.45,
+     "percentile": 27.5356
+    },
+    {
+     "rawScore": 53.5,
+     "percentile": 27.5571
+    },
+    {
+     "rawScore": 53.55,
+     "percentile": 27.5816
+    },
+    {
+     "rawScore": 53.55,
+     "percentile": 27.9939
+    },
+    {
+     "rawScore": 53.6,
+     "percentile": 28.1659
+    },
+    {
+     "rawScore": 53.65,
+     "percentile": 28.7006
+    },
+    {
+     "rawScore": 53.65,
+     "percentile": 28.7007
+    },
+    {
+     "rawScore": 53.7,
+     "percentile": 28.738
+    },
+    {
+     "rawScore": 53.75,
+     "percentile": 28.8115
+    },
+    {
+     "rawScore": 53.8,
+     "percentile": 29.136
+    },
+    {
+     "rawScore": 53.8,
+     "percentile": 29.1389
+    },
+    {
+     "rawScore": 53.85,
+     "percentile": 29.1571
+    },
+    {
+     "rawScore": 53.9,
+     "percentile": 29.2968
+    },
+    {
+     "rawScore": 53.9,
+     "percentile": 29.2968
+    },
+    {
+     "rawScore": 53.95,
+     "percentile": 29.3285
+    },
+    {
+     "rawScore": 54.0,
+     "percentile": 31.0471
+    },
+    {
+     "rawScore": 54.05,
+     "percentile": 31.0514
+    },
+    {
+     "rawScore": 54.05,
+     "percentile": 31.0649
+    },
+    {
+     "rawScore": 54.1,
+     "percentile": 31.0679
+    },
+    {
+     "rawScore": 54.15,
+     "percentile": 31.595
+    },
+    {
+     "rawScore": 54.15,
+     "percentile": 31.595
+    },
+    {
+     "rawScore": 54.2,
+     "percentile": 32.36
+    },
+    {
+     "rawScore": 54.25,
+     "percentile": 32.4101
+    },
+    {
+     "rawScore": 54.3,
+     "percentile": 32.5213
+    },
+    {
+     "rawScore": 54.3,
+     "percentile": 32.5224
+    },
+    {
+     "rawScore": 54.35,
+     "percentile": 32.529
+    },
+    {
+     "rawScore": 54.4,
+     "percentile": 32.6226
+    },
+    {
+     "rawScore": 54.4,
+     "percentile": 32.6249
+    },
+    {
+     "rawScore": 54.45,
+     "percentile": 32.6445
+    },
+    {
+     "rawScore": 54.5,
+     "percentile": 32.6725
+    },
+    {
+     "rawScore": 54.55,
+     "percentile": 32.6726
+    },
+    {
+     "rawScore": 54.55,
+     "percentile": 32.6726
+    },
+    {
+     "rawScore": 54.6,
+     "percentile": 33.0597
+    },
+    {
+     "rawScore": 54.65,
+     "percentile": 33.0809
+    },
+    {
+     "rawScore": 54.65,
+     "percentile": 33.0809
+    },
+    {
+     "rawScore": 54.7,
+     "percentile": 33.0849
+    },
+    {
+     "rawScore": 54.75,
+     "percentile": 33.1819
+    },
+    {
+     "rawScore": 54.8,
+     "percentile": 33.2078
+    },
+    {
+     "rawScore": 54.8,
+     "percentile": 33.5113
+    },
+    {
+     "rawScore": 54.85,
+     "percentile": 33.5521
+    },
+    {
+     "rawScore": 54.9,
+     "percentile": 33.5875
+    },
+    {
+     "rawScore": 54.9,
+     "percentile": 33.5878
+    },
+    {
+     "rawScore": 54.95,
+     "percentile": 33.5942
+    },
+    {
+     "rawScore": 55.0,
+     "percentile": 34.1161
+    },
+    {
+     "rawScore": 55.05,
+     "percentile": 34.1841
+    },
+    {
+     "rawScore": 55.05,
+     "percentile": 34.1953
+    },
+    {
+     "rawScore": 55.1,
+     "percentile": 34.2273
+    },
+    {
+     "rawScore": 55.15,
+     "percentile": 34.2287
+    },
+    {
+     "rawScore": 55.15,
+     "percentile": 34.2582
+    },
+    {
+     "rawScore": 55.2,
+     "percentile": 34.4838
+    },
+    {
+     "rawScore": 55.25,
+     "percentile": 34.4928
+    },
+    {
+     "rawScore": 55.3,
+     "percentile": 34.5091
+    },
+    {
+     "rawScore": 55.3,
+     "percentile": 34.9751
+    },
+    {
+     "rawScore": 55.35,
+     "percentile": 35.1044
+    },
+    {
+     "rawScore": 55.4,
+     "percentile": 35.5109
+    },
+    {
+     "rawScore": 55.4,
+     "percentile": 35.5112
+    },
+    {
+     "rawScore": 55.45,
+     "percentile": 35.677
+    },
+    {
+     "rawScore": 55.5,
+     "percentile": 35.8291
+    },
+    {
+     "rawScore": 55.55,
+     "percentile": 36.0117
+    },
+    {
+     "rawScore": 55.55,
+     "percentile": 36.0199
+    },
+    {
+     "rawScore": 55.6,
+     "percentile": 36.1283
+    },
+    {
+     "rawScore": 55.65,
+     "percentile": 36.1424
+    },
+    {
+     "rawScore": 55.65,
+     "percentile": 36.1424
+    },
+    {
+     "rawScore": 55.7,
+     "percentile": 36.2684
+    },
+    {
+     "rawScore": 55.75,
+     "percentile": 37.4434
+    },
+    {
+     "rawScore": 55.8,
+     "percentile": 37.4448
+    },
+    {
+     "rawScore": 55.8,
+     "percentile": 37.984
+    },
+    {
+     "rawScore": 55.85,
+     "percentile": 37.9854
+    },
+    {
+     "rawScore": 55.9,
+     "percentile": 38.562
+    },
+    {
+     "rawScore": 55.9,
+     "percentile": 38.5621
+    },
+    {
+     "rawScore": 55.95,
+     "percentile": 39.049
+    },
+    {
+     "rawScore": 56.0,
+     "percentile": 39.1208
+    },
+    {
+     "rawScore": 56.05,
+     "percentile": 39.1393
+    },
+    {
+     "rawScore": 56.05,
+     "percentile": 39.1405
+    },
+    {
+     "rawScore": 56.1,
+     "percentile": 39.1958
+    },
+    {
+     "rawScore": 56.15,
+     "percentile": 39.4283
+    },
+    {
+     "rawScore": 56.15,
+     "percentile": 39.43
+    },
+    {
+     "rawScore": 56.2,
+     "percentile": 39.4738
+    },
+    {
+     "rawScore": 56.25,
+     "percentile": 39.5816
+    },
+    {
+     "rawScore": 56.3,
+     "percentile": 39.5819
+    },
+    {
+     "rawScore": 56.3,
+     "percentile": 39.5976
+    },
+    {
+     "rawScore": 56.35,
+     "percentile": 39.8512
+    },
+    {
+     "rawScore": 56.4,
+     "percentile": 40.5378
+    },
+    {
+     "rawScore": 56.4,
+     "percentile": 40.5378
+    },
+    {
+     "rawScore": 56.45,
+     "percentile": 40.5426
+    },
+    {
+     "rawScore": 56.5,
+     "percentile": 40.5677
+    },
+    {
+     "rawScore": 56.55,
+     "percentile": 40.6721
+    },
+    {
+     "rawScore": 56.55,
+     "percentile": 42.0043
+    },
+    {
+     "rawScore": 56.6,
+     "percentile": 42.0309
+    },
+    {
+     "rawScore": 56.65,
+     "percentile": 42.0325
+    },
+    {
+     "rawScore": 56.65,
+     "percentile": 42.035
+    },
+    {
+     "rawScore": 56.7,
+     "percentile": 42.1503
+    },
+    {
+     "rawScore": 56.75,
+     "percentile": 42.3686
+    },
+    {
+     "rawScore": 56.8,
+     "percentile": 42.3688
+    },
+    {
+     "rawScore": 56.8,
+     "percentile": 42.3984
+    },
+    {
+     "rawScore": 56.85,
+     "percentile": 42.4301
+    },
+    {
+     "rawScore": 56.9,
+     "percentile": 42.4495
+    },
+    {
+     "rawScore": 56.9,
+     "percentile": 42.4517
+    },
+    {
+     "rawScore": 56.95,
+     "percentile": 42.551
+    },
+    {
+     "rawScore": 57.0,
+     "percentile": 42.5579
+    },
+    {
+     "rawScore": 57.05,
+     "percentile": 42.5696
+    },
+    {
+     "rawScore": 57.05,
+     "percentile": 42.5747
+    },
+    {
+     "rawScore": 57.1,
+     "percentile": 42.6184
+    },
+    {
+     "rawScore": 57.15,
+     "percentile": 44.2992
+    },
+    {
+     "rawScore": 57.15,
+     "percentile": 44.2993
+    },
+    {
+     "rawScore": 57.2,
+     "percentile": 44.4197
+    },
+    {
+     "rawScore": 57.25,
+     "percentile": 44.5213
+    },
+    {
+     "rawScore": 57.3,
+     "percentile": 44.6928
+    },
+    {
+     "rawScore": 57.3,
+     "percentile": 44.7019
+    },
+    {
+     "rawScore": 57.35,
+     "percentile": 44.7302
+    },
+    {
+     "rawScore": 57.4,
+     "percentile": 44.7677
+    },
+    {
+     "rawScore": 57.4,
+     "percentile": 44.8001
+    },
+    {
+     "rawScore": 57.45,
+     "percentile": 44.846
+    },
+    {
+     "rawScore": 57.5,
+     "percentile": 44.9436
+    },
+    {
+     "rawScore": 57.55,
+     "percentile": 44.9612
+    },
+    {
+     "rawScore": 57.55,
+     "percentile": 45.3298
+    },
+    {
+     "rawScore": 57.6,
+     "percentile": 45.4422
+    },
+    {
+     "rawScore": 57.65,
+     "percentile": 45.4615
+    },
+    {
+     "rawScore": 57.65,
+     "percentile": 45.4616
+    },
+    {
+     "rawScore": 57.7,
+     "percentile": 45.6435
+    },
+    {
+     "rawScore": 57.75,
+     "percentile": 45.8034
+    },
+    {
+     "rawScore": 57.8,
+     "percentile": 45.8546
+    },
+    {
+     "rawScore": 57.8,
+     "percentile": 45.8599
+    },
+    {
+     "rawScore": 57.85,
+     "percentile": 45.9966
+    },
+    {
+     "rawScore": 57.9,
+     "percentile": 46.1113
+    },
+    {
+     "rawScore": 57.9,
+     "percentile": 46.1185
+    },
+    {
+     "rawScore": 57.95,
+     "percentile": 46.1904
+    },
+    {
+     "rawScore": 58.0,
+     "percentile": 47.4798
+    },
+    {
+     "rawScore": 58.05,
+     "percentile": 47.4803
+    },
+    {
+     "rawScore": 58.05,
+     "percentile": 47.5106
+    },
+    {
+     "rawScore": 58.1,
+     "percentile": 47.5571
+    },
+    {
+     "rawScore": 58.15,
+     "percentile": 48.026
+    },
+    {
+     "rawScore": 58.15,
+     "percentile": 48.026
+    },
+    {
+     "rawScore": 58.2,
+     "percentile": 48.567
+    },
+    {
+     "rawScore": 58.25,
+     "percentile": 48.5931
+    },
+    {
+     "rawScore": 58.3,
+     "percentile": 48.6632
+    },
+    {
+     "rawScore": 58.3,
+     "percentile": 48.6775
+    },
+    {
+     "rawScore": 58.35,
+     "percentile": 48.8073
+    },
+    {
+     "rawScore": 58.4,
+     "percentile": 48.876
+    },
+    {
+     "rawScore": 58.45,
+     "percentile": 49.3968
+    },
+    {
+     "rawScore": 58.5,
+     "percentile": 49.8341
+    },
+    {
+     "rawScore": 58.55,
+     "percentile": 49.8342
+    },
+    {
+     "rawScore": 58.55,
+     "percentile": 49.8603
+    },
+    {
+     "rawScore": 58.6,
+     "percentile": 50.1347
+    },
+    {
+     "rawScore": 58.65,
+     "percentile": 50.1726
+    },
+    {
+     "rawScore": 58.65,
+     "percentile": 50.1813
+    },
+    {
+     "rawScore": 58.7,
+     "percentile": 50.3174
+    },
+    {
+     "rawScore": 58.75,
+     "percentile": 50.3261
+    },
+    {
+     "rawScore": 58.8,
+     "percentile": 50.3321
+    },
+    {
+     "rawScore": 58.8,
+     "percentile": 52.0738
+    },
+    {
+     "rawScore": 58.85,
+     "percentile": 52.0795
+    },
+    {
+     "rawScore": 58.9,
+     "percentile": 52.0971
+    },
+    {
+     "rawScore": 58.9,
+     "percentile": 52.0971
+    },
+    {
+     "rawScore": 58.95,
+     "percentile": 52.6088
+    },
+    {
+     "rawScore": 59.0,
+     "percentile": 52.8034
+    },
+    {
+     "rawScore": 59.05,
+     "percentile": 52.8583
+    },
+    {
+     "rawScore": 59.05,
+     "percentile": 52.8917
+    },
+    {
+     "rawScore": 59.1,
+     "percentile": 52.9845
+    },
+    {
+     "rawScore": 59.15,
+     "percentile": 53.0174
+    },
+    {
+     "rawScore": 59.15,
+     "percentile": 53.0177
+    },
+    {
+     "rawScore": 59.2,
+     "percentile": 53.1095
+    },
+    {
+     "rawScore": 59.25,
+     "percentile": 53.4625
+    },
+    {
+     "rawScore": 59.3,
+     "percentile": 53.4625
+    },
+    {
+     "rawScore": 59.3,
+     "percentile": 53.4905
+    },
+    {
+     "rawScore": 59.35,
+     "percentile": 53.4977
+    },
+    {
+     "rawScore": 59.4,
+     "percentile": 55.6457
+    },
+    {
+     "rawScore": 59.4,
+     "percentile": 55.6459
+    },
+    {
+     "rawScore": 59.45,
+     "percentile": 55.6665
+    },
+    {
+     "rawScore": 59.5,
+     "percentile": 55.7471
+    },
+    {
+     "rawScore": 59.55,
+     "percentile": 55.8437
+    },
+    {
+     "rawScore": 59.55,
+     "percentile": 55.849
+    },
+    {
+     "rawScore": 59.6,
+     "percentile": 55.9328
+    },
+    {
+     "rawScore": 59.65,
+     "percentile": 55.9752
+    },
+    {
+     "rawScore": 59.65,
+     "percentile": 55.9753
+    },
+    {
+     "rawScore": 59.7,
+     "percentile": 56.0099
+    },
+    {
+     "rawScore": 59.75,
+     "percentile": 56.0228
+    },
+    {
+     "rawScore": 59.8,
+     "percentile": 56.5181
+    },
+    {
+     "rawScore": 59.85,
+     "percentile": 56.59
+    },
+    {
+     "rawScore": 59.9,
+     "percentile": 56.6256
+    },
+    {
+     "rawScore": 59.9,
+     "percentile": 56.6256
+    },
+    {
+     "rawScore": 59.95,
+     "percentile": 56.6345
+    },
+    {
+     "rawScore": 60.0,
+     "percentile": 56.699
+    },
+    {
+     "rawScore": 60.05,
+     "percentile": 56.7023
+    },
+    {
+     "rawScore": 60.05,
+     "percentile": 56.7045
+    },
+    {
+     "rawScore": 60.1,
+     "percentile": 56.8469
+    },
+    {
+     "rawScore": 60.15,
+     "percentile": 56.9683
+    },
+    {
+     "rawScore": 60.15,
+     "percentile": 56.9777
+    },
+    {
+     "rawScore": 60.2,
+     "percentile": 57.3738
+    },
+    {
+     "rawScore": 60.25,
+     "percentile": 57.5075
+    },
+    {
+     "rawScore": 60.3,
+     "percentile": 57.5076
+    },
+    {
+     "rawScore": 60.3,
+     "percentile": 57.6091
+    },
+    {
+     "rawScore": 60.35,
+     "percentile": 57.6592
+    },
+    {
+     "rawScore": 60.4,
+     "percentile": 58.2862
+    },
+    {
+     "rawScore": 60.4,
+     "percentile": 58.2863
+    },
+    {
+     "rawScore": 60.45,
+     "percentile": 58.3001
+    },
+    {
+     "rawScore": 60.5,
+     "percentile": 58.3333
+    },
+    {
+     "rawScore": 60.55,
+     "percentile": 58.3893
+    },
+    {
+     "rawScore": 60.55,
+     "percentile": 59.5799
+    },
+    {
+     "rawScore": 60.6,
+     "percentile": 59.7205
+    },
+    {
+     "rawScore": 60.65,
+     "percentile": 59.7232
+    },
+    {
+     "rawScore": 60.65,
+     "percentile": 59.7232
+    },
+    {
+     "rawScore": 60.7,
+     "percentile": 60.2849
+    },
+    {
+     "rawScore": 60.75,
+     "percentile": 60.7881
+    },
+    {
+     "rawScore": 60.8,
+     "percentile": 60.7886
+    },
+    {
+     "rawScore": 60.8,
+     "percentile": 60.7987
+    },
+    {
+     "rawScore": 60.85,
+     "percentile": 60.8178
+    },
+    {
+     "rawScore": 60.9,
+     "percentile": 60.9466
+    },
+    {
+     "rawScore": 60.9,
+     "percentile": 60.9579
+    },
+    {
+     "rawScore": 60.95,
+     "percentile": 61.1848
+    },
+    {
+     "rawScore": 61.0,
+     "percentile": 61.1971
+    },
+    {
+     "rawScore": 61.05,
+     "percentile": 61.2032
+    },
+    {
+     "rawScore": 61.05,
+     "percentile": 61.3124
+    },
+    {
+     "rawScore": 61.1,
+     "percentile": 61.3166
+    },
+    {
+     "rawScore": 61.15,
+     "percentile": 62.7849
+    },
+    {
+     "rawScore": 61.2,
+     "percentile": 63.4536
+    },
+    {
+     "rawScore": 61.25,
+     "percentile": 63.4603
+    },
+    {
+     "rawScore": 61.3,
+     "percentile": 63.5212
+    },
+    {
+     "rawScore": 61.3,
+     "percentile": 63.523
+    },
+    {
+     "rawScore": 61.35,
+     "percentile": 63.9445
+    },
+    {
+     "rawScore": 61.4,
+     "percentile": 63.9569
+    },
+    {
+     "rawScore": 61.4,
+     "percentile": 63.957
+    },
+    {
+     "rawScore": 61.45,
+     "percentile": 63.9592
+    },
+    {
+     "rawScore": 61.5,
+     "percentile": 64.4375
+    },
+    {
+     "rawScore": 61.55,
+     "percentile": 64.5067
+    },
+    {
+     "rawScore": 61.6,
+     "percentile": 64.5144
+    },
+    {
+     "rawScore": 61.65,
+     "percentile": 64.6532
+    },
+    {
+     "rawScore": 61.65,
+     "percentile": 64.6533
+    },
+    {
+     "rawScore": 61.7,
+     "percentile": 64.6728
+    },
+    {
+     "rawScore": 61.75,
+     "percentile": 64.7854
+    },
+    {
+     "rawScore": 61.8,
+     "percentile": 64.8049
+    },
+    {
+     "rawScore": 61.8,
+     "percentile": 64.8073
+    },
+    {
+     "rawScore": 61.85,
+     "percentile": 64.8124
+    },
+    {
+     "rawScore": 61.9,
+     "percentile": 64.8146
+    },
+    {
+     "rawScore": 61.9,
+     "percentile": 64.8212
+    },
+    {
+     "rawScore": 61.95,
+     "percentile": 66.4582
+    },
+    {
+     "rawScore": 62.0,
+     "percentile": 66.493
+    },
+    {
+     "rawScore": 62.05,
+     "percentile": 66.493
+    },
+    {
+     "rawScore": 62.05,
+     "percentile": 66.5959
+    },
+    {
+     "rawScore": 62.1,
+     "percentile": 66.7086
+    },
+    {
+     "rawScore": 62.15,
+     "percentile": 66.794
+    },
+    {
+     "rawScore": 62.15,
+     "percentile": 66.7941
+    },
+    {
+     "rawScore": 62.2,
+     "percentile": 66.8388
+    },
+    {
+     "rawScore": 62.25,
+     "percentile": 66.8528
+    },
+    {
+     "rawScore": 62.3,
+     "percentile": 66.8529
+    },
+    {
+     "rawScore": 62.3,
+     "percentile": 66.9437
+    },
+    {
+     "rawScore": 62.35,
+     "percentile": 67.0554
+    },
+    {
+     "rawScore": 62.4,
+     "percentile": 67.0584
+    },
+    {
+     "rawScore": 62.45,
+     "percentile": 67.0773
+    },
+    {
+     "rawScore": 62.5,
+     "percentile": 67.4793
+    },
+    {
+     "rawScore": 62.55,
+     "percentile": 67.4809
+    },
+    {
+     "rawScore": 62.55,
+     "percentile": 67.604
+    },
+    {
+     "rawScore": 62.6,
+     "percentile": 67.6189
+    },
+    {
+     "rawScore": 62.65,
+     "percentile": 67.7463
+    },
+    {
+     "rawScore": 62.65,
+     "percentile": 67.7534
+    },
+    {
+     "rawScore": 62.7,
+     "percentile": 67.8668
+    },
+    {
+     "rawScore": 62.75,
+     "percentile": 67.8856
+    },
+    {
+     "rawScore": 62.8,
+     "percentile": 67.8904
+    },
+    {
+     "rawScore": 62.8,
+     "percentile": 69.1959
+    },
+    {
+     "rawScore": 62.85,
+     "percentile": 69.2065
+    },
+    {
+     "rawScore": 62.9,
+     "percentile": 69.3185
+    },
+    {
+     "rawScore": 62.9,
+     "percentile": 69.3185
+    },
+    {
+     "rawScore": 62.95,
+     "percentile": 69.7753
+    },
+    {
+     "rawScore": 63.0,
+     "percentile": 69.9396
+    },
+    {
+     "rawScore": 63.05,
+     "percentile": 69.9396
+    },
+    {
+     "rawScore": 63.05,
+     "percentile": 69.9443
+    },
+    {
+     "rawScore": 63.1,
+     "percentile": 70.0191
+    },
+    {
+     "rawScore": 63.15,
+     "percentile": 70.1755
+    },
+    {
+     "rawScore": 63.15,
+     "percentile": 70.1759
+    },
+    {
+     "rawScore": 63.2,
+     "percentile": 70.2428
+    },
+    {
+     "rawScore": 63.25,
+     "percentile": 70.6556
+    },
+    {
+     "rawScore": 63.3,
+     "percentile": 70.6557
+    },
+    {
+     "rawScore": 63.3,
+     "percentile": 71.0898
+    },
+    {
+     "rawScore": 63.35,
+     "percentile": 71.0965
+    },
+    {
+     "rawScore": 63.4,
+     "percentile": 72.7066
+    },
+    {
+     "rawScore": 63.45,
+     "percentile": 72.7458
+    },
+    {
+     "rawScore": 63.5,
+     "percentile": 72.7805
+    },
+    {
+     "rawScore": 63.55,
+     "percentile": 72.7835
+    },
+    {
+     "rawScore": 63.55,
+     "percentile": 72.7842
+    },
+    {
+     "rawScore": 63.6,
+     "percentile": 73.2324
+    },
+    {
+     "rawScore": 63.65,
+     "percentile": 73.2381
+    },
+    {
+     "rawScore": 63.65,
+     "percentile": 73.2385
+    },
+    {
+     "rawScore": 63.7,
+     "percentile": 73.2557
+    },
+    {
+     "rawScore": 63.75,
+     "percentile": 73.4031
+    },
+    {
+     "rawScore": 63.8,
+     "percentile": 73.4042
+    },
+    {
+     "rawScore": 63.85,
+     "percentile": 73.4684
+    },
+    {
+     "rawScore": 63.9,
+     "percentile": 74.0093
+    },
+    {
+     "rawScore": 63.9,
+     "percentile": 74.0093
+    },
+    {
+     "rawScore": 63.95,
+     "percentile": 74.0415
+    },
+    {
+     "rawScore": 64.0,
+     "percentile": 74.0646
+    },
+    {
+     "rawScore": 64.05,
+     "percentile": 74.0841
+    },
+    {
+     "rawScore": 64.05,
+     "percentile": 74.4373
+    },
+    {
+     "rawScore": 64.1,
+     "percentile": 74.4445
+    },
+    {
+     "rawScore": 64.15,
+     "percentile": 74.4524
+    },
+    {
+     "rawScore": 64.2,
+     "percentile": 76.5446
+    },
+    {
+     "rawScore": 64.25,
+     "percentile": 76.5671
+    },
+    {
+     "rawScore": 64.3,
+     "percentile": 76.5671
+    },
+    {
+     "rawScore": 64.3,
+     "percentile": 76.6486
+    },
+    {
+     "rawScore": 64.35,
+     "percentile": 76.6771
+    },
+    {
+     "rawScore": 64.4,
+     "percentile": 76.6786
+    },
+    {
+     "rawScore": 64.45,
+     "percentile": 76.7199
+    },
+    {
+     "rawScore": 64.5,
+     "percentile": 76.7287
+    },
+    {
+     "rawScore": 64.55,
+     "percentile": 76.7288
+    },
+    {
+     "rawScore": 64.55,
+     "percentile": 76.7404
+    },
+    {
+     "rawScore": 64.6,
+     "percentile": 76.868
+    },
+    {
+     "rawScore": 64.65,
+     "percentile": 77.3036
+    },
+    {
+     "rawScore": 64.7,
+     "percentile": 77.3383
+    },
+    {
+     "rawScore": 64.75,
+     "percentile": 77.6254
+    },
+    {
+     "rawScore": 64.8,
+     "percentile": 77.6274
+    },
+    {
+     "rawScore": 64.8,
+     "percentile": 77.6347
+    },
+    {
+     "rawScore": 64.85,
+     "percentile": 77.6386
+    },
+    {
+     "rawScore": 64.9,
+     "percentile": 77.7502
+    },
+    {
+     "rawScore": 64.95,
+     "percentile": 77.8708
+    },
+    {
+     "rawScore": 65.0,
+     "percentile": 77.9739
+    },
+    {
+     "rawScore": 65.05,
+     "percentile": 77.9781
+    },
+    {
+     "rawScore": 65.05,
+     "percentile": 78.0712
+    },
+    {
+     "rawScore": 65.1,
+     "percentile": 78.097
+    },
+    {
+     "rawScore": 65.15,
+     "percentile": 78.1114
+    },
+    {
+     "rawScore": 65.2,
+     "percentile": 78.7221
+    },
+    {
+     "rawScore": 65.25,
+     "percentile": 78.7563
+    },
+    {
+     "rawScore": 65.3,
+     "percentile": 78.7565
+    },
+    {
+     "rawScore": 65.3,
+     "percentile": 78.7578
+    },
+    {
+     "rawScore": 65.35,
+     "percentile": 79.1169
+    },
+    {
+     "rawScore": 65.4,
+     "percentile": 79.1283
+    },
+    {
+     "rawScore": 65.45,
+     "percentile": 79.1309
+    },
+    {
+     "rawScore": 65.5,
+     "percentile": 79.5852
+    },
+    {
+     "rawScore": 65.55,
+     "percentile": 79.5869
+    },
+    {
+     "rawScore": 65.55,
+     "percentile": 79.9726
+    },
+    {
+     "rawScore": 65.6,
+     "percentile": 79.9757
+    },
+    {
+     "rawScore": 65.65,
+     "percentile": 80.0939
+    },
+    {
+     "rawScore": 65.7,
+     "percentile": 80.0943
+    },
+    {
+     "rawScore": 65.7,
+     "percentile": 80.2222
+    },
+    {
+     "rawScore": 65.75,
+     "percentile": 80.2797
+    },
+    {
+     "rawScore": 65.8,
+     "percentile": 80.2951
+    },
+    {
+     "rawScore": 65.8,
+     "percentile": 80.2963
+    },
+    {
+     "rawScore": 65.85,
+     "percentile": 80.3303
+    },
+    {
+     "rawScore": 65.9,
+     "percentile": 80.3319
+    },
+    {
+     "rawScore": 65.95,
+     "percentile": 81.7621
+    },
+    {
+     "rawScore": 66.0,
+     "percentile": 82.0312
+    },
+    {
+     "rawScore": 66.05,
+     "percentile": 82.0312
+    },
+    {
+     "rawScore": 66.05,
+     "percentile": 82.0367
+    },
+    {
+     "rawScore": 66.1,
+     "percentile": 82.099
+    },
+    {
+     "rawScore": 66.15,
+     "percentile": 82.099
+    },
+    {
+     "rawScore": 66.15,
+     "percentile": 82.5772
+    },
+    {
+     "rawScore": 66.2,
+     "percentile": 82.5772
+    },
+    {
+     "rawScore": 66.2,
+     "percentile": 82.5893
+    },
+    {
+     "rawScore": 66.25,
+     "percentile": 82.5898
+    },
+    {
+     "rawScore": 66.3,
+     "percentile": 82.5922
+    },
+    {
+     "rawScore": 66.3,
+     "percentile": 83.046
+    },
+    {
+     "rawScore": 66.35,
+     "percentile": 83.0635
+    },
+    {
+     "rawScore": 66.4,
+     "percentile": 83.065
+    },
+    {
+     "rawScore": 66.45,
+     "percentile": 83.2003
+    },
+    {
+     "rawScore": 66.5,
+     "percentile": 83.2053
+    },
+    {
+     "rawScore": 66.55,
+     "percentile": 83.2066
+    },
+    {
+     "rawScore": 66.55,
+     "percentile": 83.2953
+    },
+    {
+     "rawScore": 66.6,
+     "percentile": 83.3157
+    },
+    {
+     "rawScore": 66.65,
+     "percentile": 83.3227
+    },
+    {
+     "rawScore": 66.7,
+     "percentile": 83.3266
+    },
+    {
+     "rawScore": 66.75,
+     "percentile": 83.7497
+    },
+    {
+     "rawScore": 66.8,
+     "percentile": 83.7498
+    },
+    {
+     "rawScore": 66.8,
+     "percentile": 83.754
+    },
+    {
+     "rawScore": 66.85,
+     "percentile": 83.7818
+    },
+    {
+     "rawScore": 66.9,
+     "percentile": 84.3439
+    },
+    {
+     "rawScore": 66.95,
+     "percentile": 84.3439
+    },
+    {
+     "rawScore": 66.95,
+     "percentile": 84.4272
+    },
+    {
+     "rawScore": 67.0,
+     "percentile": 84.4602
+    },
+    {
+     "rawScore": 67.05,
+     "percentile": 84.461
+    },
+    {
+     "rawScore": 67.05,
+     "percentile": 84.4634
+    },
+    {
+     "rawScore": 67.1,
+     "percentile": 84.4865
+    },
+    {
+     "rawScore": 67.15,
+     "percentile": 84.5998
+    },
+    {
+     "rawScore": 67.2,
+     "percentile": 84.6028
+    },
+    {
+     "rawScore": 67.25,
+     "percentile": 84.6078
+    },
+    {
+     "rawScore": 67.3,
+     "percentile": 84.6157
+    },
+    {
+     "rawScore": 67.3,
+     "percentile": 84.969
+    },
+    {
+     "rawScore": 67.35,
+     "percentile": 85.0018
+    },
+    {
+     "rawScore": 67.4,
+     "percentile": 85.0018
+    },
+    {
+     "rawScore": 67.4,
+     "percentile": 85.0071
+    },
+    {
+     "rawScore": 67.45,
+     "percentile": 85.0089
+    },
+    {
+     "rawScore": 67.45,
+     "percentile": 85.133
+    },
+    {
+     "rawScore": 67.5,
+     "percentile": 85.1615
+    },
+    {
+     "rawScore": 67.55,
+     "percentile": 85.1615
+    },
+    {
+     "rawScore": 67.55,
+     "percentile": 85.1621
+    },
+    {
+     "rawScore": 67.6,
+     "percentile": 85.4983
+    },
+    {
+     "rawScore": 67.65,
+     "percentile": 85.5038
+    },
+    {
+     "rawScore": 67.7,
+     "percentile": 85.5038
+    },
+    {
+     "rawScore": 67.7,
+     "percentile": 85.6128
+    },
+    {
+     "rawScore": 67.75,
+     "percentile": 85.7442
+    },
+    {
+     "rawScore": 67.8,
+     "percentile": 85.7745
+    },
+    {
+     "rawScore": 67.85,
+     "percentile": 85.7757
+    },
+    {
+     "rawScore": 67.9,
+     "percentile": 85.7757
+    },
+    {
+     "rawScore": 67.9,
+     "percentile": 86.225
+    },
+    {
+     "rawScore": 67.95,
+     "percentile": 86.2251
+    },
+    {
+     "rawScore": 67.95,
+     "percentile": 86.3774
+    },
+    {
+     "rawScore": 68.0,
+     "percentile": 86.3944
+    },
+    {
+     "rawScore": 68.05,
+     "percentile": 86.4167
+    },
+    {
+     "rawScore": 68.05,
+     "percentile": 86.6929
+    },
+    {
+     "rawScore": 68.1,
+     "percentile": 86.8032
+    },
+    {
+     "rawScore": 68.15,
+     "percentile": 86.8039
+    },
+    {
+     "rawScore": 68.2,
+     "percentile": 88.3721
+    },
+    {
+     "rawScore": 68.25,
+     "percentile": 88.4814
+    },
+    {
+     "rawScore": 68.3,
+     "percentile": 88.4814
+    },
+    {
+     "rawScore": 68.3,
+     "percentile": 88.4816
+    },
+    {
+     "rawScore": 68.35,
+     "percentile": 88.4848
+    },
+    {
+     "rawScore": 68.4,
+     "percentile": 88.5236
+    },
+    {
+     "rawScore": 68.45,
+     "percentile": 88.5237
+    },
+    {
+     "rawScore": 68.45,
+     "percentile": 88.5293
+    },
+    {
+     "rawScore": 68.5,
+     "percentile": 88.5337
+    },
+    {
+     "rawScore": 68.55,
+     "percentile": 88.5343
+    },
+    {
+     "rawScore": 68.55,
+     "percentile": 88.5518
+    },
+    {
+     "rawScore": 68.6,
+     "percentile": 88.5521
+    },
+    {
+     "rawScore": 68.65,
+     "percentile": 88.9034
+    },
+    {
+     "rawScore": 68.7,
+     "percentile": 88.9034
+    },
+    {
+     "rawScore": 68.7,
+     "percentile": 89.4303
+    },
+    {
+     "rawScore": 68.75,
+     "percentile": 89.4386
+    },
+    {
+     "rawScore": 68.8,
+     "percentile": 89.4399
+    },
+    {
+     "rawScore": 68.85,
+     "percentile": 89.5494
+    },
+    {
+     "rawScore": 68.9,
+     "percentile": 89.5496
+    },
+    {
+     "rawScore": 68.95,
+     "percentile": 89.5522
+    },
+    {
+     "rawScore": 69.0,
+     "percentile": 90.0931
+    },
+    {
+     "rawScore": 69.05,
+     "percentile": 90.0936
+    },
+    {
+     "rawScore": 69.05,
+     "percentile": 90.1106
+    },
+    {
+     "rawScore": 69.1,
+     "percentile": 90.1313
+    },
+    {
+     "rawScore": 69.15,
+     "percentile": 90.1313
+    },
+    {
+     "rawScore": 69.15,
+     "percentile": 90.1536
+    },
+    {
+     "rawScore": 69.2,
+     "percentile": 90.1536
+    },
+    {
+     "rawScore": 69.2,
+     "percentile": 90.1549
+    },
+    {
+     "rawScore": 69.25,
+     "percentile": 90.1866
+    },
+    {
+     "rawScore": 69.3,
+     "percentile": 90.188
+    },
+    {
+     "rawScore": 69.3,
+     "percentile": 90.188
+    },
+    {
+     "rawScore": 69.35,
+     "percentile": 90.191
+    },
+    {
+     "rawScore": 69.4,
+     "percentile": 90.1929
+    },
+    {
+     "rawScore": 69.45,
+     "percentile": 90.1929
+    },
+    {
+     "rawScore": 69.45,
+     "percentile": 90.6172
+    },
+    {
+     "rawScore": 69.5,
+     "percentile": 90.6269
+    },
+    {
+     "rawScore": 69.55,
+     "percentile": 90.6357
+    },
+    {
+     "rawScore": 69.55,
+     "percentile": 90.9179
+    },
+    {
+     "rawScore": 69.6,
+     "percentile": 90.9217
+    },
+    {
+     "rawScore": 69.65,
+     "percentile": 90.9433
+    },
+    {
+     "rawScore": 69.7,
+     "percentile": 90.9453
+    },
+    {
+     "rawScore": 69.7,
+     "percentile": 91.0463
+    },
+    {
+     "rawScore": 69.75,
+     "percentile": 91.0763
+    },
+    {
+     "rawScore": 69.8,
+     "percentile": 91.0764
+    },
+    {
+     "rawScore": 69.8,
+     "percentile": 91.0789
+    },
+    {
+     "rawScore": 69.85,
+     "percentile": 91.107
+    },
+    {
+     "rawScore": 69.9,
+     "percentile": 91.107
+    },
+    {
+     "rawScore": 69.95,
+     "percentile": 91.1211
+    },
+    {
+     "rawScore": 70.0,
+     "percentile": 91.3548
+    },
+    {
+     "rawScore": 70.05,
+     "percentile": 91.3548
+    },
+    {
+     "rawScore": 70.05,
+     "percentile": 91.3859
+    },
+    {
+     "rawScore": 70.1,
+     "percentile": 91.3864
+    },
+    {
+     "rawScore": 70.15,
+     "percentile": 91.3864
+    },
+    {
+     "rawScore": 70.15,
+     "percentile": 91.7456
+    },
+    {
+     "rawScore": 70.2,
+     "percentile": 91.7462
+    },
+    {
+     "rawScore": 70.2,
+     "percentile": 91.755
+    },
+    {
+     "rawScore": 70.25,
+     "percentile": 91.7557
+    },
+    {
+     "rawScore": 70.3,
+     "percentile": 91.7657
+    },
+    {
+     "rawScore": 70.3,
+     "percentile": 92.0723
+    },
+    {
+     "rawScore": 70.35,
+     "percentile": 92.1707
+    },
+    {
+     "rawScore": 70.4,
+     "percentile": 92.1739
+    },
+    {
+     "rawScore": 70.45,
+     "percentile": 92.1739
+    },
+    {
+     "rawScore": 70.45,
+     "percentile": 92.2891
+    },
+    {
+     "rawScore": 70.5,
+     "percentile": 92.323
+    },
+    {
+     "rawScore": 70.6,
+     "percentile": 92.339
+    },
+    {
+     "rawScore": 70.65,
+     "percentile": 92.3787
+    },
+    {
+     "rawScore": 70.7,
+     "percentile": 92.3803
+    },
+    {
+     "rawScore": 70.75,
+     "percentile": 92.7493
+    },
+    {
+     "rawScore": 70.8,
+     "percentile": 92.7523
+    },
+    {
+     "rawScore": 70.8,
+     "percentile": 92.8503
+    },
+    {
+     "rawScore": 70.85,
+     "percentile": 92.8517
+    },
+    {
+     "rawScore": 70.9,
+     "percentile": 93.2418
+    },
+    {
+     "rawScore": 70.95,
+     "percentile": 93.2419
+    },
+    {
+     "rawScore": 70.95,
+     "percentile": 93.7074
+    },
+    {
+     "rawScore": 71.0,
+     "percentile": 93.7105
+    },
+    {
+     "rawScore": 71.05,
+     "percentile": 93.7111
+    },
+    {
+     "rawScore": 71.05,
+     "percentile": 93.7111
+    },
+    {
+     "rawScore": 71.1,
+     "percentile": 93.8272
+    },
+    {
+     "rawScore": 71.1,
+     "percentile": 93.8272
+    },
+    {
+     "rawScore": 71.15,
+     "percentile": 93.8272
+    },
+    {
+     "rawScore": 71.2,
+     "percentile": 93.8287
+    },
+    {
+     "rawScore": 71.25,
+     "percentile": 93.867
+    },
+    {
+     "rawScore": 71.3,
+     "percentile": 93.8673
+    },
+    {
+     "rawScore": 71.35,
+     "percentile": 93.8911
+    },
+    {
+     "rawScore": 71.4,
+     "percentile": 93.8911
+    },
+    {
+     "rawScore": 71.4,
+     "percentile": 94.0157
+    },
+    {
+     "rawScore": 71.45,
+     "percentile": 94.0157
+    },
+    {
+     "rawScore": 71.45,
+     "percentile": 94.0225
+    },
+    {
+     "rawScore": 71.5,
+     "percentile": 94.0231
+    },
+    {
+     "rawScore": 71.55,
+     "percentile": 94.0238
+    },
+    {
+     "rawScore": 71.55,
+     "percentile": 94.0315
+    },
+    {
+     "rawScore": 71.6,
+     "percentile": 94.0326
+    },
+    {
+     "rawScore": 71.65,
+     "percentile": 94.0343
+    },
+    {
+     "rawScore": 71.7,
+     "percentile": 94.0343
+    },
+    {
+     "rawScore": 71.7,
+     "percentile": 94.5818
+    },
+    {
+     "rawScore": 71.75,
+     "percentile": 94.6033
+    },
+    {
+     "rawScore": 71.8,
+     "percentile": 94.6273
+    },
+    {
+     "rawScore": 71.85,
+     "percentile": 94.6288
+    },
+    {
+     "rawScore": 71.9,
+     "percentile": 94.6291
+    },
+    {
+     "rawScore": 71.95,
+     "percentile": 94.6292
+    },
+    {
+     "rawScore": 71.95,
+     "percentile": 94.7392
+    },
+    {
+     "rawScore": 72.0,
+     "percentile": 94.74
+    },
+    {
+     "rawScore": 72.05,
+     "percentile": 94.74
+    },
+    {
+     "rawScore": 72.05,
+     "percentile": 94.7402
+    },
+    {
+     "rawScore": 72.1,
+     "percentile": 94.832
+    },
+    {
+     "rawScore": 72.15,
+     "percentile": 94.8418
+    },
+    {
+     "rawScore": 72.2,
+     "percentile": 94.847
+    },
+    {
+     "rawScore": 72.25,
+     "percentile": 94.948
+    },
+    {
+     "rawScore": 72.3,
+     "percentile": 94.948
+    },
+    {
+     "rawScore": 72.3,
+     "percentile": 94.9481
+    },
+    {
+     "rawScore": 72.35,
+     "percentile": 94.9483
+    },
+    {
+     "rawScore": 72.4,
+     "percentile": 94.9791
+    },
+    {
+     "rawScore": 72.45,
+     "percentile": 94.9797
+    },
+    {
+     "rawScore": 72.45,
+     "percentile": 94.9826
+    },
+    {
+     "rawScore": 72.5,
+     "percentile": 95.0103
+    },
+    {
+     "rawScore": 72.55,
+     "percentile": 95.0108
+    },
+    {
+     "rawScore": 72.55,
+     "percentile": 95.0261
+    },
+    {
+     "rawScore": 72.6,
+     "percentile": 95.0338
+    },
+    {
+     "rawScore": 72.65,
+     "percentile": 95.0341
+    },
+    {
+     "rawScore": 72.7,
+     "percentile": 95.0342
+    },
+    {
+     "rawScore": 72.7,
+     "percentile": 95.4717
+    },
+    {
+     "rawScore": 72.75,
+     "percentile": 95.5111
+    },
+    {
+     "rawScore": 72.8,
+     "percentile": 95.5111
+    },
+    {
+     "rawScore": 72.85,
+     "percentile": 95.5972
+    },
+    {
+     "rawScore": 72.85,
+     "percentile": 95.5972
+    },
+    {
+     "rawScore": 72.9,
+     "percentile": 95.5972
+    },
+    {
+     "rawScore": 72.9,
+     "percentile": 95.5975
+    },
+    {
+     "rawScore": 72.95,
+     "percentile": 95.5981
+    },
+    {
+     "rawScore": 73.0,
+     "percentile": 96.0029
+    },
+    {
+     "rawScore": 73.05,
+     "percentile": 96.006
+    },
+    {
+     "rawScore": 73.05,
+     "percentile": 96.1043
+    },
+    {
+     "rawScore": 73.1,
+     "percentile": 96.1044
+    },
+    {
+     "rawScore": 73.15,
+     "percentile": 96.1044
+    },
+    {
+     "rawScore": 73.15,
+     "percentile": 96.1238
+    },
+    {
+     "rawScore": 73.2,
+     "percentile": 96.1239
+    },
+    {
+     "rawScore": 73.2,
+     "percentile": 96.1614
+    },
+    {
+     "rawScore": 73.25,
+     "percentile": 96.1628
+    },
+    {
+     "rawScore": 73.3,
+     "percentile": 96.1638
+    },
+    {
+     "rawScore": 73.3,
+     "percentile": 96.1638
+    },
+    {
+     "rawScore": 73.35,
+     "percentile": 96.1685
+    },
+    {
+     "rawScore": 73.45,
+     "percentile": 96.5107
+    },
+    {
+     "rawScore": 73.5,
+     "percentile": 96.6514
+    },
+    {
+     "rawScore": 73.55,
+     "percentile": 96.6515
+    },
+    {
+     "rawScore": 73.6,
+     "percentile": 96.6529
+    },
+    {
+     "rawScore": 73.65,
+     "percentile": 96.778
+    },
+    {
+     "rawScore": 73.7,
+     "percentile": 96.778
+    },
+    {
+     "rawScore": 73.7,
+     "percentile": 96.7782
+    },
+    {
+     "rawScore": 73.75,
+     "percentile": 96.7784
+    },
+    {
+     "rawScore": 73.8,
+     "percentile": 96.7787
+    },
+    {
+     "rawScore": 73.8,
+     "percentile": 96.7887
+    },
+    {
+     "rawScore": 73.85,
+     "percentile": 96.7931
+    },
+    {
+     "rawScore": 73.9,
+     "percentile": 96.7931
+    },
+    {
+     "rawScore": 73.95,
+     "percentile": 96.8148
+    },
+    {
+     "rawScore": 74.0,
+     "percentile": 96.8152
+    },
+    {
+     "rawScore": 74.05,
+     "percentile": 96.8367
+    },
+    {
+     "rawScore": 74.1,
+     "percentile": 96.8381
+    },
+    {
+     "rawScore": 74.1,
+     "percentile": 96.8381
+    },
+    {
+     "rawScore": 74.15,
+     "percentile": 96.8382
+    },
+    {
+     "rawScore": 74.2,
+     "percentile": 96.8387
+    },
+    {
+     "rawScore": 74.25,
+     "percentile": 96.9464
+    },
+    {
+     "rawScore": 74.3,
+     "percentile": 96.9464
+    },
+    {
+     "rawScore": 74.3,
+     "percentile": 96.9473
+    },
+    {
+     "rawScore": 74.35,
+     "percentile": 97.0211
+    },
+    {
+     "rawScore": 74.4,
+     "percentile": 97.0338
+    },
+    {
+     "rawScore": 74.45,
+     "percentile": 97.0338
+    },
+    {
+     "rawScore": 74.45,
+     "percentile": 97.0548
+    },
+    {
+     "rawScore": 74.5,
+     "percentile": 97.082
+    },
+    {
+     "rawScore": 74.55,
+     "percentile": 97.082
+    },
+    {
+     "rawScore": 74.6,
+     "percentile": 97.0826
+    },
+    {
+     "rawScore": 74.6,
+     "percentile": 97.0827
+    },
+    {
+     "rawScore": 74.65,
+     "percentile": 97.0827
+    },
+    {
+     "rawScore": 74.65,
+     "percentile": 97.1101
+    },
+    {
+     "rawScore": 74.7,
+     "percentile": 97.1102
+    },
+    {
+     "rawScore": 74.75,
+     "percentile": 97.1137
+    },
+    {
+     "rawScore": 74.8,
+     "percentile": 97.1161
+    },
+    {
+     "rawScore": 74.8,
+     "percentile": 97.1937
+    },
+    {
+     "rawScore": 74.85,
+     "percentile": 97.2016
+    },
+    {
+     "rawScore": 74.9,
+     "percentile": 97.2027
+    },
+    {
+     "rawScore": 74.95,
+     "percentile": 97.2028
+    },
+    {
+     "rawScore": 74.95,
+     "percentile": 97.5524
+    },
+    {
+     "rawScore": 75.0,
+     "percentile": 97.5546
+    },
+    {
+     "rawScore": 75.05,
+     "percentile": 97.5546
+    },
+    {
+     "rawScore": 75.05,
+     "percentile": 97.5547
+    },
+    {
+     "rawScore": 75.1,
+     "percentile": 97.6352
+    },
+    {
+     "rawScore": 75.1,
+     "percentile": 97.6352
+    },
+    {
+     "rawScore": 75.15,
+     "percentile": 97.6353
+    },
+    {
+     "rawScore": 75.2,
+     "percentile": 97.6385
+    },
+    {
+     "rawScore": 75.25,
+     "percentile": 97.671
+    },
+    {
+     "rawScore": 75.3,
+     "percentile": 97.671
+    },
+    {
+     "rawScore": 75.3,
+     "percentile": 97.6731
+    },
+    {
+     "rawScore": 75.4,
+     "percentile": 97.6731
+    },
+    {
+     "rawScore": 75.4,
+     "percentile": 97.7718
+    },
+    {
+     "rawScore": 75.45,
+     "percentile": 97.7719
+    },
+    {
+     "rawScore": 75.45,
+     "percentile": 97.8104
+    },
+    {
+     "rawScore": 75.5,
+     "percentile": 97.8108
+    },
+    {
+     "rawScore": 75.55,
+     "percentile": 97.8113
+    },
+    {
+     "rawScore": 75.55,
+     "percentile": 97.8174
+    },
+    {
+     "rawScore": 75.6,
+     "percentile": 97.8431
+    },
+    {
+     "rawScore": 75.65,
+     "percentile": 97.8431
+    },
+    {
+     "rawScore": 75.7,
+     "percentile": 98.2231
+    },
+    {
+     "rawScore": 75.75,
+     "percentile": 98.3434
+    },
+    {
+     "rawScore": 75.85,
+     "percentile": 98.3441
+    },
+    {
+     "rawScore": 75.85,
+     "percentile": 98.3441
+    },
+    {
+     "rawScore": 75.9,
+     "percentile": 98.3468
+    },
+    {
+     "rawScore": 75.95,
+     "percentile": 98.3469
+    },
+    {
+     "rawScore": 76.0,
+     "percentile": 98.3472
+    },
+    {
+     "rawScore": 76.05,
+     "percentile": 98.3473
+    },
+    {
+     "rawScore": 76.05,
+     "percentile": 98.3513
+    },
+    {
+     "rawScore": 76.1,
+     "percentile": 98.3514
+    },
+    {
+     "rawScore": 76.15,
+     "percentile": 98.3592
+    },
+    {
+     "rawScore": 76.2,
+     "percentile": 98.4806
+    },
+    {
+     "rawScore": 76.25,
+     "percentile": 98.4823
+    },
+    {
+     "rawScore": 76.35,
+     "percentile": 98.4848
+    },
+    {
+     "rawScore": 76.35,
+     "percentile": 98.4848
+    },
+    {
+     "rawScore": 76.4,
+     "percentile": 98.4848
+    },
+    {
+     "rawScore": 76.45,
+     "percentile": 98.4852
+    },
+    {
+     "rawScore": 76.45,
+     "percentile": 98.4853
+    },
+    {
+     "rawScore": 76.5,
+     "percentile": 98.6241
+    },
+    {
+     "rawScore": 76.55,
+     "percentile": 98.6242
+    },
+    {
+     "rawScore": 76.55,
+     "percentile": 98.6245
+    },
+    {
+     "rawScore": 76.6,
+     "percentile": 98.6306
+    },
+    {
+     "rawScore": 76.65,
+     "percentile": 98.6357
+    },
+    {
+     "rawScore": 76.7,
+     "percentile": 98.6357
+    },
+    {
+     "rawScore": 76.7,
+     "percentile": 98.6361
+    },
+    {
+     "rawScore": 76.75,
+     "percentile": 98.6645
+    },
+    {
+     "rawScore": 76.8,
+     "percentile": 98.6645
+    },
+    {
+     "rawScore": 76.85,
+     "percentile": 98.6646
+    },
+    {
+     "rawScore": 76.9,
+     "percentile": 98.6646
+    },
+    {
+     "rawScore": 76.9,
+     "percentile": 98.6647
+    },
+    {
+     "rawScore": 76.95,
+     "percentile": 98.6742
+    },
+    {
+     "rawScore": 77.0,
+     "percentile": 98.6755
+    },
+    {
+     "rawScore": 77.05,
+     "percentile": 98.6777
+    },
+    {
+     "rawScore": 77.05,
+     "percentile": 98.7461
+    },
+    {
+     "rawScore": 77.1,
+     "percentile": 98.7461
+    },
+    {
+     "rawScore": 77.15,
+     "percentile": 98.7466
+    },
+    {
+     "rawScore": 77.2,
+     "percentile": 98.7466
+    },
+    {
+     "rawScore": 77.2,
+     "percentile": 98.7765
+    },
+    {
+     "rawScore": 77.25,
+     "percentile": 98.7772
+    },
+    {
+     "rawScore": 77.3,
+     "percentile": 98.7772
+    },
+    {
+     "rawScore": 77.3,
+     "percentile": 98.7772
+    },
+    {
+     "rawScore": 77.35,
+     "percentile": 98.7813
+    },
+    {
+     "rawScore": 77.45,
+     "percentile": 98.7816
+    },
+    {
+     "rawScore": 77.5,
+     "percentile": 98.8977
+    },
+    {
+     "rawScore": 77.55,
+     "percentile": 98.8984
+    },
+    {
+     "rawScore": 77.6,
+     "percentile": 98.8984
+    },
+    {
+     "rawScore": 77.65,
+     "percentile": 98.9854
+    },
+    {
+     "rawScore": 77.7,
+     "percentile": 98.9854
+    },
+    {
+     "rawScore": 77.7,
+     "percentile": 98.9856
+    },
+    {
+     "rawScore": 77.75,
+     "percentile": 98.9857
+    },
+    {
+     "rawScore": 77.8,
+     "percentile": 98.986
+    },
+    {
+     "rawScore": 77.8,
+     "percentile": 98.9928
+    },
+    {
+     "rawScore": 77.85,
+     "percentile": 99.0185
+    },
+    {
+     "rawScore": 77.9,
+     "percentile": 99.0185
+    },
+    {
+     "rawScore": 77.95,
+     "percentile": 99.0375
+    },
+    {
+     "rawScore": 78.0,
+     "percentile": 99.047
+    },
+    {
+     "rawScore": 78.1,
+     "percentile": 99.048
+    },
+    {
+     "rawScore": 78.1,
+     "percentile": 99.048
+    },
+    {
+     "rawScore": 78.15,
+     "percentile": 99.048
+    },
+    {
+     "rawScore": 78.15,
+     "percentile": 99.0489
+    },
+    {
+     "rawScore": 78.25,
+     "percentile": 99.1357
+    },
+    {
+     "rawScore": 78.3,
+     "percentile": 99.1359
+    },
+    {
+     "rawScore": 78.3,
+     "percentile": 99.1428
+    },
+    {
+     "rawScore": 78.35,
+     "percentile": 99.1428
+    },
+    {
+     "rawScore": 78.4,
+     "percentile": 99.1515
+    },
+    {
+     "rawScore": 78.45,
+     "percentile": 99.2734
+    },
+    {
+     "rawScore": 78.5,
+     "percentile": 99.2734
+    },
+    {
+     "rawScore": 78.55,
+     "percentile": 99.2734
+    },
+    {
+     "rawScore": 78.6,
+     "percentile": 99.276
+    },
+    {
+     "rawScore": 78.6,
+     "percentile": 99.276
+    },
+    {
+     "rawScore": 78.7,
+     "percentile": 99.2761
+    },
+    {
+     "rawScore": 78.75,
+     "percentile": 99.2817
+    },
+    {
+     "rawScore": 78.8,
+     "percentile": 99.2817
+    },
+    {
+     "rawScore": 78.85,
+     "percentile": 99.2871
+    },
+    {
+     "rawScore": 78.9,
+     "percentile": 99.2959
+    },
+    {
+     "rawScore": 78.95,
+     "percentile": 99.296
+    },
+    {
+     "rawScore": 79.1,
+     "percentile": 99.2962
+    },
+    {
+     "rawScore": 79.15,
+     "percentile": 99.2963
+    },
+    {
+     "rawScore": 79.2,
+     "percentile": 99.3086
+    },
+    {
+     "rawScore": 79.25,
+     "percentile": 99.3139
+    },
+    {
+     "rawScore": 79.3,
+     "percentile": 99.3139
+    },
+    {
+     "rawScore": 79.3,
+     "percentile": 99.3155
+    },
+    {
+     "rawScore": 79.35,
+     "percentile": 99.3155
+    },
+    {
+     "rawScore": 79.4,
+     "percentile": 99.3155
+    },
+    {
+     "rawScore": 79.45,
+     "percentile": 99.3155
+    },
+    {
+     "rawScore": 79.45,
+     "percentile": 99.3422
+    },
+    {
+     "rawScore": 79.5,
+     "percentile": 99.3422
+    },
+    {
+     "rawScore": 79.6,
+     "percentile": 99.3625
+    },
+    {
+     "rawScore": 79.7,
+     "percentile": 99.3636
+    },
+    {
+     "rawScore": 79.75,
+     "percentile": 99.4539
+    },
+    {
+     "rawScore": 79.85,
+     "percentile": 99.4539
+    },
+    {
+     "rawScore": 79.9,
+     "percentile": 99.4559
+    },
+    {
+     "rawScore": 79.95,
+     "percentile": 99.4559
+    },
+    {
+     "rawScore": 80.0,
+     "percentile": 99.4567
+    },
+    {
+     "rawScore": 80.05,
+     "percentile": 99.4568
+    },
+    {
+     "rawScore": 80.05,
+     "percentile": 99.46
+    },
+    {
+     "rawScore": 80.1,
+     "percentile": 99.4606
+    },
+    {
+     "rawScore": 80.2,
+     "percentile": 99.5567
+    },
+    {
+     "rawScore": 80.25,
+     "percentile": 99.5665
+    },
+    {
+     "rawScore": 80.35,
+     "percentile": 99.5684
+    },
+    {
+     "rawScore": 80.35,
+     "percentile": 99.5684
+    },
+    {
+     "rawScore": 80.4,
+     "percentile": 99.5684
+    },
+    {
+     "rawScore": 80.45,
+     "percentile": 99.5684
+    },
+    {
+     "rawScore": 80.5,
+     "percentile": 99.6648
+    },
+    {
+     "rawScore": 80.55,
+     "percentile": 99.6649
+    },
+    {
+     "rawScore": 80.55,
+     "percentile": 99.6671
+    },
+    {
+     "rawScore": 80.65,
+     "percentile": 99.6712
+    },
+    {
+     "rawScore": 80.7,
+     "percentile": 99.6739
+    },
+    {
+     "rawScore": 80.8,
+     "percentile": 99.6739
+    },
+    {
+     "rawScore": 80.85,
+     "percentile": 99.675
+    },
+    {
+     "rawScore": 80.95,
+     "percentile": 99.6826
+    },
+    {
+     "rawScore": 81.0,
+     "percentile": 99.7135
+    },
+    {
+     "rawScore": 81.15,
+     "percentile": 99.7163
+    },
+    {
+     "rawScore": 81.2,
+     "percentile": 99.7163
+    },
+    {
+     "rawScore": 81.25,
+     "percentile": 99.7163
+    },
+    {
+     "rawScore": 81.35,
+     "percentile": 99.7164
+    },
+    {
+     "rawScore": 81.45,
+     "percentile": 99.7214
+    },
+    {
+     "rawScore": 81.5,
+     "percentile": 99.7214
+    },
+    {
+     "rawScore": 81.55,
+     "percentile": 99.7219
+    },
+    {
+     "rawScore": 81.6,
+     "percentile": 99.7219
+    },
+    {
+     "rawScore": 81.7,
+     "percentile": 99.722
+    },
+    {
+     "rawScore": 81.75,
+     "percentile": 99.7244
+    },
+    {
+     "rawScore": 81.8,
+     "percentile": 99.7244
+    },
+    {
+     "rawScore": 81.85,
+     "percentile": 99.7423
+    },
+    {
+     "rawScore": 81.95,
+     "percentile": 99.7428
+    },
+    {
+     "rawScore": 82.0,
+     "percentile": 99.7504
+    },
+    {
+     "rawScore": 82.1,
+     "percentile": 99.7504
+    },
+    {
+     "rawScore": 82.15,
+     "percentile": 99.7504
+    },
+    {
+     "rawScore": 82.15,
+     "percentile": 99.751
+    },
+    {
+     "rawScore": 82.25,
+     "percentile": 99.7511
+    },
+    {
+     "rawScore": 82.3,
+     "percentile": 99.7513
+    },
+    {
+     "rawScore": 82.3,
+     "percentile": 99.7562
+    },
+    {
+     "rawScore": 82.35,
+     "percentile": 99.7563
+    },
+    {
+     "rawScore": 82.4,
+     "percentile": 99.7564
+    },
+    {
+     "rawScore": 82.45,
+     "percentile": 99.8411
+    },
+    {
+     "rawScore": 82.5,
+     "percentile": 99.8412
+    },
+    {
+     "rawScore": 82.6,
+     "percentile": 99.8429
+    },
+    {
+     "rawScore": 82.6,
+     "percentile": 99.8429
+    },
+    {
+     "rawScore": 82.7,
+     "percentile": 99.843
+    },
+    {
+     "rawScore": 82.75,
+     "percentile": 99.8478
+    },
+    {
+     "rawScore": 82.8,
+     "percentile": 99.8479
+    },
+    {
+     "rawScore": 82.9,
+     "percentile": 99.8542
+    },
+    {
+     "rawScore": 82.95,
+     "percentile": 99.8542
+    },
+    {
+     "rawScore": 82.95,
+     "percentile": 99.855
+    },
+    {
+     "rawScore": 83.1,
+     "percentile": 99.8568
+    },
+    {
+     "rawScore": 83.2,
+     "percentile": 99.8653
+    },
+    {
+     "rawScore": 83.25,
+     "percentile": 99.8962
+    },
+    {
+     "rawScore": 83.35,
+     "percentile": 99.8962
+    },
+    {
+     "rawScore": 83.4,
+     "percentile": 99.8963
+    },
+    {
+     "rawScore": 83.5,
+     "percentile": 99.8963
+    },
+    {
+     "rawScore": 83.55,
+     "percentile": 99.8964
+    },
+    {
+     "rawScore": 83.6,
+     "percentile": 99.8964
+    },
+    {
+     "rawScore": 83.7,
+     "percentile": 99.9049
+    },
+    {
+     "rawScore": 83.75,
+     "percentile": 99.9049
+    },
+    {
+     "rawScore": 83.95,
+     "percentile": 99.9049
+    },
+    {
+     "rawScore": 84.0,
+     "percentile": 99.908
+    },
+    {
+     "rawScore": 84.1,
+     "percentile": 99.9084
+    },
+    {
+     "rawScore": 84.15,
+     "percentile": 99.9085
+    },
+    {
+     "rawScore": 84.2,
+     "percentile": 99.9085
+    },
+    {
+     "rawScore": 84.25,
+     "percentile": 99.9153
+    },
+    {
+     "rawScore": 84.4,
+     "percentile": 99.9153
+    },
+    {
+     "rawScore": 84.5,
+     "percentile": 99.9156
+    },
+    {
+     "rawScore": 84.55,
+     "percentile": 99.9157
+    },
+    {
+     "rawScore": 84.55,
+     "percentile": 99.9172
+    },
+    {
+     "rawScore": 84.7,
+     "percentile": 99.9191
+    },
+    {
+     "rawScore": 84.85,
+     "percentile": 99.92
+    },
+    {
+     "rawScore": 85.0,
+     "percentile": 99.9444
+    },
+    {
+     "rawScore": 85.15,
+     "percentile": 99.9464
+    },
+    {
+     "rawScore": 85.2,
+     "percentile": 99.9464
+    },
+    {
+     "rawScore": 85.25,
+     "percentile": 99.9464
+    },
+    {
+     "rawScore": 85.35,
+     "percentile": 99.9469
+    },
+    {
+     "rawScore": 85.45,
+     "percentile": 99.9509
+    },
+    {
+     "rawScore": 85.5,
+     "percentile": 99.9516
+    },
+    {
+     "rawScore": 85.6,
+     "percentile": 99.9517
+    },
+    {
+     "rawScore": 85.75,
+     "percentile": 99.9536
+    },
+    {
+     "rawScore": 85.8,
+     "percentile": 99.9537
+    },
+    {
+     "rawScore": 85.95,
+     "percentile": 99.9564
+    },
+    {
+     "rawScore": 86.25,
+     "percentile": 99.9577
+    },
+    {
+     "rawScore": 86.35,
+     "percentile": 99.9578
+    },
+    {
+     "rawScore": 86.4,
+     "percentile": 99.958
+    },
+    {
+     "rawScore": 86.6,
+     "percentile": 99.958
+    },
+    {
+     "rawScore": 86.75,
+     "percentile": 99.9581
+    },
+    {
+     "rawScore": 86.8,
+     "percentile": 99.9581
+    },
+    {
+     "rawScore": 86.95,
+     "percentile": 99.9581
+    },
+    {
+     "rawScore": 86.95,
+     "percentile": 99.9587
+    },
+    {
+     "rawScore": 87.1,
+     "percentile": 99.96
+    },
+    {
+     "rawScore": 87.2,
+     "percentile": 99.96
+    },
+    {
+     "rawScore": 87.25,
+     "percentile": 99.9815
+    },
+    {
+     "rawScore": 87.4,
+     "percentile": 99.9816
+    },
+    {
+     "rawScore": 87.5,
+     "percentile": 99.9816
+    },
+    {
+     "rawScore": 87.55,
+     "percentile": 99.9816
+    },
+    {
+     "rawScore": 87.6,
+     "percentile": 99.9816
+    },
+    {
+     "rawScore": 87.7,
+     "percentile": 99.9878
+    },
+    {
+     "rawScore": 87.75,
+     "percentile": 99.988
+    },
+    {
+     "rawScore": 88.0,
+     "percentile": 99.9901
+    },
+    {
+     "rawScore": 88.15,
+     "percentile": 99.9902
+    },
+    {
+     "rawScore": 88.2,
+     "percentile": 99.9903
+    },
+    {
+     "rawScore": 88.35,
+     "percentile": 99.9903
+    },
+    {
+     "rawScore": 88.5,
+     "percentile": 99.9924
+    },
+    {
+     "rawScore": 88.95,
+     "percentile": 99.9926
+    },
+    {
+     "rawScore": 89.0,
+     "percentile": 99.9926
+    },
+    {
+     "rawScore": 89.2,
+     "percentile": 99.9926
+    },
+    {
+     "rawScore": 89.35,
+     "percentile": 99.993
+    },
+    {
+     "rawScore": 89.5,
+     "percentile": 99.9935
+    },
+    {
+     "rawScore": 89.8,
+     "percentile": 99.9935
+    },
+    {
+     "rawScore": 89.95,
+     "percentile": 99.9954
+    },
+    {
+     "rawScore": 90.25,
+     "percentile": 99.9964
+    },
+    {
+     "rawScore": 90.4,
+     "percentile": 99.9965
+    },
+    {
+     "rawScore": 90.6,
+     "percentile": 99.9966
+    },
+    {
+     "rawScore": 90.75,
+     "percentile": 99.9973
+    },
+    {
+     "rawScore": 91.2,
+     "percentile": 99.9974
+    },
+    {
+     "rawScore": 91.6,
+     "percentile": 99.9974
+    },
+    {
+     "rawScore": 91.75,
+     "percentile": 99.9976
+    },
+    {
+     "rawScore": 92.0,
+     "percentile": 99.9976
+    },
+    {
+     "rawScore": 92.2,
+     "percentile": 99.9976
+    },
+    {
+     "rawScore": 92.35,
+     "percentile": 99.9976
+    },
+    {
+     "rawScore": 92.5,
+     "percentile": 99.9992
+    },
+    {
+     "rawScore": 92.95,
+     "percentile": 99.9993
+    },
+    {
+     "rawScore": 93.0,
+     "percentile": 99.9993
+    },
+    {
+     "rawScore": 93.75,
+     "percentile": 99.9993
+    },
+    {
+     "rawScore": 94.6,
+     "percentile": 99.9993
+    },
+    {
+     "rawScore": 94.75,
+     "percentile": 99.9998
+    },
+    {
+     "rawScore": 95.2,
+     "percentile": 99.9999
+    },
+    {
+     "rawScore": 96.0,
+     "percentile": 99.9999
+    },
+    {
+     "rawScore": 97.0,
+     "percentile": 100.0
+    },
+    {
+     "rawScore": 97.75,
+     "percentile": 100.0
+    },
+    {
+     "rawScore": 100.0,
+     "percentile": 100.0
+    }
+   ]
+  },
+  {
+   "slug": "micronutrientes",
+   "name": "Micronutrientes",
+   "position": 2,
+   "markers": [
+    {
+     "rsId": "rs4988235",
+     "weight": 0.2,
+     "position": 1,
+     "genotypeScores": [
+      {
+       "genotype": "AA",
+       "score": 100.0,
+       "classification": "FAVORAVEL"
+      },
+      {
+       "genotype": "AG",
+       "score": 60.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "GA",
+       "score": 60.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "GG",
+       "score": 10.0,
+       "classification": "DESFAVORAVEL"
+      }
+     ]
+    },
+    {
+     "rsId": "rs2228570",
+     "weight": 0.15,
+     "position": 3,
+     "genotypeScores": [
+      {
+       "genotype": "CC",
+       "score": 100.0,
+       "classification": "FAVORAVEL"
+      },
+      {
+       "genotype": "CT",
+       "score": 60.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "TC",
+       "score": 60.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "TT",
+       "score": 20.0,
+       "classification": "DESFAVORAVEL"
+      }
+     ]
+    },
+    {
+     "rsId": "rs33972313",
+     "weight": 0.15,
+     "position": 4,
+     "genotypeScores": [
+      {
+       "genotype": "CC",
+       "score": 100.0,
+       "classification": "FAVORAVEL"
+      },
+      {
+       "genotype": "CT",
+       "score": 60.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "TC",
+       "score": 60.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "TT",
+       "score": 25.0,
+       "classification": "DESFAVORAVEL"
+      }
+     ]
+    }
+   ],
+   "percentileCurve": [
+    {
+     "rawScore": 14.625,
+     "percentile": 0.0
+    },
+    {
+     "rawScore": 18.5625,
+     "percentile": 0.0
+    },
+    {
+     "rawScore": 18.625,
+     "percentile": 0.0
+    },
+    {
+     "rawScore": 19.875,
+     "percentile": 0.0
+    },
+    {
+     "rawScore": 20.125,
+     "percentile": 0.0
+    },
+    {
+     "rawScore": 20.625,
+     "percentile": 0.0
+    },
+    {
+     "rawScore": 22.5625,
+     "percentile": 0.0
+    },
+    {
+     "rawScore": 23.0625,
+     "percentile": 0.0
+    },
+    {
+     "rawScore": 23.625,
+     "percentile": 0.0
+    },
+    {
+     "rawScore": 23.8125,
+     "percentile": 0.0
+    },
+    {
+     "rawScore": 23.875,
+     "percentile": 0.0
+    },
+    {
+     "rawScore": 24.0625,
+     "percentile": 0.0
+    },
+    {
+     "rawScore": 24.125,
+     "percentile": 0.0
+    },
+    {
+     "rawScore": 24.5625,
+     "percentile": 0.0
+    },
+    {
+     "rawScore": 24.625,
+     "percentile": 0.0
+    },
+    {
+     "rawScore": 25.375,
+     "percentile": 0.0
+    },
+    {
+     "rawScore": 25.875,
+     "percentile": 0.0
+    },
+    {
+     "rawScore": 26.125,
+     "percentile": 0.0
+    },
+    {
+     "rawScore": 26.3125,
+     "percentile": 0.0
+    },
+    {
+     "rawScore": 26.625,
+     "percentile": 0.0
+    },
+    {
+     "rawScore": 27.0625,
+     "percentile": 0.0
+    },
+    {
+     "rawScore": 27.5625,
+     "percentile": 0.0
+    },
+    {
+     "rawScore": 27.8125,
+     "percentile": 0.0
+    },
+    {
+     "rawScore": 28.0625,
+     "percentile": 0.0
+    },
+    {
+     "rawScore": 28.3125,
+     "percentile": 0.0
+    },
+    {
+     "rawScore": 28.5625,
+     "percentile": 0.0001
+    },
+    {
+     "rawScore": 28.625,
+     "percentile": 0.0001
+    },
+    {
+     "rawScore": 28.875,
+     "percentile": 0.0001
+    },
+    {
+     "rawScore": 29.0625,
+     "percentile": 0.0001
+    },
+    {
+     "rawScore": 29.125,
+     "percentile": 0.0001
+    },
+    {
+     "rawScore": 29.3125,
+     "percentile": 0.0001
+    },
+    {
+     "rawScore": 29.375,
+     "percentile": 0.0001
+    },
+    {
+     "rawScore": 29.625,
+     "percentile": 0.0001
+    },
+    {
+     "rawScore": 29.8125,
+     "percentile": 0.0001
+    },
+    {
+     "rawScore": 29.875,
+     "percentile": 0.0003
+    },
+    {
+     "rawScore": 30.0625,
+     "percentile": 0.0003
+    },
+    {
+     "rawScore": 30.125,
+     "percentile": 0.0003
+    },
+    {
+     "rawScore": 30.25,
+     "percentile": 0.0003
+    },
+    {
+     "rawScore": 30.3125,
+     "percentile": 0.0003
+    },
+    {
+     "rawScore": 30.5625,
+     "percentile": 0.0003
+    },
+    {
+     "rawScore": 30.625,
+     "percentile": 0.0003
+    },
+    {
+     "rawScore": 31.375,
+     "percentile": 0.0004
+    },
+    {
+     "rawScore": 31.5625,
+     "percentile": 0.0004
+    },
+    {
+     "rawScore": 31.875,
+     "percentile": 0.0005
+    },
+    {
+     "rawScore": 32.0625,
+     "percentile": 0.0005
+    },
+    {
+     "rawScore": 32.125,
+     "percentile": 0.0005
+    },
+    {
+     "rawScore": 32.3125,
+     "percentile": 0.0005
+    },
+    {
+     "rawScore": 32.5625,
+     "percentile": 0.0005
+    },
+    {
+     "rawScore": 32.625,
+     "percentile": 0.0005
+    },
+    {
+     "rawScore": 32.8125,
+     "percentile": 0.0006
+    },
+    {
+     "rawScore": 33.0625,
+     "percentile": 0.0006
+    },
+    {
+     "rawScore": 33.3125,
+     "percentile": 0.0006
+    },
+    {
+     "rawScore": 33.5625,
+     "percentile": 0.0007
+    },
+    {
+     "rawScore": 33.625,
+     "percentile": 0.0007
+    },
+    {
+     "rawScore": 33.8125,
+     "percentile": 0.0018
+    },
+    {
+     "rawScore": 33.875,
+     "percentile": 0.0018
+    },
+    {
+     "rawScore": 34.0625,
+     "percentile": 0.0018
+    },
+    {
+     "rawScore": 34.125,
+     "percentile": 0.0018
+    },
+    {
+     "rawScore": 34.25,
+     "percentile": 0.0018
+    },
+    {
+     "rawScore": 34.3125,
+     "percentile": 0.0019
+    },
+    {
+     "rawScore": 34.375,
+     "percentile": 0.0019
+    },
+    {
+     "rawScore": 34.5625,
+     "percentile": 0.0019
+    },
+    {
+     "rawScore": 34.625,
+     "percentile": 0.0019
+    },
+    {
+     "rawScore": 34.75,
+     "percentile": 0.0019
+    },
+    {
+     "rawScore": 34.875,
+     "percentile": 0.0029
+    },
+    {
+     "rawScore": 35.0625,
+     "percentile": 0.0029
+    },
+    {
+     "rawScore": 35.125,
+     "percentile": 0.0029
+    },
+    {
+     "rawScore": 35.3125,
+     "percentile": 0.0029
+    },
+    {
+     "rawScore": 35.375,
+     "percentile": 0.0031
+    },
+    {
+     "rawScore": 35.5,
+     "percentile": 0.0031
+    },
+    {
+     "rawScore": 35.5625,
+     "percentile": 0.0031
+    },
+    {
+     "rawScore": 35.625,
+     "percentile": 0.0031
+    },
+    {
+     "rawScore": 35.8125,
+     "percentile": 0.0039
+    },
+    {
+     "rawScore": 35.875,
+     "percentile": 0.0065
+    },
+    {
+     "rawScore": 36.0625,
+     "percentile": 0.0065
+    },
+    {
+     "rawScore": 36.125,
+     "percentile": 0.0065
+    },
+    {
+     "rawScore": 36.25,
+     "percentile": 0.0065
+    },
+    {
+     "rawScore": 36.3125,
+     "percentile": 0.0065
+    },
+    {
+     "rawScore": 36.5625,
+     "percentile": 0.0065
+    },
+    {
+     "rawScore": 36.625,
+     "percentile": 0.0065
+    },
+    {
+     "rawScore": 37.0625,
+     "percentile": 0.0065
+    },
+    {
+     "rawScore": 37.3125,
+     "percentile": 0.0066
+    },
+    {
+     "rawScore": 37.375,
+     "percentile": 0.0067
+    },
+    {
+     "rawScore": 37.5625,
+     "percentile": 0.0069
+    },
+    {
+     "rawScore": 37.8125,
+     "percentile": 0.007
+    },
+    {
+     "rawScore": 37.875,
+     "percentile": 0.0074
+    },
+    {
+     "rawScore": 38.0625,
+     "percentile": 0.0075
+    },
+    {
+     "rawScore": 38.125,
+     "percentile": 0.0075
+    },
+    {
+     "rawScore": 38.3125,
+     "percentile": 0.009
+    },
+    {
+     "rawScore": 38.5625,
+     "percentile": 0.009
+    },
+    {
+     "rawScore": 38.625,
+     "percentile": 0.0092
+    },
+    {
+     "rawScore": 38.75,
+     "percentile": 0.0092
+    },
+    {
+     "rawScore": 38.8125,
+     "percentile": 0.0143
+    },
+    {
+     "rawScore": 38.875,
+     "percentile": 0.0161
+    },
+    {
+     "rawScore": 39.0625,
+     "percentile": 0.0163
+    },
+    {
+     "rawScore": 39.125,
+     "percentile": 0.0163
+    },
+    {
+     "rawScore": 39.25,
+     "percentile": 0.0163
+    },
+    {
+     "rawScore": 39.3125,
+     "percentile": 0.0171
+    },
+    {
+     "rawScore": 39.375,
+     "percentile": 0.0171
+    },
+    {
+     "rawScore": 39.5,
+     "percentile": 0.0171
+    },
+    {
+     "rawScore": 39.5625,
+     "percentile": 0.0174
+    },
+    {
+     "rawScore": 39.625,
+     "percentile": 0.0175
+    },
+    {
+     "rawScore": 39.8125,
+     "percentile": 0.032
+    },
+    {
+     "rawScore": 39.875,
+     "percentile": 0.0322
+    },
+    {
+     "rawScore": 40.0,
+     "percentile": 0.0322
+    },
+    {
+     "rawScore": 40.0625,
+     "percentile": 0.0323
+    },
+    {
+     "rawScore": 40.125,
+     "percentile": 0.0323
+    },
+    {
+     "rawScore": 40.25,
+     "percentile": 0.0323
+    },
+    {
+     "rawScore": 40.3125,
+     "percentile": 0.0334
+    },
+    {
+     "rawScore": 40.375,
+     "percentile": 0.0341
+    },
+    {
+     "rawScore": 40.5625,
+     "percentile": 0.0342
+    },
+    {
+     "rawScore": 40.625,
+     "percentile": 0.0342
+    },
+    {
+     "rawScore": 40.75,
+     "percentile": 0.0342
+    },
+    {
+     "rawScore": 40.875,
+     "percentile": 0.0473
+    },
+    {
+     "rawScore": 41.0625,
+     "percentile": 0.0473
+    },
+    {
+     "rawScore": 41.125,
+     "percentile": 0.0473
+    },
+    {
+     "rawScore": 41.3125,
+     "percentile": 0.0479
+    },
+    {
+     "rawScore": 41.375,
+     "percentile": 0.0499
+    },
+    {
+     "rawScore": 41.5,
+     "percentile": 0.0499
+    },
+    {
+     "rawScore": 41.5625,
+     "percentile": 0.0499
+    },
+    {
+     "rawScore": 41.625,
+     "percentile": 0.05
+    },
+    {
+     "rawScore": 41.8125,
+     "percentile": 0.0525
+    },
+    {
+     "rawScore": 41.875,
+     "percentile": 0.0606
+    },
+    {
+     "rawScore": 42.0625,
+     "percentile": 0.0609
+    },
+    {
+     "rawScore": 42.125,
+     "percentile": 0.0609
+    },
+    {
+     "rawScore": 42.25,
+     "percentile": 0.0609
+    },
+    {
+     "rawScore": 42.3125,
+     "percentile": 0.0609
+    },
+    {
+     "rawScore": 42.5625,
+     "percentile": 0.0618
+    },
+    {
+     "rawScore": 42.625,
+     "percentile": 0.0618
+    },
+    {
+     "rawScore": 42.8125,
+     "percentile": 0.0719
+    },
+    {
+     "rawScore": 43.0625,
+     "percentile": 0.072
+    },
+    {
+     "rawScore": 43.3125,
+     "percentile": 0.0793
+    },
+    {
+     "rawScore": 43.375,
+     "percentile": 0.0796
+    },
+    {
+     "rawScore": 43.5625,
+     "percentile": 0.0805
+    },
+    {
+     "rawScore": 43.625,
+     "percentile": 0.0806
+    },
+    {
+     "rawScore": 43.75,
+     "percentile": 0.0806
+    },
+    {
+     "rawScore": 43.8125,
+     "percentile": 0.083
+    },
+    {
+     "rawScore": 43.875,
+     "percentile": 0.0913
+    },
+    {
+     "rawScore": 44.0,
+     "percentile": 0.0913
+    },
+    {
+     "rawScore": 44.0625,
+     "percentile": 0.0917
+    },
+    {
+     "rawScore": 44.125,
+     "percentile": 0.0919
+    },
+    {
+     "rawScore": 44.25,
+     "percentile": 0.0919
+    },
+    {
+     "rawScore": 44.3125,
+     "percentile": 0.1158
+    },
+    {
+     "rawScore": 44.375,
+     "percentile": 0.1172
+    },
+    {
+     "rawScore": 44.5,
+     "percentile": 0.1172
+    },
+    {
+     "rawScore": 44.5625,
+     "percentile": 0.1173
+    },
+    {
+     "rawScore": 44.625,
+     "percentile": 0.1179
+    },
+    {
+     "rawScore": 44.75,
+     "percentile": 0.1179
+    },
+    {
+     "rawScore": 44.8125,
+     "percentile": 0.1912
+    },
+    {
+     "rawScore": 44.875,
+     "percentile": 0.2234
+    },
+    {
+     "rawScore": 45.0625,
+     "percentile": 0.2237
+    },
+    {
+     "rawScore": 45.125,
+     "percentile": 0.2238
+    },
+    {
+     "rawScore": 45.25,
+     "percentile": 0.2238
+    },
+    {
+     "rawScore": 45.3125,
+     "percentile": 0.2347
+    },
+    {
+     "rawScore": 45.375,
+     "percentile": 0.2349
+    },
+    {
+     "rawScore": 45.5,
+     "percentile": 0.235
+    },
+    {
+     "rawScore": 45.5625,
+     "percentile": 0.2353
+    },
+    {
+     "rawScore": 45.625,
+     "percentile": 0.2355
+    },
+    {
+     "rawScore": 45.8125,
+     "percentile": 0.2819
+    },
+    {
+     "rawScore": 45.875,
+     "percentile": 0.2853
+    },
+    {
+     "rawScore": 46.0,
+     "percentile": 0.2853
+    },
+    {
+     "rawScore": 46.0625,
+     "percentile": 0.2854
+    },
+    {
+     "rawScore": 46.125,
+     "percentile": 0.2854
+    },
+    {
+     "rawScore": 46.25,
+     "percentile": 0.2854
+    },
+    {
+     "rawScore": 46.3125,
+     "percentile": 0.2889
+    },
+    {
+     "rawScore": 46.375,
+     "percentile": 0.2988
+    },
+    {
+     "rawScore": 46.5625,
+     "percentile": 0.2989
+    },
+    {
+     "rawScore": 46.625,
+     "percentile": 0.2989
+    },
+    {
+     "rawScore": 46.75,
+     "percentile": 0.2989
+    },
+    {
+     "rawScore": 46.875,
+     "percentile": 0.3399
+    },
+    {
+     "rawScore": 47.0625,
+     "percentile": 0.3411
+    },
+    {
+     "rawScore": 47.125,
+     "percentile": 0.3411
+    },
+    {
+     "rawScore": 47.3125,
+     "percentile": 0.357
+    },
+    {
+     "rawScore": 47.375,
+     "percentile": 0.3632
+    },
+    {
+     "rawScore": 47.5,
+     "percentile": 0.3633
+    },
+    {
+     "rawScore": 47.5625,
+     "percentile": 0.3641
+    },
+    {
+     "rawScore": 47.625,
+     "percentile": 0.3641
+    },
+    {
+     "rawScore": 47.8125,
+     "percentile": 0.4105
+    },
+    {
+     "rawScore": 47.875,
+     "percentile": 0.4183
+    },
+    {
+     "rawScore": 48.0625,
+     "percentile": 0.4201
+    },
+    {
+     "rawScore": 48.125,
+     "percentile": 0.4201
+    },
+    {
+     "rawScore": 48.25,
+     "percentile": 0.4201
+    },
+    {
+     "rawScore": 48.3125,
+     "percentile": 0.4295
+    },
+    {
+     "rawScore": 48.5625,
+     "percentile": 0.4328
+    },
+    {
+     "rawScore": 48.625,
+     "percentile": 0.433
+    },
+    {
+     "rawScore": 48.75,
+     "percentile": 0.433
+    },
+    {
+     "rawScore": 48.8125,
+     "percentile": 0.6184
+    },
+    {
+     "rawScore": 48.875,
+     "percentile": 0.6207
+    },
+    {
+     "rawScore": 49.0,
+     "percentile": 0.6207
+    },
+    {
+     "rawScore": 49.0625,
+     "percentile": 0.6215
+    },
+    {
+     "rawScore": 49.125,
+     "percentile": 0.6215
+    },
+    {
+     "rawScore": 49.25,
+     "percentile": 0.6215
+    },
+    {
+     "rawScore": 49.3125,
+     "percentile": 0.725
+    },
+    {
+     "rawScore": 49.375,
+     "percentile": 0.7312
+    },
+    {
+     "rawScore": 49.5,
+     "percentile": 0.7312
+    },
+    {
+     "rawScore": 49.5625,
+     "percentile": 0.7327
+    },
+    {
+     "rawScore": 49.625,
+     "percentile": 0.7329
+    },
+    {
+     "rawScore": 49.75,
+     "percentile": 0.7329
+    },
+    {
+     "rawScore": 49.8125,
+     "percentile": 0.7668
+    },
+    {
+     "rawScore": 49.875,
+     "percentile": 0.9043
+    },
+    {
+     "rawScore": 50.0,
+     "percentile": 0.9045
+    },
+    {
+     "rawScore": 50.0625,
+     "percentile": 0.905
+    },
+    {
+     "rawScore": 50.125,
+     "percentile": 0.9054
+    },
+    {
+     "rawScore": 50.25,
+     "percentile": 0.9054
+    },
+    {
+     "rawScore": 50.3125,
+     "percentile": 1.0244
+    },
+    {
+     "rawScore": 50.375,
+     "percentile": 1.0486
+    },
+    {
+     "rawScore": 50.5,
+     "percentile": 1.0493
+    },
+    {
+     "rawScore": 50.5625,
+     "percentile": 1.0497
+    },
+    {
+     "rawScore": 50.625,
+     "percentile": 1.0503
+    },
+    {
+     "rawScore": 50.75,
+     "percentile": 1.0503
+    },
+    {
+     "rawScore": 50.8125,
+     "percentile": 1.2797
+    },
+    {
+     "rawScore": 50.875,
+     "percentile": 1.3975
+    },
+    {
+     "rawScore": 51.0625,
+     "percentile": 1.3978
+    },
+    {
+     "rawScore": 51.125,
+     "percentile": 1.3979
+    },
+    {
+     "rawScore": 51.25,
+     "percentile": 1.398
+    },
+    {
+     "rawScore": 51.3125,
+     "percentile": 1.4323
+    },
+    {
+     "rawScore": 51.375,
+     "percentile": 1.4349
+    },
+    {
+     "rawScore": 51.5,
+     "percentile": 1.4369
+    },
+    {
+     "rawScore": 51.5625,
+     "percentile": 1.437
+    },
+    {
+     "rawScore": 51.625,
+     "percentile": 1.437
+    },
+    {
+     "rawScore": 51.8125,
+     "percentile": 1.4833
+    },
+    {
+     "rawScore": 51.875,
+     "percentile": 1.4937
+    },
+    {
+     "rawScore": 52.0,
+     "percentile": 1.4939
+    },
+    {
+     "rawScore": 52.0625,
+     "percentile": 1.4942
+    },
+    {
+     "rawScore": 52.125,
+     "percentile": 1.4942
+    },
+    {
+     "rawScore": 52.25,
+     "percentile": 1.4942
+    },
+    {
+     "rawScore": 52.3125,
+     "percentile": 1.559
+    },
+    {
+     "rawScore": 52.375,
+     "percentile": 1.5899
+    },
+    {
+     "rawScore": 52.5625,
+     "percentile": 1.5937
+    },
+    {
+     "rawScore": 52.75,
+     "percentile": 1.5938
+    },
+    {
+     "rawScore": 52.8125,
+     "percentile": 1.6173
+    },
+    {
+     "rawScore": 52.875,
+     "percentile": 1.6545
+    },
+    {
+     "rawScore": 53.0625,
+     "percentile": 1.6592
+    },
+    {
+     "rawScore": 53.125,
+     "percentile": 1.6592
+    },
+    {
+     "rawScore": 53.3125,
+     "percentile": 1.9457
+    },
+    {
+     "rawScore": 53.375,
+     "percentile": 1.9516
+    },
+    {
+     "rawScore": 53.5,
+     "percentile": 1.9519
+    },
+    {
+     "rawScore": 53.5625,
+     "percentile": 1.9549
+    },
+    {
+     "rawScore": 53.625,
+     "percentile": 1.955
+    },
+    {
+     "rawScore": 53.75,
+     "percentile": 1.955
+    },
+    {
+     "rawScore": 53.8125,
+     "percentile": 2.7252
+    },
+    {
+     "rawScore": 53.875,
+     "percentile": 2.7372
+    },
+    {
+     "rawScore": 54.0,
+     "percentile": 2.7372
+    },
+    {
+     "rawScore": 54.0625,
+     "percentile": 2.7412
+    },
+    {
+     "rawScore": 54.125,
+     "percentile": 2.7413
+    },
+    {
+     "rawScore": 54.25,
+     "percentile": 2.7415
+    },
+    {
+     "rawScore": 54.3125,
+     "percentile": 2.9033
+    },
+    {
+     "rawScore": 54.375,
+     "percentile": 2.905
+    },
+    {
+     "rawScore": 54.5,
+     "percentile": 2.9065
+    },
+    {
+     "rawScore": 54.5625,
+     "percentile": 2.9097
+    },
+    {
+     "rawScore": 54.625,
+     "percentile": 2.9105
+    },
+    {
+     "rawScore": 54.75,
+     "percentile": 2.9105
+    },
+    {
+     "rawScore": 54.8125,
+     "percentile": 3.6468
+    },
+    {
+     "rawScore": 54.875,
+     "percentile": 3.6874
+    },
+    {
+     "rawScore": 55.0,
+     "percentile": 3.6884
+    },
+    {
+     "rawScore": 55.0625,
+     "percentile": 3.6894
+    },
+    {
+     "rawScore": 55.125,
+     "percentile": 3.6895
+    },
+    {
+     "rawScore": 55.25,
+     "percentile": 3.6896
+    },
+    {
+     "rawScore": 55.3125,
+     "percentile": 4.0243
+    },
+    {
+     "rawScore": 55.375,
+     "percentile": 4.1279
+    },
+    {
+     "rawScore": 55.5,
+     "percentile": 4.1281
+    },
+    {
+     "rawScore": 55.5625,
+     "percentile": 4.13
+    },
+    {
+     "rawScore": 55.625,
+     "percentile": 4.1302
+    },
+    {
+     "rawScore": 55.75,
+     "percentile": 4.1302
+    },
+    {
+     "rawScore": 55.8125,
+     "percentile": 4.2366
+    },
+    {
+     "rawScore": 55.875,
+     "percentile": 4.6834
+    },
+    {
+     "rawScore": 56.0,
+     "percentile": 4.6863
+    },
+    {
+     "rawScore": 56.0625,
+     "percentile": 4.6864
+    },
+    {
+     "rawScore": 56.125,
+     "percentile": 4.6868
+    },
+    {
+     "rawScore": 56.25,
+     "percentile": 4.6868
+    },
+    {
+     "rawScore": 56.3125,
+     "percentile": 4.9206
+    },
+    {
+     "rawScore": 56.375,
+     "percentile": 5.0093
+    },
+    {
+     "rawScore": 56.5,
+     "percentile": 5.0197
+    },
+    {
+     "rawScore": 56.5625,
+     "percentile": 5.0243
+    },
+    {
+     "rawScore": 56.625,
+     "percentile": 5.0244
+    },
+    {
+     "rawScore": 56.75,
+     "percentile": 5.0244
+    },
+    {
+     "rawScore": 56.8125,
+     "percentile": 5.2323
+    },
+    {
+     "rawScore": 56.875,
+     "percentile": 5.3785
+    },
+    {
+     "rawScore": 57.0625,
+     "percentile": 5.3801
+    },
+    {
+     "rawScore": 57.125,
+     "percentile": 5.3801
+    },
+    {
+     "rawScore": 57.25,
+     "percentile": 5.3802
+    },
+    {
+     "rawScore": 57.3125,
+     "percentile": 5.4312
+    },
+    {
+     "rawScore": 57.375,
+     "percentile": 5.4391
+    },
+    {
+     "rawScore": 57.5,
+     "percentile": 5.4456
+    },
+    {
+     "rawScore": 57.5625,
+     "percentile": 5.4464
+    },
+    {
+     "rawScore": 57.625,
+     "percentile": 5.4465
+    },
+    {
+     "rawScore": 57.8125,
+     "percentile": 5.5621
+    },
+    {
+     "rawScore": 57.875,
+     "percentile": 5.5715
+    },
+    {
+     "rawScore": 58.0,
+     "percentile": 5.572
+    },
+    {
+     "rawScore": 58.0625,
+     "percentile": 5.5742
+    },
+    {
+     "rawScore": 58.25,
+     "percentile": 5.5742
+    },
+    {
+     "rawScore": 58.3125,
+     "percentile": 6.6584
+    },
+    {
+     "rawScore": 58.375,
+     "percentile": 6.6864
+    },
+    {
+     "rawScore": 58.5625,
+     "percentile": 6.7
+    },
+    {
+     "rawScore": 58.75,
+     "percentile": 6.7001
+    },
+    {
+     "rawScore": 58.8125,
+     "percentile": 7.1168
+    },
+    {
+     "rawScore": 58.875,
+     "percentile": 7.1225
+    },
+    {
+     "rawScore": 59.0,
+     "percentile": 7.1245
+    },
+    {
+     "rawScore": 59.0625,
+     "percentile": 7.1296
+    },
+    {
+     "rawScore": 59.125,
+     "percentile": 7.1297
+    },
+    {
+     "rawScore": 59.25,
+     "percentile": 7.1297
+    },
+    {
+     "rawScore": 59.3125,
+     "percentile": 8.63
+    },
+    {
+     "rawScore": 59.375,
+     "percentile": 8.639
+    },
+    {
+     "rawScore": 59.5,
+     "percentile": 8.6456
+    },
+    {
+     "rawScore": 59.5625,
+     "percentile": 8.6488
+    },
+    {
+     "rawScore": 59.625,
+     "percentile": 8.6488
+    },
+    {
+     "rawScore": 59.75,
+     "percentile": 8.649
+    },
+    {
+     "rawScore": 59.8125,
+     "percentile": 11.1672
+    },
+    {
+     "rawScore": 59.875,
+     "percentile": 11.3508
+    },
+    {
+     "rawScore": 60.0,
+     "percentile": 11.3511
+    },
+    {
+     "rawScore": 60.0625,
+     "percentile": 11.3541
+    },
+    {
+     "rawScore": 60.125,
+     "percentile": 11.3547
+    },
+    {
+     "rawScore": 60.25,
+     "percentile": 11.3552
+    },
+    {
+     "rawScore": 60.3125,
+     "percentile": 11.9333
+    },
+    {
+     "rawScore": 60.375,
+     "percentile": 11.9639
+    },
+    {
+     "rawScore": 60.5,
+     "percentile": 11.9895
+    },
+    {
+     "rawScore": 60.5625,
+     "percentile": 11.9902
+    },
+    {
+     "rawScore": 60.625,
+     "percentile": 11.991
+    },
+    {
+     "rawScore": 60.75,
+     "percentile": 11.991
+    },
+    {
+     "rawScore": 60.8125,
+     "percentile": 13.0501
+    },
+    {
+     "rawScore": 60.875,
+     "percentile": 13.1821
+    },
+    {
+     "rawScore": 61.0,
+     "percentile": 13.1967
+    },
+    {
+     "rawScore": 61.0625,
+     "percentile": 13.197
+    },
+    {
+     "rawScore": 61.125,
+     "percentile": 13.1971
+    },
+    {
+     "rawScore": 61.25,
+     "percentile": 13.1973
+    },
+    {
+     "rawScore": 61.3125,
+     "percentile": 13.5318
+    },
+    {
+     "rawScore": 61.375,
+     "percentile": 13.8684
+    },
+    {
+     "rawScore": 61.5,
+     "percentile": 13.871
+    },
+    {
+     "rawScore": 61.5625,
+     "percentile": 13.8909
+    },
+    {
+     "rawScore": 61.75,
+     "percentile": 13.8909
+    },
+    {
+     "rawScore": 61.8125,
+     "percentile": 13.9891
+    },
+    {
+     "rawScore": 61.875,
+     "percentile": 14.3992
+    },
+    {
+     "rawScore": 62.0,
+     "percentile": 14.4083
+    },
+    {
+     "rawScore": 62.0625,
+     "percentile": 14.4084
+    },
+    {
+     "rawScore": 62.125,
+     "percentile": 14.4085
+    },
+    {
+     "rawScore": 62.25,
+     "percentile": 14.4085
+    },
+    {
+     "rawScore": 62.3125,
+     "percentile": 14.6586
+    },
+    {
+     "rawScore": 62.375,
+     "percentile": 14.7688
+    },
+    {
+     "rawScore": 62.5,
+     "percentile": 14.8013
+    },
+    {
+     "rawScore": 62.5625,
+     "percentile": 14.8192
+    },
+    {
+     "rawScore": 62.625,
+     "percentile": 14.8194
+    },
+    {
+     "rawScore": 62.75,
+     "percentile": 14.8194
+    },
+    {
+     "rawScore": 62.8125,
+     "percentile": 14.8647
+    },
+    {
+     "rawScore": 62.875,
+     "percentile": 14.9262
+    },
+    {
+     "rawScore": 63.0625,
+     "percentile": 14.9323
+    },
+    {
+     "rawScore": 63.125,
+     "percentile": 14.9324
+    },
+    {
+     "rawScore": 63.25,
+     "percentile": 14.9324
+    },
+    {
+     "rawScore": 63.3125,
+     "percentile": 15.3003
+    },
+    {
+     "rawScore": 63.375,
+     "percentile": 15.3073
+    },
+    {
+     "rawScore": 63.5,
+     "percentile": 15.3135
+    },
+    {
+     "rawScore": 63.5625,
+     "percentile": 15.3161
+    },
+    {
+     "rawScore": 63.625,
+     "percentile": 15.3162
+    },
+    {
+     "rawScore": 63.75,
+     "percentile": 15.3162
+    },
+    {
+     "rawScore": 63.8125,
+     "percentile": 17.1525
+    },
+    {
+     "rawScore": 64.0,
+     "percentile": 17.1617
+    },
+    {
+     "rawScore": 64.0625,
+     "percentile": 17.1662
+    },
+    {
+     "rawScore": 64.25,
+     "percentile": 17.1664
+    },
+    {
+     "rawScore": 64.3125,
+     "percentile": 20.8293
+    },
+    {
+     "rawScore": 64.375,
+     "percentile": 20.8335
+    },
+    {
+     "rawScore": 64.5,
+     "percentile": 20.8354
+    },
+    {
+     "rawScore": 64.5625,
+     "percentile": 20.8482
+    },
+    {
+     "rawScore": 64.75,
+     "percentile": 20.8488
+    },
+    {
+     "rawScore": 64.8125,
+     "percentile": 22.2811
+    },
+    {
+     "rawScore": 64.875,
+     "percentile": 22.2988
+    },
+    {
+     "rawScore": 65.0,
+     "percentile": 22.3344
+    },
+    {
+     "rawScore": 65.0625,
+     "percentile": 22.3356
+    },
+    {
+     "rawScore": 65.125,
+     "percentile": 22.3356
+    },
+    {
+     "rawScore": 65.25,
+     "percentile": 22.3358
+    },
+    {
+     "rawScore": 65.3125,
+     "percentile": 25.3605
+    },
+    {
+     "rawScore": 65.375,
+     "percentile": 25.4989
+    },
+    {
+     "rawScore": 65.5,
+     "percentile": 25.6078
+    },
+    {
+     "rawScore": 65.5625,
+     "percentile": 25.61
+    },
+    {
+     "rawScore": 65.75,
+     "percentile": 25.6102
+    },
+    {
+     "rawScore": 65.8125,
+     "percentile": 27.9654
+    },
+    {
+     "rawScore": 65.875,
+     "percentile": 28.5541
+    },
+    {
+     "rawScore": 66.0,
+     "percentile": 28.5578
+    },
+    {
+     "rawScore": 66.0625,
+     "percentile": 28.5586
+    },
+    {
+     "rawScore": 66.125,
+     "percentile": 28.5591
+    },
+    {
+     "rawScore": 66.25,
+     "percentile": 28.5596
+    },
+    {
+     "rawScore": 66.3125,
+     "percentile": 29.2486
+    },
+    {
+     "rawScore": 66.375,
+     "percentile": 29.3481
+    },
+    {
+     "rawScore": 66.5,
+     "percentile": 29.4415
+    },
+    {
+     "rawScore": 66.5625,
+     "percentile": 29.4486
+    },
+    {
+     "rawScore": 66.75,
+     "percentile": 29.4487
+    },
+    {
+     "rawScore": 66.8125,
+     "percentile": 30.0118
+    },
+    {
+     "rawScore": 66.875,
+     "percentile": 30.132
+    },
+    {
+     "rawScore": 67.0,
+     "percentile": 30.1774
+    },
+    {
+     "rawScore": 67.0625,
+     "percentile": 30.1777
+    },
+    {
+     "rawScore": 67.25,
+     "percentile": 30.1777
+    },
+    {
+     "rawScore": 67.3125,
+     "percentile": 30.2611
+    },
+    {
+     "rawScore": 67.375,
+     "percentile": 30.5701
+    },
+    {
+     "rawScore": 67.5,
+     "percentile": 30.5784
+    },
+    {
+     "rawScore": 67.5625,
+     "percentile": 30.6422
+    },
+    {
+     "rawScore": 67.75,
+     "percentile": 30.6422
+    },
+    {
+     "rawScore": 67.8125,
+     "percentile": 30.7126
+    },
+    {
+     "rawScore": 67.875,
+     "percentile": 30.7717
+    },
+    {
+     "rawScore": 68.0,
+     "percentile": 30.7803
+    },
+    {
+     "rawScore": 68.0625,
+     "percentile": 30.7805
+    },
+    {
+     "rawScore": 68.125,
+     "percentile": 30.7807
+    },
+    {
+     "rawScore": 68.3125,
+     "percentile": 32.2396
+    },
+    {
+     "rawScore": 68.375,
+     "percentile": 32.286
+    },
+    {
+     "rawScore": 68.5,
+     "percentile": 32.3154
+    },
+    {
+     "rawScore": 68.5625,
+     "percentile": 32.3407
+    },
+    {
+     "rawScore": 68.625,
+     "percentile": 32.3409
+    },
+    {
+     "rawScore": 68.75,
+     "percentile": 32.3411
+    },
+    {
+     "rawScore": 68.8125,
+     "percentile": 32.679
+    },
+    {
+     "rawScore": 68.875,
+     "percentile": 32.7223
+    },
+    {
+     "rawScore": 69.0,
+     "percentile": 32.7249
+    },
+    {
+     "rawScore": 69.0625,
+     "percentile": 32.7308
+    },
+    {
+     "rawScore": 69.125,
+     "percentile": 32.7308
+    },
+    {
+     "rawScore": 69.25,
+     "percentile": 32.7308
+    },
+    {
+     "rawScore": 69.3125,
+     "percentile": 34.5363
+    },
+    {
+     "rawScore": 69.5,
+     "percentile": 34.5458
+    },
+    {
+     "rawScore": 69.5625,
+     "percentile": 34.5481
+    },
+    {
+     "rawScore": 69.75,
+     "percentile": 34.5483
+    },
+    {
+     "rawScore": 69.8125,
+     "percentile": 40.4708
+    },
+    {
+     "rawScore": 70.0,
+     "percentile": 40.6231
+    },
+    {
+     "rawScore": 70.0625,
+     "percentile": 40.6262
+    },
+    {
+     "rawScore": 70.25,
+     "percentile": 40.6268
+    },
+    {
+     "rawScore": 70.3125,
+     "percentile": 44.3886
+    },
+    {
+     "rawScore": 70.375,
+     "percentile": 44.4019
+    },
+    {
+     "rawScore": 70.5,
+     "percentile": 44.4341
+    },
+    {
+     "rawScore": 70.5625,
+     "percentile": 44.4353
+    },
+    {
+     "rawScore": 70.75,
+     "percentile": 44.4359
+    },
+    {
+     "rawScore": 70.8125,
+     "percentile": 45.969
+    },
+    {
+     "rawScore": 70.875,
+     "percentile": 45.9848
+    },
+    {
+     "rawScore": 71.0,
+     "percentile": 46.1154
+    },
+    {
+     "rawScore": 71.0625,
+     "percentile": 46.1174
+    },
+    {
+     "rawScore": 71.25,
+     "percentile": 46.1175
+    },
+    {
+     "rawScore": 71.3125,
+     "percentile": 48.3264
+    },
+    {
+     "rawScore": 71.375,
+     "percentile": 48.7698
+    },
+    {
+     "rawScore": 71.5,
+     "percentile": 49.124
+    },
+    {
+     "rawScore": 71.5625,
+     "percentile": 49.1503
+    },
+    {
+     "rawScore": 71.75,
+     "percentile": 49.1504
+    },
+    {
+     "rawScore": 71.8125,
+     "percentile": 49.5359
+    },
+    {
+     "rawScore": 71.875,
+     "percentile": 50.0691
+    },
+    {
+     "rawScore": 72.0,
+     "percentile": 50.0807
+    },
+    {
+     "rawScore": 72.0625,
+     "percentile": 50.0822
+    },
+    {
+     "rawScore": 72.25,
+     "percentile": 50.0823
+    },
+    {
+     "rawScore": 72.3125,
+     "percentile": 50.3417
+    },
+    {
+     "rawScore": 72.375,
+     "percentile": 50.4322
+    },
+    {
+     "rawScore": 72.5,
+     "percentile": 50.5481
+    },
+    {
+     "rawScore": 72.5625,
+     "percentile": 50.5682
+    },
+    {
+     "rawScore": 72.8125,
+     "percentile": 50.8436
+    },
+    {
+     "rawScore": 73.0,
+     "percentile": 50.8847
+    },
+    {
+     "rawScore": 73.0625,
+     "percentile": 50.885
+    },
+    {
+     "rawScore": 73.25,
+     "percentile": 50.885
+    },
+    {
+     "rawScore": 73.3125,
+     "percentile": 51.0229
+    },
+    {
+     "rawScore": 73.375,
+     "percentile": 51.0674
+    },
+    {
+     "rawScore": 73.5,
+     "percentile": 51.0748
+    },
+    {
+     "rawScore": 73.5625,
+     "percentile": 51.1331
+    },
+    {
+     "rawScore": 73.75,
+     "percentile": 51.1331
+    },
+    {
+     "rawScore": 73.8125,
+     "percentile": 52.2142
+    },
+    {
+     "rawScore": 73.875,
+     "percentile": 52.4062
+    },
+    {
+     "rawScore": 74.0,
+     "percentile": 52.4195
+    },
+    {
+     "rawScore": 74.125,
+     "percentile": 52.4197
+    },
+    {
+     "rawScore": 74.3125,
+     "percentile": 57.0951
+    },
+    {
+     "rawScore": 74.375,
+     "percentile": 57.1277
+    },
+    {
+     "rawScore": 74.5,
+     "percentile": 57.1322
+    },
+    {
+     "rawScore": 74.5625,
+     "percentile": 57.1453
+    },
+    {
+     "rawScore": 74.75,
+     "percentile": 57.1462
+    },
+    {
+     "rawScore": 74.8125,
+     "percentile": 58.0119
+    },
+    {
+     "rawScore": 74.875,
+     "percentile": 58.0514
+    },
+    {
+     "rawScore": 75.0,
+     "percentile": 58.0964
+    },
+    {
+     "rawScore": 75.25,
+     "percentile": 58.0964
+    },
+    {
+     "rawScore": 75.3125,
+     "percentile": 61.5159
+    },
+    {
+     "rawScore": 75.5,
+     "percentile": 61.6614
+    },
+    {
+     "rawScore": 75.75,
+     "percentile": 61.6616
+    },
+    {
+     "rawScore": 75.8125,
+     "percentile": 67.0582
+    },
+    {
+     "rawScore": 76.0,
+     "percentile": 67.5531
+    },
+    {
+     "rawScore": 76.25,
+     "percentile": 67.5537
+    },
+    {
+     "rawScore": 76.3125,
+     "percentile": 68.522
+    },
+    {
+     "rawScore": 76.375,
+     "percentile": 68.534
+    },
+    {
+     "rawScore": 76.5,
+     "percentile": 68.6386
+    },
+    {
+     "rawScore": 76.5625,
+     "percentile": 68.6426
+    },
+    {
+     "rawScore": 76.75,
+     "percentile": 68.6427
+    },
+    {
+     "rawScore": 76.8125,
+     "percentile": 69.0051
+    },
+    {
+     "rawScore": 77.0,
+     "percentile": 69.167
+    },
+    {
+     "rawScore": 77.0625,
+     "percentile": 69.169
+    },
+    {
+     "rawScore": 77.3125,
+     "percentile": 69.7564
+    },
+    {
+     "rawScore": 77.375,
+     "percentile": 70.158
+    },
+    {
+     "rawScore": 77.5,
+     "percentile": 70.4831
+    },
+    {
+     "rawScore": 77.5625,
+     "percentile": 70.5669
+    },
+    {
+     "rawScore": 77.75,
+     "percentile": 70.567
+    },
+    {
+     "rawScore": 77.8125,
+     "percentile": 71.6411
+    },
+    {
+     "rawScore": 78.0,
+     "percentile": 71.6514
+    },
+    {
+     "rawScore": 78.0625,
+     "percentile": 71.6525
+    },
+    {
+     "rawScore": 78.25,
+     "percentile": 71.6527
+    },
+    {
+     "rawScore": 78.3125,
+     "percentile": 71.8351
+    },
+    {
+     "rawScore": 78.5,
+     "percentile": 71.8839
+    },
+    {
+     "rawScore": 78.5625,
+     "percentile": 71.9009
+    },
+    {
+     "rawScore": 78.8125,
+     "percentile": 72.2252
+    },
+    {
+     "rawScore": 79.0,
+     "percentile": 72.2315
+    },
+    {
+     "rawScore": 79.25,
+     "percentile": 72.2315
+    },
+    {
+     "rawScore": 79.3125,
+     "percentile": 72.3552
+    },
+    {
+     "rawScore": 79.375,
+     "percentile": 72.4999
+    },
+    {
+     "rawScore": 79.5625,
+     "percentile": 72.5082
+    },
+    {
+     "rawScore": 79.75,
+     "percentile": 72.5083
+    },
+    {
+     "rawScore": 79.8125,
+     "percentile": 75.9741
+    },
+    {
+     "rawScore": 79.875,
+     "percentile": 76.149
+    },
+    {
+     "rawScore": 80.0,
+     "percentile": 76.3524
+    },
+    {
+     "rawScore": 80.3125,
+     "percentile": 80.5865
+    },
+    {
+     "rawScore": 80.375,
+     "percentile": 80.6162
+    },
+    {
+     "rawScore": 80.5,
+     "percentile": 80.6302
+    },
+    {
+     "rawScore": 80.5625,
+     "percentile": 80.6363
+    },
+    {
+     "rawScore": 80.75,
+     "percentile": 80.6371
+    },
+    {
+     "rawScore": 80.8125,
+     "percentile": 81.3449
+    },
+    {
+     "rawScore": 81.0,
+     "percentile": 81.4911
+    },
+    {
+     "rawScore": 81.3125,
+     "percentile": 83.7373
+    },
+    {
+     "rawScore": 81.5,
+     "percentile": 84.2039
+    },
+    {
+     "rawScore": 81.8125,
+     "percentile": 84.5519
+    },
+    {
+     "rawScore": 82.0,
+     "percentile": 85.0063
+    },
+    {
+     "rawScore": 82.3125,
+     "percentile": 86.5074
+    },
+    {
+     "rawScore": 82.5,
+     "percentile": 86.6027
+    },
+    {
+     "rawScore": 82.5625,
+     "percentile": 86.6064
+    },
+    {
+     "rawScore": 82.75,
+     "percentile": 86.6067
+    },
+    {
+     "rawScore": 82.8125,
+     "percentile": 86.8616
+    },
+    {
+     "rawScore": 83.0,
+     "percentile": 86.9298
+    },
+    {
+     "rawScore": 83.3125,
+     "percentile": 88.0471
+    },
+    {
+     "rawScore": 83.5,
+     "percentile": 88.0939
+    },
+    {
+     "rawScore": 83.5625,
+     "percentile": 88.1695
+    },
+    {
+     "rawScore": 83.75,
+     "percentile": 88.1696
+    },
+    {
+     "rawScore": 83.8125,
+     "percentile": 89.1475
+    },
+    {
+     "rawScore": 84.25,
+     "percentile": 89.1477
+    },
+    {
+     "rawScore": 84.3125,
+     "percentile": 89.3138
+    },
+    {
+     "rawScore": 84.5,
+     "percentile": 89.3481
+    },
+    {
+     "rawScore": 84.8125,
+     "percentile": 89.4412
+    },
+    {
+     "rawScore": 85.0,
+     "percentile": 89.4608
+    },
+    {
+     "rawScore": 85.375,
+     "percentile": 89.5925
+    },
+    {
+     "rawScore": 85.5625,
+     "percentile": 89.6197
+    },
+    {
+     "rawScore": 85.8125,
+     "percentile": 92.7589
+    },
+    {
+     "rawScore": 86.0,
+     "percentile": 93.4111
+    },
+    {
+     "rawScore": 86.5,
+     "percentile": 93.4236
+    },
+    {
+     "rawScore": 86.5625,
+     "percentile": 93.4292
+    },
+    {
+     "rawScore": 87.0,
+     "percentile": 93.5624
+    },
+    {
+     "rawScore": 87.5,
+     "percentile": 93.9851
+    },
+    {
+     "rawScore": 87.8125,
+     "percentile": 95.1158
+    },
+    {
+     "rawScore": 88.0,
+     "percentile": 95.1813
+    },
+    {
+     "rawScore": 88.3125,
+     "percentile": 96.5481
+    },
+    {
+     "rawScore": 88.75,
+     "percentile": 96.5484
+    },
+    {
+     "rawScore": 88.8125,
+     "percentile": 96.7805
+    },
+    {
+     "rawScore": 89.0,
+     "percentile": 96.8284
+    },
+    {
+     "rawScore": 89.3125,
+     "percentile": 97.5651
+    },
+    {
+     "rawScore": 89.5,
+     "percentile": 97.7174
+    },
+    {
+     "rawScore": 90.5,
+     "percentile": 97.7486
+    },
+    {
+     "rawScore": 91.0,
+     "percentile": 97.7661
+    },
+    {
+     "rawScore": 91.5625,
+     "percentile": 97.7909
+    },
+    {
+     "rawScore": 92.0,
+     "percentile": 98.3816
+    },
+    {
+     "rawScore": 93.8125,
+     "percentile": 99.4112
+    },
+    {
+     "rawScore": 94.0,
+     "percentile": 99.624
+    },
+    {
+     "rawScore": 95.0,
+     "percentile": 99.6676
+    },
+    {
+     "rawScore": 95.5,
+     "percentile": 99.8063
+    },
+    {
+     "rawScore": 100.0,
+     "percentile": 100.0
+    }
+   ]
+  },
+  {
+   "slug": "detox_biotransformacao",
+   "name": "Detox e Biotransformação",
+   "position": 3,
+   "markers": [
+    {
+     "rsId": "GSTM1_delecao",
+     "weight": 0.3,
+     "position": 0,
+     "genotypeScores": [
+      {
+       "genotype": "(+/+)",
+       "score": 100.0,
+       "classification": "FAVORAVEL"
+      },
+      {
+       "genotype": "(+/-)",
+       "score": 100.0,
+       "classification": "FAVORAVEL"
+      },
+      {
+       "genotype": "(-/-)",
+       "score": 25.0,
+       "classification": "DESFAVORAVEL"
+      }
+     ]
+    },
+    {
+     "rsId": "rs762551",
+     "weight": 0.25,
+     "position": 1,
+     "genotypeScores": [
+      {
+       "genotype": "AA",
+       "score": 100.0,
+       "classification": "FAVORAVEL"
+      },
+      {
+       "genotype": "AC",
+       "score": 60.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "CA",
+       "score": 60.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "CC",
+       "score": 25.0,
+       "classification": "DESFAVORAVEL"
+      }
+     ]
+    },
+    {
+     "rsId": "rs1799930",
+     "weight": 0.2,
+     "position": 2,
+     "genotypeScores": [
+      {
+       "genotype": "GG",
+       "score": 100.0,
+       "classification": "FAVORAVEL"
+      },
+      {
+       "genotype": "AG",
+       "score": 55.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "GA",
+       "score": 55.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "AA",
+       "score": 20.0,
+       "classification": "DESFAVORAVEL"
+      }
+     ]
+    },
+    {
+     "rsId": "rs4880",
+     "weight": 0.15,
+     "position": 3,
+     "genotypeScores": [
+      {
+       "genotype": "CC",
+       "score": 100.0,
+       "classification": "FAVORAVEL"
+      },
+      {
+       "genotype": "CT",
+       "score": 60.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "TC",
+       "score": 60.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "TT",
+       "score": 20.0,
+       "classification": "DESFAVORAVEL"
+      }
+     ]
+    },
+    {
+     "rsId": "rs1695",
+     "weight": 0.1,
+     "position": 4,
+     "genotypeScores": [
+      {
+       "genotype": "AA",
+       "score": 100.0,
+       "classification": "FAVORAVEL"
+      },
+      {
+       "genotype": "AG",
+       "score": 55.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "GA",
+       "score": 55.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "GG",
+       "score": 15.0,
+       "classification": "DESFAVORAVEL"
+      }
+     ]
+    }
+   ],
+   "percentileCurve": [
+    {
+     "rawScore": 22.25,
+     "percentile": 0.0053
+    },
+    {
+     "rawScore": 26.25,
+     "percentile": 0.0243
+    },
+    {
+     "rawScore": 28.25,
+     "percentile": 0.0338
+    },
+    {
+     "rawScore": 29.25,
+     "percentile": 0.0641
+    },
+    {
+     "rawScore": 30.75,
+     "percentile": 0.081
+    },
+    {
+     "rawScore": 31.0,
+     "percentile": 0.1029
+    },
+    {
+     "rawScore": 32.25,
+     "percentile": 0.1365
+    },
+    {
+     "rawScore": 33.25,
+     "percentile": 0.2444
+    },
+    {
+     "rawScore": 34.25,
+     "percentile": 0.2486
+    },
+    {
+     "rawScore": 35.0,
+     "percentile": 0.3265
+    },
+    {
+     "rawScore": 35.25,
+     "percentile": 0.3803
+    },
+    {
+     "rawScore": 36.75,
+     "percentile": 0.4103
+    },
+    {
+     "rawScore": 37.0,
+     "percentile": 0.4492
+    },
+    {
+     "rawScore": 37.75,
+     "percentile": 0.545
+    },
+    {
+     "rawScore": 38.0,
+     "percentile": 0.6696
+    },
+    {
+     "rawScore": 38.25,
+     "percentile": 0.7277
+    },
+    {
+     "rawScore": 39.25,
+     "percentile": 0.9192
+    },
+    {
+     "rawScore": 39.5,
+     "percentile": 0.9884
+    },
+    {
+     "rawScore": 41.0,
+     "percentile": 1.1493
+    },
+    {
+     "rawScore": 41.25,
+     "percentile": 1.1732
+    },
+    {
+     "rawScore": 42.0,
+     "percentile": 1.6163
+    },
+    {
+     "rawScore": 42.25,
+     "percentile": 1.7696
+    },
+    {
+     "rawScore": 42.75,
+     "percentile": 1.7829
+    },
+    {
+     "rawScore": 43.0,
+     "percentile": 1.8002
+    },
+    {
+     "rawScore": 43.75,
+     "percentile": 1.9703
+    },
+    {
+     "rawScore": 44.0,
+     "percentile": 2.1916
+    },
+    {
+     "rawScore": 44.25,
+     "percentile": 2.2681
+    },
+    {
+     "rawScore": 44.75,
+     "percentile": 2.2892
+    },
+    {
+     "rawScore": 45.0,
+     "percentile": 2.3692
+    },
+    {
+     "rawScore": 45.25,
+     "percentile": 2.4542
+    },
+    {
+     "rawScore": 45.5,
+     "percentile": 2.5772
+    },
+    {
+     "rawScore": 46.5,
+     "percentile": 2.971
+    },
+    {
+     "rawScore": 46.75,
+     "percentile": 3.1073
+    },
+    {
+     "rawScore": 47.0,
+     "percentile": 3.3859
+    },
+    {
+     "rawScore": 48.0,
+     "percentile": 4.3005
+    },
+    {
+     "rawScore": 48.25,
+     "percentile": 4.5728
+    },
+    {
+     "rawScore": 48.75,
+     "percentile": 4.6477
+    },
+    {
+     "rawScore": 49.5,
+     "percentile": 4.7188
+    },
+    {
+     "rawScore": 49.75,
+     "percentile": 4.7943
+    },
+    {
+     "rawScore": 50.0,
+     "percentile": 4.8926
+    },
+    {
+     "rawScore": 50.25,
+     "percentile": 4.9266
+    },
+    {
+     "rawScore": 50.75,
+     "percentile": 4.964
+    },
+    {
+     "rawScore": 51.0,
+     "percentile": 5.7361
+    },
+    {
+     "rawScore": 51.5,
+     "percentile": 5.7908
+    },
+    {
+     "rawScore": 51.75,
+     "percentile": 5.9105
+    },
+    {
+     "rawScore": 52.0,
+     "percentile": 6.3654
+    },
+    {
+     "rawScore": 52.5,
+     "percentile": 7.0646
+    },
+    {
+     "rawScore": 52.75,
+     "percentile": 7.3066
+    },
+    {
+     "rawScore": 53.0,
+     "percentile": 7.639
+    },
+    {
+     "rawScore": 53.25,
+     "percentile": 7.7056
+    },
+    {
+     "rawScore": 53.5,
+     "percentile": 7.7921
+    },
+    {
+     "rawScore": 54.0,
+     "percentile": 8.3686
+    },
+    {
+     "rawScore": 54.25,
+     "percentile": 8.4894
+    },
+    {
+     "rawScore": 54.75,
+     "percentile": 8.6224
+    },
+    {
+     "rawScore": 55.5,
+     "percentile": 9.3088
+    },
+    {
+     "rawScore": 55.75,
+     "percentile": 9.7345
+    },
+    {
+     "rawScore": 56.5,
+     "percentile": 10.1388
+    },
+    {
+     "rawScore": 56.75,
+     "percentile": 10.1554
+    },
+    {
+     "rawScore": 57.0,
+     "percentile": 11.5192
+    },
+    {
+     "rawScore": 57.5,
+     "percentile": 11.8269
+    },
+    {
+     "rawScore": 57.75,
+     "percentile": 12.0395
+    },
+    {
+     "rawScore": 58.0,
+     "percentile": 12.8472
+    },
+    {
+     "rawScore": 58.5,
+     "percentile": 13.1576
+    },
+    {
+     "rawScore": 58.75,
+     "percentile": 13.2651
+    },
+    {
+     "rawScore": 59.0,
+     "percentile": 13.4048
+    },
+    {
+     "rawScore": 59.25,
+     "percentile": 13.523
+    },
+    {
+     "rawScore": 59.5,
+     "percentile": 13.6766
+    },
+    {
+     "rawScore": 60.0,
+     "percentile": 13.7775
+    },
+    {
+     "rawScore": 60.25,
+     "percentile": 14.1558
+    },
+    {
+     "rawScore": 60.5,
+     "percentile": 14.6478
+    },
+    {
+     "rawScore": 60.75,
+     "percentile": 14.8771
+    },
+    {
+     "rawScore": 61.0,
+     "percentile": 15.5241
+    },
+    {
+     "rawScore": 61.5,
+     "percentile": 16.5746
+    },
+    {
+     "rawScore": 61.75,
+     "percentile": 17.3304
+    },
+    {
+     "rawScore": 62.0,
+     "percentile": 17.6039
+    },
+    {
+     "rawScore": 62.5,
+     "percentile": 18.3219
+    },
+    {
+     "rawScore": 63.0,
+     "percentile": 19.1417
+    },
+    {
+     "rawScore": 63.5,
+     "percentile": 19.7768
+    },
+    {
+     "rawScore": 63.75,
+     "percentile": 19.8712
+    },
+    {
+     "rawScore": 64.0,
+     "percentile": 20.2298
+    },
+    {
+     "rawScore": 64.5,
+     "percentile": 21.979
+    },
+    {
+     "rawScore": 64.75,
+     "percentile": 22.5844
+    },
+    {
+     "rawScore": 65.25,
+     "percentile": 22.6369
+    },
+    {
+     "rawScore": 65.5,
+     "percentile": 23.2802
+    },
+    {
+     "rawScore": 66.25,
+     "percentile": 23.952
+    },
+    {
+     "rawScore": 66.5,
+     "percentile": 24.8255
+    },
+    {
+     "rawScore": 66.75,
+     "percentile": 25.1278
+    },
+    {
+     "rawScore": 67.0,
+     "percentile": 26.2765
+    },
+    {
+     "rawScore": 67.5,
+     "percentile": 27.034
+    },
+    {
+     "rawScore": 67.75,
+     "percentile": 27.3695
+    },
+    {
+     "rawScore": 68.0,
+     "percentile": 27.8551
+    },
+    {
+     "rawScore": 68.5,
+     "percentile": 28.1739
+    },
+    {
+     "rawScore": 69.0,
+     "percentile": 29.8722
+    },
+    {
+     "rawScore": 69.25,
+     "percentile": 30.4103
+    },
+    {
+     "rawScore": 69.5,
+     "percentile": 31.5103
+    },
+    {
+     "rawScore": 70.5,
+     "percentile": 35.1211
+    },
+    {
+     "rawScore": 70.75,
+     "percentile": 36.196
+    },
+    {
+     "rawScore": 71.5,
+     "percentile": 37.2171
+    },
+    {
+     "rawScore": 72.0,
+     "percentile": 37.4979
+    },
+    {
+     "rawScore": 72.25,
+     "percentile": 37.7962
+    },
+    {
+     "rawScore": 72.5,
+     "percentile": 38.184
+    },
+    {
+     "rawScore": 72.75,
+     "percentile": 38.3182
+    },
+    {
+     "rawScore": 73.0,
+     "percentile": 38.8283
+    },
+    {
+     "rawScore": 73.5,
+     "percentile": 41.8769
+    },
+    {
+     "rawScore": 74.0,
+     "percentile": 42.0924
+    },
+    {
+     "rawScore": 74.5,
+     "percentile": 43.8885
+    },
+    {
+     "rawScore": 75.0,
+     "percentile": 46.6491
+    },
+    {
+     "rawScore": 75.25,
+     "percentile": 47.6046
+    },
+    {
+     "rawScore": 75.5,
+     "percentile": 48.9169
+    },
+    {
+     "rawScore": 76.5,
+     "percentile": 51.1927
+    },
+    {
+     "rawScore": 76.75,
+     "percentile": 51.6699
+    },
+    {
+     "rawScore": 77.5,
+     "percentile": 52.1233
+    },
+    {
+     "rawScore": 78.0,
+     "percentile": 54.8331
+    },
+    {
+     "rawScore": 79.0,
+     "percentile": 56.4297
+    },
+    {
+     "rawScore": 79.5,
+     "percentile": 61.814
+    },
+    {
+     "rawScore": 80.5,
+     "percentile": 65.0029
+    },
+    {
+     "rawScore": 81.0,
+     "percentile": 66.2286
+    },
+    {
+     "rawScore": 81.25,
+     "percentile": 66.6528
+    },
+    {
+     "rawScore": 81.5,
+     "percentile": 67.2043
+    },
+    {
+     "rawScore": 82.5,
+     "percentile": 67.6026
+    },
+    {
+     "rawScore": 83.5,
+     "percentile": 70.1569
+    },
+    {
+     "rawScore": 84.0,
+     "percentile": 74.3044
+    },
+    {
+     "rawScore": 85.0,
+     "percentile": 77.139
+    },
+    {
+     "rawScore": 85.5,
+     "percentile": 80.3756
+    },
+    {
+     "rawScore": 86.5,
+     "percentile": 81.7914
+    },
+    {
+     "rawScore": 88.0,
+     "percentile": 84.062
+    },
+    {
+     "rawScore": 89.5,
+     "percentile": 88.5971
+    },
+    {
+     "rawScore": 90.0,
+     "percentile": 90.3403
+    },
+    {
+     "rawScore": 91.0,
+     "percentile": 91.5989
+    },
+    {
+     "rawScore": 91.5,
+     "percentile": 92.1652
+    },
+    {
+     "rawScore": 94.0,
+     "percentile": 96.1965
+    },
+    {
+     "rawScore": 95.5,
+     "percentile": 98.2101
+    },
+    {
+     "rawScore": 100.0,
+     "percentile": 100.0
+    }
+   ]
+  },
+  {
+   "slug": "neuronutricao",
+   "name": "Neuronutrição",
+   "position": 4,
+   "markers": [
+    {
+     "rsId": "rs4680",
+     "weight": 0.3,
+     "position": 0,
+     "genotypeScores": [
+      {
+       "genotype": "GG",
+       "score": 100.0,
+       "classification": "FAVORAVEL"
+      },
+      {
+       "genotype": "AG",
+       "score": 55.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "GA",
+       "score": 55.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "AA",
+       "score": 25.0,
+       "classification": "DESFAVORAVEL"
+      }
+     ]
+    },
+    {
+     "rsId": "SLC6A4_5HTTLPR",
+     "weight": 0.25,
+     "position": 1,
+     "genotypeScores": [
+      {
+       "genotype": "LA/LA",
+       "score": 100.0,
+       "classification": "FAVORAVEL"
+      },
+      {
+       "genotype": "LA/LG",
+       "score": 55.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "LA/AS",
+       "score": 55.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "LA/SG",
+       "score": 55.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "LG/LG",
+       "score": 15.0,
+       "classification": "DESFAVORAVEL"
+      },
+      {
+       "genotype": "SA/AS",
+       "score": 15.0,
+       "classification": "DESFAVORAVEL"
+      },
+      {
+       "genotype": "SA/LG",
+       "score": 15.0,
+       "classification": "DESFAVORAVEL"
+      },
+      {
+       "genotype": "LG/SG",
+       "score": 15.0,
+       "classification": "DESFAVORAVEL"
+      },
+      {
+       "genotype": "AS/SG",
+       "score": 15.0,
+       "classification": "DESFAVORAVEL"
+      },
+      {
+       "genotype": "SG/SG",
+       "score": 15.0,
+       "classification": "DESFAVORAVEL"
+      },
+      {
+       "genotype": "SA/SA",
+       "score": 15.0,
+       "classification": "DESFAVORAVEL"
+      }
+     ]
+    },
+    {
+     "rsId": "rs1800497",
+     "weight": 0.2,
+     "position": 2,
+     "genotypeScores": [
+      {
+       "genotype": "GG",
+       "score": 100.0,
+       "classification": "FAVORAVEL"
+      },
+      {
+       "genotype": "AG",
+       "score": 55.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "GA",
+       "score": 55.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "AA",
+       "score": 20.0,
+       "classification": "DESFAVORAVEL"
+      }
+     ]
+    },
+    {
+     "rsId": "rs6265",
+     "weight": 0.15,
+     "position": 3,
+     "genotypeScores": [
+      {
+       "genotype": "GG",
+       "score": 100.0,
+       "classification": "FAVORAVEL"
+      },
+      {
+       "genotype": "AG",
+       "score": 60.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "GA",
+       "score": 60.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "AA",
+       "score": 20.0,
+       "classification": "DESFAVORAVEL"
+      }
+     ]
+    },
+    {
+     "rsId": "rs1801260",
+     "weight": 0.1,
+     "position": 4,
+     "genotypeScores": [
+      {
+       "genotype": "TT",
+       "score": 100.0,
+       "classification": "FAVORAVEL"
+      },
+      {
+       "genotype": "CT",
+       "score": 55.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "TC",
+       "score": 55.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "CC",
+       "score": 20.0,
+       "classification": "DESFAVORAVEL"
+      }
+     ]
+    }
+   ],
+   "percentileCurve": [
+    {
+     "rawScore": 20.25,
+     "percentile": 0.0007
+    },
+    {
+     "rawScore": 23.75,
+     "percentile": 0.0052
+    },
+    {
+     "rawScore": 26.25,
+     "percentile": 0.0135
+    },
+    {
+     "rawScore": 27.25,
+     "percentile": 0.0177
+    },
+    {
+     "rawScore": 28.25,
+     "percentile": 0.0246
+    },
+    {
+     "rawScore": 29.25,
+     "percentile": 0.0264
+    },
+    {
+     "rawScore": 29.75,
+     "percentile": 0.077
+    },
+    {
+     "rawScore": 30.25,
+     "percentile": 0.0775
+    },
+    {
+     "rawScore": 30.75,
+     "percentile": 0.1032
+    },
+    {
+     "rawScore": 32.25,
+     "percentile": 0.1264
+    },
+    {
+     "rawScore": 32.75,
+     "percentile": 0.1379
+    },
+    {
+     "rawScore": 33.25,
+     "percentile": 0.1851
+    },
+    {
+     "rawScore": 33.75,
+     "percentile": 0.1884
+    },
+    {
+     "rawScore": 34.25,
+     "percentile": 0.2657
+    },
+    {
+     "rawScore": 35.25,
+     "percentile": 0.3261
+    },
+    {
+     "rawScore": 35.75,
+     "percentile": 0.4681
+    },
+    {
+     "rawScore": 36.25,
+     "percentile": 0.491
+    },
+    {
+     "rawScore": 36.75,
+     "percentile": 0.7795
+    },
+    {
+     "rawScore": 37.25,
+     "percentile": 0.8002
+    },
+    {
+     "rawScore": 38.25,
+     "percentile": 0.8053
+    },
+    {
+     "rawScore": 38.75,
+     "percentile": 0.9346
+    },
+    {
+     "rawScore": 39.25,
+     "percentile": 1.0686
+    },
+    {
+     "rawScore": 39.75,
+     "percentile": 1.2082
+    },
+    {
+     "rawScore": 40.25,
+     "percentile": 1.4255
+    },
+    {
+     "rawScore": 40.75,
+     "percentile": 1.4444
+    },
+    {
+     "rawScore": 41.25,
+     "percentile": 1.9453
+    },
+    {
+     "rawScore": 41.5,
+     "percentile": 1.9458
+    },
+    {
+     "rawScore": 42.25,
+     "percentile": 2.151
+    },
+    {
+     "rawScore": 42.75,
+     "percentile": 2.9719
+    },
+    {
+     "rawScore": 43.25,
+     "percentile": 3.2046
+    },
+    {
+     "rawScore": 44.25,
+     "percentile": 3.4181
+    },
+    {
+     "rawScore": 44.75,
+     "percentile": 3.7819
+    },
+    {
+     "rawScore": 45.0,
+     "percentile": 3.785
+    },
+    {
+     "rawScore": 45.25,
+     "percentile": 3.8449
+    },
+    {
+     "rawScore": 45.75,
+     "percentile": 5.1002
+    },
+    {
+     "rawScore": 46.25,
+     "percentile": 5.12
+    },
+    {
+     "rawScore": 46.75,
+     "percentile": 5.3328
+    },
+    {
+     "rawScore": 47.25,
+     "percentile": 6.5866
+    },
+    {
+     "rawScore": 47.5,
+     "percentile": 6.5924
+    },
+    {
+     "rawScore": 48.25,
+     "percentile": 7.1212
+    },
+    {
+     "rawScore": 48.5,
+     "percentile": 7.1241
+    },
+    {
+     "rawScore": 48.75,
+     "percentile": 7.3269
+    },
+    {
+     "rawScore": 49.25,
+     "percentile": 7.9811
+    },
+    {
+     "rawScore": 49.5,
+     "percentile": 7.9859
+    },
+    {
+     "rawScore": 49.75,
+     "percentile": 8.0683
+    },
+    {
+     "rawScore": 50.25,
+     "percentile": 9.9886
+    },
+    {
+     "rawScore": 50.5,
+     "percentile": 9.99
+    },
+    {
+     "rawScore": 50.75,
+     "percentile": 10.0012
+    },
+    {
+     "rawScore": 51.0,
+     "percentile": 10.0366
+    },
+    {
+     "rawScore": 51.25,
+     "percentile": 10.5784
+    },
+    {
+     "rawScore": 51.75,
+     "percentile": 13.813
+    },
+    {
+     "rawScore": 52.0,
+     "percentile": 13.8309
+    },
+    {
+     "rawScore": 52.25,
+     "percentile": 14.0525
+    },
+    {
+     "rawScore": 52.75,
+     "percentile": 14.6517
+    },
+    {
+     "rawScore": 53.25,
+     "percentile": 14.9832
+    },
+    {
+     "rawScore": 53.5,
+     "percentile": 14.9995
+    },
+    {
+     "rawScore": 54.0,
+     "percentile": 15.0075
+    },
+    {
+     "rawScore": 54.25,
+     "percentile": 15.123
+    },
+    {
+     "rawScore": 54.5,
+     "percentile": 15.156
+    },
+    {
+     "rawScore": 54.75,
+     "percentile": 16.5167
+    },
+    {
+     "rawScore": 55.25,
+     "percentile": 16.528
+    },
+    {
+     "rawScore": 55.5,
+     "percentile": 16.5822
+    },
+    {
+     "rawScore": 55.75,
+     "percentile": 17.5082
+    },
+    {
+     "rawScore": 56.25,
+     "percentile": 22.4617
+    },
+    {
+     "rawScore": 56.5,
+     "percentile": 22.504
+    },
+    {
+     "rawScore": 56.75,
+     "percentile": 22.6307
+    },
+    {
+     "rawScore": 57.0,
+     "percentile": 22.7303
+    },
+    {
+     "rawScore": 57.25,
+     "percentile": 24.1301
+    },
+    {
+     "rawScore": 57.5,
+     "percentile": 24.1418
+    },
+    {
+     "rawScore": 57.75,
+     "percentile": 24.2062
+    },
+    {
+     "rawScore": 58.0,
+     "percentile": 24.4083
+    },
+    {
+     "rawScore": 58.25,
+     "percentile": 25.0313
+    },
+    {
+     "rawScore": 58.5,
+     "percentile": 25.0436
+    },
+    {
+     "rawScore": 58.75,
+     "percentile": 25.1326
+    },
+    {
+     "rawScore": 59.25,
+     "percentile": 27.6289
+    },
+    {
+     "rawScore": 59.75,
+     "percentile": 27.634
+    },
+    {
+     "rawScore": 60.0,
+     "percentile": 27.7247
+    },
+    {
+     "rawScore": 60.25,
+     "percentile": 29.0229
+    },
+    {
+     "rawScore": 60.5,
+     "percentile": 29.1158
+    },
+    {
+     "rawScore": 60.75,
+     "percentile": 32.0881
+    },
+    {
+     "rawScore": 61.0,
+     "percentile": 32.1598
+    },
+    {
+     "rawScore": 61.25,
+     "percentile": 32.2869
+    },
+    {
+     "rawScore": 61.5,
+     "percentile": 32.4392
+    },
+    {
+     "rawScore": 61.75,
+     "percentile": 35.0424
+    },
+    {
+     "rawScore": 62.25,
+     "percentile": 35.1635
+    },
+    {
+     "rawScore": 62.5,
+     "percentile": 35.5145
+    },
+    {
+     "rawScore": 62.75,
+     "percentile": 35.8708
+    },
+    {
+     "rawScore": 63.25,
+     "percentile": 36.0076
+    },
+    {
+     "rawScore": 63.5,
+     "percentile": 36.1394
+    },
+    {
+     "rawScore": 63.75,
+     "percentile": 36.8631
+    },
+    {
+     "rawScore": 64.0,
+     "percentile": 37.4323
+    },
+    {
+     "rawScore": 64.5,
+     "percentile": 37.571
+    },
+    {
+     "rawScore": 64.75,
+     "percentile": 38.4872
+    },
+    {
+     "rawScore": 65.25,
+     "percentile": 44.3512
+    },
+    {
+     "rawScore": 65.5,
+     "percentile": 44.4609
+    },
+    {
+     "rawScore": 65.75,
+     "percentile": 44.5179
+    },
+    {
+     "rawScore": 66.0,
+     "percentile": 44.7728
+    },
+    {
+     "rawScore": 66.25,
+     "percentile": 48.4225
+    },
+    {
+     "rawScore": 66.5,
+     "percentile": 48.4332
+    },
+    {
+     "rawScore": 66.75,
+     "percentile": 48.6186
+    },
+    {
+     "rawScore": 67.0,
+     "percentile": 49.4248
+    },
+    {
+     "rawScore": 67.25,
+     "percentile": 49.7822
+    },
+    {
+     "rawScore": 67.5,
+     "percentile": 49.7873
+    },
+    {
+     "rawScore": 67.75,
+     "percentile": 49.8348
+    },
+    {
+     "rawScore": 68.25,
+     "percentile": 50.6817
+    },
+    {
+     "rawScore": 68.5,
+     "percentile": 51.5512
+    },
+    {
+     "rawScore": 68.75,
+     "percentile": 51.5584
+    },
+    {
+     "rawScore": 69.25,
+     "percentile": 53.097
+    },
+    {
+     "rawScore": 69.5,
+     "percentile": 53.4676
+    },
+    {
+     "rawScore": 69.75,
+     "percentile": 55.5021
+    },
+    {
+     "rawScore": 70.0,
+     "percentile": 55.5773
+    },
+    {
+     "rawScore": 70.5,
+     "percentile": 55.9672
+    },
+    {
+     "rawScore": 70.75,
+     "percentile": 58.4636
+    },
+    {
+     "rawScore": 71.0,
+     "percentile": 58.4685
+    },
+    {
+     "rawScore": 71.5,
+     "percentile": 59.7018
+    },
+    {
+     "rawScore": 71.75,
+     "percentile": 59.8622
+    },
+    {
+     "rawScore": 72.0,
+     "percentile": 59.87
+    },
+    {
+     "rawScore": 72.25,
+     "percentile": 59.9143
+    },
+    {
+     "rawScore": 72.5,
+     "percentile": 60.0351
+    },
+    {
+     "rawScore": 72.75,
+     "percentile": 61.3307
+    },
+    {
+     "rawScore": 73.0,
+     "percentile": 63.5971
+    },
+    {
+     "rawScore": 73.5,
+     "percentile": 63.6552
+    },
+    {
+     "rawScore": 73.75,
+     "percentile": 64.189
+    },
+    {
+     "rawScore": 74.25,
+     "percentile": 66.0869
+    },
+    {
+     "rawScore": 74.5,
+     "percentile": 66.2169
+    },
+    {
+     "rawScore": 74.75,
+     "percentile": 66.2983
+    },
+    {
+     "rawScore": 75.25,
+     "percentile": 70.6236
+    },
+    {
+     "rawScore": 76.0,
+     "percentile": 71.3891
+    },
+    {
+     "rawScore": 76.75,
+     "percentile": 71.4568
+    },
+    {
+     "rawScore": 77.0,
+     "percentile": 71.511
+    },
+    {
+     "rawScore": 77.5,
+     "percentile": 74.9781
+    },
+    {
+     "rawScore": 78.0,
+     "percentile": 75.067
+    },
+    {
+     "rawScore": 78.25,
+     "percentile": 75.5649
+    },
+    {
+     "rawScore": 78.5,
+     "percentile": 75.9044
+    },
+    {
+     "rawScore": 78.75,
+     "percentile": 78.8078
+    },
+    {
+     "rawScore": 79.0,
+     "percentile": 78.8529
+    },
+    {
+     "rawScore": 79.5,
+     "percentile": 79.0161
+    },
+    {
+     "rawScore": 79.75,
+     "percentile": 80.5168
+    },
+    {
+     "rawScore": 80.0,
+     "percentile": 80.5236
+    },
+    {
+     "rawScore": 80.5,
+     "percentile": 81.9853
+    },
+    {
+     "rawScore": 80.75,
+     "percentile": 82.2141
+    },
+    {
+     "rawScore": 82.0,
+     "percentile": 84.291
+    },
+    {
+     "rawScore": 82.75,
+     "percentile": 85.0527
+    },
+    {
+     "rawScore": 83.0,
+     "percentile": 85.2051
+    },
+    {
+     "rawScore": 83.5,
+     "percentile": 85.2471
+    },
+    {
+     "rawScore": 84.0,
+     "percentile": 85.4968
+    },
+    {
+     "rawScore": 84.25,
+     "percentile": 86.8967
+    },
+    {
+     "rawScore": 85.0,
+     "percentile": 87.4038
+    },
+    {
+     "rawScore": 86.0,
+     "percentile": 87.4811
+    },
+    {
+     "rawScore": 86.5,
+     "percentile": 91.5901
+    },
+    {
+     "rawScore": 88.0,
+     "percentile": 91.6545
+    },
+    {
+     "rawScore": 88.75,
+     "percentile": 93.796
+    },
+    {
+     "rawScore": 89.5,
+     "percentile": 94.2691
+    },
+    {
+     "rawScore": 91.0,
+     "percentile": 95.6947
+    },
+    {
+     "rawScore": 92.0,
+     "percentile": 95.9121
+    },
+    {
+     "rawScore": 94.0,
+     "percentile": 96.6357
+    },
+    {
+     "rawScore": 95.5,
+     "percentile": 97.9656
+    },
+    {
+     "rawScore": 100.0,
+     "percentile": 100.0
+    }
+   ]
+  }
+ ],
+ "modalities": [
+  {
+   "slug": "global",
+   "name": "Índice Nutrigenético",
+   "isGlobal": true,
+   "position": 0,
+   "categoryWeights": [
+    {
+     "category": "metabolismo_energetico",
+     "weight": 0.2
+    },
+    {
+     "category": "saude_cardiometabolica",
+     "weight": 0.25
+    },
+    {
+     "category": "micronutrientes",
+     "weight": 0.2
+    },
+    {
+     "category": "detox_biotransformacao",
+     "weight": 0.15
+    },
+    {
+     "category": "neuronutricao",
+     "weight": 0.2
+    }
+   ]
+  }
+ ]
+}

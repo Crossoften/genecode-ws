@@ -314,3 +314,412 @@ model AuditLog {
   @@index([createdAt])
   @@map("audit_logs")
 }
+
+// ============================================================================
+// GENOMICS — catálogo de marcadores e painéis
+// ============================================================================
+//
+// O ponto central deste bloco: **escore e interpretação pertencem ao painel**,
+// não ao SNP. Parece redundante — o mesmo rs4880 aparece nos dois painéis — mas
+// a análise das fontes mostrou que o SOD2 rs4880 tem polaridade INVERTIDA entre
+// performance e nutrigenética (TT favorável num, desfavorável no outro), e o
+// ADRB3 rs4994 diverge entre as fontes do mesmo painel.
+//
+// Modelar o escore como propriedade do SNP obrigaria a escolher um lado
+// silenciosamente. Modelando por painel, a divergência fica explícita no dado e
+// pode ser sinalizada no laudo Premium até o Dr. Câmara arbitrar.
+
+/// Marcador genético. Identificado pelo rsID, nunca pelo nome do gene — a
+/// análise encontrou o mesmo marcador nomeado `TNF_rs1800629` numa fonte e
+/// `TNF-alfa_rs1800629` noutra, o que quebrava o cruzamento.
+model Snp {
+  id       String  @id @default(uuid()) @db.Char(36)
+  rsId     String  @unique @db.VarChar(32) // rs1815739
+  gene     String  @db.VarChar(32) // ACTN3 — rótulo de exibição
+  fullName String? @db.VarChar(160)
+
+  /// Frequência do alelo menor na população (GnomAD), para exibição no laudo.
+  minorAllele     String? @db.VarChar(8)
+  minorAlleleFreq Decimal? @db.Decimal(8, 6)
+  majorAllele     String? @db.VarChar(8)
+  majorAlleleFreq Decimal? @db.Decimal(8, 6)
+
+  /// Texto "ação da proteína": explica o gene e é idêntico para os 3 genótipos.
+  proteinAction String? @db.LongText
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  aliases        GenotypeAlias[]
+  panelSnps      PanelSnp[]
+  subjectResults SubjectGenotype[]
+
+  @@index([gene])
+  @@map("snps")
+}
+
+/// Normalização de fita e de notação.
+///
+/// O BDNF rs6265 aparece como C/T numa fonte e G/A noutra — são a mesma variante
+/// lida em fitas opostas de DNA. Sem esta tabela, o genótipo "CC" não casaria com
+/// o painel que espera "GG", o marcador seria descartado em silêncio e o paciente
+/// receberia um escore calculado com menos marcadores do que deveria.
+model GenotypeAlias {
+  id    String @id @default(uuid()) @db.Char(36)
+  snpId String @db.Char(36)
+  snp   Snp    @relation(fields: [snpId], references: [id], onDelete: Cascade)
+
+  /// Forma como pode chegar no CSV (ex.: "CC", "cc", "C/C").
+  alias String @db.VarChar(24)
+  /// Forma canônica usada pelo painel (ex.: "GG").
+  canonical String @db.VarChar(24)
+
+  @@unique([snpId, alias])
+  @@map("genotype_aliases")
+}
+
+// ============================================================================
+// PAINEL VERSIONADO
+// ============================================================================
+
+/// Painel de análise, versionado e imutável depois de publicado.
+///
+/// Um laudo emitido precisa ser reproduzível anos depois. Se um peso for
+/// corrigido em 2027, os laudos de 2026 não podem mudar retroativamente — isso
+/// seria adulterar documento de saúde. Por isso não se faz UPDATE em painel
+/// publicado: publica-se uma nova versão, e cada laudo guarda a que usou.
+model Panel {
+  id      String      @id @default(uuid()) @db.Char(36)
+  slug    String      @db.VarChar(64) // performance, nutrigenetics
+  version String      @db.VarChar(20) // 1.0.0
+  name    String      @db.VarChar(160)
+  kind    PanelKind
+  /// Modelo matemático de combinação genético × ambiental.
+  scoringModel ScoringModel
+
+  status      PanelStatus @default(DRAFT)
+  publishedAt DateTime?
+  notes       String?     @db.Text
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  categories     PanelCategory[]
+  snps           PanelSnp[]
+  modalities     Modality[]
+  interpretations Interpretation[]
+  reports        Report[]
+
+  @@unique([slug, version])
+  @@index([status])
+  @@map("panels")
+}
+
+enum PanelKind {
+  PERFORMANCE
+  NUTRIGENETICS
+}
+
+enum PanelStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+/// Como o escore ambiental se combina com o genético.
+///
+/// ADDITIVE      — performance: Ajustado = Genético×0,30 + Ambiental×0,70
+/// MULTIPLICATIVE — nutrigenética: Ajustado = Bruto × Modificador (0,6–1,4)
+enum ScoringModel {
+  ADDITIVE
+  MULTIPLICATIVE
+}
+
+/// Categoria biológica dentro de um painel (Força e Potência, Metabolismo…).
+model PanelCategory {
+  id      String @id @default(uuid()) @db.Char(36)
+  panelId String @db.Char(36)
+  panel   Panel  @relation(fields: [panelId], references: [id], onDelete: Cascade)
+
+  slug     String @db.VarChar(64) // forca_potencia
+  name     String @db.VarChar(120)
+  position Int    @default(0)
+
+  snps            PanelSnp[]
+  modalityWeights ModalityWeight[]
+  percentiles     PercentilePoint[]
+  reportScores    ReportCategoryScore[]
+
+  @@unique([panelId, slug])
+  @@map("panel_categories")
+}
+
+/// Vínculo SNP × painel, com o peso dele dentro da categoria.
+model PanelSnp {
+  id         String        @id @default(uuid()) @db.Char(36)
+  panelId    String        @db.Char(36)
+  snpId      String        @db.Char(36)
+  categoryId String        @db.Char(36)
+  panel      Panel         @relation(fields: [panelId], references: [id], onDelete: Cascade)
+  snp        Snp           @relation(fields: [snpId], references: [id])
+  category   PanelCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  /// Peso dentro da categoria. Normalizado na leitura, então não precisa somar 1.
+  weight   Decimal @db.Decimal(6, 4)
+  position Int     @default(0)
+
+  genotypeScores GenotypeScore[]
+
+  @@unique([panelId, snpId])
+  @@index([categoryId])
+  @@map("panel_snps")
+}
+
+/// Escore de um genótipo dentro de um painel.
+///
+/// A escala é variável por SNP (0/50/100, 20/60/100, 30/65/100…), não uniforme
+/// como a especificação em markdown afirmava — o mockup de referência e o código
+/// Python concordam entre si contra o texto da spec.
+model GenotypeScore {
+  id         String   @id @default(uuid()) @db.Char(36)
+  panelSnpId String   @db.Char(36)
+  panelSnp   PanelSnp @relation(fields: [panelSnpId], references: [id], onDelete: Cascade)
+
+  genotype       String         @db.VarChar(24) // forma canônica
+  score          Decimal        @db.Decimal(6, 2)
+  classification Classification
+
+  @@unique([panelSnpId, genotype])
+  @@map("genotype_scores")
+}
+
+enum Classification {
+  FAVORAVEL
+  MODERADO
+  DESFAVORAVEL
+}
+
+// ============================================================================
+// ÍNDICES COMPOSTOS
+// ============================================================================
+
+/// Índice composto: o Global e as 30 modalidades esportivas.
+model Modality {
+  id      String @id @default(uuid()) @db.Char(36)
+  panelId String @db.Char(36)
+  panel   Panel  @relation(fields: [panelId], references: [id], onDelete: Cascade)
+
+  slug      String  @db.VarChar(64) // global, futebol, e_sports
+  name      String  @db.VarChar(120)
+  /// O índice Global é o número de capa do laudo; os demais são por esporte.
+  isGlobal  Boolean @default(false)
+  position  Int     @default(0)
+
+  weights     ModalityWeight[]
+  percentiles PercentilePoint[]
+  reportIndexes ReportModalityIndex[]
+
+  @@unique([panelId, slug])
+  @@map("modalities")
+}
+
+/// Peso de cada categoria biológica dentro de uma modalidade.
+model ModalityWeight {
+  id         String        @id @default(uuid()) @db.Char(36)
+  modalityId String        @db.Char(36)
+  categoryId String        @db.Char(36)
+  modality   Modality      @relation(fields: [modalityId], references: [id], onDelete: Cascade)
+  category   PanelCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  weight Decimal @db.Decimal(6, 4)
+
+  @@unique([modalityId, categoryId])
+  @@map("modality_weights")
+}
+
+/// Ponto da curva de percentil populacional, para a normalização 20–90.
+///
+/// Existe por categoria (curva analítica via Hardy-Weinberg sobre frequências do
+/// GnomAD) e por modalidade (curva por Monte Carlo, porque as 6 categorias são
+/// correlacionadas e a composição não tem forma fechada).
+///
+/// A normalização das modalidades corrige a compressão do Índice Global: sem
+/// ela, metade da população cai numa faixa de 12 pontos e o laudo parece dizer
+/// que ninguém tira nota alta.
+model PercentilePoint {
+  id         String  @id @default(uuid()) @db.Char(36)
+  categoryId String? @db.Char(36)
+  modalityId String? @db.Char(36)
+  category   PanelCategory? @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  modality   Modality?      @relation(fields: [modalityId], references: [id], onDelete: Cascade)
+
+  rawScore   Decimal @db.Decimal(8, 4)
+  percentile Decimal @db.Decimal(8, 4)
+
+  @@index([categoryId, rawScore])
+  @@index([modalityId, rawScore])
+  @@map("percentile_points")
+}
+
+// ============================================================================
+// CONTEÚDO DO LAUDO
+// ============================================================================
+
+/// Texto interpretativo por genótipo, versionado junto do painel.
+///
+/// Escopo por painel pelo mesmo motivo do GenotypeScore: onde a polaridade
+/// diverge, o texto que o paciente lê diverge junto.
+model Interpretation {
+  id      String @id @default(uuid()) @db.Char(36)
+  panelId String @db.Char(36)
+  panel   Panel  @relation(fields: [panelId], references: [id], onDelete: Cascade)
+
+  rsId     String @db.VarChar(32)
+  genotype String @db.VarChar(24)
+
+  /// Frequência populacional deste genótipo, para contexto no laudo.
+  genotypeFreq Decimal? @db.Decimal(10, 8)
+  /// Resumo clínico curto.
+  summary String? @db.Text
+  /// Texto voltado ao paciente — cerca de mil caracteres.
+  patientText String @db.LongText
+  /// Referências científicas do genótipo específico.
+  references String? @db.LongText
+
+  @@unique([panelId, rsId, genotype])
+  @@map("interpretations")
+}
+
+// ============================================================================
+// DADOS DO TITULAR E LAUDO
+// ============================================================================
+
+/// Lote de genótipos enviado pelo laboratório via CSV.
+model GenotypeBatch {
+  id           String      @id @default(uuid()) @db.Char(36)
+  filename     String      @db.VarChar(255)
+  uploadedById String?     @db.Char(36)
+  status       BatchStatus @default(PENDING)
+
+  rowCount     Int    @default(0)
+  processedCount Int  @default(0)
+  failedCount  Int    @default(0)
+  /// Erros por linha, para o admin corrigir o arquivo e reenviar.
+  errors       Json?
+
+  createdAt   DateTime  @default(now())
+  completedAt DateTime?
+
+  genotypes SubjectGenotype[]
+
+  @@index([status])
+  @@map("genotype_batches")
+}
+
+enum BatchStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+/// Genótipo observado de um titular para um marcador.
+///
+/// Guarda o valor bruto ao lado do canônico: quando um laudo for contestado,
+/// é preciso poder mostrar exatamente o que o laboratório enviou.
+model SubjectGenotype {
+  id        String @id @default(uuid()) @db.Char(36)
+  subjectId String @db.Char(36)
+  snpId     String @db.Char(36)
+  snp       Snp    @relation(fields: [snpId], references: [id])
+
+  /// Valor como veio no CSV.
+  rawValue String @db.VarChar(24)
+  /// Valor após normalização de fita e notação.
+  genotype String @db.VarChar(24)
+
+  batchId String?        @db.Char(36)
+  batch   GenotypeBatch? @relation(fields: [batchId], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now())
+
+  @@unique([subjectId, snpId])
+  @@index([snpId])
+  @@map("subject_genotypes")
+}
+
+/// Laudo calculado. Imutável: recalcular gera uma nova versão.
+model Report {
+  id        String @id @default(uuid()) @db.Char(36)
+  subjectId String @db.Char(36)
+  panelId   String @db.Char(36)
+  /// Versão do painel usada — é o que torna o laudo reproduzível no futuro.
+  panel     Panel  @relation(fields: [panelId], references: [id])
+
+  version   Int          @default(1)
+  status    ReportStatus @default(DRAFT)
+  /// Marcadores que faltaram no CSV, se houver. Some no laudo como aviso.
+  missingMarkers Json?
+
+  computedAt   DateTime  @default(now())
+  publishedAt  DateTime?
+
+  categoryScores  ReportCategoryScore[]
+  modalityIndexes ReportModalityIndex[]
+
+  @@unique([subjectId, panelId, version])
+  @@index([status])
+  @@map("reports")
+}
+
+enum ReportStatus {
+  DRAFT
+  PUBLISHED
+  SUPERSEDED
+}
+
+/// Escore de uma categoria biológica no laudo.
+model ReportCategoryScore {
+  id         String        @id @default(uuid()) @db.Char(36)
+  reportId   String        @db.Char(36)
+  categoryId String        @db.Char(36)
+  report     Report        @relation(fields: [reportId], references: [id], onDelete: Cascade)
+  category   PanelCategory @relation(fields: [categoryId], references: [id])
+
+  /// Soma ponderada dos SNPs, antes da normalização.
+  rawScore Decimal @db.Decimal(8, 4)
+  /// Após percentil populacional — a escala 20–90 que o paciente vê.
+  normalizedScore Decimal @db.Decimal(6, 2)
+  band            ScoreBand
+
+  @@unique([reportId, categoryId])
+  @@map("report_category_scores")
+}
+
+/// Índice composto no laudo (Global ou por modalidade).
+model ReportModalityIndex {
+  id         String   @id @default(uuid()) @db.Char(36)
+  reportId   String   @db.Char(36)
+  modalityId String   @db.Char(36)
+  report     Report   @relation(fields: [reportId], references: [id], onDelete: Cascade)
+  modality   Modality @relation(fields: [modalityId], references: [id])
+
+  rawIndex        Decimal   @db.Decimal(8, 4)
+  normalizedIndex Decimal   @db.Decimal(6, 2)
+  band            ScoreBand
+
+  @@unique([reportId, modalityId])
+  @@map("report_modality_indexes")
+}
+
+/// Faixa de classificação, ancorada nos quartis da normalização populacional.
+///
+/// Como score = 20 + percentil × 0,70, os quartis caem exatamente em
+/// 37,5 / 55 / 72,5. As faixas antigas (0–34 e 80–100) tinham trechos
+/// inalcançáveis, já que nenhum escore sai da faixa 20–90.
+enum ScoreBand {
+  FAVORAVEL   // 73–90 · quartil superior
+  MODERADO    // 55–72 · acima da mediana
+  ATENCAO     // 38–54 · abaixo da mediana
+  PRIORIDADE  // 20–37 · quartil inferior
+}

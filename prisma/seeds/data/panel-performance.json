@@ -1,0 +1,3511 @@
+{
+ "slug": "performance",
+ "version": "1.0.0",
+ "name": "GeneCode Performance",
+ "kind": "PERFORMANCE",
+ "scoringModel": "ADDITIVE",
+ "snps": [
+  {
+   "rsId": "rs1815739",
+   "gene": "ACTN3"
+  },
+  {
+   "rsId": "rs4646994",
+   "gene": "ACE"
+  },
+  {
+   "rsId": "rs35767",
+   "gene": "IGF1"
+  },
+  {
+   "rsId": "rs1805086",
+   "gene": "MSTN"
+  },
+  {
+   "rsId": "rs8192678",
+   "gene": "PPARGC1A"
+  },
+  {
+   "rsId": "rs4253778",
+   "gene": "PPARA"
+  },
+  {
+   "rsId": "rs2070744",
+   "gene": "NOS3"
+  },
+  {
+   "rsId": "rs1042713",
+   "gene": "ADRB2"
+  },
+  {
+   "rsId": "rs1800795",
+   "gene": "IL6"
+  },
+  {
+   "rsId": "rs4880",
+   "gene": "SOD2"
+  },
+  {
+   "rsId": "rs1800629",
+   "gene": "TNF"
+  },
+  {
+   "rsId": "rs1800896",
+   "gene": "IL10"
+  },
+  {
+   "rsId": "rs12722",
+   "gene": "COL5A1"
+  },
+  {
+   "rsId": "rs1800012",
+   "gene": "COL1A1"
+  },
+  {
+   "rsId": "rs143383",
+   "gene": "GDF5"
+  },
+  {
+   "rsId": "rs2228570",
+   "gene": "VDR"
+  },
+  {
+   "rsId": "rs9939609",
+   "gene": "FTO"
+  },
+  {
+   "rsId": "rs1801282",
+   "gene": "PPARG"
+  },
+  {
+   "rsId": "rs4994",
+   "gene": "ADRB3"
+  },
+  {
+   "rsId": "rs1799883",
+   "gene": "FABP2"
+  },
+  {
+   "rsId": "rs4680",
+   "gene": "COMT"
+  },
+  {
+   "rsId": "rs762551",
+   "gene": "CYP1A2"
+  },
+  {
+   "rsId": "rs6265",
+   "gene": "BDNF"
+  },
+  {
+   "rsId": "rs5751876",
+   "gene": "ADORA2A"
+  }
+ ],
+ "categories": [
+  {
+   "slug": "forca_potencia",
+   "name": "Força e Potência",
+   "position": 0,
+   "markers": [
+    {
+     "rsId": "rs1815739",
+     "weight": 0.375,
+     "position": 0,
+     "genotypeScores": [
+      {
+       "genotype": "CC",
+       "score": 100.0,
+       "classification": "FAVORAVEL"
+      },
+      {
+       "genotype": "CT",
+       "score": 55.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "TC",
+       "score": 55.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "TT",
+       "score": 10.0,
+       "classification": "DESFAVORAVEL"
+      }
+     ]
+    },
+    {
+     "rsId": "rs4646994",
+     "weight": 0.3,
+     "position": 1,
+     "genotypeScores": [
+      {
+       "genotype": "DD",
+       "score": 100.0,
+       "classification": "FAVORAVEL"
+      },
+      {
+       "genotype": "ID",
+       "score": 60.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "DI",
+       "score": 60.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "II",
+       "score": 20.0,
+       "classification": "DESFAVORAVEL"
+      }
+     ]
+    },
+    {
+     "rsId": "rs35767",
+     "weight": 0.2,
+     "position": 2,
+     "genotypeScores": [
+      {
+       "genotype": "CC",
+       "score": 100.0,
+       "classification": "FAVORAVEL"
+      },
+      {
+       "genotype": "CT",
+       "score": 55.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "TC",
+       "score": 55.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "TT",
+       "score": 20.0,
+       "classification": "DESFAVORAVEL"
+      }
+     ]
+    },
+    {
+     "rsId": "rs1805086",
+     "weight": 0.125,
+     "position": 3,
+     "genotypeScores": [
+      {
+       "genotype": "GG",
+       "score": 100.0,
+       "classification": "FAVORAVEL"
+      },
+      {
+       "genotype": "AG",
+       "score": 60.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "GA",
+       "score": 60.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "AA",
+       "score": 20.0,
+       "classification": "DESFAVORAVEL"
+      }
+     ]
+    }
+   ],
+   "percentileCurve": [
+    {
+     "rawScore": 16.25,
+     "percentile": 0.2054
+    },
+    {
+     "rawScore": 21.25,
+     "percentile": 0.2357
+    },
+    {
+     "rawScore": 23.25,
+     "percentile": 1.1707
+    },
+    {
+     "rawScore": 26.25,
+     "percentile": 1.1718
+    },
+    {
+     "rawScore": 28.25,
+     "percentile": 1.8613
+    },
+    {
+     "rawScore": 32.25,
+     "percentile": 2.925
+    },
+    {
+     "rawScore": 33.125,
+     "percentile": 3.6144
+    },
+    {
+     "rawScore": 33.25,
+     "percentile": 3.7008
+    },
+    {
+     "rawScore": 35.25,
+     "percentile": 6.2116
+    },
+    {
+     "rawScore": 37.25,
+     "percentile": 6.3684
+    },
+    {
+     "rawScore": 38.125,
+     "percentile": 6.4701
+    },
+    {
+     "rawScore": 38.25,
+     "percentile": 6.4731
+    },
+    {
+     "rawScore": 40.125,
+     "percentile": 9.6102
+    },
+    {
+     "rawScore": 40.25,
+     "percentile": 10.3508
+    },
+    {
+     "rawScore": 42.25,
+     "percentile": 10.3566
+    },
+    {
+     "rawScore": 43.125,
+     "percentile": 10.3603
+    },
+    {
+     "rawScore": 44.25,
+     "percentile": 13.2169
+    },
+    {
+     "rawScore": 45.125,
+     "percentile": 15.5307
+    },
+    {
+     "rawScore": 45.25,
+     "percentile": 15.599
+    },
+    {
+     "rawScore": 47.25,
+     "percentile": 17.2847
+    },
+    {
+     "rawScore": 49.125,
+     "percentile": 20.8538
+    },
+    {
+     "rawScore": 49.25,
+     "percentile": 21.2751
+    },
+    {
+     "rawScore": 50.0,
+     "percentile": 21.8533
+    },
+    {
+     "rawScore": 50.125,
+     "percentile": 22.1433
+    },
+    {
+     "rawScore": 50.25,
+     "percentile": 22.1454
+    },
+    {
+     "rawScore": 52.125,
+     "percentile": 30.5701
+    },
+    {
+     "rawScore": 52.25,
+     "percentile": 30.8187
+    },
+    {
+     "rawScore": 54.125,
+     "percentile": 31.345
+    },
+    {
+     "rawScore": 54.25,
+     "percentile": 31.3605
+    },
+    {
+     "rawScore": 55.0,
+     "percentile": 31.4458
+    },
+    {
+     "rawScore": 55.125,
+     "percentile": 31.4559
+    },
+    {
+     "rawScore": 56.25,
+     "percentile": 33.3737
+    },
+    {
+     "rawScore": 57.0,
+     "percentile": 36.0053
+    },
+    {
+     "rawScore": 57.125,
+     "percentile": 38.4905
+    },
+    {
+     "rawScore": 57.25,
+     "percentile": 38.4996
+    },
+    {
+     "rawScore": 59.125,
+     "percentile": 38.519
+    },
+    {
+     "rawScore": 60.0,
+     "percentile": 38.5222
+    },
+    {
+     "rawScore": 61.125,
+     "percentile": 48.1072
+    },
+    {
+     "rawScore": 61.25,
+     "percentile": 48.39
+    },
+    {
+     "rawScore": 62.0,
+     "percentile": 50.331
+    },
+    {
+     "rawScore": 62.125,
+     "percentile": 50.5601
+    },
+    {
+     "rawScore": 64.125,
+     "percentile": 56.2164
+    },
+    {
+     "rawScore": 66.0,
+     "percentile": 59.2104
+    },
+    {
+     "rawScore": 66.125,
+     "percentile": 60.6237
+    },
+    {
+     "rawScore": 66.25,
+     "percentile": 60.6342
+    },
+    {
+     "rawScore": 67.0,
+     "percentile": 60.8775
+    },
+    {
+     "rawScore": 67.125,
+     "percentile": 60.8842
+    },
+    {
+     "rawScore": 69.0,
+     "percentile": 67.9514
+    },
+    {
+     "rawScore": 69.125,
+     "percentile": 68.7855
+    },
+    {
+     "rawScore": 71.0,
+     "percentile": 69.2269
+    },
+    {
+     "rawScore": 71.125,
+     "percentile": 69.279
+    },
+    {
+     "rawScore": 72.0,
+     "percentile": 69.2875
+    },
+    {
+     "rawScore": 73.125,
+     "percentile": 75.7228
+    },
+    {
+     "rawScore": 74.0,
+     "percentile": 77.8075
+    },
+    {
+     "rawScore": 74.125,
+     "percentile": 77.8382
+    },
+    {
+     "rawScore": 76.0,
+     "percentile": 77.8545
+    },
+    {
+     "rawScore": 78.0,
+     "percentile": 85.895
+    },
+    {
+     "rawScore": 78.125,
+     "percentile": 86.8439
+    },
+    {
+     "rawScore": 79.0,
+     "percentile": 87.0361
+    },
+    {
+     "rawScore": 81.0,
+     "percentile": 91.7809
+    },
+    {
+     "rawScore": 83.0,
+     "percentile": 92.9665
+    },
+    {
+     "rawScore": 83.125,
+     "percentile": 93.0015
+    },
+    {
+     "rawScore": 84.0,
+     "percentile": 93.0072
+    },
+    {
+     "rawScore": 86.0,
+     "percentile": 93.7068
+    },
+    {
+     "rawScore": 88.0,
+     "percentile": 93.7506
+    },
+    {
+     "rawScore": 90.0,
+     "percentile": 99.1488
+    },
+    {
+     "rawScore": 91.0,
+     "percentile": 99.1746
+    },
+    {
+     "rawScore": 95.0,
+     "percentile": 99.9707
+    },
+    {
+     "rawScore": 100.0,
+     "percentile": 100.0
+    }
+   ]
+  },
+  {
+   "slug": "resistencia_aerobica",
+   "name": "Resistência e Capacidade Aeróbica",
+   "position": 1,
+   "markers": [
+    {
+     "rsId": "rs8192678",
+     "weight": 0.35,
+     "position": 0,
+     "genotypeScores": [
+      {
+       "genotype": "GG",
+       "score": 100.0,
+       "classification": "FAVORAVEL"
+      },
+      {
+       "genotype": "AG",
+       "score": 60.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "GA",
+       "score": 60.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "AA",
+       "score": 20.0,
+       "classification": "DESFAVORAVEL"
+      }
+     ]
+    },
+    {
+     "rsId": "rs4253778",
+     "weight": 0.3,
+     "position": 1,
+     "genotypeScores": [
+      {
+       "genotype": "GG",
+       "score": 100.0,
+       "classification": "FAVORAVEL"
+      },
+      {
+       "genotype": "GC",
+       "score": 55.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "CG",
+       "score": 55.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "CC",
+       "score": 20.0,
+       "classification": "DESFAVORAVEL"
+      }
+     ]
+    },
+    {
+     "rsId": "rs2070744",
+     "weight": 0.2,
+     "position": 2,
+     "genotypeScores": [
+      {
+       "genotype": "TT",
+       "score": 100.0,
+       "classification": "FAVORAVEL"
+      },
+      {
+       "genotype": "TC",
+       "score": 60.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "CT",
+       "score": 60.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "CC",
+       "score": 20.0,
+       "classification": "DESFAVORAVEL"
+      }
+     ]
+    },
+    {
+     "rsId": "rs1042713",
+     "weight": 0.15,
+     "position": 3,
+     "genotypeScores": [
+      {
+       "genotype": "GG",
+       "score": 100.0,
+       "classification": "FAVORAVEL"
+      },
+      {
+       "genotype": "AG",
+       "score": 55.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "GA",
+       "score": 55.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "AA",
+       "score": 20.0,
+       "classification": "DESFAVORAVEL"
+      }
+     ]
+    }
+   ],
+   "percentileCurve": [
+    {
+     "rawScore": 20.0,
+     "percentile": 0.0093
+    },
+    {
+     "rawScore": 25.25,
+     "percentile": 0.0344
+    },
+    {
+     "rawScore": 28.0,
+     "percentile": 0.0781
+    },
+    {
+     "rawScore": 30.5,
+     "percentile": 0.1243
+    },
+    {
+     "rawScore": 32.0,
+     "percentile": 0.1411
+    },
+    {
+     "rawScore": 33.25,
+     "percentile": 0.2583
+    },
+    {
+     "rawScore": 34.0,
+     "percentile": 0.3107
+    },
+    {
+     "rawScore": 35.75,
+     "percentile": 0.4347
+    },
+    {
+     "rawScore": 36.0,
+     "percentile": 0.4859
+    },
+    {
+     "rawScore": 38.5,
+     "percentile": 0.7026
+    },
+    {
+     "rawScore": 39.25,
+     "percentile": 0.843
+    },
+    {
+     "rawScore": 40.0,
+     "percentile": 0.9215
+    },
+    {
+     "rawScore": 41.25,
+     "percentile": 1.0589
+    },
+    {
+     "rawScore": 42.0,
+     "percentile": 1.3041
+    },
+    {
+     "rawScore": 42.5,
+     "percentile": 1.3872
+    },
+    {
+     "rawScore": 43.75,
+     "percentile": 1.9683
+    },
+    {
+     "rawScore": 44.0,
+     "percentile": 2.0256
+    },
+    {
+     "rawScore": 44.5,
+     "percentile": 2.285
+    },
+    {
+     "rawScore": 46.0,
+     "percentile": 2.379
+    },
+    {
+     "rawScore": 46.5,
+     "percentile": 2.6329
+    },
+    {
+     "rawScore": 47.25,
+     "percentile": 3.2903
+    },
+    {
+     "rawScore": 48.0,
+     "percentile": 3.4557
+    },
+    {
+     "rawScore": 49.25,
+     "percentile": 3.6094
+    },
+    {
+     "rawScore": 49.75,
+     "percentile": 4.3049
+    },
+    {
+     "rawScore": 50.0,
+     "percentile": 4.5921
+    },
+    {
+     "rawScore": 50.5,
+     "percentile": 4.9816
+    },
+    {
+     "rawScore": 51.75,
+     "percentile": 5.6622
+    },
+    {
+     "rawScore": 52.0,
+     "percentile": 5.9307
+    },
+    {
+     "rawScore": 52.5,
+     "percentile": 7.1461
+    },
+    {
+     "rawScore": 53.25,
+     "percentile": 7.3428
+    },
+    {
+     "rawScore": 54.0,
+     "percentile": 7.7835
+    },
+    {
+     "rawScore": 55.25,
+     "percentile": 8.5535
+    },
+    {
+     "rawScore": 56.0,
+     "percentile": 9.0003
+    },
+    {
+     "rawScore": 56.5,
+     "percentile": 9.4665
+    },
+    {
+     "rawScore": 57.25,
+     "percentile": 10.1865
+    },
+    {
+     "rawScore": 57.75,
+     "percentile": 13.445
+    },
+    {
+     "rawScore": 58.0,
+     "percentile": 13.7665
+    },
+    {
+     "rawScore": 58.5,
+     "percentile": 14.5863
+    },
+    {
+     "rawScore": 60.0,
+     "percentile": 15.0327
+    },
+    {
+     "rawScore": 60.5,
+     "percentile": 16.4563
+    },
+    {
+     "rawScore": 61.25,
+     "percentile": 17.3779
+    },
+    {
+     "rawScore": 62.0,
+     "percentile": 17.8941
+    },
+    {
+     "rawScore": 63.25,
+     "percentile": 18.7559
+    },
+    {
+     "rawScore": 63.75,
+     "percentile": 19.731
+    },
+    {
+     "rawScore": 64.0,
+     "percentile": 20.6163
+    },
+    {
+     "rawScore": 64.5,
+     "percentile": 22.8004
+    },
+    {
+     "rawScore": 65.25,
+     "percentile": 23.6438
+    },
+    {
+     "rawScore": 65.75,
+     "percentile": 27.4604
+    },
+    {
+     "rawScore": 66.0,
+     "percentile": 28.9664
+    },
+    {
+     "rawScore": 66.5,
+     "percentile": 30.6703
+    },
+    {
+     "rawScore": 68.0,
+     "percentile": 31.2881
+    },
+    {
+     "rawScore": 69.25,
+     "percentile": 32.3676
+    },
+    {
+     "rawScore": 70.0,
+     "percentile": 32.9453
+    },
+    {
+     "rawScore": 70.5,
+     "percentile": 33.5989
+    },
+    {
+     "rawScore": 71.25,
+     "percentile": 37.6366
+    },
+    {
+     "rawScore": 71.75,
+     "percentile": 42.205
+    },
+    {
+     "rawScore": 72.0,
+     "percentile": 43.2209
+    },
+    {
+     "rawScore": 72.5,
+     "percentile": 45.7792
+    },
+    {
+     "rawScore": 74.0,
+     "percentile": 47.5431
+    },
+    {
+     "rawScore": 74.5,
+     "percentile": 49.5388
+    },
+    {
+     "rawScore": 76.0,
+     "percentile": 50.2624
+    },
+    {
+     "rawScore": 77.25,
+     "percentile": 51.4707
+    },
+    {
+     "rawScore": 78.0,
+     "percentile": 54.1772
+    },
+    {
+     "rawScore": 78.5,
+     "percentile": 57.2393
+    },
+    {
+     "rawScore": 79.25,
+     "percentile": 61.9686
+    },
+    {
+     "rawScore": 79.75,
+     "percentile": 67.3194
+    },
+    {
+     "rawScore": 80.0,
+     "percentile": 69.4307
+    },
+    {
+     "rawScore": 84.0,
+     "percentile": 70.2406
+    },
+    {
+     "rawScore": 85.25,
+     "percentile": 75.9014
+    },
+    {
+     "rawScore": 86.0,
+     "percentile": 79.0714
+    },
+    {
+     "rawScore": 86.5,
+     "percentile": 82.6581
+    },
+    {
+     "rawScore": 88.0,
+     "percentile": 85.131
+    },
+    {
+     "rawScore": 92.0,
+     "percentile": 88.9254
+    },
+    {
+     "rawScore": 93.25,
+     "percentile": 95.5557
+    },
+    {
+     "rawScore": 100.0,
+     "percentile": 100.0
+    }
+   ]
+  },
+  {
+   "slug": "recuperacao_inflamacao",
+   "name": "Recuperação e Resposta Inflamatória",
+   "position": 2,
+   "markers": [
+    {
+     "rsId": "rs1800795",
+     "weight": 0.35,
+     "position": 0,
+     "genotypeScores": [
+      {
+       "genotype": "CC",
+       "score": 100.0,
+       "classification": "FAVORAVEL"
+      },
+      {
+       "genotype": "CG",
+       "score": 55.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "GC",
+       "score": 55.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "GG",
+       "score": 15.0,
+       "classification": "DESFAVORAVEL"
+      }
+     ]
+    },
+    {
+     "rsId": "rs4880",
+     "weight": 0.25,
+     "position": 1,
+     "genotypeScores": [
+      {
+       "genotype": "TT",
+       "score": 100.0,
+       "classification": "FAVORAVEL"
+      },
+      {
+       "genotype": "CT",
+       "score": 60.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "TC",
+       "score": 60.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "CC",
+       "score": 20.0,
+       "classification": "DESFAVORAVEL"
+      }
+     ]
+    },
+    {
+     "rsId": "rs1800629",
+     "weight": 0.225,
+     "position": 2,
+     "genotypeScores": [
+      {
+       "genotype": "GG",
+       "score": 100.0,
+       "classification": "FAVORAVEL"
+      },
+      {
+       "genotype": "GA",
+       "score": 50.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "AG",
+       "score": 50.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "AA",
+       "score": 10.0,
+       "classification": "DESFAVORAVEL"
+      }
+     ]
+    },
+    {
+     "rsId": "rs1800896",
+     "weight": 0.175,
+     "position": 3,
+     "genotypeScores": [
+      {
+       "genotype": "GG",
+       "score": 100.0,
+       "classification": "FAVORAVEL"
+      },
+      {
+       "genotype": "AG",
+       "score": 55.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "GA",
+       "score": 55.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "AA",
+       "score": 20.0,
+       "classification": "DESFAVORAVEL"
+      }
+     ]
+    }
+   ],
+   "percentileCurve": [
+    {
+     "rawScore": 16.0,
+     "percentile": 0.0773
+    },
+    {
+     "rawScore": 22.125,
+     "percentile": 0.1808
+    },
+    {
+     "rawScore": 25.0,
+     "percentile": 1.1494
+    },
+    {
+     "rawScore": 26.0,
+     "percentile": 1.3236
+    },
+    {
+     "rawScore": 30.0,
+     "percentile": 1.4193
+    },
+    {
+     "rawScore": 31.125,
+     "percentile": 2.7147
+    },
+    {
+     "rawScore": 32.125,
+     "percentile": 2.9477
+    },
+    {
+     "rawScore": 35.0,
+     "percentile": 5.1296
+    },
+    {
+     "rawScore": 36.0,
+     "percentile": 5.2277
+    },
+    {
+     "rawScore": 36.125,
+     "percentile": 5.3095
+    },
+    {
+     "rawScore": 36.25,
+     "percentile": 8.3427
+    },
+    {
+     "rawScore": 39.0,
+     "percentile": 9.5419
+    },
+    {
+     "rawScore": 40.0,
+     "percentile": 9.7576
+    },
+    {
+     "rawScore": 41.125,
+     "percentile": 12.6755
+    },
+    {
+     "rawScore": 42.125,
+     "percentile": 12.8067
+    },
+    {
+     "rawScore": 42.375,
+     "percentile": 16.8631
+    },
+    {
+     "rawScore": 44.0,
+     "percentile": 16.8904
+    },
+    {
+     "rawScore": 45.0,
+     "percentile": 18.1191
+    },
+    {
+     "rawScore": 45.125,
+     "percentile": 19.1437
+    },
+    {
+     "rawScore": 45.75,
+     "percentile": 19.1558
+    },
+    {
+     "rawScore": 46.125,
+     "percentile": 19.3401
+    },
+    {
+     "rawScore": 46.25,
+     "percentile": 26.1725
+    },
+    {
+     "rawScore": 49.0,
+     "percentile": 28.8739
+    },
+    {
+     "rawScore": 50.0,
+     "percentile": 28.9954
+    },
+    {
+     "rawScore": 50.25,
+     "percentile": 32.7507
+    },
+    {
+     "rawScore": 51.125,
+     "percentile": 34.3939
+    },
+    {
+     "rawScore": 51.875,
+     "percentile": 34.4101
+    },
+    {
+     "rawScore": 52.375,
+     "percentile": 43.5473
+    },
+    {
+     "rawScore": 53.0,
+     "percentile": 43.8899
+    },
+    {
+     "rawScore": 54.0,
+     "percentile": 43.9515
+    },
+    {
+     "rawScore": 54.75,
+     "percentile": 44.103
+    },
+    {
+     "rawScore": 55.125,
+     "percentile": 46.411
+    },
+    {
+     "rawScore": 55.75,
+     "percentile": 46.4382
+    },
+    {
+     "rawScore": 56.125,
+     "percentile": 46.542
+    },
+    {
+     "rawScore": 56.25,
+     "percentile": 50.3896
+    },
+    {
+     "rawScore": 56.375,
+     "percentile": 53.5981
+    },
+    {
+     "rawScore": 59.0,
+     "percentile": 55.1193
+    },
+    {
+     "rawScore": 59.75,
+     "percentile": 55.1247
+    },
+    {
+     "rawScore": 60.25,
+     "percentile": 63.5839
+    },
+    {
+     "rawScore": 60.875,
+     "percentile": 63.7865
+    },
+    {
+     "rawScore": 61.875,
+     "percentile": 63.8229
+    },
+    {
+     "rawScore": 62.375,
+     "percentile": 68.9684
+    },
+    {
+     "rawScore": 63.0,
+     "percentile": 69.7401
+    },
+    {
+     "rawScore": 64.0,
+     "percentile": 69.7748
+    },
+    {
+     "rawScore": 64.25,
+     "percentile": 70.8475
+    },
+    {
+     "rawScore": 64.75,
+     "percentile": 71.1887
+    },
+    {
+     "rawScore": 65.125,
+     "percentile": 72.4885
+    },
+    {
+     "rawScore": 65.75,
+     "percentile": 72.5038
+    },
+    {
+     "rawScore": 66.0,
+     "percentile": 72.9782
+    },
+    {
+     "rawScore": 66.375,
+     "percentile": 80.2055
+    },
+    {
+     "rawScore": 68.75,
+     "percentile": 80.2732
+    },
+    {
+     "rawScore": 69.75,
+     "percentile": 80.2854
+    },
+    {
+     "rawScore": 70.25,
+     "percentile": 85.0491
+    },
+    {
+     "rawScore": 70.875,
+     "percentile": 85.5055
+    },
+    {
+     "rawScore": 71.875,
+     "percentile": 85.526
+    },
+    {
+     "rawScore": 72.125,
+     "percentile": 86.1605
+    },
+    {
+     "rawScore": 73.0,
+     "percentile": 86.595
+    },
+    {
+     "rawScore": 74.25,
+     "percentile": 89.0113
+    },
+    {
+     "rawScore": 74.75,
+     "percentile": 89.2035
+    },
+    {
+     "rawScore": 76.0,
+     "percentile": 90.2722
+    },
+    {
+     "rawScore": 76.375,
+     "percentile": 94.3421
+    },
+    {
+     "rawScore": 78.75,
+     "percentile": 94.4947
+    },
+    {
+     "rawScore": 79.75,
+     "percentile": 94.5016
+    },
+    {
+     "rawScore": 80.0,
+     "percentile": 94.7137
+    },
+    {
+     "rawScore": 80.875,
+     "percentile": 94.9707
+    },
+    {
+     "rawScore": 82.125,
+     "percentile": 96.3999
+    },
+    {
+     "rawScore": 84.25,
+     "percentile": 97.7606
+    },
+    {
+     "rawScore": 86.0,
+     "percentile": 98.3624
+    },
+    {
+     "rawScore": 88.75,
+     "percentile": 98.4483
+    },
+    {
+     "rawScore": 90.0,
+     "percentile": 98.9261
+    },
+    {
+     "rawScore": 92.125,
+     "percentile": 99.7309
+    },
+    {
+     "rawScore": 100.0,
+     "percentile": 100.0
+    }
+   ]
+  },
+  {
+   "slug": "risco_lesao",
+   "name": "Risco de Lesão e Estrutura",
+   "position": 3,
+   "markers": [
+    {
+     "rsId": "rs12722",
+     "weight": 0.35,
+     "position": 0,
+     "genotypeScores": [
+      {
+       "genotype": "TT",
+       "score": 100.0,
+       "classification": "FAVORAVEL"
+      },
+      {
+       "genotype": "CT",
+       "score": 60.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "TC",
+       "score": 60.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "CC",
+       "score": 20.0,
+       "classification": "DESFAVORAVEL"
+      }
+     ]
+    },
+    {
+     "rsId": "rs1800012",
+     "weight": 0.325,
+     "position": 1,
+     "genotypeScores": [
+      {
+       "genotype": "GG",
+       "score": 100.0,
+       "classification": "FAVORAVEL"
+      },
+      {
+       "genotype": "GT",
+       "score": 60.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "TG",
+       "score": 60.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "TT",
+       "score": 20.0,
+       "classification": "DESFAVORAVEL"
+      }
+     ]
+    },
+    {
+     "rsId": "rs143383",
+     "weight": 0.175,
+     "position": 2,
+     "genotypeScores": [
+      {
+       "genotype": "CC",
+       "score": 100.0,
+       "classification": "FAVORAVEL"
+      },
+      {
+       "genotype": "CT",
+       "score": 55.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "TC",
+       "score": 55.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "TT",
+       "score": 20.0,
+       "classification": "DESFAVORAVEL"
+      }
+     ]
+    },
+    {
+     "rsId": "rs2228570",
+     "weight": 0.15,
+     "position": 3,
+     "genotypeScores": [
+      {
+       "genotype": "CC",
+       "score": 100.0,
+       "classification": "FAVORAVEL"
+      },
+      {
+       "genotype": "CT",
+       "score": 60.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "TC",
+       "score": 60.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "TT",
+       "score": 20.0,
+       "classification": "DESFAVORAVEL"
+      }
+     ]
+    }
+   ],
+   "percentileCurve": [
+    {
+     "rawScore": 20.0,
+     "percentile": 0.0154
+    },
+    {
+     "rawScore": 26.0,
+     "percentile": 0.0753
+    },
+    {
+     "rawScore": 26.125,
+     "percentile": 0.1091
+    },
+    {
+     "rawScore": 32.0,
+     "percentile": 0.1677
+    },
+    {
+     "rawScore": 32.125,
+     "percentile": 0.2997
+    },
+    {
+     "rawScore": 33.0,
+     "percentile": 0.4941
+    },
+    {
+     "rawScore": 34.0,
+     "percentile": 0.5365
+    },
+    {
+     "rawScore": 38.125,
+     "percentile": 0.6655
+    },
+    {
+     "rawScore": 39.0,
+     "percentile": 1.4246
+    },
+    {
+     "rawScore": 39.125,
+     "percentile": 1.8528
+    },
+    {
+     "rawScore": 40.0,
+     "percentile": 2.0184
+    },
+    {
+     "rawScore": 40.125,
+     "percentile": 2.0708
+    },
+    {
+     "rawScore": 45.0,
+     "percentile": 2.8119
+    },
+    {
+     "rawScore": 45.125,
+     "percentile": 4.4841
+    },
+    {
+     "rawScore": 46.0,
+     "percentile": 5.2611
+    },
+    {
+     "rawScore": 46.125,
+     "percentile": 5.4656
+    },
+    {
+     "rawScore": 47.0,
+     "percentile": 6.0025
+    },
+    {
+     "rawScore": 48.0,
+     "percentile": 6.0406
+    },
+    {
+     "rawScore": 51.125,
+     "percentile": 7.673
+    },
+    {
+     "rawScore": 52.0,
+     "percentile": 10.0761
+    },
+    {
+     "rawScore": 52.125,
+     "percentile": 11.6313
+    },
+    {
+     "rawScore": 53.0,
+     "percentile": 13.7279
+    },
+    {
+     "rawScore": 53.125,
+     "percentile": 14.3911
+    },
+    {
+     "rawScore": 54.0,
+     "percentile": 14.5397
+    },
+    {
+     "rawScore": 54.125,
+     "percentile": 14.56
+    },
+    {
+     "rawScore": 58.0,
+     "percentile": 16.9059
+    },
+    {
+     "rawScore": 58.125,
+     "percentile": 22.1992
+    },
+    {
+     "rawScore": 59.0,
+     "percentile": 24.2459
+    },
+    {
+     "rawScore": 59.125,
+     "percentile": 26.8357
+    },
+    {
+     "rawScore": 60.0,
+     "percentile": 28.6804
+    },
+    {
+     "rawScore": 60.125,
+     "percentile": 28.7596
+    },
+    {
+     "rawScore": 61.0,
+     "percentile": 29.2414
+    },
+    {
+     "rawScore": 62.0,
+     "percentile": 29.2525
+    },
+    {
+     "rawScore": 64.125,
+     "percentile": 34.42
+    },
+    {
+     "rawScore": 65.125,
+     "percentile": 36.9482
+    },
+    {
+     "rawScore": 66.0,
+     "percentile": 43.5849
+    },
+    {
+     "rawScore": 66.125,
+     "percentile": 45.7617
+    },
+    {
+     "rawScore": 67.0,
+     "percentile": 47.6431
+    },
+    {
+     "rawScore": 67.125,
+     "percentile": 47.8999
+    },
+    {
+     "rawScore": 68.0,
+     "percentile": 47.9435
+    },
+    {
+     "rawScore": 72.0,
+     "percentile": 54.4224
+    },
+    {
+     "rawScore": 72.125,
+     "percentile": 62.6204
+    },
+    {
+     "rawScore": 73.0,
+     "percentile": 64.4571
+    },
+    {
+     "rawScore": 73.125,
+     "percentile": 65.4599
+    },
+    {
+     "rawScore": 74.0,
+     "percentile": 67.0276
+    },
+    {
+     "rawScore": 75.0,
+     "percentile": 67.1691
+    },
+    {
+     "rawScore": 78.125,
+     "percentile": 75.1722
+    },
+    {
+     "rawScore": 79.125,
+     "percentile": 76.1511
+    },
+    {
+     "rawScore": 80.0,
+     "percentile": 82.1067
+    },
+    {
+     "rawScore": 80.125,
+     "percentile": 82.9196
+    },
+    {
+     "rawScore": 81.0,
+     "percentile": 83.4718
+    },
+    {
+     "rawScore": 86.0,
+     "percentile": 89.2858
+    },
+    {
+     "rawScore": 86.125,
+     "percentile": 92.4601
+    },
+    {
+     "rawScore": 87.0,
+     "percentile": 92.9991
+    },
+    {
+     "rawScore": 88.0,
+     "percentile": 93.4468
+    },
+    {
+     "rawScore": 92.125,
+     "percentile": 96.5455
+    },
+    {
+     "rawScore": 94.0,
+     "percentile": 98.2935
+    },
+    {
+     "rawScore": 100.0,
+     "percentile": 100.0
+    }
+   ]
+  },
+  {
+   "slug": "metabolismo_composicao",
+   "name": "Metabolismo e Composição Corporal",
+   "position": 4,
+   "markers": [
+    {
+     "rsId": "rs9939609",
+     "weight": 0.325,
+     "position": 0,
+     "genotypeScores": [
+      {
+       "genotype": "TT",
+       "score": 100.0,
+       "classification": "FAVORAVEL"
+      },
+      {
+       "genotype": "AT",
+       "score": 50.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "TA",
+       "score": 50.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "AA",
+       "score": 0.0,
+       "classification": "DESFAVORAVEL"
+      }
+     ]
+    },
+    {
+     "rsId": "rs1801282",
+     "weight": 0.3,
+     "position": 1,
+     "genotypeScores": [
+      {
+       "genotype": "GG",
+       "score": 100.0,
+       "classification": "FAVORAVEL"
+      },
+      {
+       "genotype": "CG",
+       "score": 65.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "GC",
+       "score": 65.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "CC",
+       "score": 30.0,
+       "classification": "DESFAVORAVEL"
+      }
+     ]
+    },
+    {
+     "rsId": "rs4994",
+     "weight": 0.2,
+     "position": 2,
+     "genotypeScores": [
+      {
+       "genotype": "TT",
+       "score": 100.0,
+       "classification": "FAVORAVEL"
+      },
+      {
+       "genotype": "TC",
+       "score": 55.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "CT",
+       "score": 55.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "CC",
+       "score": 10.0,
+       "classification": "DESFAVORAVEL"
+      }
+     ]
+    },
+    {
+     "rsId": "rs1799883",
+     "weight": 0.175,
+     "position": 3,
+     "genotypeScores": [
+      {
+       "genotype": "GG",
+       "score": 100.0,
+       "classification": "FAVORAVEL"
+      },
+      {
+       "genotype": "GA",
+       "score": 55.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "AG",
+       "score": 55.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "AA",
+       "score": 20.0,
+       "classification": "DESFAVORAVEL"
+      }
+     ]
+    }
+   ],
+   "percentileCurve": [
+    {
+     "rawScore": 14.5,
+     "percentile": 0.0081
+    },
+    {
+     "rawScore": 20.625,
+     "percentile": 0.0544
+    },
+    {
+     "rawScore": 23.5,
+     "percentile": 0.2117
+    },
+    {
+     "rawScore": 25.0,
+     "percentile": 0.2133
+    },
+    {
+     "rawScore": 28.5,
+     "percentile": 0.2793
+    },
+    {
+     "rawScore": 29.625,
+     "percentile": 1.1768
+    },
+    {
+     "rawScore": 30.75,
+     "percentile": 1.2004
+    },
+    {
+     "rawScore": 31.125,
+     "percentile": 1.2095
+    },
+    {
+     "rawScore": 32.5,
+     "percentile": 1.9726
+    },
+    {
+     "rawScore": 34.0,
+     "percentile": 2.0037
+    },
+    {
+     "rawScore": 35.5,
+     "percentile": 2.0038
+    },
+    {
+     "rawScore": 36.875,
+     "percentile": 2.1381
+    },
+    {
+     "rawScore": 37.5,
+     "percentile": 3.4182
+    },
+    {
+     "rawScore": 38.625,
+     "percentile": 7.7716
+    },
+    {
+     "rawScore": 39.0,
+     "percentile": 7.7846
+    },
+    {
+     "rawScore": 39.75,
+     "percentile": 8.2413
+    },
+    {
+     "rawScore": 40.125,
+     "percentile": 8.4188
+    },
+    {
+     "rawScore": 41.25,
+     "percentile": 8.4234
+    },
+    {
+     "rawScore": 41.625,
+     "percentile": 8.4239
+    },
+    {
+     "rawScore": 43.0,
+     "percentile": 8.5748
+    },
+    {
+     "rawScore": 44.5,
+     "percentile": 8.5763
+    },
+    {
+     "rawScore": 44.75,
+     "percentile": 8.7678
+    },
+    {
+     "rawScore": 45.875,
+     "percentile": 11.3733
+    },
+    {
+     "rawScore": 46.5,
+     "percentile": 17.5823
+    },
+    {
+     "rawScore": 47.0,
+     "percentile": 17.5993
+    },
+    {
+     "rawScore": 47.375,
+     "percentile": 17.6259
+    },
+    {
+     "rawScore": 48.0,
+     "percentile": 17.879
+    },
+    {
+     "rawScore": 48.75,
+     "percentile": 20.0942
+    },
+    {
+     "rawScore": 49.125,
+     "percentile": 20.9549
+    },
+    {
+     "rawScore": 49.5,
+     "percentile": 20.9555
+    },
+    {
+     "rawScore": 50.25,
+     "percentile": 21.0458
+    },
+    {
+     "rawScore": 50.625,
+     "percentile": 21.0546
+    },
+    {
+     "rawScore": 51.75,
+     "percentile": 21.0548
+    },
+    {
+     "rawScore": 53.125,
+     "percentile": 21.1523
+    },
+    {
+     "rawScore": 53.5,
+     "percentile": 21.1597
+    },
+    {
+     "rawScore": 53.75,
+     "percentile": 24.8757
+    },
+    {
+     "rawScore": 54.875,
+     "percentile": 37.5133
+    },
+    {
+     "rawScore": 55.25,
+     "percentile": 37.5511
+    },
+    {
+     "rawScore": 56.0,
+     "percentile": 37.8826
+    },
+    {
+     "rawScore": 56.375,
+     "percentile": 38.3977
+    },
+    {
+     "rawScore": 57.0,
+     "percentile": 39.6253
+    },
+    {
+     "rawScore": 57.5,
+     "percentile": 39.6286
+    },
+    {
+     "rawScore": 57.875,
+     "percentile": 39.63
+    },
+    {
+     "rawScore": 58.5,
+     "percentile": 39.6425
+    },
+    {
+     "rawScore": 59.25,
+     "percentile": 40.0804
+    },
+    {
+     "rawScore": 59.625,
+     "percentile": 40.123
+    },
+    {
+     "rawScore": 60.75,
+     "percentile": 40.1274
+    },
+    {
+     "rawScore": 61.0,
+     "percentile": 40.2664
+    },
+    {
+     "rawScore": 62.125,
+     "percentile": 42.1573
+    },
+    {
+     "rawScore": 62.75,
+     "percentile": 60.1813
+    },
+    {
+     "rawScore": 63.625,
+     "percentile": 60.2005
+    },
+    {
+     "rawScore": 64.25,
+     "percentile": 60.9352
+    },
+    {
+     "rawScore": 65.0,
+     "percentile": 62.5428
+    },
+    {
+     "rawScore": 65.375,
+     "percentile": 65.0414
+    },
+    {
+     "rawScore": 65.75,
+     "percentile": 65.0433
+    },
+    {
+     "rawScore": 66.5,
+     "percentile": 65.1088
+    },
+    {
+     "rawScore": 66.875,
+     "percentile": 65.1342
+    },
+    {
+     "rawScore": 67.5,
+     "percentile": 65.1949
+    },
+    {
+     "rawScore": 68.0,
+     "percentile": 65.1951
+    },
+    {
+     "rawScore": 69.75,
+     "percentile": 65.2167
+    },
+    {
+     "rawScore": 70.0,
+     "percentile": 67.9135
+    },
+    {
+     "rawScore": 71.125,
+     "percentile": 77.0849
+    },
+    {
+     "rawScore": 71.5,
+     "percentile": 77.1124
+    },
+    {
+     "rawScore": 72.625,
+     "percentile": 77.4862
+    },
+    {
+     "rawScore": 73.25,
+     "percentile": 81.0497
+    },
+    {
+     "rawScore": 74.125,
+     "percentile": 81.0507
+    },
+    {
+     "rawScore": 74.75,
+     "percentile": 81.087
+    },
+    {
+     "rawScore": 75.5,
+     "percentile": 81.4048
+    },
+    {
+     "rawScore": 75.875,
+     "percentile": 81.5283
+    },
+    {
+     "rawScore": 77.0,
+     "percentile": 81.5315
+    },
+    {
+     "rawScore": 79.0,
+     "percentile": 94.612
+    },
+    {
+     "rawScore": 80.5,
+     "percentile": 95.1452
+    },
+    {
+     "rawScore": 81.625,
+     "percentile": 96.9584
+    },
+    {
+     "rawScore": 82.0,
+     "percentile": 96.9598
+    },
+    {
+     "rawScore": 83.125,
+     "percentile": 96.9782
+    },
+    {
+     "rawScore": 83.75,
+     "percentile": 97.1544
+    },
+    {
+     "rawScore": 86.0,
+     "percentile": 97.1701
+    },
+    {
+     "rawScore": 89.5,
+     "percentile": 99.7562
+    },
+    {
+     "rawScore": 91.0,
+     "percentile": 99.7826
+    },
+    {
+     "rawScore": 92.125,
+     "percentile": 99.8722
+    },
+    {
+     "rawScore": 100.0,
+     "percentile": 100.0
+    }
+   ]
+  },
+  {
+   "slug": "neuroperformance",
+   "name": "Neuroperformance e Tempo de Resposta",
+   "position": 5,
+   "markers": [
+    {
+     "rsId": "rs4680",
+     "weight": 0.295,
+     "position": 0,
+     "genotypeScores": [
+      {
+       "genotype": "GG",
+       "score": 100.0,
+       "classification": "FAVORAVEL"
+      },
+      {
+       "genotype": "AG",
+       "score": 55.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "GA",
+       "score": 55.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "AA",
+       "score": 20.0,
+       "classification": "DESFAVORAVEL"
+      }
+     ]
+    },
+    {
+     "rsId": "rs762551",
+     "weight": 0.341,
+     "position": 1,
+     "genotypeScores": [
+      {
+       "genotype": "AA",
+       "score": 100.0,
+       "classification": "FAVORAVEL"
+      },
+      {
+       "genotype": "AC",
+       "score": 60.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "CA",
+       "score": 60.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "CC",
+       "score": 25.0,
+       "classification": "DESFAVORAVEL"
+      }
+     ]
+    },
+    {
+     "rsId": "rs6265",
+     "weight": 0.205,
+     "position": 2,
+     "genotypeScores": [
+      {
+       "genotype": "CC",
+       "score": 100.0,
+       "classification": "FAVORAVEL"
+      },
+      {
+       "genotype": "CT",
+       "score": 60.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "TC",
+       "score": 60.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "TT",
+       "score": 20.0,
+       "classification": "DESFAVORAVEL"
+      }
+     ]
+    },
+    {
+     "rsId": "rs5751876",
+     "weight": 0.159,
+     "position": 3,
+     "genotypeScores": [
+      {
+       "genotype": "CC",
+       "score": 100.0,
+       "classification": "FAVORAVEL"
+      },
+      {
+       "genotype": "CT",
+       "score": 60.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "TC",
+       "score": 60.0,
+       "classification": "MODERADO"
+      },
+      {
+       "genotype": "TT",
+       "score": 20.0,
+       "classification": "DESFAVORAVEL"
+      }
+     ]
+    }
+   ],
+   "percentileCurve": [
+    {
+     "rawScore": 21.375,
+     "percentile": 0.0109
+    },
+    {
+     "rawScore": 28.375,
+     "percentile": 0.0344
+    },
+    {
+     "rawScore": 30.375,
+     "percentile": 0.1568
+    },
+    {
+     "rawScore": 31.0,
+     "percentile": 0.2015
+    },
+    {
+     "rawScore": 32.75,
+     "percentile": 0.2294
+    },
+    {
+     "rawScore": 35.375,
+     "percentile": 0.242
+    },
+    {
+     "rawScore": 37.375,
+     "percentile": 0.5059
+    },
+    {
+     "rawScore": 38.0,
+     "percentile": 0.6023
+    },
+    {
+     "rawScore": 39.375,
+     "percentile": 0.9465
+    },
+    {
+     "rawScore": 39.75,
+     "percentile": 1.0066
+    },
+    {
+     "rawScore": 40.0,
+     "percentile": 1.5094
+    },
+    {
+     "rawScore": 41.75,
+     "percentile": 1.8229
+    },
+    {
+     "rawScore": 42.0,
+     "percentile": 1.8689
+    },
+    {
+     "rawScore": 42.375,
+     "percentile": 1.9834
+    },
+    {
+     "rawScore": 44.375,
+     "percentile": 2.1256
+    },
+    {
+     "rawScore": 45.0,
+     "percentile": 2.1776
+    },
+    {
+     "rawScore": 46.375,
+     "percentile": 2.9196
+    },
+    {
+     "rawScore": 46.75,
+     "percentile": 2.952
+    },
+    {
+     "rawScore": 47.0,
+     "percentile": 4.036
+    },
+    {
+     "rawScore": 47.375,
+     "percentile": 4.0539
+    },
+    {
+     "rawScore": 48.75,
+     "percentile": 4.7299
+    },
+    {
+     "rawScore": 49.0,
+     "percentile": 6.2425
+    },
+    {
+     "rawScore": 49.375,
+     "percentile": 6.4894
+    },
+    {
+     "rawScore": 50.75,
+     "percentile": 7.3708
+    },
+    {
+     "rawScore": 51.0,
+     "percentile": 7.8872
+    },
+    {
+     "rawScore": 51.375,
+     "percentile": 9.1751
+    },
+    {
+     "rawScore": 53.375,
+     "percentile": 9.6926
+    },
+    {
+     "rawScore": 54.0,
+     "percentile": 10.2769
+    },
+    {
+     "rawScore": 54.375,
+     "percentile": 10.3154
+    },
+    {
+     "rawScore": 55.75,
+     "percentile": 10.6797
+    },
+    {
+     "rawScore": 56.0,
+     "percentile": 13.7808
+    },
+    {
+     "rawScore": 56.375,
+     "percentile": 14.1146
+    },
+    {
+     "rawScore": 57.0,
+     "percentile": 14.188
+    },
+    {
+     "rawScore": 57.75,
+     "percentile": 16.0884
+    },
+    {
+     "rawScore": 58.0,
+     "percentile": 17.2016
+    },
+    {
+     "rawScore": 58.375,
+     "percentile": 19.9782
+    },
+    {
+     "rawScore": 60.0,
+     "percentile": 21.4298
+    },
+    {
+     "rawScore": 60.375,
+     "percentile": 25.304
+    },
+    {
+     "rawScore": 61.375,
+     "percentile": 25.3248
+    },
+    {
+     "rawScore": 62.375,
+     "percentile": 26.6473
+    },
+    {
+     "rawScore": 63.0,
+     "percentile": 28.29
+    },
+    {
+     "rawScore": 63.375,
+     "percentile": 28.7228
+    },
+    {
+     "rawScore": 64.0,
+     "percentile": 28.8809
+    },
+    {
+     "rawScore": 64.75,
+     "percentile": 29.9052
+    },
+    {
+     "rawScore": 65.0,
+     "percentile": 30.5053
+    },
+    {
+     "rawScore": 65.375,
+     "percentile": 32.5662
+    },
+    {
+     "rawScore": 66.0,
+     "percentile": 33.3909
+    },
+    {
+     "rawScore": 67.0,
+     "percentile": 36.5206
+    },
+    {
+     "rawScore": 67.375,
+     "percentile": 44.4633
+    },
+    {
+     "rawScore": 68.0,
+     "percentile": 44.5386
+    },
+    {
+     "rawScore": 69.375,
+     "percentile": 47.3898
+    },
+    {
+     "rawScore": 70.375,
+     "percentile": 47.6231
+    },
+    {
+     "rawScore": 71.0,
+     "percentile": 47.7083
+    },
+    {
+     "rawScore": 71.375,
+     "percentile": 51.4264
+    },
+    {
+     "rawScore": 72.375,
+     "percentile": 52.6432
+    },
+    {
+     "rawScore": 73.0,
+     "percentile": 54.4211
+    },
+    {
+     "rawScore": 74.0,
+     "percentile": 56.108
+    },
+    {
+     "rawScore": 74.375,
+     "percentile": 60.3154
+    },
+    {
+     "rawScore": 75.0,
+     "percentile": 62.7961
+    },
+    {
+     "rawScore": 76.375,
+     "percentile": 64.3329
+    },
+    {
+     "rawScore": 77.0,
+     "percentile": 65.1797
+    },
+    {
+     "rawScore": 78.375,
+     "percentile": 73.1957
+    },
+    {
+     "rawScore": 79.375,
+     "percentile": 73.8516
+    },
+    {
+     "rawScore": 80.0,
+     "percentile": 74.8098
+    },
+    {
+     "rawScore": 82.0,
+     "percentile": 79.8957
+    },
+    {
+     "rawScore": 84.0,
+     "percentile": 81.7214
+    },
+    {
+     "rawScore": 85.375,
+     "percentile": 86.0419
+    },
+    {
+     "rawScore": 86.0,
+     "percentile": 88.4226
+    },
+    {
+     "rawScore": 89.0,
+     "percentile": 91.1167
+    },
+    {
+     "rawScore": 91.0,
+     "percentile": 92.1007
+    },
+    {
+     "rawScore": 93.0,
+     "percentile": 97.2335
+    },
+    {
+     "rawScore": 100.0,
+     "percentile": 100.0
+    }
+   ]
+  }
+ ],
+ "modalities": [
+  {
+   "slug": "global",
+   "name": "Índice Global",
+   "isGlobal": true,
+   "position": 0,
+   "categoryWeights": [
+    {
+     "category": "forca_potencia",
+     "weight": 0.2
+    },
+    {
+     "category": "resistencia_aerobica",
+     "weight": 0.2
+    },
+    {
+     "category": "recuperacao_inflamacao",
+     "weight": 0.2
+    },
+    {
+     "category": "risco_lesao",
+     "weight": 0.15
+    },
+    {
+     "category": "metabolismo_composicao",
+     "weight": 0.15
+    },
+    {
+     "category": "neuroperformance",
+     "weight": 0.1
+    }
+   ]
+  },
+  {
+   "slug": "futebol",
+   "name": "Futebol",
+   "isGlobal": false,
+   "position": 1,
+   "categoryWeights": [
+    {
+     "category": "forca_potencia",
+     "weight": 0.15
+    },
+    {
+     "category": "resistencia_aerobica",
+     "weight": 0.25
+    },
+    {
+     "category": "recuperacao_inflamacao",
+     "weight": 0.2
+    },
+    {
+     "category": "risco_lesao",
+     "weight": 0.2
+    },
+    {
+     "category": "metabolismo_composicao",
+     "weight": 0.1
+    },
+    {
+     "category": "neuroperformance",
+     "weight": 0.1
+    }
+   ]
+  },
+  {
+   "slug": "futsal",
+   "name": "Futsal",
+   "isGlobal": false,
+   "position": 2,
+   "categoryWeights": [
+    {
+     "category": "forca_potencia",
+     "weight": 0.15
+    },
+    {
+     "category": "resistencia_aerobica",
+     "weight": 0.2
+    },
+    {
+     "category": "recuperacao_inflamacao",
+     "weight": 0.2
+    },
+    {
+     "category": "risco_lesao",
+     "weight": 0.2
+    },
+    {
+     "category": "metabolismo_composicao",
+     "weight": 0.1
+    },
+    {
+     "category": "neuroperformance",
+     "weight": 0.15
+    }
+   ]
+  },
+  {
+   "slug": "basquete",
+   "name": "Basquete",
+   "isGlobal": false,
+   "position": 3,
+   "categoryWeights": [
+    {
+     "category": "forca_potencia",
+     "weight": 0.2
+    },
+    {
+     "category": "resistencia_aerobica",
+     "weight": 0.2
+    },
+    {
+     "category": "recuperacao_inflamacao",
+     "weight": 0.2
+    },
+    {
+     "category": "risco_lesao",
+     "weight": 0.2
+    },
+    {
+     "category": "metabolismo_composicao",
+     "weight": 0.05
+    },
+    {
+     "category": "neuroperformance",
+     "weight": 0.15
+    }
+   ]
+  },
+  {
+   "slug": "handebol",
+   "name": "Handebol",
+   "isGlobal": false,
+   "position": 4,
+   "categoryWeights": [
+    {
+     "category": "forca_potencia",
+     "weight": 0.2
+    },
+    {
+     "category": "resistencia_aerobica",
+     "weight": 0.2
+    },
+    {
+     "category": "recuperacao_inflamacao",
+     "weight": 0.2
+    },
+    {
+     "category": "risco_lesao",
+     "weight": 0.2
+    },
+    {
+     "category": "metabolismo_composicao",
+     "weight": 0.05
+    },
+    {
+     "category": "neuroperformance",
+     "weight": 0.15
+    }
+   ]
+  },
+  {
+   "slug": "volei_quadra",
+   "name": "Vôlei de Quadra",
+   "isGlobal": false,
+   "position": 5,
+   "categoryWeights": [
+    {
+     "category": "forca_potencia",
+     "weight": 0.25
+    },
+    {
+     "category": "resistencia_aerobica",
+     "weight": 0.15
+    },
+    {
+     "category": "recuperacao_inflamacao",
+     "weight": 0.2
+    },
+    {
+     "category": "risco_lesao",
+     "weight": 0.15
+    },
+    {
+     "category": "metabolismo_composicao",
+     "weight": 0.1
+    },
+    {
+     "category": "neuroperformance",
+     "weight": 0.15
+    }
+   ]
+  },
+  {
+   "slug": "volei_praia",
+   "name": "Vôlei de Praia",
+   "isGlobal": false,
+   "position": 6,
+   "categoryWeights": [
+    {
+     "category": "forca_potencia",
+     "weight": 0.25
+    },
+    {
+     "category": "resistencia_aerobica",
+     "weight": 0.2
+    },
+    {
+     "category": "recuperacao_inflamacao",
+     "weight": 0.2
+    },
+    {
+     "category": "risco_lesao",
+     "weight": 0.15
+    },
+    {
+     "category": "metabolismo_composicao",
+     "weight": 0.1
+    },
+    {
+     "category": "neuroperformance",
+     "weight": 0.1
+    }
+   ]
+  },
+  {
+   "slug": "tenis",
+   "name": "Tênis",
+   "isGlobal": false,
+   "position": 7,
+   "categoryWeights": [
+    {
+     "category": "forca_potencia",
+     "weight": 0.15
+    },
+    {
+     "category": "resistencia_aerobica",
+     "weight": 0.2
+    },
+    {
+     "category": "recuperacao_inflamacao",
+     "weight": 0.2
+    },
+    {
+     "category": "risco_lesao",
+     "weight": 0.15
+    },
+    {
+     "category": "metabolismo_composicao",
+     "weight": 0.1
+    },
+    {
+     "category": "neuroperformance",
+     "weight": 0.2
+    }
+   ]
+  },
+  {
+   "slug": "badminton",
+   "name": "Badminton",
+   "isGlobal": false,
+   "position": 8,
+   "categoryWeights": [
+    {
+     "category": "forca_potencia",
+     "weight": 0.1
+    },
+    {
+     "category": "resistencia_aerobica",
+     "weight": 0.25
+    },
+    {
+     "category": "recuperacao_inflamacao",
+     "weight": 0.2
+    },
+    {
+     "category": "risco_lesao",
+     "weight": 0.15
+    },
+    {
+     "category": "metabolismo_composicao",
+     "weight": 0.1
+    },
+    {
+     "category": "neuroperformance",
+     "weight": 0.2
+    }
+   ]
+  },
+  {
+   "slug": "beach_tennis",
+   "name": "Beach Tennis",
+   "isGlobal": false,
+   "position": 9,
+   "categoryWeights": [
+    {
+     "category": "forca_potencia",
+     "weight": 0.2
+    },
+    {
+     "category": "resistencia_aerobica",
+     "weight": 0.2
+    },
+    {
+     "category": "recuperacao_inflamacao",
+     "weight": 0.2
+    },
+    {
+     "category": "risco_lesao",
+     "weight": 0.15
+    },
+    {
+     "category": "metabolismo_composicao",
+     "weight": 0.1
+    },
+    {
+     "category": "neuroperformance",
+     "weight": 0.15
+    }
+   ]
+  },
+  {
+   "slug": "pickleball",
+   "name": "Pickleball",
+   "isGlobal": false,
+   "position": 10,
+   "categoryWeights": [
+    {
+     "category": "forca_potencia",
+     "weight": 0.1
+    },
+    {
+     "category": "resistencia_aerobica",
+     "weight": 0.15
+    },
+    {
+     "category": "recuperacao_inflamacao",
+     "weight": 0.2
+    },
+    {
+     "category": "risco_lesao",
+     "weight": 0.2
+    },
+    {
+     "category": "metabolismo_composicao",
+     "weight": 0.1
+    },
+    {
+     "category": "neuroperformance",
+     "weight": 0.25
+    }
+   ]
+  },
+  {
+   "slug": "ciclismo",
+   "name": "Ciclismo",
+   "isGlobal": false,
+   "position": 11,
+   "categoryWeights": [
+    {
+     "category": "forca_potencia",
+     "weight": 0.15
+    },
+    {
+     "category": "resistencia_aerobica",
+     "weight": 0.35
+    },
+    {
+     "category": "recuperacao_inflamacao",
+     "weight": 0.2
+    },
+    {
+     "category": "risco_lesao",
+     "weight": 0.1
+    },
+    {
+     "category": "metabolismo_composicao",
+     "weight": 0.15
+    },
+    {
+     "category": "neuroperformance",
+     "weight": 0.05
+    }
+   ]
+  },
+  {
+   "slug": "musculacao",
+   "name": "Musculação",
+   "isGlobal": false,
+   "position": 12,
+   "categoryWeights": [
+    {
+     "category": "forca_potencia",
+     "weight": 0.35
+    },
+    {
+     "category": "resistencia_aerobica",
+     "weight": 0.05
+    },
+    {
+     "category": "recuperacao_inflamacao",
+     "weight": 0.25
+    },
+    {
+     "category": "risco_lesao",
+     "weight": 0.15
+    },
+    {
+     "category": "metabolismo_composicao",
+     "weight": 0.15
+    },
+    {
+     "category": "neuroperformance",
+     "weight": 0.05
+    }
+   ]
+  },
+  {
+   "slug": "corrida_curta",
+   "name": "Corrida Curta",
+   "isGlobal": false,
+   "position": 13,
+   "categoryWeights": [
+    {
+     "category": "forca_potencia",
+     "weight": 0.3
+    },
+    {
+     "category": "resistencia_aerobica",
+     "weight": 0.1
+    },
+    {
+     "category": "recuperacao_inflamacao",
+     "weight": 0.2
+    },
+    {
+     "category": "risco_lesao",
+     "weight": 0.2
+    },
+    {
+     "category": "metabolismo_composicao",
+     "weight": 0.1
+    },
+    {
+     "category": "neuroperformance",
+     "weight": 0.1
+    }
+   ]
+  },
+  {
+   "slug": "corrida_longa",
+   "name": "Corrida Longa",
+   "isGlobal": false,
+   "position": 14,
+   "categoryWeights": [
+    {
+     "category": "forca_potencia",
+     "weight": 0.05
+    },
+    {
+     "category": "resistencia_aerobica",
+     "weight": 0.4
+    },
+    {
+     "category": "recuperacao_inflamacao",
+     "weight": 0.2
+    },
+    {
+     "category": "risco_lesao",
+     "weight": 0.15
+    },
+    {
+     "category": "metabolismo_composicao",
+     "weight": 0.15
+    },
+    {
+     "category": "neuroperformance",
+     "weight": 0.05
+    }
+   ]
+  },
+  {
+   "slug": "natacao_curta",
+   "name": "Natação Curta",
+   "isGlobal": false,
+   "position": 15,
+   "categoryWeights": [
+    {
+     "category": "forca_potencia",
+     "weight": 0.3
+    },
+    {
+     "category": "resistencia_aerobica",
+     "weight": 0.15
+    },
+    {
+     "category": "recuperacao_inflamacao",
+     "weight": 0.2
+    },
+    {
+     "category": "risco_lesao",
+     "weight": 0.15
+    },
+    {
+     "category": "metabolismo_composicao",
+     "weight": 0.1
+    },
+    {
+     "category": "neuroperformance",
+     "weight": 0.1
+    }
+   ]
+  },
+  {
+   "slug": "natacao_longa",
+   "name": "Natação Longa",
+   "isGlobal": false,
+   "position": 16,
+   "categoryWeights": [
+    {
+     "category": "forca_potencia",
+     "weight": 0.1
+    },
+    {
+     "category": "resistencia_aerobica",
+     "weight": 0.35
+    },
+    {
+     "category": "recuperacao_inflamacao",
+     "weight": 0.25
+    },
+    {
+     "category": "risco_lesao",
+     "weight": 0.15
+    },
+    {
+     "category": "metabolismo_composicao",
+     "weight": 0.1
+    },
+    {
+     "category": "neuroperformance",
+     "weight": 0.05
+    }
+   ]
+  },
+  {
+   "slug": "aguas_abertas",
+   "name": "Águas Abertas",
+   "isGlobal": false,
+   "position": 17,
+   "categoryWeights": [
+    {
+     "category": "forca_potencia",
+     "weight": 0.05
+    },
+    {
+     "category": "resistencia_aerobica",
+     "weight": 0.45
+    },
+    {
+     "category": "recuperacao_inflamacao",
+     "weight": 0.2
+    },
+    {
+     "category": "risco_lesao",
+     "weight": 0.1
+    },
+    {
+     "category": "metabolismo_composicao",
+     "weight": 0.15
+    },
+    {
+     "category": "neuroperformance",
+     "weight": 0.05
+    }
+   ]
+  },
+  {
+   "slug": "hipismo",
+   "name": "Hipismo",
+   "isGlobal": false,
+   "position": 18,
+   "categoryWeights": [
+    {
+     "category": "forca_potencia",
+     "weight": 0.1
+    },
+    {
+     "category": "resistencia_aerobica",
+     "weight": 0.15
+    },
+    {
+     "category": "recuperacao_inflamacao",
+     "weight": 0.15
+    },
+    {
+     "category": "risco_lesao",
+     "weight": 0.2
+    },
+    {
+     "category": "metabolismo_composicao",
+     "weight": 0.1
+    },
+    {
+     "category": "neuroperformance",
+     "weight": 0.3
+    }
+   ]
+  },
+  {
+   "slug": "remo",
+   "name": "Remo",
+   "isGlobal": false,
+   "position": 19,
+   "categoryWeights": [
+    {
+     "category": "forca_potencia",
+     "weight": 0.25
+    },
+    {
+     "category": "resistencia_aerobica",
+     "weight": 0.3
+    },
+    {
+     "category": "recuperacao_inflamacao",
+     "weight": 0.2
+    },
+    {
+     "category": "risco_lesao",
+     "weight": 0.15
+    },
+    {
+     "category": "metabolismo_composicao",
+     "weight": 0.05
+    },
+    {
+     "category": "neuroperformance",
+     "weight": 0.05
+    }
+   ]
+  },
+  {
+   "slug": "crossfit",
+   "name": "CrossFit",
+   "isGlobal": false,
+   "position": 20,
+   "categoryWeights": [
+    {
+     "category": "forca_potencia",
+     "weight": 0.25
+    },
+    {
+     "category": "resistencia_aerobica",
+     "weight": 0.2
+    },
+    {
+     "category": "recuperacao_inflamacao",
+     "weight": 0.25
+    },
+    {
+     "category": "risco_lesao",
+     "weight": 0.2
+    },
+    {
+     "category": "metabolismo_composicao",
+     "weight": 0.05
+    },
+    {
+     "category": "neuroperformance",
+     "weight": 0.05
+    }
+   ]
+  },
+  {
+   "slug": "surfe",
+   "name": "Surfe",
+   "isGlobal": false,
+   "position": 21,
+   "categoryWeights": [
+    {
+     "category": "forca_potencia",
+     "weight": 0.15
+    },
+    {
+     "category": "resistencia_aerobica",
+     "weight": 0.2
+    },
+    {
+     "category": "recuperacao_inflamacao",
+     "weight": 0.15
+    },
+    {
+     "category": "risco_lesao",
+     "weight": 0.15
+    },
+    {
+     "category": "metabolismo_composicao",
+     "weight": 0.1
+    },
+    {
+     "category": "neuroperformance",
+     "weight": 0.25
+    }
+   ]
+  },
+  {
+   "slug": "jiu_jitsu",
+   "name": "Jiu-Jitsu",
+   "isGlobal": false,
+   "position": 22,
+   "categoryWeights": [
+    {
+     "category": "forca_potencia",
+     "weight": 0.25
+    },
+    {
+     "category": "resistencia_aerobica",
+     "weight": 0.2
+    },
+    {
+     "category": "recuperacao_inflamacao",
+     "weight": 0.25
+    },
+    {
+     "category": "risco_lesao",
+     "weight": 0.15
+    },
+    {
+     "category": "metabolismo_composicao",
+     "weight": 0.1
+    },
+    {
+     "category": "neuroperformance",
+     "weight": 0.05
+    }
+   ]
+  },
+  {
+   "slug": "judo",
+   "name": "Judô",
+   "isGlobal": false,
+   "position": 23,
+   "categoryWeights": [
+    {
+     "category": "forca_potencia",
+     "weight": 0.25
+    },
+    {
+     "category": "resistencia_aerobica",
+     "weight": 0.2
+    },
+    {
+     "category": "recuperacao_inflamacao",
+     "weight": 0.2
+    },
+    {
+     "category": "risco_lesao",
+     "weight": 0.2
+    },
+    {
+     "category": "metabolismo_composicao",
+     "weight": 0.1
+    },
+    {
+     "category": "neuroperformance",
+     "weight": 0.05
+    }
+   ]
+  },
+  {
+   "slug": "boxe",
+   "name": "Boxe",
+   "isGlobal": false,
+   "position": 24,
+   "categoryWeights": [
+    {
+     "category": "forca_potencia",
+     "weight": 0.2
+    },
+    {
+     "category": "resistencia_aerobica",
+     "weight": 0.25
+    },
+    {
+     "category": "recuperacao_inflamacao",
+     "weight": 0.2
+    },
+    {
+     "category": "risco_lesao",
+     "weight": 0.15
+    },
+    {
+     "category": "metabolismo_composicao",
+     "weight": 0.1
+    },
+    {
+     "category": "neuroperformance",
+     "weight": 0.1
+    }
+   ]
+  },
+  {
+   "slug": "mma",
+   "name": "MMA",
+   "isGlobal": false,
+   "position": 25,
+   "categoryWeights": [
+    {
+     "category": "forca_potencia",
+     "weight": 0.25
+    },
+    {
+     "category": "resistencia_aerobica",
+     "weight": 0.2
+    },
+    {
+     "category": "recuperacao_inflamacao",
+     "weight": 0.25
+    },
+    {
+     "category": "risco_lesao",
+     "weight": 0.2
+    },
+    {
+     "category": "metabolismo_composicao",
+     "weight": 0.05
+    },
+    {
+     "category": "neuroperformance",
+     "weight": 0.05
+    }
+   ]
+  },
+  {
+   "slug": "automobilismo",
+   "name": "Automobilismo",
+   "isGlobal": false,
+   "position": 26,
+   "categoryWeights": [
+    {
+     "category": "forca_potencia",
+     "weight": 0.15
+    },
+    {
+     "category": "resistencia_aerobica",
+     "weight": 0.2
+    },
+    {
+     "category": "recuperacao_inflamacao",
+     "weight": 0.15
+    },
+    {
+     "category": "risco_lesao",
+     "weight": 0.2
+    },
+    {
+     "category": "metabolismo_composicao",
+     "weight": 0.05
+    },
+    {
+     "category": "neuroperformance",
+     "weight": 0.25
+    }
+   ]
+  },
+  {
+   "slug": "capoeira",
+   "name": "Capoeira",
+   "isGlobal": false,
+   "position": 27,
+   "categoryWeights": [
+    {
+     "category": "forca_potencia",
+     "weight": 0.2
+    },
+    {
+     "category": "resistencia_aerobica",
+     "weight": 0.2
+    },
+    {
+     "category": "recuperacao_inflamacao",
+     "weight": 0.15
+    },
+    {
+     "category": "risco_lesao",
+     "weight": 0.2
+    },
+    {
+     "category": "metabolismo_composicao",
+     "weight": 0.05
+    },
+    {
+     "category": "neuroperformance",
+     "weight": 0.2
+    }
+   ]
+  },
+  {
+   "slug": "skate",
+   "name": "Skate",
+   "isGlobal": false,
+   "position": 28,
+   "categoryWeights": [
+    {
+     "category": "forca_potencia",
+     "weight": 0.15
+    },
+    {
+     "category": "resistencia_aerobica",
+     "weight": 0.1
+    },
+    {
+     "category": "recuperacao_inflamacao",
+     "weight": 0.2
+    },
+    {
+     "category": "risco_lesao",
+     "weight": 0.25
+    },
+    {
+     "category": "metabolismo_composicao",
+     "weight": 0.05
+    },
+    {
+     "category": "neuroperformance",
+     "weight": 0.25
+    }
+   ]
+  },
+  {
+   "slug": "ginastica",
+   "name": "Ginástica",
+   "isGlobal": false,
+   "position": 29,
+   "categoryWeights": [
+    {
+     "category": "forca_potencia",
+     "weight": 0.25
+    },
+    {
+     "category": "resistencia_aerobica",
+     "weight": 0.15
+    },
+    {
+     "category": "recuperacao_inflamacao",
+     "weight": 0.2
+    },
+    {
+     "category": "risco_lesao",
+     "weight": 0.25
+    },
+    {
+     "category": "metabolismo_composicao",
+     "weight": 0.05
+    },
+    {
+     "category": "neuroperformance",
+     "weight": 0.1
+    }
+   ]
+  },
+  {
+   "slug": "e_sports",
+   "name": "E-Sports",
+   "isGlobal": false,
+   "position": 30,
+   "categoryWeights": [
+    {
+     "category": "forca_potencia",
+     "weight": 0.0
+    },
+    {
+     "category": "resistencia_aerobica",
+     "weight": 0.05
+    },
+    {
+     "category": "recuperacao_inflamacao",
+     "weight": 0.2
+    },
+    {
+     "category": "risco_lesao",
+     "weight": 0.15
+    },
+    {
+     "category": "metabolismo_composicao",
+     "weight": 0.1
+    },
+    {
+     "category": "neuroperformance",
+     "weight": 0.5
+    }
+   ]
+  }
+ ]
+}
