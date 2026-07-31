@@ -1214,3 +1214,87 @@ enum Checkpoint {
   Q3
   Q4
 }
+
+// ============================================================================
+// PARCEIROS
+// ============================================================================
+
+/// Parceiro afiliado: vende por cupom e recebe comissão.
+///
+/// Distinto do parceiro **profissional**, que atende pacientes. Augusto separou
+/// os dois em 15/06 com um exemplo claro: *"uma recepcionista da academia pode
+/// vender esse produto, mas ela não vai orientar você porque ela é uma
+/// recepcionista"*. Os papéis se sobrepõem — o personal pode vender e orientar —
+/// mas são cadastros e permissões diferentes.
+model Partner {
+  id     String @id @default(uuid()) @db.Char(36)
+  userId String @unique @db.Char(36)
+
+  type PartnerType
+
+  displayName String  @db.VarChar(160)
+  document    String  @db.VarChar(18)
+  /// Como divulga: Instagram, site, consultório.
+  channel     String? @db.VarChar(200)
+
+  /// Cupom exclusivo, gerado no cadastro.
+  couponCode String @unique @db.VarChar(40)
+
+  /// Dados de repasse.
+  pixKeyType String? @db.VarChar(20)
+  pixKey     String? @db.VarChar(140)
+  bankName   String? @db.VarChar(80)
+  bankBranch String? @db.VarChar(20)
+  bankAccount String? @db.VarChar(30)
+
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  payouts Payout[]
+
+  @@index([active])
+  @@map("partners")
+}
+
+enum PartnerType {
+  INDIVIDUAL
+  COMPANY
+}
+
+/// Repasse de comissão ao parceiro.
+///
+/// O split acontece na adquirente no ato da venda, mas o registro aqui é o que
+/// permite ao parceiro conferir o que entrou e ao admin fechar o mês. O cliente
+/// pediu no painel: quanto vendeu, quanto converteu, previsibilidade do mês.
+model Payout {
+  id        String  @id @default(uuid()) @db.Char(36)
+  partnerId String  @db.Char(36)
+  partner   Partner @relation(fields: [partnerId], references: [id], onDelete: Cascade)
+
+  orderId     String @db.Char(36)
+  orderNumber String @db.VarChar(20)
+
+  amountCents Int
+  status      PayoutStatus @default(PENDING)
+
+  /// Identificador da transferência na adquirente.
+  externalId String?   @db.VarChar(120)
+  settledAt  DateTime?
+  createdAt  DateTime  @default(now())
+
+  @@unique([orderId])
+  @@index([partnerId, status])
+  @@map("payouts")
+}
+
+enum PayoutStatus {
+  /// Venda registrada, repasse ainda não liberado.
+  PENDING
+  /// Em processamento na adquirente.
+  PROCESSING
+  /// Repassado.
+  SETTLED
+  /// Estornado junto com o pedido.
+  REVERSED
+}
