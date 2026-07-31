@@ -1039,3 +1039,71 @@ model Coupon {
   @@index([active])
   @@map("coupons")
 }
+
+// ============================================================================
+// LABORATÓRIO — KITS E AMOSTRAS
+// ============================================================================
+
+/// Lote de kits, para impressão e rastreio de produção.
+model KitBatch {
+  id        String   @id @default(uuid()) @db.Char(36)
+  reference String   @unique @db.VarChar(40)
+  notes     String?  @db.VarChar(255)
+  createdAt DateTime @default(now())
+
+  kits Kit[]
+
+  @@map("kit_batches")
+}
+
+/// Kit físico, identificado pelo código de ativação impresso nele.
+///
+/// O código é a chave que atravessa o sistema inteiro: está na etiqueta dentro
+/// da caixa, é digitado na ativação, e é a primeira coluna do CSV de resultados
+/// que o laboratório envia. A decisão F2 unificou os dois códigos que o
+/// protótipo tinha num só, porque kit e exame andam juntos.
+model Kit {
+  id   String @id @default(uuid()) @db.Char(36)
+  /// Formato XXXXXX-XX, com dígitos verificadores módulo 11.
+  code String @unique @db.VarChar(12)
+
+  batchId String   @db.Char(36)
+  batch   KitBatch @relation(fields: [batchId], references: [id])
+
+  status KitStatus @default(GENERATED)
+
+  /// Pedido a que o kit foi atribuído no despacho.
+  orderId String? @db.Char(36)
+  /// Titular do dado genético, definido na ativação.
+  ///
+  /// Separado do pedido de propósito: o comprador pode não ser o paciente. O
+  /// cliente foi enfático em 01/06 sobre o kit poder ser presente, e sobre o
+  /// registro ser feito por quem coleta — *"DNA tem que ser exatamente para a
+  /// pessoa que está adquirindo aquele kit"*.
+  subjectId String? @db.Char(36)
+  /// Conta que ativou o kit.
+  activatedByUserId String? @db.Char(36)
+
+  activatedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([status])
+  @@index([orderId])
+  @@map("kits")
+}
+
+enum KitStatus {
+  /// Gerado e impresso, ainda no estoque.
+  GENERATED
+  /// Atribuído a um pedido e despachado.
+  ASSIGNED
+  /// Ativado pelo cliente, com titular definido.
+  ACTIVATED
+  /// Amostra coletada e enviada ao laboratório.
+  SAMPLE_SENT
+  /// Amostra recebida no laboratório.
+  SAMPLE_RECEIVED
+  /// Descartado: extraviado, danificado ou coleta inviável.
+  DISCARDED
+}
