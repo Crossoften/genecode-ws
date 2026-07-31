@@ -76,7 +76,17 @@ export class PartnerDashboardUseCase {
         productName: order.items[0]?.productName ?? '—',
         amountCents: order.totalCents,
         commissionCents: order.commissionCents ?? 0,
-        payoutStatus: payoutByOrder.get(order.id)?.status ?? 'PENDING',
+        // Sem registro de repasse a situação é NOT_ISSUED, não PENDING.
+        //
+        // O default anterior era 'PENDING', e isso produzia uma tela que não
+        // fechava: quatro vendas marcadas "a receber" enquanto o total pendente
+        // — que soma repasses reais — contava só duas. O parceiro veria a
+        // diferença e não teria como explicá-la.
+        //
+        // Na prática só afeta pedidos pagos antes de o repasse passar a nascer
+        // junto do pagamento; daqui para frente todo pedido com comissão tem
+        // registro. Mas o dado precisa ser honesto sobre o passado também.
+        payoutStatus: payoutByOrder.get(order.id)?.status ?? 'NOT_ISSUED',
         date: order.createdAt,
       })),
     });
