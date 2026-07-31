@@ -4,6 +4,7 @@ import type { Prisma } from '@prisma/client';
 import { PrismaService } from '@infra/database/prisma.service';
 
 import type { LoadedPanel, PanelRepository } from '../../domain/ports/panel.repository';
+import { COMPOSITE_RULES } from '../../domain/scoring/composite-marker';
 import { GenotypeNormalizer, type GenotypeAliasMap } from '../../domain/scoring/genotype-normalizer';
 import type {
   CategoryDefinition,
@@ -24,6 +25,7 @@ const PANEL_INCLUDE = {
         },
       },
       percentiles: { orderBy: { rawScore: 'asc' } },
+      composites: { orderBy: { position: 'asc' } },
     },
   },
   modalities: {
@@ -74,6 +76,10 @@ export class PrismaPanelRepository implements PanelRepository {
         rawScore: Number(point.rawScore),
         percentile: Number(point.percentile),
       })),
+      composites: category.composites.map((composite) => ({
+        key: composite.ruleKey,
+        weight: Number(composite.weight),
+      })),
       markers: category.snps.map((panelSnp) => ({
         rsId: panelSnp.snp.rsId,
         weight: Number(panelSnp.weight),
@@ -115,6 +121,20 @@ export class PrismaPanelRepository implements PanelRepository {
           panelSnp.genotypeScores.map((gs) => gs.genotype),
         ),
       );
+
+    // Os SNPs de origem dos compostos não têm tabela de escore própria — a
+    // pontuação deles só existe dentro da regra combinada. Os aliases vêm da
+    // própria regra, senão um genótipo válido do laboratório seria rejeitado.
+    for (const category of panel.categories) {
+      for (const composite of category.composites) {
+        const rule = COMPOSITE_RULES.get(composite.ruleKey);
+        if (!rule) continue;
+
+        for (const [rsId, genotypes] of Object.entries(rule.acceptedGenotypes)) {
+          aliases.push(GenotypeNormalizer.buildAliases(rsId, genotypes));
+        }
+      }
+    }
 
     const definition: PanelDefinition = {
       slug: panel.slug,

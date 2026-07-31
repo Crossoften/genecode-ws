@@ -100,14 +100,21 @@ export class ComputeReportUseCase {
           })),
       });
 
-      const previous = await tx.report.findFirst({
-        where: { subjectId, panelId: input.panelId },
+      // Supersede pelo SLUG do painel, não pelo id da versão.
+      //
+      // A primeira versão comparava `panelId`, e com isso publicar o painel
+      // v1.0.1 deixava o laudo da v1.0.0 ainda PUBLISHED: o titular passava a
+      // ter dois laudos "atuais" do mesmo produto, com números diferentes. Num
+      // documento de saúde isso é inaceitável — o laudo antigo tem de continuar
+      // recuperável, mas não vigente.
+      const previous = await tx.report.findMany({
+        where: { subjectId, panel: { slug: panel.ref.slug } },
         orderBy: { version: 'desc' },
       });
 
-      if (previous) {
-        await tx.report.update({
-          where: { id: previous.id },
+      if (previous.length > 0) {
+        await tx.report.updateMany({
+          where: { id: { in: previous.map((report) => report.id) } },
           data: { status: 'SUPERSEDED' },
         });
       }
@@ -116,7 +123,7 @@ export class ComputeReportUseCase {
         data: {
           subjectId,
           panelId: input.panelId,
-          version: (previous?.version ?? 0) + 1,
+          version: (previous[0]?.version ?? 0) + 1,
           status: 'PUBLISHED',
           publishedAt: new Date(),
           missingMarkers:

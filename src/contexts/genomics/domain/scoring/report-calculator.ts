@@ -1,3 +1,4 @@
+import { COMPOSITE_RULES } from './composite-marker';
 import { GenotypeNormalizer, type GenotypeAliasMap } from './genotype-normalizer';
 import { PercentileNormalizer, type PercentilePoint } from './percentile-normalizer';
 import { ScoreBand, bandFor } from './score-band';
@@ -12,9 +13,23 @@ export interface MarkerDefinition {
   readonly genotypeScores: ReadonlyMap<string, number>;
 }
 
+/**
+ * Marcador composto dentro de uma categoria.
+ *
+ * Referencia uma regra nomeada em `composite-marker.ts` — MTHFR e HFE são os
+ * dois casos do painel, em que dois SNPs só têm significado clínico juntos.
+ */
+export interface CompositeDefinition {
+  /** Chave da regra: `mthfr` ou `hfe`. */
+  readonly key: string;
+  readonly weight: number;
+}
+
 export interface CategoryDefinition {
   readonly slug: string;
   readonly markers: readonly MarkerDefinition[];
+  /** Marcadores compostos, se a categoria tiver algum. */
+  readonly composites?: readonly CompositeDefinition[];
   readonly percentileCurve: readonly PercentilePoint[];
 }
 
@@ -70,6 +85,13 @@ export interface CalculationResult {
    * panel, was filed as "missing", and a report went out without it.
    */
   readonly unmatchedMarkers: readonly { rsId: string; genotype: string }[];
+  /**
+   * Categorias omitidas por falta de curva populacional.
+   *
+   * Sem a curva não há como converter o escore bruto em percentil, e apresentar
+   * um número não calibrado como se fosse escore populacional seria enganoso.
+   */
+  readonly uncalibratedCategories: readonly string[];
 }
 
 /**
@@ -112,12 +134,17 @@ export class ReportCalculator {
    */
   calculate(rawGenotypes: ReadonlyMap<string, string>): CalculationResult {
     const resolved = new Map<string, string>();
+    // Mesmo conteúdo, indexado pelo rsId como escrito — as regras compostas
+    // consultam por `rs1801133`, não por `rs1801133` em minúsculas de um lado e
+    // maiúsculas de outro.
+    const resolvedByRsId = new Map<string, string>();
     const rejected: { rsId: string; rawValue: string; reason: string }[] = [];
 
     for (const [rsId, rawValue] of rawGenotypes) {
       const normalised = this.normalizer.normalize(rsId, rawValue);
       if (normalised.isOk()) {
         resolved.set(rsId.toLowerCase(), normalised.value);
+        resolvedByRsId.set(rsId, normalised.value);
       } else {
         rejected.push({ rsId, rawValue, reason: normalised.error.message });
       }
@@ -126,6 +153,7 @@ export class ReportCalculator {
     const categories: CategoryResult[] = [];
     const missingOverall: string[] = [];
     const unmatched: { rsId: string; genotype: string }[] = [];
+    const uncalibrated: string[] = [];
     // Keeps normalised category scores for the modality step below.
     const normalisedByCategory = new Map<string, number>();
 
@@ -153,6 +181,20 @@ export class ReportCalculator {
         present.push({ rsId: marker.rsId, score, weight: marker.weight });
       }
 
+      // Compostos entram na mesma média ponderada dos marcadores simples: são
+      // uma contribuição a mais na categoria, com peso próprio.
+      for (const composite of category.composites ?? []) {
+        const rule = COMPOSITE_RULES.get(composite.key);
+        if (!rule) continue;
+
+        const score = rule.evaluate({ genotypes: resolvedByRsId });
+        if (score === null) {
+          missing.push(...rule.rsIds);
+          continue;
+        }
+        present.push({ rsId: composite.key, score, weight: composite.weight });
+      }
+
       missingOverall.push(...missing);
 
       const rawScore = weightedAverage(present);
@@ -161,6 +203,12 @@ export class ReportCalculator {
       if (rawScore === null) continue;
 
       const normalizedScore = new PercentileNormalizer(category.percentileCurve).normalize(rawScore);
+      if (normalizedScore === null) {
+        // Categoria sem curva populacional não pode ser apresentada como escore
+        // normalizado. Omitir é honesto; inventar um número não é.
+        uncalibrated.push(category.slug);
+        continue;
+      }
       normalisedByCategory.set(category.slug, normalizedScore);
 
       categories.push({
@@ -182,6 +230,7 @@ export class ReportCalculator {
       missingMarkers: missingOverall,
       rejectedMarkers: rejected,
       unmatchedMarkers: unmatched,
+      uncalibratedCategories: uncalibrated,
     };
   }
 
@@ -208,7 +257,13 @@ export class ReportCalculator {
     const rawIndex = weightedAverage(contributions);
     if (rawIndex === null) return null;
 
-    const normalizedIndex = new PercentileNormalizer(modality.percentileCurve).normalize(rawIndex);
+    const normalizer = new PercentileNormalizer(modality.percentileCurve);
+    // Sem curva simulada, o índice bruto é usado como está. Ele já está na
+    // escala 20–90 por ser média de categorias normalizadas — só não está
+    // reancorado na distribuição populacional, o que significa que fica
+    // comprimido perto da mediana. É uma aproximação declarada, não um valor
+    // inventado.
+    const normalizedIndex = normalizer.normalize(rawIndex) ?? Math.round(rawIndex * 10) / 10;
 
     return {
       slug: modality.slug,

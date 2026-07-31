@@ -28,10 +28,17 @@ export class PercentileNormalizer {
    * @param rawScore - Weighted sum produced by a scoring strategy.
    * @returns The normalised score, rounded to one decimal.
    */
-  normalize(rawScore: number): number {
+  normalize(rawScore: number): number | null {
     const percentile = this.percentileOf(rawScore);
+    if (percentile === null) return null;
+
     const scaled = SCORE_MIN + (percentile / 100) * (SCORE_MAX - SCORE_MIN);
     return Math.round(scaled * 10) / 10;
+  }
+
+  /** True quando há curva populacional para normalizar. */
+  get hasCurve(): boolean {
+    return this.curve.length > 0;
   }
 
   /**
@@ -42,13 +49,17 @@ export class PercentileNormalizer {
    * extrapolating: beyond the curve there is no population data to justify a
    * number, and extrapolating would invent one.
    */
-  percentileOf(rawScore: number): number {
-    if (this.curve.length === 0) {
-      // No curve means no basis for a percentile. Returning the median is the
-      // only neutral answer — and the seed guarantees a curve exists, so this
-      // is a guard, not a normal path.
-      return 50;
-    }
+  percentileOf(rawScore: number): number | null {
+    // Sem curva não há base para percentil algum.
+    //
+    // A primeira versão devolvia 50 aqui, tratando isso como guarda defensiva.
+    // Não era: o painel de nutrigenética não tinha curva para o índice composto,
+    // e todo paciente recebia exatamente 55 — inclusive um com todas as
+    // categorias em 90 e outro com todas em 20. Um número plausível e idêntico
+    // para todo mundo é pior que erro nenhum, porque ninguém desconfia dele.
+    //
+    // Devolver null obriga quem chama a decidir o que fazer.
+    if (this.curve.length === 0) return null;
 
     const first = this.curve[0]!;
     const last = this.curve[this.curve.length - 1]!;

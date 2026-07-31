@@ -34,6 +34,14 @@ interface ModalityJson {
   categoryWeights: { category: string; weight: number }[];
 }
 
+interface CompositeJson {
+  ruleKey: string;
+  name: string;
+  category: string;
+  weight: number;
+  position: number;
+}
+
 interface PanelJson {
   slug: string;
   version: string;
@@ -43,6 +51,7 @@ interface PanelJson {
   snps: { rsId: string; gene: string }[];
   categories: CategoryJson[];
   modalities: ModalityJson[];
+  composites?: CompositeJson[];
 }
 
 /**
@@ -219,6 +228,7 @@ async function seedPanel(prisma: PrismaClient, json: PanelJson): Promise<void> {
     }
   }
 
+  await seedComposites(prisma, panel.id, json, categoryIds);
   await seedModalities(prisma, panel.id, json, categoryIds);
 
   console.log(
@@ -244,6 +254,36 @@ async function seedSnps(prisma: PrismaClient, json: PanelJson): Promise<void> {
     });
 
     void record;
+  }
+}
+
+/**
+ * Registra os marcadores compostos do painel.
+ *
+ * Só a referência à regra e o peso vão para o banco — a matemática de MTHFR e
+ * HFE vive em `domain/scoring/composite-marker.ts`, onde fica legível para quem
+ * precisa conferi-la contra a literatura.
+ */
+async function seedComposites(
+  prisma: PrismaClient,
+  panelId: string,
+  json: PanelJson,
+  categoryIds: ReadonlyMap<string, string>,
+): Promise<void> {
+  for (const composite of json.composites ?? []) {
+    const categoryId = categoryIds.get(composite.category);
+    if (!categoryId) continue;
+
+    await prisma.panelComposite.create({
+      data: {
+        panelId,
+        categoryId,
+        ruleKey: composite.ruleKey,
+        name: composite.name,
+        weight: composite.weight,
+        position: composite.position,
+      },
+    });
   }
 }
 

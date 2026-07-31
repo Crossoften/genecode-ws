@@ -394,6 +394,7 @@ model Panel {
   snps           PanelSnp[]
   modalities     Modality[]
   interpretations Interpretation[]
+  composites      PanelComposite[]
   reports        Report[]
 
   @@unique([slug, version])
@@ -432,6 +433,7 @@ model PanelCategory {
   position Int    @default(0)
 
   snps            PanelSnp[]
+  composites      PanelComposite[]
   modalityWeights ModalityWeight[]
   percentiles     PercentilePoint[]
   reportScores    ReportCategoryScore[]
@@ -811,4 +813,31 @@ model ProductTrait {
 
   @@unique([productId, trait])
   @@map("product_traits")
+}
+
+/// Marcador composto dentro de uma categoria.
+///
+/// MTHFR e HFE são dois SNPs cada que só têm significado clínico juntos: o
+/// efeito não é a soma das partes, há interação, e a fórmula do laboratório
+/// aplica penalidade explícita ao heterozigoto composto.
+///
+/// A tabela guarda só a referência à regra e o peso — a matemática vive em
+/// `domain/scoring/composite-marker.ts`, onde pode ser lida e conferida contra
+/// a literatura.
+model PanelComposite {
+  id         String        @id @default(uuid()) @db.Char(36)
+  panelId    String        @db.Char(36)
+  categoryId String        @db.Char(36)
+  panel      Panel         @relation(fields: [panelId], references: [id], onDelete: Cascade)
+  category   PanelCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  /// Chave da regra no domínio: `mthfr` ou `hfe`.
+  ruleKey  String  @db.VarChar(40)
+  name     String  @db.VarChar(120)
+  weight   Decimal @db.Decimal(6, 4)
+  position Int     @default(0)
+
+  @@unique([panelId, ruleKey])
+  @@index([categoryId])
+  @@map("panel_composites")
 }

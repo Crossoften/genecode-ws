@@ -41,7 +41,7 @@ export class GenotypeNormalizer {
    *   and the value so the laboratory can fix the file.
    */
   normalize(rsId: string, rawValue: string): Result<string> {
-    const cleaned = rawValue.trim().replace(/[\s/|-]/g, '').toUpperCase();
+    const cleaned = cleanGenotype(rawValue);
 
     if (cleaned.length === 0) {
       return fail(
@@ -56,7 +56,7 @@ export class GenotypeNormalizer {
       );
     }
 
-    const canonical = map.aliases.get(cleaned.toLowerCase());
+    const canonical = map.aliases.get(cleaned);
     if (!canonical) {
       return fail(
         new ValidationError(
@@ -84,7 +84,10 @@ export class GenotypeNormalizer {
     const aliases = new Map<string, string>();
 
     const register = (alias: string, canonical: string): void => {
-      const key = alias.toLowerCase();
+      // A chave passa pela MESMA limpeza da consulta. Sem isso, genótipos com
+      // separador — APOE `E3/E4`, GSTM1 `(+/-)`, 5-HTTLPR `LA/LG` — eram
+      // registrados com a barra e consultados sem ela, e nunca casavam.
+      const key = cleanGenotype(alias);
       // First writer wins: a canonical form must never be shadowed by a
       // complement generated for a different genotype.
       if (!aliases.has(key)) aliases.set(key, canonical);
@@ -104,6 +107,22 @@ export class GenotypeNormalizer {
 
     return { rsId, aliases };
   }
+}
+
+/**
+ * Normaliza um genótipo para comparação.
+ *
+ * Remove apenas o que é separador — espaço, barra, pipe e parênteses — e passa
+ * para maiúsculas. Usada tanto ao construir a tabela de aliases quanto ao
+ * consultar: se as duas divergirem, o marcador simplesmente não casa.
+ *
+ * **O hífen NÃO é removido.** No GSTM1 o painel usa notação de número de cópias
+ * — `(+/+)`, `(+/-)`, `(-/-)` — em que o sinal é o valor, não pontuação.
+ * Removê-lo transformava `(-/-)` em string vazia e colidia `(+/-)` com `(+/+)`.
+ * Nenhum marcador do painel usa hífen como separador.
+ */
+function cleanGenotype(value: string): string {
+  return value.trim().replace(/[\s/|()]/g, '').toUpperCase();
 }
 
 /** Watson-Crick base pairs. Only applied to plain nucleotide genotypes. */

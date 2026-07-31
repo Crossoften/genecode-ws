@@ -1,6 +1,6 @@
 {
  "slug": "nutrigenetics",
- "version": "1.0.0",
+ "version": "1.0.1",
  "name": "GeneCode Nutrigenética",
  "kind": "NUTRIGENETICS",
  "scoringModel": "MULTIPLICATIVE",
@@ -108,6 +108,22 @@
   {
    "rsId": "rs1801260",
    "gene": "CLOCK"
+  },
+  {
+   "rsId": "rs1801133",
+   "gene": "MTHFR"
+  },
+  {
+   "rsId": "rs1801131",
+   "gene": "MTHFR"
+  },
+  {
+   "rsId": "rs1800562",
+   "gene": "HFE"
+  },
+  {
+   "rsId": "rs1799945",
+   "gene": "HFE"
   }
  ],
  "categories": [
@@ -11191,6 +11207,22 @@
      "weight": 0.2
     }
    ]
+  }
+ ],
+ "composites": [
+  {
+   "ruleKey": "mthfr",
+   "name": "MTHFR (C677T + A1298C)",
+   "category": "micronutrientes",
+   "weight": 0.25,
+   "position": 0
+  },
+  {
+   "ruleKey": "hfe",
+   "name": "HFE (C282Y + H63D)",
+   "category": "micronutrientes",
+   "weight": 0.25,
+   "position": 1
   }
  ]
 }
