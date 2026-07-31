@@ -1,6 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import { hash } from 'bcrypt';
 
+import { seedCatalog } from './catalog.seed';
 import { seedGenomics } from './genomics.seed';
 
 const prisma = new PrismaClient();
@@ -120,6 +121,7 @@ async function main(): Promise<void> {
   console.log(`✓ ${ROLES.length} papéis`);
 
   await seedGenomics(prisma);
+  await seedCatalog(prisma);
   await seedDevelopmentAdmin();
 }
 

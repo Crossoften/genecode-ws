@@ -719,3 +719,96 @@ enum ScoreBand {
   ATENCAO     // 38–54 · abaixo da mediana
   PRIORIDADE  // 20–37 · quartil inferior
 }
+
+// ============================================================================
+// CATÁLOGO
+// ============================================================================
+
+/// Produto da vitrine.
+///
+/// Parametrizável desde o início: o Dr. Câmara disse em 28/05 que começam com
+/// dois produtos e "logo alguns meses vai passar para três", e Augusto pediu
+/// explicitamente que escale para quantos o portfólio crescer. Cadastrar um
+/// produto novo não pode exigir deploy.
+model Product {
+  id    String @id @default(uuid()) @db.Char(36)
+  slug  String @unique @db.VarChar(80)
+  name  String @db.VarChar(160)
+
+  /// Resumo do card da vitrine — o protótipo limita a 160 caracteres.
+  summary     String @db.VarChar(200)
+  description String @db.Text
+
+  /// Painel genético que este produto entrega. Nulo enquanto o painel não
+  /// existir — é o caso do Premium até os marcadores compostos entrarem.
+  panelSlug String? @db.VarChar(64)
+
+  /// Quantidade de marcadores anunciada.
+  ///
+  /// Fica no banco, e não derivada do painel, por uma razão desconfortável: a
+  /// vitrine aprovada anuncia 45/52/120+ e os painéis entregam 30/24/44. Manter
+  /// o número explícito torna a divergência visível e auditável em vez de
+  /// escondê-la atrás de um COUNT que ninguém confere.
+  markerCount Int
+
+  priceCents Int
+  /// Preço promocional, quando houver.
+  promoPriceCents Int?
+  /// Parcelas sem juros oferecidas no checkout.
+  maxInstallments Int @default(12)
+
+  /// Publicar é passo intencional: todo produto novo nasce despublicado.
+  published Boolean @default(false)
+  /// Arquivado sai da vitrine mas permanece no banco — há clientes que
+  /// compraram, e o histórico precisa continuar íntegro.
+  archived  Boolean @default(false)
+
+  /// Destaque do card ("Mais vendido").
+  highlight String? @db.VarChar(40)
+  position  Int     @default(0)
+
+  imageUrl String? @db.VarChar(500)
+
+  /// Itens do "o que está incluso", um por posição.
+  features ProductFeature[]
+  /// Eixos usados pelo quiz de recomendação.
+  traits   ProductTrait[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([published, archived])
+  @@map("products")
+}
+
+model ProductFeature {
+  id        String  @id @default(uuid()) @db.Char(36)
+  productId String  @db.Char(36)
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  label    String @db.VarChar(200)
+  position Int    @default(0)
+
+  @@index([productId])
+  @@map("product_features")
+}
+
+/// Aderência de um produto a um eixo do quiz.
+///
+/// O quiz precisa recomendar sem que a regra viva em código: Augusto foi
+/// categórico em 15/06 de que ele **sempre** indica algum produto —
+/// *"não pode assim, 'ah, para você não serve nenhum'"*. Pontuar por eixo e
+/// escolher o maior garante isso por construção.
+model ProductTrait {
+  id        String  @id @default(uuid()) @db.Char(36)
+  productId String  @db.Char(36)
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  /// Eixo: nutrition, performance, health.
+  trait  String @db.VarChar(40)
+  /// Peso de 0 a 100.
+  weight Int
+
+  @@unique([productId, trait])
+  @@map("product_traits")
+}

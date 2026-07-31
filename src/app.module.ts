@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { APP_FILTER, APP_GUARD } from '@nestjs/core';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 
+import { CatalogModule } from '@contexts/catalog/catalog.module';
 import { GenomicsModule } from '@contexts/genomics/genomics.module';
 import { IdentityModule } from '@contexts/identity/identity.module';
 import { JwtAuthGuard } from '@contexts/identity/presentation/guards/jwt-auth.guard';
@@ -41,6 +42,7 @@ import { HealthController } from './health.controller';
     PrismaModule,
     IdentityModule,
     GenomicsModule,
+    CatalogModule,
   ],
   controllers: [HealthController],
   providers: [
