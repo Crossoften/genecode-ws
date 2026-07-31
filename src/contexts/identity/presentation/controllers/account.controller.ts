@@ -1,7 +1,9 @@
-import { Body, Controller, HttpCode, HttpStatus, Post, Req } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Post, Req } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Throttle } from '@nestjs/throttler';
 import type { Request } from 'express';
+
+import { PrismaService } from '@infra/database/prisma.service';
 
 import { RefreshSessionUseCase } from '../../application/use-cases/refresh-session.use-case';
 import { RegisterUserUseCase } from '../../application/use-cases/register-user.use-case';
@@ -24,6 +26,16 @@ import {
  * São exatamente os endpoints que um atacante usaria para enumerar contas ou
  * forçar códigos.
  */
+/** Rótulos dos documentos legais, como aparecem na tela de cadastro. */
+const CONSENT_LABELS: Readonly<Record<string, string>> = {
+  TERMS_OF_USE: 'Termos de Uso',
+  PRIVACY_POLICY: 'Política de Privacidade',
+  GENETIC_DATA_PROCESSING: 'Autorização para tratamento de dados genéticos',
+  DATA_SHARING_PROFESSIONAL: 'Compartilhamento com profissional autorizado',
+  PARTNER_PROGRAM: 'Programa de parceiros',
+  MARKETING: 'Receber novidades e promoções por e-mail',
+};
+
 @ApiTags('Conta')
 @Controller('conta')
 export class AccountController {
@@ -32,7 +44,45 @@ export class AccountController {
     private readonly verifyEmail: VerifyEmailUseCase,
     private readonly resetPassword: ResetPasswordUseCase,
     private readonly refreshSession: RefreshSessionUseCase,
+    private readonly prisma: PrismaService,
   ) {}
+
+  /**
+   * Documentos legais vigentes, para a tela de cadastro.
+   *
+   * Existe porque a versão aceita **precisa** vir do servidor. Fixar a versão no
+   * código do front significaria que uma revisão do texto passaria a gravar
+   * aceite de uma versão que a pessoa não leu — e a prova de consentimento, que
+   * é o requisito da LGPD para dado genético, valeria nada.
+   *
+   * Devolve só a versão mais recente de cada tipo. O texto completo não vem
+   * aqui: são documentos longos, e a tela mostra o título com link.
+   */
+  @Get('consentimentos')
+  @IsPublic()
+  @ApiOperation({ summary: 'Documentos legais vigentes e suas versões' })
+  async consents() {
+    const documents = await this.prisma.consentDocument.findMany({
+      orderBy: [{ type: 'asc' }, { publishedAt: 'desc' }],
+      select: { type: true, version: true, publishedAt: true },
+    });
+
+    // Uma versão por tipo: a primeira de cada, já que vêm ordenados por data
+    // decrescente dentro do tipo.
+    const latest = new Map<string, (typeof documents)[number]>();
+    for (const document of documents) {
+      if (!latest.has(document.type)) latest.set(document.type, document);
+    }
+
+    return [...latest.values()].map((document) => ({
+      type: document.type,
+      version: document.version,
+      label: CONSENT_LABELS[document.type] ?? document.type,
+      // Marketing é o único opcional. Os demais são condição para o serviço
+      // existir — sem tratamento de dado genético não há exame.
+      required: document.type !== 'MARKETING',
+    }));
+  }
 
   /** Cria a conta em estado pendente e envia o código de verificação. */
   @Post('cadastro')

@@ -1,10 +1,12 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
-import { RequirePermissions } from '@contexts/identity/presentation/decorators';
+import { CurrentUser, RequirePermissions } from '@contexts/identity/presentation/decorators';
+import type { AuthenticatedPrincipal } from '@contexts/identity/presentation/guards/jwt-auth.guard';
 
 import { GetReportUseCase } from '../../application/use-cases/get-report.use-case';
 import { IngestGenotypesUseCase } from '../../application/use-cases/ingest-genotypes.use-case';
+import { PatientAreaUseCase } from '../../application/use-cases/patient-area.use-case';
 import { IngestCsvDto } from '../dtos/ingest-csv.dto';
 
 @ApiTags('Laudos')
@@ -12,6 +14,7 @@ import { IngestCsvDto } from '../dtos/ingest-csv.dto';
 export class ReportsController {
   constructor(
     private readonly ingest: IngestGenotypesUseCase,
+    private readonly patientArea: PatientAreaUseCase,
     private readonly getReport: GetReportUseCase,
   ) {}
 
@@ -33,6 +36,18 @@ export class ReportsController {
     });
     if (result.isFail()) throw result.error;
     return result.value;
+  }
+
+  /**
+   * Resumo da área do paciente: kits, laudos e pedidos da conta logada.
+   *
+   * É a tela inicial de quem está logado. Sem ela, quem acabou de verificar o
+   * e-mail cairia numa página sem nada.
+   */
+  @Get('area/resumo')
+  @ApiOperation({ summary: 'Kits, laudos e pedidos da conta logada' })
+  async area(@CurrentUser() user: AuthenticatedPrincipal) {
+    return this.patientArea.execute(user.id);
   }
 
   /** Level 1 of the report: global index, categories and modality indexes. */

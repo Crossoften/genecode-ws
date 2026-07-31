@@ -6,6 +6,7 @@ import { IdentityModule } from '@contexts/identity/identity.module';
 import { ComputeReportUseCase } from './application/use-cases/compute-report.use-case';
 import { GetReportUseCase } from './application/use-cases/get-report.use-case';
 import { IngestGenotypesUseCase } from './application/use-cases/ingest-genotypes.use-case';
+import { PatientAreaUseCase } from './application/use-cases/patient-area.use-case';
 import { NARRATIVE_PROVIDER } from './domain/ports/narrative.provider';
 import { PANEL_REPOSITORY } from './domain/ports/panel.repository';
 import { AiNarrativeProvider } from './infrastructure/narrative/ai-narrative.provider';
@@ -27,6 +28,7 @@ import { ReportsController } from './presentation/controllers/reports.controller
     ComputeReportUseCase,
     GetReportUseCase,
     IngestGenotypesUseCase,
+    PatientAreaUseCase,
     { provide: PANEL_REPOSITORY, useClass: PrismaPanelRepository },
 
     // Ambos são instanciáveis, porque a IA cai para a tabela quando o guardrail
