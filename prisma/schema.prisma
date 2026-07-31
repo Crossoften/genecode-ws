@@ -841,3 +841,201 @@ model PanelComposite {
   @@index([categoryId])
   @@map("panel_composites")
 }
+
+// ============================================================================
+// COMÉRCIO
+// ============================================================================
+
+/// Pedido.
+///
+/// `customer` é quem comprou e pagou; o titular do dado genético é resolvido só
+/// na ativação do kit. O cliente foi explícito em 01/06: o kit pode ser
+/// presente, e quem registra é quem coleta. Amarrar pedido e paciente aqui
+/// impediria o caso de uso que ele mais destacou.
+model Order {
+  id     String @id @default(uuid()) @db.Char(36)
+  /// Número visível ao cliente, no formato GC-AAAA-NNNNN.
+  number String @unique @db.VarChar(20)
+
+  /// Conta que fez a compra. Nulo enquanto o checkout é anônimo — a conta é
+  /// oferecida depois da confirmação, como o cliente definiu em 28/05.
+  userId String? @db.Char(36)
+
+  /// Dados de quem comprou, congelados no momento do pedido.
+  customerName  String @db.VarChar(160)
+  customerEmail String @db.VarChar(255)
+  customerDoc   String @db.VarChar(18)
+  customerPhone String? @db.VarChar(20)
+
+  status OrderStatus @default(PENDING_PAYMENT)
+
+  /// Valores em centavos. Dinheiro em ponto flutuante acumula erro, e o split
+  /// de comissão depende de aritmética exata.
+  subtotalCents Int
+  discountCents Int @default(0)
+  shippingCents Int @default(0)
+  totalCents    Int
+
+  couponCode String? @db.VarChar(40)
+  /// Percentual de comissão vigente no momento do pedido, congelado.
+  /// Alterar a comissão de um parceiro não pode reprecificar vendas passadas.
+  commissionRate Decimal? @db.Decimal(5, 2)
+  commissionCents Int?
+
+  shippingMethod String? @db.VarChar(40)
+  /// Rastreio da ida: laboratório → casa do cliente.
+  outboundTracking String? @db.VarChar(60)
+  /// Rastreio da volta: cliente → laboratório.
+  inboundTracking  String? @db.VarChar(60)
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  paidAt    DateTime?
+
+  address    OrderAddress?
+  items      OrderItem[]
+  payments   Payment[]
+  events     OrderEvent[]
+
+  @@index([status])
+  @@index([userId])
+  @@index([customerEmail])
+  @@map("orders")
+}
+
+/// Estados do pedido.
+///
+/// Uma máquina de estados só, resolvendo os três vocabulários divergentes que a
+/// análise encontrou entre os protótipos de Paciente, Admin e Genoa.
+enum OrderStatus {
+  PENDING_PAYMENT
+  PAID
+  KIT_SHIPPED
+  KIT_DELIVERED
+  SAMPLE_IN_TRANSIT
+  SAMPLE_RECEIVED
+  PROCESSING
+  REPORT_READY
+  CANCELLED
+  REFUNDED
+}
+
+/// Item do pedido, com preço congelado.
+///
+/// Nome e preço são copiados, não referenciados: mudar o preço do produto no
+/// admin não pode alterar o valor de um pedido já feito.
+model OrderItem {
+  id      String @id @default(uuid()) @db.Char(36)
+  orderId String @db.Char(36)
+  order   Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  productSlug String @db.VarChar(80)
+  productName String @db.VarChar(160)
+  unitCents   Int
+  quantity    Int    @default(1)
+
+  @@index([orderId])
+  @@map("order_items")
+}
+
+/// Endereço de entrega, congelado no pedido.
+model OrderAddress {
+  id      String @id @default(uuid()) @db.Char(36)
+  orderId String @unique @db.Char(36)
+  order   Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  zipCode      String  @db.VarChar(9)
+  street       String  @db.VarChar(200)
+  number       String  @db.VarChar(20)
+  complement   String? @db.VarChar(100)
+  neighborhood String  @db.VarChar(120)
+  city         String  @db.VarChar(120)
+  state        String  @db.VarChar(2)
+
+  @@map("order_addresses")
+}
+
+/// Tentativa de pagamento.
+///
+/// Um pedido pode ter várias: cartão recusado, cliente tenta Pix. Guardar todas
+/// é o que permite ao admin entender por que uma venda não fechou.
+model Payment {
+  id      String @id @default(uuid()) @db.Char(36)
+  orderId String @db.Char(36)
+  order   Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  method      PaymentMethod
+  status      PaymentStatus @default(PENDING)
+  amountCents Int
+
+  /// Identificador na adquirente. Nulo até ela responder.
+  externalId String? @db.VarChar(120)
+  /// Motivo da recusa, quando houver.
+  failureReason String? @db.VarChar(255)
+  installments  Int     @default(1)
+
+  createdAt   DateTime  @default(now())
+  confirmedAt DateTime?
+
+  @@index([orderId])
+  @@index([externalId])
+  @@map("payments")
+}
+
+enum PaymentMethod {
+  CREDIT_CARD
+  PIX
+  BOLETO
+}
+
+enum PaymentStatus {
+  PENDING
+  AUTHORIZED
+  PAID
+  REFUSED
+  REFUNDED
+  EXPIRED
+}
+
+/// Evento na linha do tempo do pedido.
+///
+/// Append-only. É o que alimenta o acompanhamento do cliente e a esteira de SLA
+/// do admin — que o cliente descreveu como "onde está o pênalti do negócio".
+model OrderEvent {
+  id      String @id @default(uuid()) @db.Char(36)
+  orderId String @db.Char(36)
+  order   Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  status    OrderStatus
+  note      String?  @db.VarChar(500)
+  /// Quem provocou: `system`, ou o id do admin.
+  actor     String?  @db.VarChar(80)
+  createdAt DateTime @default(now())
+
+  @@index([orderId, createdAt])
+  @@map("order_events")
+}
+
+/// Cupom de desconto, que é também o vínculo com o parceiro.
+model Coupon {
+  id   String @id @default(uuid()) @db.Char(36)
+  code String @unique @db.VarChar(40)
+
+  /// Desconto ao cliente, em pontos percentuais.
+  discountPercent Decimal @db.Decimal(5, 2)
+  /// Comissão do parceiro. Variável por parceiro, definida no admin.
+  commissionPercent Decimal @db.Decimal(5, 2)
+
+  partnerName String? @db.VarChar(160)
+  active      Boolean @default(true)
+  expiresAt   DateTime?
+  /// Limite de usos. Nulo é ilimitado.
+  maxUses  Int?
+  usedCount Int @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([active])
+  @@map("coupons")
+}

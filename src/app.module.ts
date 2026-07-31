@@ -5,6 +5,7 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 
 import { CatalogModule } from '@contexts/catalog/catalog.module';
 import { GenomicsModule } from '@contexts/genomics/genomics.module';
+import { OrderingModule } from '@contexts/ordering/ordering.module';
 import { IdentityModule } from '@contexts/identity/identity.module';
 import { JwtAuthGuard } from '@contexts/identity/presentation/guards/jwt-auth.guard';
 import { AuthorizationGuard } from '@contexts/identity/presentation/guards/authorization.guard';
@@ -43,6 +44,7 @@ import { HealthController } from './health.controller';
     IdentityModule,
     GenomicsModule,
     CatalogModule,
+    OrderingModule,
   ],
   controllers: [HealthController],
   providers: [
