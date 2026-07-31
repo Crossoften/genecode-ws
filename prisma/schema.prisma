@@ -659,6 +659,14 @@ model Report {
   /// Marcadores que faltaram no CSV, se houver. Some no laudo como aviso.
   missingMarkers Json?
 
+  /// Texto de recomendação, gerado uma vez na emissão (decisão L4).
+  ///
+  /// Persistido porque laudo de saúde precisa ser reproduzível: gerar a cada
+  /// abertura faria o mesmo laudo dizer coisas diferentes em dias diferentes.
+  /// Guarda junto o provedor, o modelo e a versão do prompt — sem isso não há
+  /// como, daqui a um ano, saber sob quais instruções aquele texto nasceu.
+  narrative Json?
+
   computedAt   DateTime  @default(now())
   publishedAt  DateTime?
 

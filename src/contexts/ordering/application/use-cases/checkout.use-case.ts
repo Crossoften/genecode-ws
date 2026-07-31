@@ -273,8 +273,34 @@ export class CheckoutUseCase {
     });
   }
 
-  /** Marca como pago e registra o evento na linha do tempo. */
+  /**
+   * Marca como pago, registra o evento e abre o repasse do parceiro.
+   *
+   * O repasse nasce **junto do pagamento**, na mesma transação, e não num
+   * fechamento posterior. O motivo é o que o cliente pediu ver no painel do
+   * parceiro em 15/06: *"quanto vendeu, quanto converteu, previsibilidade do
+   * mês"*. Previsibilidade exige que a comissão apareça no instante em que ela
+   * passa a ser devida — um repasse criado só no fechamento faria o parceiro
+   * olhar o painel no dia 10 e ver zero, tendo vendido.
+   *
+   * O `@@unique([orderId])` do `Payout` é a rede de segurança: reprocessar um
+   * pagamento não paga o parceiro duas vezes.
+   */
   private async markPaid(orderId: string): Promise<void> {
+    const order = await this.prisma.order.findUniqueOrThrow({
+      where: { id: orderId },
+      select: { number: true, couponCode: true, commissionCents: true },
+    });
+
+    // Sem cupom não há parceiro; sem comissão não há o que repassar.
+    const partner =
+      order.couponCode && (order.commissionCents ?? 0) > 0
+        ? await this.prisma.partner.findUnique({
+            where: { couponCode: order.couponCode },
+            select: { id: true },
+          })
+        : null;
+
     await this.prisma.$transaction([
       this.prisma.order.update({
         where: { id: orderId },
@@ -283,6 +309,23 @@ export class CheckoutUseCase {
       this.prisma.orderEvent.create({
         data: { orderId, status: 'PAID', actor: 'system', note: 'Pagamento confirmado.' },
       }),
+      ...(partner
+        ? [
+            this.prisma.payout.upsert({
+              where: { orderId },
+              // O split acontece na adquirente; este registro é o que permite ao
+              // parceiro conferir e ao admin fechar o mês. Nasce PENDING porque
+              // a liquidação é da adquirente, não nossa.
+              create: {
+                partnerId: partner.id,
+                orderId,
+                orderNumber: order.number,
+                amountCents: order.commissionCents!,
+              },
+              update: {},
+            }),
+          ]
+        : []),
     ]);
   }
 

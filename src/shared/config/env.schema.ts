@@ -31,6 +31,17 @@ export const envSchema = z.object({
     .enum(['true', 'false'])
     .default('true')
     .transform((v) => v === 'true'),
+
+  // --- Texto de recomendação do laudo (decisão L4) --------------------------
+  //
+  // O padrão é `table`: determinístico, auditável e sem custo por laudo. A IA
+  // entra por configuração, e alternar entre as duas é mudar esta variável —
+  // que é o que "agnóstica de modelo, trocável sem reescrita" significa na
+  // prática.
+  AI_NARRATIVE_PROVIDER: z.enum(['table', 'ai']).default('table'),
+  AI_NARRATIVE_URL: z.string().url().default('https://api.anthropic.com/v1/messages'),
+  AI_NARRATIVE_MODEL: z.string().default('claude-sonnet-5'),
+  AI_NARRATIVE_API_KEY: z.string().optional(),
 });
 
 export type Env = z.infer<typeof envSchema>;

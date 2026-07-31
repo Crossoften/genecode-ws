@@ -23,6 +23,20 @@ export interface ReportSummary {
   }[];
   /** Marcadores que o CSV não trouxe. Vira aviso no laudo. */
   readonly missingMarkers: readonly string[];
+  /**
+   * Texto de recomendação, como gravado na emissão.
+   *
+   * Vem do banco, nunca é regerado na leitura — é o que garante que reabrir o
+   * laudo em outro dia mostre exatamente o mesmo texto (decisão L4). A
+   * procedência acompanha para o front poder marcar textos de IA, se o cliente
+   * quiser essa distinção visível.
+   */
+  readonly narrative: {
+    readonly text: string;
+    readonly provider: string;
+    readonly model: string | null;
+    readonly promptVersion: string;
+  } | null;
 }
 
 export interface CategoryDetail {
@@ -120,6 +134,7 @@ export class GetReportUseCase {
           band: entry.band,
         })),
       missingMarkers: (report.missingMarkers as string[] | null) ?? [],
+      narrative: readNarrative(report.narrative),
     });
   }
 
@@ -238,4 +253,24 @@ export class GetReportUseCase {
     });
     return new Map(records.map((record) => [`${record.rsId}|${record.genotype}`, record]));
   }
+}
+
+/**
+ * Lê o texto persistido, tolerando laudos anteriores à decisão L4.
+ *
+ * Laudos emitidos antes desta coluna existir simplesmente não têm texto, e isso
+ * é correto: gerar um agora produziria um texto que o titular nunca viu, com a
+ * data de hoje, dentro de um documento datado de antes.
+ */
+function readNarrative(raw: unknown): ReportSummary['narrative'] {
+  if (raw === null || typeof raw !== 'object') return null;
+  const value = raw as Record<string, unknown>;
+  if (typeof value.text !== 'string') return null;
+
+  return {
+    text: value.text,
+    provider: typeof value.provider === 'string' ? value.provider : 'desconhecido',
+    model: typeof value.model === 'string' ? value.model : null,
+    promptVersion: typeof value.promptVersion === 'string' ? value.promptVersion : '—',
+  };
 }

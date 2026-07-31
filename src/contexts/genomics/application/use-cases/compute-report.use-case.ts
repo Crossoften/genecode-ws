@@ -4,6 +4,10 @@ import { PrismaService } from '@infra/database/prisma.service';
 import { NotFoundError, ValidationError } from '@shared/domain/domain-error';
 import { fail, ok, type Result } from '@shared/domain/result';
 
+import {
+  NARRATIVE_PROVIDER,
+  type NarrativeProvider,
+} from '../../domain/ports/narrative.provider';
 import { PANEL_REPOSITORY, type PanelRepository } from '../../domain/ports/panel.repository';
 import { ReportCalculator } from '../../domain/scoring/report-calculator';
 import { ScoreBand } from '../../domain/scoring/score-band';
@@ -37,6 +41,7 @@ export interface ComputeReportOutput {
 export class ComputeReportUseCase {
   constructor(
     @Inject(PANEL_REPOSITORY) private readonly panels: PanelRepository,
+    @Inject(NARRATIVE_PROVIDER) private readonly narratives: NarrativeProvider,
     private readonly prisma: PrismaService,
   ) {}
 
@@ -79,6 +84,21 @@ export class ComputeReportUseCase {
 
     const categoryIds = await this.mapSlugs('panelCategory', input.panelId);
     const modalityIds = await this.mapSlugs('modality', input.panelId);
+
+    // O texto é gerado **fora** da transação, de propósito. Ele pode envolver
+    // uma chamada de rede a um provedor externo, e segurar uma transação de
+    // banco aberta durante uma chamada dessas é como se perdem conexões do pool
+    // quando o provedor fica lento. O provedor nunca lança: no pior caso devolve
+    // o texto de tabela.
+    const narrative = await this.narratives.generate({
+      panelName: panel.ref.name,
+      categories: result.categories.map((category) => ({
+        name: panel.categoryNames.get(category.slug) ?? category.slug,
+        score: category.normalizedScore,
+        band: category.band,
+      })),
+      globalIndex: result.modalities.find((modality) => modality.isGlobal)?.normalizedIndex ?? null,
+    });
 
     const report = await this.prisma.$transaction(async (tx) => {
       await tx.subjectGenotype.deleteMany({ where: { subjectId } });
@@ -128,6 +148,7 @@ export class ComputeReportUseCase {
           publishedAt: new Date(),
           missingMarkers:
             result.missingMarkers.length > 0 ? [...result.missingMarkers] : undefined,
+          narrative: { ...narrative, generatedAt: new Date().toISOString() },
           categoryScores: {
             create: result.categories
               .filter((category) => categoryIds.has(category.slug))
