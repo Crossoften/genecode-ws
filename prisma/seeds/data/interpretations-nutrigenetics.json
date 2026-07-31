@@ -1,0 +1,1017 @@
+{
+ "panelSlug": "nutrigenetics",
+ "snps": [
+  {
+   "rsId": "rs9939609",
+   "gene": "FTO",
+   "proteinAction": "O polimorfismo de nucleotídeo único (SNP) rs9939609 do gene FTO é um dos mais estudados e está associado à obesidade e à vulnerabilidade metabólica. Localizado no gene FTO (Associado à Massa Gorda e à Obesidade) no cromossomo 16, essa variação genética consiste em dois alelos: o alelo T comum e o alelo A desfavorável."
+  },
+  {
+   "rsId": "rs993969",
+   "gene": "FTO",
+   "proteinAction": "O polimorfismo de nucleotídeo único (SNP) rs9939609 do gene FTO é um dos mais estudados e está associado à obesidade e à vulnerabilidade metabólica. Localizado no gene FTO (Associado à Massa Gorda e à Obesidade) no cromossomo 16, essa variação genética consiste em dois alelos: o alelo T comum e o alelo A desfavorável."
+  },
+  {
+   "rsId": "rs7903146",
+   "gene": "TCF7L2",
+   "proteinAction": "A variante genética TCF7L2 rs7903146 ​​é uma das mais estudadas (Polimorfismo de Nucleotídeo Único, ou SNP) associada ao Diabetes Tipo 2 (DM2). Ela está localizada no gene TCF7L2 (Fator de Transcrição 7-Like 2), que desempenha um papel fundamental na via de sinalização Wnt e influencia a função das células beta pancreáticas e a secreção de insulina."
+  },
+  {
+   "rsId": "rs1801282",
+   "gene": "PPARG",
+   "proteinAction": "O rs1801282 é um polimorfismo de nucleotídeo único (SNP) no gene PPAR-gamma (PPARG), também conhecido como Pro12Ala. Ele resulta na troca do aminoácido prolina por alanina. Esta variação genética afeta a sensibilidade à insulina, o metabolismo de gorduras/carboidratos e a suscetibilidade a distúrbios metabólicos. "
+  },
+  {
+   "rsId": "rs2241766",
+   "gene": "ADIPOQ",
+   "proteinAction": "O rs2241766 é um polimorfismo de nucleotídeo único (SNP) no gene ADIPOQ, que codifica a adiponectina, um hormônio essencial que regula o metabolismo da glicose e o gasto energético. A presença da variação genética está frequentemente associada a níveis reduzidos de adiponectina circulante no sangue"
+  },
+  {
+   "rsId": "rs1042713",
+   "gene": "ADRB2",
+   "proteinAction": "O polimorfismo rs1042713 (Gly16Arg) do gene ADRB2 é um polimorfismo de nucleotídeo único (SNP) comum e bem estudado no gene que codifica o receptor β₂-adrenérgico. Ele determina se um indivíduo possui glicina (Gly) ou arginina (Arg) na posição 16 do aminoácido, influenciando diretamente a forma como o corpo responde à adrenalina e a medicamentos β-agonistas (por exemplo, inaladores para asma)."
+  },
+  {
+   "rsId": "rs1801278",
+   "gene": "IRS1",
+   "proteinAction": "O rs1801278 é um polimorfismo genético no gene IRS1 (Substrato 1 do Receptor de Insulina) que altera o aminoácido glicina para arginina na posição 972 (conhecido como Gly972Arg). Esta variação genética afeta a sinalização da insulina e está frequentemente associada à resistência insulínica e a distúrbios metabólicos."
+  },
+  {
+   "rsId": "rs429358",
+   "gene": "APOE",
+   "proteinAction": "As variantes genéticas rs429358 e rs7412 são dois polimorfismos de nucleotídeo único (SNPs) específicos no gene APOE que determinam sua isoforma da Apolipoproteína E (ApoE). Juntas, essas variações definem seu risco para a doença de Alzheimer e sua saúde cardiovascular."
+  },
+  {
+   "rsId": "rs7412",
+   "gene": "APOE",
+   "proteinAction": "As variantes genéticas rs429358 e rs7412 são dois polimorfismos de nucleotídeo único (SNPs) específicos no gene APOE que determinam sua isoforma da Apolipoproteína E (ApoE). Juntas, essas variações definem seu risco para a doença de Alzheimer e sua saúde cardiovascular."
+  },
+  {
+   "rsId": "rs708272",
+   "gene": "CETP",
+   "proteinAction": "O rs708272 (também conhecido como variação TaqIB) é um polimorfismo de nucleotídeo único (SNP) no gene da proteína de transferência de éster de colesteril (CETP). Ele regula o metabolismo de lipídios e influencia significativamente os níveis de colesterol HDL (o \"bom\" colesterol) e o risco de doenças cardiovasculares."
+  },
+  {
+   "rsId": "rs688",
+   "gene": "LDLR",
+   "proteinAction": "O LDLR rs688 é um polimorfismo de nucleotídeo único (SNP) comum no éxon 12 do gene do receptor de lipoproteína de baixa densidade (LDLR), que desempenha um papel importante na regulação dos níveis de colesterol. Ele tem sido amplamente pesquisado por sua influência no metabolismo lipídico, no risco de doenças cardíacas e na homeostase do colesterol."
+  },
+  {
+   "rsId": "rs11591147",
+   "gene": "PCSK9",
+   "proteinAction": "A variante genética rs11591147 é uma mutação de perda de função bem estudada no gene PCSK9, que causa a substituição de arginina por leucina na posição 46 do aminoácido (frequentemente referida como R46L). É amplamente reconhecida como uma característica genética protetora que reduz naturalmente o colesterol \"ruim\"."
+  },
+  {
+   "rsId": "rs4253778",
+   "gene": "PPARA",
+   "proteinAction": "O polimorfismo rs4253778 é uma variação genética no íntron 7 do gene PPARA (receptor ativado por proliferador de peroxissoma alfa), que regula o metabolismo de ácidos graxos e a capacidade de resistência física.A variante possui os alelos G (frequentemente associado à alta capacidade de resistência muscular) e C"
+  },
+  {
+   "rsId": "rs1800629",
+   "gene": "TNF",
+   "proteinAction": "O polimorfismo TNF rs1800629 (comumente conhecido como polimorfismo TNF-308 G>A) é um polimorfismo de nucleotídeo único na região promotora do gene TNF. Ele afeta significativamente a produção do fator de necrose tumoral alfa (TNF-α), uma citocina pró-inflamatória."
+  },
+  {
+   "rsId": "rs1205",
+   "gene": "CRP",
+   "proteinAction": "rs1205 é um polimorfismo genético (SNP) no gene CRP, o qual codifica a proteína de fase aguda Proteína C Reativa (PCR). Esta proteína é um importante marcador inflamatório produzido pelo fígado. [1, 2]"
+  },
+  {
+   "rsId": "rs1801133",
+   "gene": "MTHFR",
+   "proteinAction": "A variante genética MTHFR rs1801133 (comumente conhecida como C677T) é muito comum no gene MTHFR e afeta o metabolismo do folato e a metilação. Indivíduos com essa mutação apresentam atividade enzimática reduzida, o que pode levar a níveis mais baixos de folato e elevação da homocisteína plasmática."
+  },
+  {
+   "rsId": "rs1801131",
+   "gene": "MTHFR",
+   "proteinAction": "A variante genética rs1801131 é comum no gene MTHFR (metilenotetrahidrofolato redutase), amplamente conhecida como mutação A1298C. Essa variação pode reduzir moderadamente a capacidade da enzima de processar o ácido fólico em sua forma ativa (L-metilfolato), mas geralmente tem um impacto menor do que a mutação associada rs1801133 (C677T)."
+  },
+  {
+   "rsId": "rs2228570",
+   "gene": "VDR",
+   "proteinAction": "O polimorfismo VDR rs2228570 (comumente conhecido como polimorfismo FokI) é uma variação genética específica no gene do receptor de vitamina D (VDR). Esse polimorfismo de nucleotídeo único (SNP) altera a forma como o corpo processa a vitamina D, que desempenha um papel crucial na saúde óssea, na função imunológica e nas respostas inflamatórias."
+  },
+  {
+   "rsId": "rs1800562",
+   "gene": "HFE",
+   "proteinAction": "A mutação rs1800562 (também conhecida como C282Y) é a mais comum no gene HFE e a principal causa genética da hemocromatose hereditária, uma doença que leva o organismo a absorver ferro em excesso. Essa variante resulta em níveis anormalmente elevados de ferro, que podem se acumular em órgãos como fígado, coração e pâncreas."
+  },
+  {
+   "rsId": "rs1799945",
+   "gene": "HFE",
+   "proteinAction": "rs1799945 é um polimorfismo de nucleotídeo único (SNP) no gene HFE. É mais conhecido como a mutação H63D, uma variante genética responsável por uma forma mais branda e menos penetrante de hemocromatose hereditária (sobrecarga de ferro) em comparação com a mutação C282Y, mais grave."
+  },
+  {
+   "rsId": "rs4988235",
+   "gene": "LCT",
+   "proteinAction": "O rs4988235 (também conhecido como -13910 C>T) é um marcador genético bem conhecido usado para prever a persistência da lactase (a capacidade de digerir lactose na idade adulta). Localizado no gene MCM6, que regula o gene LCT (lactase), ele indica sua predisposição genética à intolerância à lactose."
+  },
+  {
+   "rsId": "rs33972313",
+   "gene": "SLC23A1",
+   "proteinAction": "A variante rs33972313 do gene SLC23A1 é um polimorfismo de nucleotídeo único (SNP) no gene SLC23A1, que codifica a proteína SVCT1. Este transportador é responsável pela absorção da vitamina C no intestino e sua reabsorção nos rins. A variante está fortemente associada aos níveis sanguíneos de vitamina C."
+  },
+  {
+   "rsId": "rs762551",
+   "gene": "CYP1A2",
+   "proteinAction": "O polimorfismo genético CYP1A2 rs762551 afeta significativamente a velocidade com que o corpo metaboliza a cafeína, antipsicóticos e certos antidepressivos. Esse polimorfismo de nucleotídeo único determina se você metaboliza a cafeína rapidamente ou lentamente, o que influencia tanto os efeitos estimulantes quanto os impactos metabólicos da cafeína."
+  },
+  {
+   "rsId": "rs1695",
+   "gene": "GSTP1",
+   "proteinAction": "A variante genética GSTP1 rs1695 (também conhecida como Ile105Val) é comum no gene GSTP1, que codifica a enzima glutationa S-transferase P1. Essa enzima desempenha um papel crucial na desintoxicação celular, utilizando a glutationa para neutralizar o estresse oxidativo e toxinas nocivas."
+  },
+  {
+   "rsId": "rs4880",
+   "gene": "SOD2",
+   "proteinAction": "O polimorfismo SOD2 rs4880 (também conhecido como Ala16Val ou T47C) é uma variação genética comum no gene SOD2, que codifica a enzima superóxido dismutase de manganês (MnSOD). Esta enzima atua como uma defesa antioxidante primária, neutralizando espécies reativas de oxigênio (ROS) prejudiciais dentro das mitocôndrias."
+  },
+  {
+   "rsId": "rs1799930",
+   "gene": "NAT2",
+   "proteinAction": "O polimorfismo SOD2 rs4880 (também conhecido como Ala16Val ou T47C) é uma variação genética comum no gene SOD2, que codifica a enzima superóxido dismutase de manganês (MnSOD). Essa enzima atua como uma importante defesa antioxidante, neutralizando espécies reativas de oxigênio (ROS) prejudiciais dentro das mitocôndrias."
+  },
+  {
+   "rsId": "rs4680",
+   "gene": "COMT",
+   "proteinAction": "O COMT rs4680 (conhecido como Val158Met) é um polimorfismo genético comum no gene COMT que determina a velocidade com que a enzima catecol-O-metiltransferase degrada neurotransmissores como a dopamina e a noradrenalina no córtex pré-frontal"
+  },
+  {
+   "rsId": "rs6265",
+   "gene": "BDNF",
+   "proteinAction": "O rs6265 (também conhecido como Val66Met) é o polimorfismo genético mais estudado no gene BDNF(Fator Neurotrófico Derivado do Cérebro). Ele altera uma proteína chave essencial para a plasticidade sináptica, sobrevivência neuronal, aprendizado e memória"
+  },
+  {
+   "rsId": "rs1801260",
+   "gene": "CLOCK",
+   "proteinAction": "rs1801260 (também conhecido como 3111 T/C) é um polimorfismo de nucleotídeo único (SNP) comum na região 3' não traduzida do gene CLOCK, que regula os ritmos circadianos. Essa variação genética é amplamente estudada por sua influência nos padrões de sono e na saúde metabólica."
+  },
+  {
+   "rsId": "rs1800497",
+   "gene": "DRD2",
+   "proteinAction": "DRD2 rs1800497 (também conhecido como polimorfismo Taq1A) é uma variante genética bem estudada localizada perto do gene do receptor de dopamina D2 (DRD2) e do gene ANKK1. Envolve uma substituição de base C para T, onde a presença do alelo T (frequentemente referido como A1) está ligada à diminuição da densidade e ligação dos receptores D2 da dopamina no corpo estriado."
+  }
+ ],
+ "interpretations": [
+  {
+   "rsId": "rs9939609",
+   "genotype": "TT",
+   "genotypeFreq": 0.350556358084,
+   "summary": "Genotipo AA  aumenta risco obesidade; AT intermediário; TT protetor",
+   "patientText": "Seu resultado genético para o gene FTO indica o genótipo TT, considerado o mais favorável neste marcador. O gene FTO (Fat Mass and Obesity-Associated) é um dos principais reguladores do apetite e do balanço energético no organismo. Pessoas com o genótipo TT apresentam resposta mais eficiente à saciedade, menor tendência à hiperfagia e risco reduzido de ganho de peso comparadas às portadoras dos alelos de risco. Sua biologia favorece um controle natural do apetite, com menor ativação dos mecanismos cerebrais que estimulam o consumo excessivo de calorias. Embora essa predisposição protetora seja uma vantagem, ela não elimina a influência do estilo de vida: uma alimentação variada, rica em fibras, proteínas de qualidade e com baixa densidade calórica potencializa esse perfil genético favorável. Recomendamos manter horários regulares de refeições, evitar o consumo de ultraprocessados e praticar atividade física regular — hábitos que, combinados ao seu perfil genético, sustentam um metabolismo saudável a longo prazo.",
+   "references": "1.\tJess T,  et al Impact on weight dynamics and general growth of the common FTO rs9939609: a longitudinal Danish cohort study Int J Obes (Lond). 32(9):p 1388-1394,2008 doi: 10.1038/ijo.2008.110\n2.\tNie H, et al Weight-adjusted waist index and cognitive impairment in older adults: A nationwide longitudinal cohort study. Medicine 105(19): p e48576, May 08, 2026. doi: 10.1097/MD.000000000 0048576 \n3.\tXian Lu et al Challenging the obesity paradox in cognitive function. Weight‐adjusted waist index as an obesity indicator in older adults. Diabetes, Obesity and Metabolism 28(3):p 1710-1720, March 2026. | DOI: 10.1111/dom.70348\n4.\tSierra-Ruelas E,  et al The rs9939609 Variant in FTO Increases the Risk of Hypercholesterolemia in Metabolically Healthy Subjects with Excess Weight Lifestyle Genom. 2022;15(4):131-138; doi: 10.1159/000527097\n5.\tMadrigal-Juárez A et al FTO genotypes (rs9939609 T&gt;A) are associated with Increased Added Sugar Intake in Healthy Young Adults. Lifestyle Genom. 2023;16(1):214-223. doi: 10.1159/000534741.\n6.\tWoehning A, et al The A-allele of the common FTO gene variant rs9939609 complicates weight maintenance in severely obese patients. Int J Obes (Lond). 2013 Jan;37(1):135-9. doi: 10.1038/ijo.2012.14.\n7.\tGholamalizadeh M, et al . Does the rs9939609 FTO gene polymorphism affect fat percentage? A meta-analysis. Arch Physiol Biochem. 2022 Dec;128(6):1421-1425. doi: 10.1080/13813455.2020.1773861.",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs993969",
+   "genotype": "AT",
+   "genotypeFreq": 0.483043283832,
+   "summary": "Genótipo AA  aumenta risco obesidade; AT intermediário; TT protetor",
+   "patientText": "Seu resultado genético para o gene FTO indica o genótipo AT, caracterizado como intermediário. O gene FTO desempenha papel central na regulação do apetite, da saciedade e do armazenamento de gordura corporal. Portadores do genótipo AT carregam um alelo protetor (T) e um alelo de risco (A), resultando em predisposição moderada ao ganho de peso — maior do que em indivíduos TT, porém menor do que em portadores do genótipo AA. Na prática, você pode apresentar episódios de fome mais intensa em situações de privação de sono, estresse ou dietas muito restritivas, exigindo maior atenção ao planejamento alimentar. Estratégias como o consumo adequado de proteínas em cada refeição, a inclusão de alimentos ricos em fibras e a manutenção de um padrão alimentar regular são especialmente benéficas para este perfil. A prática de exercício físico demonstrou modular positivamente o efeito do alelo de risco FTO, sendo uma das intervenções mais eficazes para equilibrar o metabolismo energético neste genótipo.",
+   "references": "1.\tJess T,  et al Impact on weight dynamics and general growth of the common FTO rs9939609: a longitudinal Danish cohort study Int J Obes (Lond). 32(9):p 1388-1394,2008 doi: 10.1038/ijo.2008.110\n2.\tNie H, et al Weight-adjusted waist index and cognitive impairment in older adults: A nationwide longitudinal cohort study. Medicine 105(19): p e48576, May 08, 2026. doi: 10.1097/MD.000000000 0048576 \n3.\tXian Lu et al Challenging the obesity paradox in cognitive function. Weight‐adjusted waist index as an obesity indicator in older adults. Diabetes, Obesity and Metabolism 28(3):p 1710-1720, March 2026. | DOI: 10.1111/dom.70348\n4.\tSierra-Ruelas E,  et al The rs9939609 Variant in FTO Increases the Risk of Hypercholesterolemia in Metabolically Healthy Subjects with Excess Weight Lifestyle Genom. 2022;15(4):131-138; doi: 10.1159/000527097\n5.\tMadrigal-Juárez A et al FTO genotypes (rs9939609 T&gt;A) are associated with Increased Added Sugar Intake in Healthy Young Adults. Lifestyle Genom. 2023;16(1):214-223. doi: 10.1159/000534741.\n6.\tWoehning A, et al The A-allele of the common FTO gene variant rs9939609 complicates weight maintenance in severely obese patients. Int J Obes (Lond). 2013 Jan;37(1):135-9. doi: 10.1038/ijo.2012.14.\n7.\tGholamalizadeh M, et al . Does the rs9939609 FTO gene polymorphism affect fat percentage? A meta-analysis. Arch Physiol Biochem. 2022 Dec;128(6):1421-1425. doi: 10.1080/13813455.2020.1773861.",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs993969",
+   "genotype": "AA",
+   "genotypeFreq": 0.166400358084,
+   "summary": "Genótipo AA  aumenta risco obesidade; AT intermediário; TT protetor",
+   "patientText": "Seu resultado genético para o gene FTO indica o genótipo AA, associado ao maior risco neste marcador. O gene FTO regula circuitos cerebrais relacionados à saciedade, à preferência por alimentos de alta densidade calórica e ao armazenamento de gordura. Portadores do genótipo AA apresentam, em média, maior tendência ao ganho de peso ao longo da vida, resposta reduzida aos sinais de saciedade e maior apetite em contextos de estresse ou privação de sono. Isso não significa que o ganho de peso seja inevitável — estudos robustos demonstram que intervenções no estilo de vida podem neutralizar significativamente o efeito desse genótipo. Para você, recomendamos especial atenção à qualidade nutricional da dieta: priorizar proteínas magras, fibras solúveis, gorduras saudáveis e evitar ambientes alimentares de alto risco. O exercício físico regular — especialmente atividades aeróbicas combinadas com treinamento de força — demonstrou reduzir em até 30% o efeito do alelo A sobre o índice de massa corporal. Acompanhamento nutricional individualizado é fortemente recomendado para este perfil.",
+   "references": "1.\tJess T,  et al Impact on weight dynamics and general growth of the common FTO rs9939609: a longitudinal Danish cohort study Int J Obes (Lond). 32(9):p 1388-1394,2008 doi: 10.1038/ijo.2008.110\n2.\tNie H, et al Weight-adjusted waist index and cognitive impairment in older adults: A nationwide longitudinal cohort study. Medicine 105(19): p e48576, May 08, 2026. doi: 10.1097/MD.000000000 0048576 \n3.\tXian Lu et al Challenging the obesity paradox in cognitive function. Weight‐adjusted waist index as an obesity indicator in older adults. Diabetes, Obesity and Metabolism 28(3):p 1710-1720, March 2026. | DOI: 10.1111/dom.70348\n4.\tSierra-Ruelas E,  et al The rs9939609 Variant in FTO Increases the Risk of Hypercholesterolemia in Metabolically Healthy Subjects with Excess Weight Lifestyle Genom. 2022;15(4):131-138; doi: 10.1159/000527097\n5.\tMadrigal-Juárez A et al FTO genotypes (rs9939609 T&gt;A) are associated with Increased Added Sugar Intake in Healthy Young Adults. Lifestyle Genom. 2023;16(1):214-223. doi: 10.1159/000534741.\n6.\tWoehning A, et al The A-allele of the common FTO gene variant rs9939609 complicates weight maintenance in severely obese patients. Int J Obes (Lond). 2013 Jan;37(1):135-9. doi: 10.1038/ijo.2012.14.\n7.\tGholamalizadeh M, et al . Does the rs9939609 FTO gene polymorphism affect fat percentage? A meta-analysis. Arch Physiol Biochem. 2022 Dec;128(6):1421-1425. doi: 10.1080/13813455.2020.1773861.",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs7903146",
+   "genotype": "CC",
+   "genotypeFreq": 0.5279257622250001,
+   "summary": "Genótipo TT  aumenta risco Diabetes mellitus 2; CT intermediário; CC protetor",
+   "patientText": "Seu resultado genético para o gene TCF7L2 indica o genótipo CC, considerado o mais favorável para o metabolismo glicídico. O gene TCF7L2 é um dos mais estudados em relação ao risco de diabetes mellitus tipo 2 (DM2), regulando diretamente a secreção de insulina pelas células beta do pâncreas e a sensibilidade dos tecidos à ação insulínica. O genótipo CC está associado a uma função pancreática mais eficiente, com resposta insulínica adequada às refeições e menor predisposição genética ao desenvolvimento de resistência insulínica. Na prática clínica, isso representa uma vantagem metabólica significativa, especialmente quando associada a hábitos alimentares saudáveis. Mesmo com esse perfil favorável, recomendamos manter uma dieta com baixo índice glicêmico, priorizando carboidratos complexos, legumes, vegetais e proteínas de qualidade, além da prática regular de atividade física.",
+   "references": "1.\tSen P et al Association of the TCF7L2 rs7903146 variant with type 2 diabetes mellitus and related biomarkers: a systematic review BMJ Nutr Prev Health 2025  doi: 10.1136/bmjnph-2025-001205\n2.\tHansen A l et al Plasma adipokine and inflammatory marker concentrations are altered in obese, as opposed to non-obese, type 2 diabetes patients Diabetes Obes Metab. doi:10.1111/dom.16193\n3.\tDing W et al Meta-analysis of association between TCF7L2 polymorphism rs7903146 and type 2 diabetes mellitus BMC Med Genet. 2018 Mar 7;19:38. doi: 10.1186/s12881-018-0553-5\n4.\tGuan Y, et al Correlation of the TCF7L2 (rs7903146) polymorphism with an enhanced risk of type 2 diabetes mellitus: a meta-analysis Genet Mol Res. 2016 Aug 26;15(3). doi: 10.4238/gmr.15037969.",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs7903146",
+   "genotype": "CT",
+   "genotypeFreq": 0.39731847555000005,
+   "summary": "Genótipo TT  aumenta risco Diabetes mellitus 2; CT intermediário; CC protetor",
+   "patientText": "Seu resultado genético para o gene TCF7L2 indica o genótipo CT, classificado como intermediário para o risco de alterações glicídicas. O TCF7L2 é o gene de maior efeito conhecido para o risco de diabetes tipo 2 na população geral, influenciando a secreção de insulina e a resposta do organismo à glicose. Portadores do genótipo CT apresentam risco moderadamente aumentado em relação ao genótipo CC, com possível tendência à resposta insulínica levemente reduzida em situações de sobrecarga glicêmica. Em termos práticos, padrões alimentares ricos em açúcares simples e carboidratos refinados podem ter impacto mais pronunciado sobre seus níveis glicêmicos do que em pessoas com genótipo totalmente favorável. A adoção de dieta com baixo índice glicêmico, distribuição equilibrada de carboidratos ao longo do dia, consumo adequado de fibras e prática regular de atividade física são estratégias prioritárias para este perfil. Monitoramento periódico da glicemia de jejum e hemoglobina glicada é recomendado a partir dos 35 anos.",
+   "references": "1.\tSen P et al Association of the TCF7L2 rs7903146 variant with type 2 diabetes mellitus and related biomarkers: a systematic review BMJ Nutr Prev Health 2025  doi: 10.1136/bmjnph-2025-001205\n2.\tHansen A l et al Plasma adipokine and inflammatory marker concentrations are altered in obese, as opposed to non-obese, type 2 diabetes patients Diabetes Obes Metab. doi:10.1111/dom.16193\n3.\tDing W et al Meta-analysis of association between TCF7L2 polymorphism rs7903146 and type 2 diabetes mellitus BMC Med Genet. 2018 Mar 7;19:38. doi: 10.1186/s12881-018-0553-5\n4.\tGuan Y, et al Correlation of the TCF7L2 (rs7903146) polymorphism with an enhanced risk of type 2 diabetes mellitus: a meta-analysis Genet Mol Res. 2016 Aug 26;15(3). doi: 10.4238/gmr.15037969.",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs7903146",
+   "genotype": "TT",
+   "genotypeFreq": 0.07475576222500001,
+   "summary": "Genótipo TT  aumenta risco Diabetes mellitus 2; CT intermediário; CC protetor",
+   "patientText": "Seu resultado genético para o gene TCF7L2 indica o genótipo TT, associado ao maior risco genético para alterações do metabolismo glicídico neste marcador. TCF7L2 é o gene com maior associação ao risco de diabetes mellitus tipo 2 identificado em estudos de associação genômica ampla (GWAS). O genótipo TT está relacionado à redução da capacidade de secreção de insulina pelas células beta pancreáticas, menor sensibilidade dos tecidos à ação insulínica e maior variabilidade glicêmica pós-prandial. Portadores deste genótipo têm risco até 2 vezes maior de desenvolver DM2 ao longo da vida em comparação com indivíduos CC, especialmente quando expostos a dietas de alta carga glicêmica, obesidade ou sedentarismo. O cuidado nutricional para este perfil é prioritário: recomendamos alimentação de baixo índice e carga glicêmica, distribuição equilibrada de macronutrientes, consumo elevado de fibras, proteínas de qualidade e gorduras insaturadas. A atividade física regular demonstrou ser um dos modificadores ambientais mais eficazes para este genótipo, melhorando a sensibilidade insulínica e a função das células beta. Exames de rastreamento metabólico (glicemia, insulina de jejum, HOMA-IR, HbA1c) são recomendados com periodicidade anual.",
+   "references": "1.\tSen P et al Association of the TCF7L2 rs7903146 variant with type 2 diabetes mellitus and related biomarkers: a systematic review BMJ Nutr Prev Health 2025  doi: 10.1136/bmjnph-2025-001205\n2.\tHansen A l et al Plasma adipokine and inflammatory marker concentrations are altered in obese, as opposed to non-obese, type 2 diabetes patients Diabetes Obes Metab. doi:10.1111/dom.16193\n3.\tDing W et al Meta-analysis of association between TCF7L2 polymorphism rs7903146 and type 2 diabetes mellitus BMC Med Genet. 2018 Mar 7;19:38. doi: 10.1186/s12881-018-0553-5\n4.\tGuan Y, et al Correlation of the TCF7L2 (rs7903146) polymorphism with an enhanced risk of type 2 diabetes mellitus: a meta-analysis Genet Mol Res. 2016 Aug 26;15(3). doi: 10.4238/gmr.15037969.",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs1801282",
+   "genotype": "GG",
+   "genotypeFreq": 0.008092981521,
+   "summary": "Genótipo GG (Pro12Ala) aumenta sensib; CC (Pro12Pro) diminui  sensibilidade insulínica",
+   "patientText": " Seu resultado genético para o gene PPARG indica o genótipo GG (variante Pro12Ala), considerado o mais favorável para sensibilidade insulínica e metabolismo lipídico. O receptor PPARG (Peroxisome Proliferator-Activated Receptor Gamma) é um fator de transcrição nuclear que regula a adipogênese, a sensibilidade à insulina e o metabolismo dos ácidos graxos. Portadores do genótipo GG (alelo Ala12) apresentam maior sensibilidade insulínica periférica, menor tendência ao acúmulo de gordura visceral e perfil lipídico mais favorável. Esse perfil está associado a menor risco de resistência insulínica e síndrome metabólica. Recomendamos aproveitar essa vantagem genética com uma alimentação rica em ácidos graxos insaturados (azeite, abacate, nozes, peixes), que ativam positivamente o receptor PPARG, potencializando seus efeitos metabólicos benéficos.",
+   "references": "1.\tShujin Li et al G Allele of the rs1801282 Polymorphism in PPARγ Gene Confers an Increased Risk of Obesity and Hypercholesterolemia, While T Allele of the rs3856806 Polymorphism Displays a Protective Role Against Dyslipidemia: A Systematic Review and Meta-Analysis Front Endocrinol (Lausanne) . 2022 Jun 29;13:919087. doi: 10.3389/fendo.2022.919087\n2.\tPenson, D F et al Diabetes Care 2003 Apr;26(4):1093-9. doi: 10.2337/diacare. 26.4.1093.\n3.\tHemstapat, H et al J PharmacolExpTher2007Jul;322(1):254 doi:10.1124/jpet.106.117093. \n4.\tBoyko E j et al Diabetes Care. 2009 May;32(5):966–967. doi: 10.2337/dc09-0388",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs1801282",
+   "genotype": "CG",
+   "genotypeFreq": 0.16373603695800001,
+   "summary": "Genótipo GG (Pro12Ala) aumenta sensib; CC (Pro12Pro) diminui  sensibilidade insulínica",
+   "patientText": "Seu resultado genético para o gene PPARG indica o genótipo CG (heterozigoto Pro12Ala), classificado como intermediário. O gene PPARG regula a diferenciação dos adipócitos, a sensibilidade insulínica e o metabolismo lipídico. No genótipo CG, a presença de um alelo Pro12 e um Ala12 resulta em atividade receptora intermediária, com sensibilidade à insulina preservada na maioria dos contextos, mas com potencial de redução diante de dieta hipercalórica, sedentarismo ou ganho de peso. A nutrição tem impacto direto na expressão deste gene: ácidos graxos saturados tendem a reduzir a atividade do PPARG, enquanto ácidos graxos poli-insaturados (ômega-3 e ômega-9) a estimulam positivamente. Para este perfil, recomendamos uma dieta com boa qualidade de gorduras — priorizar azeite de oliva, peixes de água fria, sementes e oleaginosas — e evitar o consumo excessivo de gordura saturada e trans.",
+   "references": "1.\tShujin Li et al G Allele of the rs1801282 Polymorphism in PPARγ Gene Confers an Increased Risk of Obesity and Hypercholesterolemia, While T Allele of the rs3856806 Polymorphism Displays a Protective Role Against Dyslipidemia: A Systematic Review and Meta-Analysis Front Endocrinol (Lausanne) . 2022 Jun 29;13:919087. doi: 10.3389/fendo.2022.919087\n2.\tPenson, D F et al Diabetes Care 2003 Apr;26(4):1093-9. doi: 10.2337/diacare. 26.4.1093.\n3.\tHemstapat, H et al J PharmacolExpTher2007Jul;322(1):254 doi:10.1124/jpet.106.117093. \n4.\tBoyko E j et al Diabetes Care. 2009 May;32(5):966–967. doi: 10.2337/dc09-0388",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs1801282",
+   "genotype": "CC",
+   "genotypeFreq": 0.8281709815210001,
+   "summary": "Genótipo GG (Pro12Ala) aumenta sensib; CC (Pro12Pro) diminui  sensibilidade insulínica",
+   "patientText": "Seu resultado genético para o gene PPARG indica o genótipo CC (variante Pro12Pro), associado à menor sensibilidade insulínica periférica neste marcador. O receptor PPARG na forma Pro12 apresenta menor atividade de transcrição em comparação à variante Ala12, o que se reflete em menor eficiência no metabolismo glicídico e lipídico, maior tendência ao acúmulo de gordura visceral e predisposição à resistência insulínica, especialmente em contextos de excesso calórico. Portadores do genótipo CC se beneficiam especialmente de dietas ricas em ácidos graxos insaturados (azeite, abacate, nozes, ômega-3), que funcionam como ativadores naturais do receptor PPARG, compensando parcialmente a menor atividade intrínseca. Recomendamos reduzir o consumo de gorduras saturadas e trans, aumentar a ingestão de fibras e ácidos graxos ômega-3, manter peso corporal adequado e realizar atividade física regular.",
+   "references": "1.\tShujin Li et al G Allele of the rs1801282 Polymorphism in PPARγ Gene Confers an Increased Risk of Obesity and Hypercholesterolemia, While T Allele of the rs3856806 Polymorphism Displays a Protective Role Against Dyslipidemia: A Systematic Review and Meta-Analysis Front Endocrinol (Lausanne) . 2022 Jun 29;13:919087. doi: 10.3389/fendo.2022.919087\n2.\tPenson, D F et al Diabetes Care 2003 Apr;26(4):1093-9. doi: 10.2337/diacare. 26.4.1093.\n3.\tHemstapat, H et al J PharmacolExpTher2007Jul;322(1):254 doi:10.1124/jpet.106.117093. \n4.\tBoyko E j et al Diabetes Care. 2009 May;32(5):966–967. doi: 10.2337/dc09-0388",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs2241766",
+   "genotype": "GG",
+   "genotypeFreq": 0.022909244163999996,
+   "summary": "Genótipo GG aumenta adiponectina; TT diminui  adiponectina,  aumenta resistência insulínica",
+   "patientText": "Seu resultado genético para o gene ADIPOQ indica o genótipo GG, associado a níveis mais elevados de adiponectina circulante. A adiponectina é um hormônio produzido pelo tecido adiposo com ações anti-inflamatórias, sensibilizadoras de insulina e protetoras do endotélio vascular. Portadores do genótipo GG tendem a apresentar concentrações mais altas de adiponectina, o que favorece a sensibilidade à insulina, o metabolismo de lipídios e a proteção cardiovascular. Esse perfil está associado a menor risco de resistência insulínica, síndrome metabólica e doenças cardiovasculares. Para potencializar esse perfil favorável, recomendamos manter peso corporal adequado — pois a adiponectina é inversamente proporcional à gordura visceral — e adotar uma dieta mediterrânea, rica em ácidos graxos insaturados, antioxidantes e fibras, que estimulam a produção deste hormônio protetor.",
+   "references": "1.\tLu JF et al Association of ADIPOQ polymorphisms with obesity risk: a meta-analysis. Hum Immunol. 2014 Oct;75(10):1062-8. doi: 10.1016/j.humimm.2014.09.004.\n2.\tde Heer, H et al Hisp J Behav Sci. 2011 doi: 10.1177/0739986311406068\n3.\tWu J, et al Association of adiponectin gene (ADIPOQ) rs2241766 polymorphism with obesity in adults: a meta-analysis. PLoS One. 2014 Apr 16;9(4):e95270. \n4.\tVan Gaal LF, et al (2006) Mechanisms linking obesity with cardiovascular disease. Nature 444: 875–880.\n5.\tHu E, et al (1996) AdipoQ is a novel adipose-specific gene dysregulated in obesity. J Biol Chem 271: 10697–10703.\n6.\tVasseur F, Leprêtre F, Lacquemant C, Froguel P (2003) The genetics of adiponectin. Curr Diabetes 3: 151–158\n7.\tLing H, Waterworth DM, Stirnadel HA, Pollin TI, Barter PJ, et al. (2009) Genome-wide linkage and association analyses to identify genes influencing adiponectin levels: the GEMS Study. Obesity (Silver Spring) 17: 737–744\n8.\tArita Y, Kihara S, Ouchi N, Takahashi M, Maeda K, et al. (1999) Paradoxical decrease of an adipose-specificprotein, adiponectin, in obesity. Biochem Biophys Res Commun 257: 79–83\n9.\tBeckers S, Peeters AV, de Freitas F, Mertens IL, Verhulst SL, et al. (2009) Association Study and Mutation Analysis of Adiponectin Shows Association of Variants in APM1 with Complex Obesity in Women. Ann Hum Genet 73: 492–501",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs2241766",
+   "genotype": "GT",
+   "genotypeFreq": 0.256897511672,
+   "summary": "Genótipo GG aumenta adiponectina; TT diminui  adiponectina,  aumenta resistência insulínica",
+   "patientText": "Seu resultado genético para o gene ADIPOQ indica o genótipo GT (heterozigoto), classificado como intermediário para os níveis de adiponectina. A adiponectina desempenha papel fundamental na regulação da sensibilidade insulínica, no metabolismo lipídico e na proteção vascular. O genótipo GT está associado a níveis intermediários de adiponectina, que podem ser influenciados de forma expressiva pelo estilo de vida — especialmente pelo controle do peso corporal e pela qualidade da dieta. O acúmulo de gordura visceral é o principal supressor da adiponectina, independentemente do genótipo. Recomendamos priorizar alimentos anti-inflamatórios (peixes, azeite, frutas vermelhas, vegetais coloridos), manter composição corporal adequada e praticar atividade física regular, especialmente exercícios aeróbicos, que demonstraram aumentar os níveis de adiponectina circulante.",
+   "references": "1.\tLu JF et al Association of ADIPOQ polymorphisms with obesity risk: a meta-analysis. Hum Immunol. 2014 Oct;75(10):1062-8. doi: 10.1016/j.humimm.2014.09.004.\n2.\tde Heer, H et al Hisp J Behav Sci. 2011 doi: 10.1177/0739986311406068\n3.\tWu J, et al Association of adiponectin gene (ADIPOQ) rs2241766 polymorphism with obesity in adults: a meta-analysis. PLoS One. 2014 Apr 16;9(4):e95270. \n4.\tVan Gaal LF, et al (2006) Mechanisms linking obesity with cardiovascular disease. Nature 444: 875–880.\n5.\tHu E, et al (1996) AdipoQ is a novel adipose-specific gene dysregulated in obesity. J Biol Chem 271: 10697–10703.\n6.\tVasseur F, Leprêtre F, Lacquemant C, Froguel P (2003) The genetics of adiponectin. Curr Diabetes 3: 151–158\n7.\tLing H, Waterworth DM, Stirnadel HA, Pollin TI, Barter PJ, et al. (2009) Genome-wide linkage and association analyses to identify genes influencing adiponectin levels: the GEMS Study. Obesity (Silver Spring) 17: 737–744\n8.\tArita Y, Kihara S, Ouchi N, Takahashi M, Maeda K, et al. (1999) Paradoxical decrease of an adipose-specificprotein, adiponectin, in obesity. Biochem Biophys Res Commun 257: 79–83\n9.\tBeckers S, Peeters AV, de Freitas F, Mertens IL, Verhulst SL, et al. (2009) Association Study and Mutation Analysis of Adiponectin Shows Association of Variants in APM1 with Complex Obesity in Women. Ann Hum Genet 73: 492–501",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs2241766",
+   "genotype": "TT",
+   "genotypeFreq": 0.720193244164,
+   "summary": "Genótipo GG aumenta adiponectina; TT diminui  adiponectina,  aumenta resistência insulínica",
+   "patientText": "Seu resultado genético para o gene ADIPOQ indica o genótipo TT, associado à tendência de menores níveis de adiponectina circulante. A adiponectina é um hormônio com ações protetoras sobre a sensibilidade insulínica, o perfil lipídico e o endotélio vascular. Níveis reduzidos estão associados a maior risco de resistência insulínica, inflamação crônica e síndrome metabólica. Portadores do genótipo TT podem apresentar essa desvantagem metabólica, especialmente quando combinada com excesso de gordura visceral, sedentarismo ou dieta inflamatória. Os níveis de adiponectina são altamente moduláveis pelo estilo de vida: perda de gordura visceral, exercício físico aeróbico regular, dieta anti-inflamatória (rica em ômega-3, polifenóis e fibras) e redução do consumo de gorduras saturadas e açúcares são intervenções comprovadas para elevar a adiponectina. Acompanhamento dos marcadores metabólicos (insulina, HOMA-IR, perfil lipídico) é recomendado para este perfil.",
+   "references": "1.\tLu JF et al Association of ADIPOQ polymorphisms with obesity risk: a meta-analysis. Hum Immunol. 2014 Oct;75(10):1062-8. doi: 10.1016/j.humimm.2014.09.004.\n2.\tde Heer, H et al Hisp J Behav Sci. 2011 doi: 10.1177/0739986311406068\n3.\tWu J, et al Association of adiponectin gene (ADIPOQ) rs2241766 polymorphism with obesity in adults: a meta-analysis. PLoS One. 2014 Apr 16;9(4):e95270. \n4.\tVan Gaal LF, et al (2006) Mechanisms linking obesity with cardiovascular disease. Nature 444: 875–880.\n5.\tHu E, et al (1996) AdipoQ is a novel adipose-specific gene dysregulated in obesity. J Biol Chem 271: 10697–10703.\n6.\tVasseur F, Leprêtre F, Lacquemant C, Froguel P (2003) The genetics of adiponectin. Curr Diabetes 3: 151–158\n7.\tLing H, Waterworth DM, Stirnadel HA, Pollin TI, Barter PJ, et al. (2009) Genome-wide linkage and association analyses to identify genes influencing adiponectin levels: the GEMS Study. Obesity (Silver Spring) 17: 737–744\n8.\tArita Y, Kihara S, Ouchi N, Takahashi M, Maeda K, et al. (1999) Paradoxical decrease of an adipose-specificprotein, adiponectin, in obesity. Biochem Biophys Res Commun 257: 79–83\n9.\tBeckers S, Peeters AV, de Freitas F, Mertens IL, Verhulst SL, et al. (2009) Association Study and Mutation Analysis of Adiponectin Shows Association of Variants in APM1 with Complex Obesity in Women. Ann Hum Genet 73: 492–501",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs1042713",
+   "genotype": "GG",
+   "genotypeFreq": 0.32805035194624005,
+   "summary": "Genótipo GG (Arg16)  aumenta lipólise; AA (Gly16) diminui  resposta catecolaminas",
+   "patientText": "Seu resultado genético para o gene ADRB2 indica o genótipo GG (variante Arg16), associado a uma resposta mais eficiente à lipólise mediada pelas catecolaminas. O receptor ADRB2 é ativado pela adrenalina e noradrenalina durante exercício físico e estados de demanda energética, promovendo a mobilização das reservas de gordura para obtenção de energia. Portadores do genótipo GG apresentam maior responsividade a esse estímulo, favorecendo a oxidação de gorduras durante o exercício e em situações de balanço calórico negativo. Isso representa uma vantagem na composição corporal, especialmente para quem pratica atividades físicas regularmente. Recomendamos maximizar esse potencial com exercícios aeróbicos em intensidade moderada a alta, combinados com treinamento de força, para otimizar a mobilização e oxidação de gorduras.",
+   "references": "1.\tShah, I A et al Association of TCF7L2 genetic variants rs12255372 and rs7903146 with the polycystic ovary syndrome risk: systematic review and meta-analysis J Ovarian Res . 2025 Jan 6;18(1):2. doi: 10.1186/s13048-024-01585-z.\n2.\tMitra S R J et al Nutr Metab. 2019 Mar 17:2019:8718795. doi: 10.1155/2019/8718795.\n3.\tShokouhi S, et al Association of rs7903146, rs12255372, and rs290487 polymorphisms in TCF7L2 gene with type 2 diabetes in an Iranian Kurdish ethnic group .Clin Lab. 2014;60(8):1269-76. doi: 10.7754/clin.lab.2013.13080\n4.\tYang Y, et al . Association of TCF7L2 gene polymorphisms with susceptibility to type 2 diabetes mellitus in a Chinese Hui population. Genet Mol Res. 2015 Aug 21;14(3):10064-71. doi: 10.4238/2015.August.21.13.",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs1042713",
+   "genotype": "AG",
+   "genotypeFreq": 0.48941283790199996,
+   "summary": "GG (Arg16)  aumenta lipólise; AA (Gly16) diminui  resposta catecolaminas",
+   "patientText": "Seu resultado genético para o gene ADRB2 indica o genótipo AG (heterozigoto Arg16/Gly16), classificado como intermediário para a resposta lipolítica. O receptor beta-2 adrenérgico medeia a mobilização das reservas de gordura em resposta às catecolaminas, hormônios liberados durante o exercício e situações de estresse metabólico. No genótipo AG, a resposta lipolítica é parcialmente preservada, mas pode ser menos pronunciada do que em portadores GG em situações de alta demanda. Para este perfil, o tipo e a intensidade do exercício físico têm papel relevante: exercícios de alta intensidade intervalada (HIIT) e treinos aeróbicos em zona de queima de gordura são estratégias eficazes para otimizar a lipólise. Uma alimentação com carga glicêmica controlada e ingestão proteica adequada favorecem a ativação do receptor ADRB2.",
+   "references": "1.\tShah, I A et al Association of TCF7L2 genetic variants rs12255372 and rs7903146 with the polycystic ovary syndrome risk: systematic review and meta-analysis J Ovarian Res . 2025 Jan 6;18(1):2. doi: 10.1186/s13048-024-01585-z.\n2.\tMitra S R J et al Nutr Metab. 2019 Mar 17:2019:8718795. doi: 10.1155/2019/8718795.\n3.\tShokouhi S, et al Association of rs7903146, rs12255372, and rs290487 polymorphisms in TCF7L2 gene with type 2 diabetes in an Iranian Kurdish ethnic group .Clin Lab. 2014;60(8):1269-76. doi: 10.7754/clin.lab.2013.13080\n4.\tYang Y, et al . Association of TCF7L2 gene polymorphisms with susceptibility to type 2 diabetes mellitus in a Chinese Hui population. Genet Mol Res. 2015 Aug 21;14(3):10064-71. doi: 10.4238/2015.August.21.13.",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs1042713",
+   "genotype": "AA",
+   "genotypeFreq": 0.18253658104899997,
+   "summary": "Genótipo GG (Arg16)  aumenta lipólise; AA (Gly16) diminui  resposta catecolaminas",
+   "patientText": "Seu resultado genético para o gene ADRB2 indica o genótipo AA (variante Gly16 em homozigose), associado a menor responsividade do receptor beta-2 adrenérgico. Essa variante está relacionada a uma down-regulation mais intensa do receptor após estimulação repetida pelas catecolaminas, resultando em menor eficiência na mobilização de gordura durante e após o exercício físico. Na prática, portadores do genótipo AA podem apresentar maior dificuldade em perder gordura corporal com exercício, especialmente em modalidades de intensidade moderada. Estratégias que contornam essa limitação incluem: exercícios de alta intensidade intervalada (HIIT), treinamento de força para aumentar a massa magra e a taxa metabólica de repouso, e alimentação com controle de carboidratos refinados e ingestão adequada de proteínas. A periodização do exercício — com variação de intensidade e modalidade — é especialmente recomendada para evitar a dessensibilização do receptor e manter a resposta lipolítica ativa.",
+   "references": "1.\tShah, I A et al Association of TCF7L2 genetic variants rs12255372 and rs7903146 with the polycystic ovary syndrome risk: systematic review and meta-analysis J Ovarian Res . 2025 Jan 6;18(1):2. doi: 10.1186/s13048-024-01585-z.\n2.\tMitra S R J et al Nutr Metab. 2019 Mar 17:2019:8718795. doi: 10.1155/2019/8718795.\n3.\tShokouhi S, et al Association of rs7903146, rs12255372, and rs290487 polymorphisms in TCF7L2 gene with type 2 diabetes in an Iranian Kurdish ethnic group .Clin Lab. 2014;60(8):1269-76. doi: 10.7754/clin.lab.2013.13080\n4.\tYang Y, et al . Association of TCF7L2 gene polymorphisms with susceptibility to type 2 diabetes mellitus in a Chinese Hui population. Genet Mol Res. 2015 Aug 21;14(3):10064-71. doi: 10.4238/2015.August.21.13.",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs1801278",
+   "genotype": "GG",
+   "genotypeFreq": 0.8802380041,
+   "summary": "Genótipo GG protetor; AA aumenta resistência insulínica periférica",
+   "patientText": "Seu resultado genético para o gene IRS1 indica o genótipo GG, associado à preservação da sinalização insulínica periférica. A proteína IRS-1 (Insulin Receptor Substrate 1) é uma das principais moléculas da cascata de sinalização intracelular da insulina, transmitindo o sinal do receptor insulínico para os processos de captação de glicose nos tecidos. O genótipo GG preserva a estrutura e função normal da IRS-1, resultando em resposta insulínica eficiente nos músculos e no tecido adiposo. Esse é um fator protetor importante contra o desenvolvimento de resistência insulínica e diabetes tipo 2. Recomendamos manter esse perfil favorável com alimentação equilibrada, exercício físico regular e controle do peso corporal.",
+   "references": "1.\tQiuyan Li  et al Associations between two single-nucleotide polymorphisms (rs1801278 and rs2943641) of insulin receptor substrate 1 gene and type 2 diabetes susceptibility: a meta-analysis Endocrine . 2016 Jan;51(1):52-62  doi: 10.1007/s12020-015-0770-z.Epub 2015 Nov 18.\n2.\tSesti, S et al Defects of the insulin receptor substrate (IRS) system in human metabolic disorders. FASEB J. 15(12), 2099–2111 (2001). doi:10.1096/fj.01-0009rev\n3.\tRasool SUA,  et al Genes (Basel). 2022 doi: 10.3390/genes13081463.\n4.\tPérez MS, et al Diabetes Res Clin Pract. 2011. doi: 10.1016/j.diabres.2011.05.018\n5.\tImai, Y et al, Variant sequences of insulin receptor substrate-1 in patients with noninsulin-dependent diabetes mellitus. J. Clin. Endocrinol. Metab. 79(6), 1655–1658 (1994). doi:10.1210/jcem.79.6.7989470\n6.\tFlores-Martinez,  SE et al DNA polymorphism analysis of candidate genes for type 2 diabetes mellitus in a Mexican ethnic group. Ann. Genet. 47(4), 339–348 (2004). doi:10.1016/j.anngen.2004.05.004",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs1801278",
+   "genotype": "GA",
+   "genotypeFreq": 0.11594399179999999,
+   "summary": "Genótipo GG protetor; AA aumenta resistência insulínica periférica",
+   "patientText": "Seu resultado genético para o gene IRS1 indica o genótipo AG (heterozigoto), classificado como intermediário para a sinalização insulínica. A IRS-1 é essencial para a transmissão do sinal da insulina nos tecidos periféricos, especialmente músculo e fígado. O genótipo AG implica função parcialmente alterada da proteína, com possível redução discreta da eficiência na captação de glicose em situações de sobrecarga metabólica. Para este perfil, estratégias que aumentam a sensibilidade insulínica periférica são prioritárias: prática regular de exercício físico (especialmente musculação e atividades aeróbicas), dieta com baixo índice glicêmico e manutenção do peso corporal. Nutrientes como magnésio, cromo e ácidos graxos ômega-3 demonstraram apoiar a sinalização insulínica e são especialmente relevantes para portadores deste genótipo.",
+   "references": "1.\tQiuyan Li  et al Associations between two single-nucleotide polymorphisms (rs1801278 and rs2943641) of insulin receptor substrate 1 gene and type 2 diabetes susceptibility: a meta-analysis Endocrine . 2016 Jan;51(1):52-62  doi: 10.1007/s12020-015-0770-z.Epub 2015 Nov 18.\n2.\tSesti, S et al Defects of the insulin receptor substrate (IRS) system in human metabolic disorders. FASEB J. 15(12), 2099–2111 (2001). doi:10.1096/fj.01-0009rev\n3.\tRasool SUA,  et al Genes (Basel). 2022 doi: 10.3390/genes13081463.\n4.\tPérez MS, et al Diabetes Res Clin Pract. 2011. doi: 10.1016/j.diabres.2011.05.018\n5.\tImai, Y et al, Variant sequences of insulin receptor substrate-1 in patients with noninsulin-dependent diabetes mellitus. J. Clin. Endocrinol. Metab. 79(6), 1655–1658 (1994). doi:10.1210/jcem.79.6.7989470\n6.\tFlores-Martinez,  SE et al DNA polymorphism analysis of candidate genes for type 2 diabetes mellitus in a Mexican ethnic group. Ann. Genet. 47(4), 339–348 (2004). doi:10.1016/j.anngen.2004.05.004",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs1801278",
+   "genotype": "AA",
+   "genotypeFreq": 0.0038180041,
+   "summary": "Genótipo GG protetor; AA aumenta resistência insulínica periférica",
+   "patientText": "Seu resultado genético para o gene IRS1 indica o genótipo AA, associado à maior predisposição à resistência insulínica periférica. A variante identificada neste genótipo reduz a eficiência da proteína IRS-1 na transmissão do sinal insulínico nos tecidos-alvo, o que pode comprometer a captação de glicose pelo músculo e pelo tecido adiposo, contribuindo para o desenvolvimento de resistência insulínica. Portadores do genótipo AA têm predisposição aumentada à hiperglicemia pós-prandial, ao acúmulo de gordura visceral e à síndrome metabólica, especialmente na presença de outros fatores de risco. O cuidado nutricional para este perfil inclui: dieta de baixo índice glicêmico, controle do consumo de carboidratos simples, ingestão adequada de proteínas e fibras, suplementação de magnésio (quando indicada por exames) e consumo de ômega-3. O exercício físico de força é especialmente eficaz para aumentar a expressão de transportadores de glicose (GLUT4) no músculo, compensando a redução da sinalização via IRS-1. Monitoramento regular de glicemia, insulina de jejum e HOMA-IR é fortemente recomendado.",
+   "references": "1.\tQiuyan Li  et al Associations between two single-nucleotide polymorphisms (rs1801278 and rs2943641) of insulin receptor substrate 1 gene and type 2 diabetes susceptibility: a meta-analysis Endocrine . 2016 Jan;51(1):52-62  doi: 10.1007/s12020-015-0770-z.Epub 2015 Nov 18.\n2.\tSesti, S et al Defects of the insulin receptor substrate (IRS) system in human metabolic disorders. FASEB J. 15(12), 2099–2111 (2001). doi:10.1096/fj.01-0009rev\n3.\tRasool SUA,  et al Genes (Basel). 2022 doi: 10.3390/genes13081463.\n4.\tPérez MS, et al Diabetes Res Clin Pract. 2011. doi: 10.1016/j.diabres.2011.05.018\n5.\tImai, Y et al, Variant sequences of insulin receptor substrate-1 in patients with noninsulin-dependent diabetes mellitus. J. Clin. Endocrinol. Metab. 79(6), 1655–1658 (1994). doi:10.1210/jcem.79.6.7989470\n6.\tFlores-Martinez,  SE et al DNA polymorphism analysis of candidate genes for type 2 diabetes mellitus in a Mexican ethnic group. Ann. Genet. 47(4), 339–348 (2004). doi:10.1016/j.anngen.2004.05.004",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs429358",
+   "genotype": "TT",
+   "genotypeFreq": 0.708810764281,
+   "summary": "ε2: menor afinidade pelo receptor de LDL, geralmente associada a menores níveis de LDL-colesterol. Em homozigose, pode favorecer o acúmulo de remanescentes de lipoproteínas e predispor à disbetalipoproteinemia.\nε3: isoforma considerada neutra.\nε4: associada a maiores concentrações de LDL-colesterol e colesterol total, com maior risco cardiovascular em algumas populações.",
+   "patientText": "Seu resultado genético para o gene APOE indica o genótipo E2/E2. A apolipoproteína E (APOE) participa do transporte e da remoção do colesterol e de outras lipoproteínas da circulação. O alelo E2 está associado, em média, aos menores níveis de LDL-colesterol entre as três isoformas da APOE, favorecendo um perfil lipídico geralmente mais protetor e menor risco de aterosclerose. Entretanto, indivíduos com genótipo E2/E2 apresentam maior predisposição ao acúmulo de lipoproteínas remanescentes e ao desenvolvimento da disbetalipoproteinemia familiar (hiperlipoproteinemia tipo III). Essa condição é incomum e geralmente ocorre apenas quando coexistem fatores como obesidade, diabetes, hipotireoidismo ou menopausa. Recomenda-se manter hábitos de vida saudáveis, controlar periodicamente colesterol e triglicerídeos e seguir uma alimentação equilibrada, como a dieta mediterrânea, rica em frutas, vegetais, fibras, peixes e gorduras insaturadas.",
+   "references": "1.\tZintzaras E, Kitsios GD, Triposkiadis F, Lau J, Raman G. APOE gene polymorphisms and response to statin therapy. Pharmacogenomics J. 2009;9:248–257.\n2.\tBrott T, et al. Measurements of acute cerebral infarction: a clinical examination scale. Stroke. 1989;20:864–870\n3.\tWu H  et al The SNPs rs429358 and rs7412 of APOE gene are association with cerebral infarction but not SNPs rs2306283 and rs4149056 of SLCO1B1 gene in southern Chinese Hakka population Lipids Health Dis. 2020 Sep 5;19:202.\n4.\tLan, X et al Association of Different Combinations of ALDH2 rs671, APOE rs429358, rs7412 Polymorphisms with Hypertension in Middle-Aged and Elderly People: A Case-Control Study.  Int J Gen Med. 2023 Mar 11;16:915-927.",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs7412",
+   "genotype": "TT",
+   "genotypeFreq": 0.006122906001000002,
+   "summary": "",
+   "patientText": "",
+   "references": "",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs7412",
+   "genotype": "CC",
+   "genotypeFreq": 0.8496249060009999,
+   "summary": "",
+   "patientText": "",
+   "references": "",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs429358",
+   "genotype": "CT",
+   "genotypeFreq": 0.13309823571899998,
+   "summary": "ε2: menor afinidade pelo receptor de LDL, geralmente associada a menores níveis de LDL-colesterol. Em homozigose, pode favorecer o acúmulo de remanescentes de lipoproteínas e predispor à disbetalipoproteinemia.\nε3: isoforma considerada neutra.\nε4: associada a maiores concentrações de LDL-colesterol e colesterol total, com maior risco cardiovascular em algumas populações.",
+   "patientText": "Seu resultado genético para o gene APOE indica o genótipo E3/E4. A presença de uma cópia do alelo E4 está associada, em média, a maiores níveis de LDL-colesterol e maior predisposição ao desenvolvimento de aterosclerose e doenças cardiovasculares quando comparada aos genótipos sem esse alelo. Embora esse perfil represente um fator de susceptibilidade genética, seu impacto pode ser significativamente reduzido por hábitos saudáveis. Estudos mostram que portadores do alelo E4 costumam responder de forma particularmente favorável à redução do consumo de gorduras saturadas e à prática regular de atividade física. Recomenda-se priorizar uma alimentação rica em fibras, frutas, vegetais, azeite de oliva, peixes e oleaginosas, limitar gorduras saturadas e manter acompanhamento periódico do colesterol e de outros fatores de risco cardiovascular.",
+   "references": "1.\tZintzaras E, Kitsios GD, Triposkiadis F, Lau J, Raman G. APOE gene polymorphisms and response to statin therapy. Pharmacogenomics J. 2009;9:248–257.\n2.\tBrott T, et al. Measurements of acute cerebral infarction: a clinical examination scale. Stroke. 1989;20:864–870\n3.\tWu H  et al The SNPs rs429358 and rs7412 of APOE gene are association with cerebral infarction but not SNPs rs2306283 and rs4149056 of SLCO1B1 gene in southern Chinese Hakka population Lipids Health Dis. 2020 Sep 5;19:202.\n4.\tLan, X et al Association of Different Combinations of ALDH2 rs671, APOE rs429358, rs7412 Polymorphisms with Hypertension in Middle-Aged and Elderly People: A Case-Control Study.  Int J Gen Med. 2023 Mar 11;16:915-927.",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs429358",
+   "genotype": "CC",
+   "genotypeFreq": 0.024992764280999995,
+   "summary": "ε2: menor afinidade pelo receptor de LDL, geralmente associada a menores níveis de LDL-colesterol. Em homozigose, pode favorecer o acúmulo de remanescentes de lipoproteínas e predispor à disbetalipoproteinemia.\nε3: isoforma considerada neutra.\nε4: associada a maiores concentrações de LDL-colesterol e colesterol total, com maior risco cardiovascular em algumas populações.",
+   "patientText": "Seu resultado genético para o gene APOE indica o genótipo E4/E4, associado ao maior risco cardiovascular e metabólico entre os genótipos APOE. O alelo E4 está associado a maior absorção intestinal de colesterol, maior produção hepática de VLDL, menor clearance de LDL e maior resposta do colesterol LDL ao consumo de gorduras saturadas. Portadores do E4/E4 tendem a apresentar LDL mais elevado, maior sensibilidade ao colesterol alimentar e risco aumentado de aterosclerose e doença arterial coronariana. O manejo nutricional para este genótipo requer atenção especial: redução significativa de gorduras saturadas e trans, controle do colesterol alimentar, aumento do consumo de fibras solúveis, esteróis vegetais e ácidos graxos ômega-3. A dieta mediterrânea demonstrou os melhores resultados para redução do risco cardiovascular neste genótipo. Monitoramento lipídico semestral e avaliação cardiovascular periódica são fortemente recomendados.",
+   "references": "1.\tZintzaras E, Kitsios GD, Triposkiadis F, Lau J, Raman G. APOE gene polymorphisms and response to statin therapy. Pharmacogenomics J. 2009;9:248–257.\n2.\tBrott T, et al. Measurements of acute cerebral infarction: a clinical examination scale. Stroke. 1989;20:864–870\n3.\tWu H  et al The SNPs rs429358 and rs7412 of APOE gene are association with cerebral infarction but not SNPs rs2306283 and rs4149056 of SLCO1B1 gene in southern Chinese Hakka population Lipids Health Dis. 2020 Sep 5;19:202.\n4.\tLan, X et al Association of Different Combinations of ALDH2 rs671, APOE rs429358, rs7412 Polymorphisms with Hypertension in Middle-Aged and Elderly People: A Case-Control Study.  Int J Gen Med. 2023 Mar 11;16:915-927.",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs708272",
+   "genotype": "GG",
+   "genotypeFreq": 0.37880208996100007,
+   "summary": "GG (Taq1B2) aumenta HDL; AA diminui  HDL",
+   "patientText": "Seu resultado genético para o gene CETP indica o genótipo GG (variante Taq1B2), associado a menores níveis de atividade da proteína CETP e, consequentemente, maiores concentrações de HDL-colesterol. A proteína CETP transfere ésteres de colesterol das partículas HDL para as lipoproteínas de menor densidade. Uma menor atividade da CETP resulta em HDL mais alto e maior capacidade de transporte reverso de colesterol. Portadores do genótipo GG apresentam um perfil de HDL mais elevado, associado à melhor proteção cardiovascular e menor risco de aterosclerose. Para potencializar esse perfil, recomendamos exercício físico aeróbico regular (o principal estimulador do HDL), cessação do tabagismo (se aplicável) e dieta rica em gorduras insaturadas — fatores que elevam ainda mais o HDL neste perfil genético favorável.",
+   "references": "1.\tGreetje J de Grooth A review of CETP and its relation to atherosclerosis J Lipid Res . 2004 Nov;45(11):1967-74                                                \n2.\tMendivil EJ, et al  Interaction of CETP rs708272 Polymorphism on Trans Fatty Acid Intake and Glucose Metabolism Markers. Nutrients. 2024 Oct 29;16(21):3683.                                                                                                                                                                                                                   \n3.\tQi Q, et al . Weight-loss diets modify glucose-dependent insulinotropic polypeptide receptor rs2287019 genotype effects on changes in body weight, fasting glucose, and insulin resistance: the Preventing Overweight Using Novel Dietary Strategies trial. Am J Clin Nutr. 2012 Feb;95(2):506-13.",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs708272",
+   "genotype": "AG",
+   "genotypeFreq": 0.47333382007800007,
+   "summary": "Genótipo GG (Taq1B2) aumenta HDL; AA diminui  HDL",
+   "patientText": "Seu resultado genético para o gene CETP indica o genótipo AG (heterozigoto), com atividade intermediária da proteína CETP e níveis moderados de HDL-colesterol. A CETP regula o transporte reverso do colesterol, e sua atividade influencia diretamente a concentração e funcionalidade do HDL. No genótipo AG, o HDL tende a ser moderadamente mais baixo que no GG, mas ainda preservado na maioria dos casos. O nível de HDL neste perfil é altamente responsivo ao estilo de vida: exercício aeróbico regular é a intervenção mais eficaz para elevar o HDL, seguido de dieta rica em gorduras insaturadas e abandono do tabagismo. Recomendamos acompanhamento do perfil lipídico com atenção especial ao HDL funcional e às partículas de LDL, realizando ajustes dietéticos conforme necessário.",
+   "references": "1.\tGreetje J de Grooth A review of CETP and its relation to atherosclerosis J Lipid Res . 2004 Nov;45(11):1967-74                                         \n2.\tMendivil EJ, et al  Interaction of CETP rs708272 Polymorphism on Trans Fatty Acid Intake and Glucose Metabolism Markers. Nutrients. 2024 Oct 29;16(21):3683.                                                                                                                                                                                                                   \n3.\tQi Q, et al . Weight-loss diets modify glucose-dependent insulinotropic polypeptide receptor rs2287019 genotype effects on changes in body weight, fasting glucose, and insulin resistance: the Preventing Overweight Using Novel Dietary Strategies trial. Am J Clin Nutr. 2012 Feb;95(2):506-13.",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs708272",
+   "genotype": "AA",
+   "genotypeFreq": 0.147864089961,
+   "summary": "GG (Taq1B2) aumenta HDL; AA diminui  HDL",
+   "patientText": "Seu resultado genético para o gene CETP indica o genótipo AA, associado à maior atividade da proteína CETP e tendência a menores concentrações de HDL-colesterol. A maior atividade da CETP resulta em transferência mais intensa de ésteres de colesterol do HDL para as lipoproteínas aterogênicas (LDL e VLDL), reduzindo o HDL circulante e potencialmente aumentando partículas de LDL menores e mais densas — as de maior risco cardiovascular. As estratégias mais eficazes para elevar o HDL incluem: exercício aeróbico de moderada a alta intensidade (30-60 min, 5 dias/semana), dieta mediterrânea com ênfase em gorduras insaturadas, redução do consumo de carboidratos simples e gorduras trans, e cessação do tabagismo. Em caso de HDL persistentemente baixo, avaliação cardiológica e eventual manejo farmacológico podem ser indicados.",
+   "references": "1.\tGreetje J de Grooth A review of CETP and its relation to atherosclerosis J Lipid Res . 2004 Nov;45(11):1967-74                               \n2.\tMendivil EJ, et al  Interaction of CETP rs708272 Polymorphism on Trans Fatty Acid Intake and Glucose Metabolism Markers. Nutrients. 2024 Oct 29;16(21):3683.                                                                                                                                                                                                                   \n3.\tQi Q, et al . Weight-loss diets modify glucose-dependent insulinotropic polypeptide receptor rs2287019 genotype effects on changes in body weight, fasting glucose, and insulin resistance: the Preventing Overweight Using Novel Dietary Strategies trial. Am J Clin Nutr. 2012 Feb;95(2):506-13.",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs688",
+   "genotype": "TT",
+   "genotypeFreq": 0.113331875904,
+   "summary": "Genótipo CC aumenta LDL circulante; TT aumenta expressão LDLR",
+   "patientText": "Seu resultado genético para o gene LDLR indica o genótipo TT, associado à maior expressão do receptor de LDL hepático e clearance mais eficiente do LDL-colesterol circulante. O receptor de LDL (LDLR) é responsável pela captação e remoção das partículas de LDL da corrente sanguínea pelo fígado. Uma maior expressão do receptor resulta em menores concentrações de LDL circulante e menor risco de aterosclerose. Portadores do genótipo TT apresentam clearance lipídico mais eficiente, tendendo a níveis de LDL mais controlados — uma vantagem protetora para a saúde cardiovascular. Recomendamos manter esse perfil com dieta equilibrada em gorduras, rica em fibras solúveis e fitosteróis — que estimulam a expressão dos receptores de LDL — além de evitar o consumo excessivo de gorduras saturadas.",
+   "references": "1.\tSen  NTT, et al Investigation of the characteristics of LDLR gene rs688 polymorphism and its association with dyslipidemia in patients at high to very high cardiovascular risk BMC Cardiovasc Disord . 2025 Sep 26;25:666.\n2.\tGabcova-Balaziova D, et al. Molecular-genetic aspects of Familial hypercholesterolemia. Endocr Regul. 2015;49(3):164–81\n3.\tBilitou A, et al. Prevalence and patient outcomes of adult primary hypercholesterolemia and dyslipidemia in the UK: longitudinal retrospective study using a primary care dataset from 2009 to 2019. Clinicoecon Outcomes Res. 2022. 10.2147/CEOR.S347085.\n4.\tLiu Y-T, et al. Interaction between sex and LDLR rs688 polymorphism on hyperlipidemia among Taiwan biobank adult participants. Biomolecules. 2020;10(2): 244.\n5.\tGao F, et al. A common polymorphism in the LDL receptor gene has multiple effects on LDL receptor function. Hum Mol Genet. 2013;22(7):1424–31\n6.\tYue Y-h, et al. The association of lipid metabolism relative gene polymorphisms and ischemic stroke in Han and Uighur population of Xinjiang. Lipids Health Dis. 2017;16:1–8.  ",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs688",
+   "genotype": "CT",
+   "genotypeFreq": 0.446632248192,
+   "summary": "Genótipo CC aumenta LDL circulante; TT aumenta expressão LDLR",
+   "patientText": "Seu resultado genético para o gene LDLR indica o genótipo CT (heterozigoto), com expressão intermediária do receptor de LDL hepático. O LDLR é o principal mecanismo de remoção do LDL-colesterol da circulação. No genótipo CT, a eficiência desse sistema é moderadamente reduzida em comparação ao genótipo TT, podendo resultar em LDL ligeiramente mais elevado em contextos de dieta inadequada. A resposta do LDL à dieta é particularmente relevante neste perfil: o consumo de gorduras saturadas tem impacto mais pronunciado nos níveis de LDL do que em portadores do genótipo TT. Recomendamos controle rigoroso do consumo de gorduras saturadas e trans, aumento do consumo de fibras solúveis (aveia, psyllium, leguminosas), fitosteróis e ácidos graxos ômega-3, além de exercício físico regular.",
+   "references": "1.\tSen  NTT, et al Investigation of the characteristics of LDLR gene rs688 polymorphism and its association with dyslipidemia in patients at high to very high cardiovascular risk BMC Cardiovasc Disord . 2025 Sep 26;25:666.\n2.\tGabcova-Balaziova D, et al. Molecular-genetic aspects of Familial hypercholesterolemia. Endocr Regul. 2015;49(3):164–81\n3.\tBilitou A, et al. Prevalence and patient outcomes of adult primary hypercholesterolemia and dyslipidemia in the UK: longitudinal retrospective study using a primary care dataset from 2009 to 2019. Clinicoecon Outcomes Res. 2022. 10.2147/CEOR.S347085.\n4.\tLiu Y-T, et al. Interaction between sex and LDLR rs688 polymorphism on hyperlipidemia among Taiwan biobank adult participants. Biomolecules. 2020;10(2): 244.\n5.\tGao F, et al. A common polymorphism in the LDL receptor gene has multiple effects on LDL receptor function. Hum Mol Genet. 2013;22(7):1424–31\n6.\tYue Y-h, et al. The association of lipid metabolism relative gene polymorphisms and ischemic stroke in Han and Uighur population of Xinjiang. Lipids Health Dis. 2017;16:1–8.  ",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs688",
+   "genotype": "CC",
+   "genotypeFreq": 0.4400358759039999,
+   "summary": "Genótipo CC aumenta LDL circulante; TT aumenta expressão LDLR",
+   "patientText": "Seu resultado genético para o gene LDLR indica o genótipo CC, associado à redução da expressão do receptor de LDL hepático e menor eficiência no clearance do LDL circulante. Quando a expressão do LDLR está reduzida, as partículas de LDL permanecem por mais tempo na circulação, elevando o risco de oxidação, deposição arterial e desenvolvimento de aterosclerose. Portadores do genótipo CC tendem a apresentar LDL mais elevado e maior sensibilidade ao consumo de gorduras saturadas e colesterol dietético. O manejo nutricional para este perfil é prioritário: redução expressiva de gorduras saturadas e trans, aumento do consumo de fibras solúveis, fitosteróis (2g/dia demonstrou reduzir LDL em 10-15%), ômega-3 e antioxidantes. Monitoramento lipídico semestral e avaliação do risco cardiovascular global são recomendados para este perfil.",
+   "references": "1.\tSen  NTT, et al Investigation of the characteristics of LDLR gene rs688 polymorphism and its association with dyslipidemia in patients at high to very high cardiovascular risk BMC Cardiovasc Disord . 2025 Sep 26;25:666.\n2.\tGabcova-Balaziova D, et al. Molecular-genetic aspects of Familial hypercholesterolemia. Endocr Regul. 2015;49(3):164–81\n3.\tBilitou A, et al. Prevalence and patient outcomes of adult primary hypercholesterolemia and dyslipidemia in the UK: longitudinal retrospective study using a primary care dataset from 2009 to 2019. Clinicoecon Outcomes Res. 2022. 10.2147/CEOR.S347085.\n4.\tLiu Y-T, et al. Interaction between sex and LDLR rs688 polymorphism on hyperlipidemia among Taiwan biobank adult participants. Biomolecules. 2020;10(2): 244.\n5.\tGao F, et al. A common polymorphism in the LDL receptor gene has multiple effects on LDL receptor function. Hum Mol Genet. 2013;22(7):1424–31\n6.\tYue Y-h, et al. The association of lipid metabolism relative gene polymorphisms and ischemic stroke in Han and Uighur population of Xinjiang. Lipids Health Dis. 2017;16:1–8.  ",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs11591147",
+   "genotype": "GT",
+   "genotypeFreq": 0.00015057744100000002,
+   "summary": "O alelo T diminui  PCSK9 levando aumento de LDLR que por sua vez  diminui  LDL (ganho de função raro)",
+   "patientText": "Seu resultado genético para o gene PCSK9 indica o genótipo GT, portador do alelo T de perda de função, considerado altamente favorável para o metabolismo do LDL-colesterol. A proteína PCSK9 degrada os receptores de LDL hepáticos (LDLR) após cada ciclo de captação. Quando a PCSK9 tem atividade reduzida, os receptores são reciclados com maior eficiência, aumentando o clearance do LDL da corrente sanguínea. Portadores do alelo T apresentam, em estudos populacionais, níveis de LDL significativamente mais baixos e risco cardiovascular reduzido em até 88% ao longo da vida, tornando este um dos genótipos mais protetores conhecidos para doença arterial coronariana. Recomendamos potencializá-lo com alimentação saudável rica em fibras e gorduras insaturadas, exercício regular e manutenção do peso corporal.",
+   "references": "1.\tPostmus I, et al  PCSK9 SNP rs11591147 is associated with low cholesterol levels but not with cognitive performance or noncardiovascular clinical events in an elderly population J Lipid Res . 2013 Feb;54(2):561–566. \n2.\tBrautbar A, et al,  2011. Pharmacological strategies for lowering LDL cholesterol: statins and beyond. Nat Rev Cardiol. 8: 253–265\n3.\tCariou B., etal  2011. Clinical aspects of PCSK9. Atherosclerosis. 216: 258–265\n4.\tShyamala, N et al PCSK9 genetic (rs11591147) and epigenetic (DNA methylation) modifications associated with PCSK9 expression and serum proteins in CAD patients. The Journal of Gene Medicine 23(8):p e3346, August 2021",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs11591147",
+   "genotype": "GG",
+   "genotypeFreq": 0.9756085774409999,
+   "summary": "O alelo T diminui  PCSK9 levando aumento de LDLR que por sua vez  diminui  LDL (ganho de função raro)",
+   "patientText": "Seu resultado genético para o gene PCSK9 indica o genótipo GG, considerado o genótipo de referência para este marcador. A PCSK9 é uma enzima que regula a quantidade de receptores de LDL disponíveis no fígado, controlando assim o clearance do LDL circulante. O genótipo GG representa a função normal da PCSK9, sem o benefício adicional da variante de perda de função (alelo T). Neste perfil, os níveis de LDL são determinados principalmente pela dieta, pelo estilo de vida e por outros fatores genéticos. Recomendamos dieta com baixo teor de gorduras saturadas e trans, rica em fibras solúveis, fitosteróis e ômega-3, associada à prática regular de exercício físico — fatores que reduzem a expressão da PCSK9 e favorecem o clearance do LDL de forma natural.",
+   "references": "1.\tPostmus I, et al  PCSK9 SNP rs11591147 is associated with low cholesterol levels but not with cognitive performance or noncardiovascular clinical events in an elderly population J Lipid Res . 2013 Feb;54(2):561–566. \n2.\tBrautbar A, et al,  2011. Pharmacological strategies for lowering LDL cholesterol: statins and beyond. Nat Rev Cardiol. 8: 253–265\n3.\tCariou B., etal  2011. Clinical aspects of PCSK9. Atherosclerosis. 216: 258–265\n4.\tShyamala, N et al PCSK9 genetic (rs11591147) and epigenetic (DNA methylation) modifications associated with PCSK9 expression and serum proteins in CAD patients. The Journal of Gene Medicine 23(8):p e3346, August 2021",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs11591147",
+   "genotype": "TT",
+   "genotypeFreq": 0.00015057744100000002,
+   "summary": "O alelo T diminui  PCSK9 levando aumento de LDLR que por sua vez  diminui  LDL (ganho de função raro)",
+   "patientText": "Este marcador apresenta apenas dois estados informativos clinicamente relevantes (GT e GG). Não há genótipo adicional para este SNP no painel atual.",
+   "references": "1.\tPostmus I, et al  PCSK9 SNP rs11591147 is associated with low cholesterol levels but not with cognitive performance or noncardiovascular clinical events in an elderly population J Lipid Res . 2013 Feb;54(2):561–566. \n2.\tBrautbar A, et al,  2011. Pharmacological strategies for lowering LDL cholesterol: statins and beyond. Nat Rev Cardiol. 8: 253–265\n3.\tCariou B., etal  2011. Clinical aspects of PCSK9. Atherosclerosis. 216: 258–265\n4.\tShyamala, N et al PCSK9 genetic (rs11591147) and epigenetic (DNA methylation) modifications associated with PCSK9 expression and serum proteins in CAD patients. The Journal of Gene Medicine 23(8):p e3346, August 2021",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs4253778",
+   "genotype": "GG",
+   "genotypeFreq": 0.507689025529,
+   "summary": "Genótipo GG aumenta β-oxidação; CC diminui  oxidação lipídica,  aumenta TG",
+   "patientText": "Seu resultado genético para o gene PPARA indica o genótipo GG, associado à maior atividade do receptor alfa ativado por proliferadores de peroxissoma — regulador central da oxidação de ácidos graxos e do metabolismo lipídico. O PPARA coordena a expressão de genes envolvidos na beta-oxidação mitocondrial, no metabolismo de triglicerídeos e na homeostase do HDL. Portadores do genótipo GG tendem a apresentar maior eficiência na oxidação de gorduras, triglicerídeos mais controlados e melhor resposta ao exercício físico em termos de utilização lipídica como fonte energética. Para potencializar esse perfil, recomendamos dieta com aporte adequado de ácidos graxos de cadeia média e longa (que ativam o PPARA), exercício aeróbico regular e alimentação com carga glicêmica controlada.",
+   "references": "1.\tMaciejewska-Skrendo  A, et al Does the PPARA Intron 7 Gene Variant (rs4253778) Influence Performance in Power/Strength‐Oriented Athletes? A Case‐Control Replication Study in three Cohorts of European Gymnasts. Journal of Human Kinetics 2022 volume 79/2021, 77-85\n2.\tAhmetov II, et al . Genes and Athletic Performance: Na Update. Med Sport Sci, 2016; 61: 41–54\n3.\tAhmetov II, et al . PPARalpha gene variation and physical performance in Russian athletes. Eur J Appl Physiol, 2006; 97: 103–8\n4.\tAllard MF, et al. Contribution of oxidative metabolism and glycolysis to ATP production in hypertrophied hearts. Am J Physiol, 1994; 267: H742-50",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs4253778",
+   "genotype": "GC",
+   "genotypeFreq": 0.409667948942,
+   "summary": "Genótipo GG aumenta β-oxidação; CC diminui  oxidação lipídica,  aumenta GT",
+   "patientText": "Seu resultado genético para o gene PPARA indica o genótipo GC (heterozigoto), com atividade intermediária do receptor PPARA na regulação do metabolismo lipídico. O PPARA regula a beta-oxidação de ácidos graxos e o metabolismo de triglicerídeos. No genótipo GC, a resposta a substratos ativadores é parcialmente preservada, mas pode ser insuficiente em contextos de dieta hiperlipídica ou sedentarismo. Ácidos graxos insaturados, especialmente o ômega-3 (EPA e DHA), funcionam como ativadores naturais do PPARA e são especialmente recomendados para este perfil. Uma dieta com boa qualidade de gorduras, controle dos carboidratos simples (que elevam os triglicerídeos), exercício regular e manutenção do peso corporal são estratégias prioritárias.",
+   "references": "1.\tMaciejewska-Skrendo  A, et al Does the PPARA Intron 7 Gene Variant (rs4253778) Influence Performance in Power/Strength‐Oriented Athletes? A Case‐Control Replication Study in three Cohorts of European Gymnasts. Journal of Human Kinetics 2022 volume 79/2021, 77-85\n2.\tAhmetov II, et al . Genes and Athletic Performance: Na Update. Med Sport Sci, 2016; 61: 41–54\n3.\tAhmetov II, et al . PPARalpha gene variation and physical performance in Russian athletes. Eur J Appl Physiol, 2006; 97: 103–8\n4.\tAllard MF, et al. Contribution of oxidative metabolism and glycolysis to ATP production in hypertrophied hearts. Am J Physiol, 1994; 267: H742-50",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs4253778",
+   "genotype": "CC",
+   "genotypeFreq": 0.08264302552899999,
+   "summary": "Genótipo GG aumenta β-oxidação; TT diminui  oxidação lipídica,  aumenta GT",
+   "patientText": "Seu resultado genético para o gene PPARA indica o genótipo CC, associado à menor atividade do receptor PPARA e redução da capacidade de oxidação de ácidos graxos. Portadores do genótipo CC tendem a apresentar menor eficiência na beta-oxidação lipídica, predisposição à hipertrigliceridemia e menor resposta do perfil lipídico ao exercício físico. O metabolismo de gorduras pode ser menos eficiente, com maior tendência ao acúmulo de triglicerídeos quando a dieta é hipercalórica ou rica em carboidratos simples. O manejo para este perfil inclui: redução expressiva do consumo de açúcares simples e carboidratos refinados, aumento do consumo de ômega-3 (ativador natural do PPARA), exercício aeróbico regular e manutenção do peso corporal. Em caso de triglicerídeos persistentemente elevados, avaliação médica e suplementação de ômega-3 em doses terapêuticas (2-4g/dia de EPA+DHA) podem ser indicadas.",
+   "references": "1.\tMaciejewska-Skrendo  A, et al Does the PPARA Intron 7 Gene Variant (rs4253778) Influence Performance in Power/Strength‐Oriented Athletes? A Case‐Control Replication Study in three Cohorts of European Gymnasts. Journal of Human Kinetics 2022 volume 79/2021, 77-85\n2.\tAhmetov II, et al . Genes and Athletic Performance: Na Update. Med Sport Sci, 2016; 61: 41–54\n3.\tAhmetov II, et al . PPARalpha gene variation and physical performance in Russian athletes. Eur J Appl Physiol, 2006; 97: 103–8\n4.\tAllard MF, et al. Contribution of oxidative metabolism and glycolysis to ATP production in hypertrophied hearts. Am J Physiol, 1994; 267: H742-50",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs1800629",
+   "genotype": "GG",
+   "genotypeFreq": 0.743583709969,
+   "summary": "Genótipo AA aumenta TNF-α→ aumenta inflamação e resistência insulínica",
+   "patientText": "Seu resultado genético para o gene TNF indica o genótipo GG, associado a menores níveis basais de TNF-alfa e menor predisposição à inflamação crônica sistêmica. O fator de necrose tumoral alfa (TNF-α) é uma citocina pró-inflamatória central na resposta imune. Quando produzido em excesso cronicamente, contribui para resistência insulínica, aterosclerose, disfunção endotelial e síndrome metabólica. Portadores do genótipo GG tendem a apresentar menor expressão basal de TNF-α, traduzindo-se em menor carga inflamatória sistêmica e melhor sensibilidade insulínica. Recomendamos manter esse perfil anti-inflamatório favorável com uma dieta rica em antioxidantes e compostos anti-inflamatórios (cúrcuma, gengibre, frutas vermelhas, peixes de água fria).",
+   "references": "1.\tAbraham LJ and Kroeger KM. 1999. Impact of the -308 TNF promoter polymorphism on the transcriptional regulation of the TNF gene: relevance to disease. J Leukoc Biol. 66(4):562-6.\n2.\tKarimi M et al. 2009. A critical assessment of the factors affecting reporter gene assays for promoter SNP function: a reassessment of −308 TNF polymorphism function using a novel integrated reporter system. Eur J Hum Genet. 17(11):1454–1462. \n3.\tPeake JM et al. 2015. Cytokine expression and secretion by skeletal muscle cells: regulatory mechanisms and exercise effects Exerc Immunol Rev. 21:8-25.\n4.\tPetersen AMW and Pedersen BK. 2005. The anti-inflammatory effect of exercise. J Appl Physiol. 98(4):1154-62.",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs1800629",
+   "genotype": "AG",
+   "genotypeFreq": 0.23745858006200002,
+   "summary": "Genótipo AA aumenta TNF-α→ aumenta inflamação e resistência insulínica",
+   "patientText": "Seu resultado genético para o gene TNF indica o genótipo AG (heterozigoto), com predisposição intermediária à inflamação sistêmica. O TNF-α regula processos inflamatórios fundamentais, e o alelo A está associado ao aumento da transcrição deste gene, elevando a produção de TNF-α. No genótipo AG, esse efeito é parcial, mas pode se manifestar em situações de estresse, infecção ou dieta inflamatória. Para este perfil, a alimentação anti-inflamatória tem papel especialmente relevante: priorizar ácidos graxos ômega-3, polifenóis (frutas coloridas, verduras, chá verde), reduzir gorduras saturadas e açúcares, e manter microbiota intestinal saudável com fibras e probióticos. Controle do estresse e sono adequado são também moduladores importantes dos marcadores inflamatórios.",
+   "references": "1.\tAbraham LJ and Kroeger KM. 1999. Impact of the -308 TNF promoter polymorphism on the transcriptional regulation of the TNF gene: relevance to disease. J Leukoc Biol. 66(4):562-6.\n2.\tKarimi M et al. 2009. A critical assessment of the factors affecting reporter gene assays for promoter SNP function: a reassessment of −308 TNF polymorphism function using a novel integrated reporter system. Eur J Hum Genet. 17(11):1454–1462. \n3.\tPeake JM et al. 2015. Cytokine expression and secretion by skeletal muscle cells: regulatory mechanisms and exercise effects Exerc Immunol Rev. 21:8-25.\n4.\tPetersen AMW and Pedersen BK. 2005. The anti-inflammatory effect of exercise. J Appl Physiol. 98(4):1154-62.",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs1800629",
+   "genotype": "AA",
+   "genotypeFreq": 0.018957709969,
+   "summary": "Genótipo AA aumenta TNF-α→ aumenta inflamação e resistência insulínica",
+   "patientText": "Seu resultado genético para o gene TNF indica o genótipo AA, associado à maior produção de TNF-alfa e maior predisposição à inflamação crônica sistêmica. O alelo A do promotor do gene TNF está associado ao aumento da transcrição e da produção de TNF-α, uma citocina pró-inflamatória que, quando cronicamente elevada, contribui para resistência insulínica, disfunção endotelial, aterosclerose e progressão de doenças autoimunes. Portadores do genótipo AA podem apresentar marcadores inflamatórios (PCR, IL-6, TNF-α) mais elevados em resposta a gatilhos dietéticos, ambientais e de estresse. O manejo nutricional para este perfil é prioritário e baseado em estratégias anti-inflamatórias: dieta mediterrânea, consumo elevado de ômega-3 (EPA+DHA), polifenóis, fibras prebióticas, redução de açúcares simples, gorduras trans e ultraprocessados. Monitoramento de marcadores inflamatórios (PCR ultrassensível, IL-6) é recomendado periodicamente.",
+   "references": "1.\tAbraham LJ and Kroeger KM. 1999. Impact of the -308 TNF promoter polymorphism on the transcriptional regulation of the TNF gene: relevance to disease. J Leukoc Biol. 66(4):562-6.\n2.\tKarimi M et al. 2009. A critical assessment of the factors affecting reporter gene assays for promoter SNP function: a reassessment of −308 TNF polymorphism function using a novel integrated reporter system. Eur J Hum Genet. 17(11):1454–1462. \n3.\tPeake JM et al. 2015. Cytokine expression and secretion by skeletal muscle cells: regulatory mechanisms and exercise effects Exerc Immunol Rev. 21:8-25.\n4.\tPetersen AMW and Pedersen BK. 2005. The anti-inflammatory effect of exercise. J Appl Physiol. 98(4):1154-62.",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs1205",
+   "genotype": "CC",
+   "genotypeFreq": 0.475830938025,
+   "summary": "Genótipo TT aumenta CRP basal; CC diminui  inflamação crônica",
+   "patientText": "Seu resultado genético para o gene CRP indica o genótipo CC, associado a menores níveis basais de Proteína C-Reativa (PCR) e menor inflamação crônica sistêmica. A PCR é produzida pelo fígado em resposta a sinais inflamatórios e é um dos marcadores de inflamação mais utilizados clinicamente. Níveis cronicamente elevados de PCR estão associados a maior risco cardiovascular, metabólico e de comorbidades inflamatórias. Portadores do genótipo CC tendem a apresentar menores concentrações basais de PCR, representando um perfil inflamatório mais favorável. Recomendamos manter esse perfil com dieta anti-inflamatória, exercício regular, controle do estresse e sono adequado.",
+   "references": "1.\tde Santis, IP et al C-reactive protein gene rs1205 polymorphism is associated with low-grade chronic inflammation in postmenopausal women Womens Midlife Health . 2020 May 27:6:3.\n2.\tWypasek E, et al   Association of the C-Reactive Protein Gene (CRP) rs1205 C>T Polymorphism with Aortic Valve Calcification in Patients with Aortic Stenosis Int J Mol Sci. 2015 Oct 9;16(10):23745-59.\n3.\tKlinger EI et al, Avaliação dos níveis de proteína C reativa circulante e do SNP rs1205 do gene CRP com obesidade, características antropométricas e marcadores bioquímicos Revista Jovens Pesquisadores, Santa Cruz do Sul, v. 5, n. 3, p. 02-15, 2015. \n4.\tSheu, HH, et al Sci Representantes . 2017 Aug 11;7:7987. CRP-level-associated polymorphism rs1205 within the CRP gene is associated with 2-hour glucose level: The SAPPHIRe study\n5.\tGuerrero-Romero F, et al. Association of C-reactive protein levels with fasting and postload glucose levels according to glucose tolerance status. Arch Med Res. 2014;45:70–75.",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs1205",
+   "genotype": "CT",
+   "genotypeFreq": 0.42794812395,
+   "summary": "Genótipo TT aumenta CRP basal; CC diminui  inflamação crônica",
+   "patientText": "Seu resultado genético para o gene CRP indica o genótipo CT (heterozigoto), com predisposição intermediária a variações nos níveis de PCR. A Proteína C-Reativa é um marcador sensível de inflamação sistêmica. O genótipo CT implica resposta inflamatória que pode ser mais variável, dependendo de gatilhos externos como infecções, dieta inadequada, sedentarismo e estresse. Para este perfil, o controle dos fatores pró-inflamatórios do estilo de vida é especialmente importante. Recomendamos priorizar alimentos anti-inflamatórios (peixes gordurosos, azeite, frutas vermelhas, cúrcuma, gengibre), reduzir o consumo de açúcares e ultraprocessados, praticar exercício regular e monitorar a PCR ultrassensível anualmente como indicador de risco cardiovascular.",
+   "references": "1.\tde Santis, IP et al C-reactive protein gene rs1205 polymorphism is associated with low-grade chronic inflammation in postmenopausal women Womens Midlife Health . 2020 May 27:6:3.\n2.\tWypasek E, et al   Association of the C-Reactive Protein Gene (CRP) rs1205 C>T Polymorphism with Aortic Valve Calcification in Patients with Aortic Stenosis Int J Mol Sci. 2015 Oct 9;16(10):23745-59.\n3.\tKlinger EI et al, Avaliação dos níveis de proteína C reativa circulante e do SNP rs1205 do gene CRP com obesidade, características antropométricas e marcadores bioquímicos Revista Jovens Pesquisadores, Santa Cruz do Sul, v. 5, n. 3, p. 02-15, 2015. \n4.\tSheu, HH, et al Sci Representantes . 2017 Aug 11;7:7987. CRP-level-associated polymorphism rs1205 within the CRP gene is associated with 2-hour glucose level: The SAPPHIRe study\n5.\tGuerrero-Romero F, et al. Association of C-reactive protein levels with fasting and postload glucose levels according to glucose tolerance status. Arch Med Res. 2014;45:70–75.",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs1205",
+   "genotype": "TT",
+   "genotypeFreq": 0.096220938025,
+   "summary": "Genótipo TT aumenta CRP basal; CC diminui  inflamação crônica",
+   "patientText": "Seu resultado genético para o gene CRP indica o genótipo TT, associado à tendência de maiores níveis basais de Proteína C-Reativa e maior inflamação crônica sistêmica. Portadores do genótipo TT podem apresentar PCR basal mais elevada, o que, em conjunto com outros fatores de risco, amplifica a predisposição a doenças cardiovasculares, metabólicas e inflamatórias crônicas. As estratégias mais eficazes para reduzir a PCR incluem: perda de peso (se sobrepeso/obesidade), dieta mediterrânea ou plant-based, exercício físico regular (demonstrou reduzir PCR em 20-30%), suplementação de ômega-3, abandono do tabagismo e controle do estresse. Monitoramento semestral de PCR ultrassensível é recomendado para acompanhar a resposta às intervenções e estratificar o risco cardiovascular.",
+   "references": "1.\tde Santis, IP et al C-reactive protein gene rs1205 polymorphism is associated with low-grade chronic inflammation in postmenopausal women Womens Midlife Health . 2020 May 27:6:3.\n2.\tWypasek E, et al   Association of the C-Reactive Protein Gene (CRP) rs1205 C>T Polymorphism with Aortic Valve Calcification in Patients with Aortic Stenosis Int J Mol Sci. 2015 Oct 9;16(10):23745-59.\n3.\tKlinger EI et al, Avaliação dos níveis de proteína C reativa circulante e do SNP rs1205 do gene CRP com obesidade, características antropométricas e marcadores bioquímicos Revista Jovens Pesquisadores, Santa Cruz do Sul, v. 5, n. 3, p. 02-15, 2015. \n4.\tSheu, HH, et al Sci Representantes . 2017 Aug 11;7:7987. CRP-level-associated polymorphism rs1205 within the CRP gene is associated with 2-hour glucose level: The SAPPHIRe study\n5.\tGuerrero-Romero F, et al. Association of C-reactive protein levels with fasting and postload glucose levels according to glucose tolerance status. Arch Med Res. 2014;45:70–75.",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs1801133",
+   "genotype": "TT",
+   "genotypeFreq": 0.07484382777599999,
+   "summary": "Genótipo TT diminui  atividade MTHFR ~30%;  aumenta homocisteína; CC normal",
+   "patientText": "Seu resultado genético para o gene MTHFR no marcador C677T indica o genótipo CC, considerado o mais favorável para o metabolismo do folato. A enzima MTHFR (metilenotetrahidrofolato redutase) é responsável por converter o folato dietético em sua forma ativa (5-metiltetrahidrofolato), essencial para o ciclo do metil — processo fundamental para a síntese de DNA, metilação do genoma e produção de neurotransmissores. O genótipo CC preserva a atividade plena da MTHFR, garantindo conversão eficiente do folato e manutenção de níveis adequados de homocisteína. Portadores deste genótipo possuem menor risco de hiper-homocisteinemia, com todos os seus efeitos cardiovasculares e neurológicos negativos. Recomendamos manter o consumo regular de alimentos ricos em folato (vegetais de folha escura, leguminosas, abacate) para preservar esse perfil metabólico favorável.",
+   "references": "1.\tYingchao Fan Y et al Methylenetetrahydrofolate Reductase Gene rs1801133 and rs1801131 Polymorphisms and Essential Hypertension Risk: A Comprehensive Analysis Cardiovasc Ther . 2022 Feb 22; 2022: 2144443. \n2.\tBayramoglu A., et al, Is there any genetic predisposition of MMP-9 gene C1562T and MTHFR gene C677T polymorphisms with essential hypertension? Cytotechnology . 2015;67(1):115–122.\n3.\tHeux S., et al. The methylentetrahydrofolate reductase gene variant (C677T) as a risk factor for essential hypertension in Caucasians. Hypertension Research . 2004;27(9):663–667.\n4.\tMelisse B., et al. Eating disorders in the Arab world: a literature review. Journal of Eating Disorders . 2020;8(1):p. 59.\n5.\tSilvestre ES et al A variante MTHFR 677C>T (RS1801133) está associada a hiperhomocisteinemia, mas não a gravidade clínica em pacientes com doença arterial periférica J. Vasc. Bras. 22 • 2023 • https://doi.org/10.1590/1677-5449.202200612 ",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs1801133",
+   "genotype": "TC",
+   "genotypeFreq": 0.39746434444799994,
+   "summary": "Genótipo TT diminui  atividade MTHFR ~30%;  aumenta homocisteína; CC normal",
+   "patientText": "Seu resultado genético para o gene MTHFR no marcador C677T indica o genótipo CT (heterozigoto), com redução parcial da atividade enzimática. A MTHFR no genótipo CT apresenta atividade reduzida em aproximadamente 35% em relação ao genótipo CC, o que pode comprometer a conversão do folato à sua forma ativa e elevar discretamente os níveis de homocisteína, especialmente em situações de baixo consumo alimentar de folato, B6 e B12. A homocisteína elevada é um fator de risco independente para doenças cardiovasculares, declínio cognitivo e complicações na gestação. Para este perfil, recomendamos: consumo diário de alimentos ricos em folato (espinafre, rúcula, brócolis, feijão, lentilha), vitamina B6 (frango, banana, batata) e vitamina B12 (carnes, ovos, laticínios). Em casos de homocisteína elevada confirmada por exame, a suplementação de metilfolato (forma ativa) pode ser indicada pelo médico ou nutricionista.",
+   "references": "1.\tYingchao Fan Y et al Methylenetetrahydrofolate Reductase Gene rs1801133 and rs1801131 Polymorphisms and Essential Hypertension Risk: A Comprehensive Analysis Cardiovasc Ther . 2022 Feb 22; 2022: 2144443. \n2.\tBayramoglu A., et al, Is there any genetic predisposition of MMP-9 gene C1562T and MTHFR gene C677T polymorphisms with essential hypertension? Cytotechnology . 2015;67(1):115–122.\n3.\tHeux S., et al. The methylentetrahydrofolate reductase gene variant (C677T) as a risk factor for essential hypertension in Caucasians. Hypertension Research . 2004;27(9):663–667.\n4.\tMelisse B., et al. Eating disorders in the Arab world: a literature review. Journal of Eating Disorders . 2020;8(1):p. 59.\n5.\tSilvestre ES et al A variante MTHFR 677C>T (RS1801133) está associada a hiperhomocisteinemia, mas não a gravidade clínica em pacientes com doença arterial periférica J. Vasc. Bras. 22 • 2023 • https://doi.org/10.1590/1677-5449.202200612 ",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs1801133",
+   "genotype": "CC",
+   "genotypeFreq": 0.527691827776,
+   "summary": "Genótipo TT diminui  atividade MTHFR ~30%;  aumenta homocisteína; CC normal",
+   "patientText": "Seu resultado genético para o gene MTHFR no marcador C677T indica o genótipo TT, associado à redução significativa da atividade enzimática — cerca de 70% menor que o genótipo CC. Portadores do genótipo TT apresentam comprometimento relevante na conversão do folato à sua forma ativa, com consequente risco aumentado de hiper-homocisteinemia — condição associada a maior risco cardiovascular, trombose, declínio cognitivo, depressão e, em mulheres em idade fértil, maior risco de defeitos do tubo neural na gestação. Este é um dos polimorfismos nutrigenéticos de maior relevância clínica, com impacto direto e modificável pela nutrição. A suplementação com metilfolato (5-MTHF, a forma ativa do folato) é geralmente preferível ao ácido fólico convencional para este genótipo, pois contorna o bloqueio enzimático. Vitamina B6 (P5P) e B12 (metilcobalamina) são cofatores essenciais e devem ser garantidos pela dieta ou suplementação. Monitoramento regular de homocisteína plasmática, folato eritrocitário e vitamina B12 é fortemente recomendado. Consulte seu médico ou nutricionista para definir o protocolo de suplementação mais adequado ao seu perfil.",
+   "references": "1.\tYingchao Fan Y et al Methylenetetrahydrofolate Reductase Gene rs1801133 and rs1801131 Polymorphisms and Essential Hypertension Risk: A Comprehensive Analysis Cardiovasc Ther . 2022 Feb 22; 2022: 2144443. \n2.\tBayramoglu A., et al, Is there any genetic predisposition of MMP-9 gene C1562T and MTHFR gene C677T polymorphisms with essential hypertension? Cytotechnology . 2015;67(1):115–122.\n3.\tHeux S., et al. The methylentetrahydrofolate reductase gene variant (C677T) as a risk factor for essential hypertension in Caucasians. Hypertension Research . 2004;27(9):663–667.\n4.\tMelisse B., et al. Eating disorders in the Arab world: a literature review. Journal of Eating Disorders . 2020;8(1):p. 59.\n5.\tSilvestre ES et al A variante MTHFR 677C>T (RS1801133) está associada a hiperhomocisteinemia, mas não a gravidade clínica em pacientes com doença arterial periférica J. Vasc. Bras. 22 • 2023 • https://doi.org/10.1590/1677-5449.202200612 ",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs1801131",
+   "genotype": "AA",
+   "genotypeFreq": 0.5424101552250001,
+   "summary": "Genótipo CC diminui  atividade MTHFR adicional; AA constitui o genotipo normal; combinado com a variante C677T o quadro agrava",
+   "patientText": "Seu resultado genético para o gene MTHFR no marcador A1298C indica o genótipo AA, considerado o mais favorável para este segundo sítio polimórfico da enzima MTHFR. O polimorfismo A1298C afeta um domínio regulatório da MTHFR, distinto do afetado pelo C677T. O genótipo AA preserva a atividade normal nessa região, sem impacto adicional na conversão do folato. Portadores do genótipo AA neste marcador não têm a redução adicional da atividade enzimática associada ao alelo C, o que é especialmente relevante em combinação com o resultado do marcador C677T. Recomendamos manter o consumo regular de folato e vitaminas do complexo B para sustentar o ciclo do metil em plena função.",
+   "references": "1.\tShivkar RR,  et al Association of MTHFR C677T (rs1801133) and A1298C (rs1801131) Polymorphisms with Serum Homocysteine, Folate and Vitamin B12 in Patients with Young Coronary Artery Disease Indian J Clin Biochem. 2021 May 18;37(2):224–231.\n2.\tMa Y, et al Serum high concentrations of homocysteine and low levels of folic acid and vitamin B12 are significantly correlated with the categories of coronary artery diseases. BMC CardiovascDisord. 2017;17(1):37\n3.\tFriso S, et al. A1298C methylenetetrahydrofolatereductase mutation and coronary artery disease: relationships with C677T polymorphism and homocysteine/folate metabolism. Clin Exp Med. 2002;2(1):7–12.\n4.\tKlee GG. Cobalamin and folate evaluation: measurement of methylmalonic acid and homocysteinevs vitamin B(12) and folate. Clin Chem. 2000;46(8 Pt 2):1277–1283.\n5.\tAngeline T, Aruna RM, Ramadevi K, Mohan G, Jeyaraj N. Homocysteine status and acute myocardial infarction among Tamilians. Indian J Clin Biochem. 2005;20(1):18–20.",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs1801131",
+   "genotype": "AC",
+   "genotypeFreq": 0.38814968955,
+   "summary": "Genótipo CC diminui  atividade MTHFR adicional; AA constitui o genotipo normal; combinado com a variante C677T o quadro agrava",
+   "patientText": "Seu resultado genético para o gene MTHFR no marcador A1298C indica o genótipo AC (heterozigoto), com redução moderada adicional da atividade enzimática neste sítio. O polimorfismo A1298C, em combinação com o resultado do C677T, define o perfil global de atividade da MTHFR. O genótipo AC representa uma redução parcial neste segundo domínio, com efeito cumulativo sobre o metabolismo do folato quando combinado com variantes desfavoráveis no C677T. Para este perfil, é importante garantir ingestão suficiente de folato (de preferência na forma de metilfolato alimentar) e das vitaminas B6 e B12. Avaliação conjunta com o resultado do C677T é fundamental para interpretar o impacto real sobre o ciclo do metil e definir se há necessidade de suplementação.",
+   "references": "1.\tShivkar RR,  et al Association of MTHFR C677T (rs1801133) and A1298C (rs1801131) Polymorphisms with Serum Homocysteine, Folate and Vitamin B12 in Patients with Young Coronary Artery Disease Indian J Clin Biochem. 2021 May 18;37(2):224–231.\n2.\tMa Y, et al Serum high concentrations of homocysteine and low levels of folic acid and vitamin B12 are significantly correlated with the categories of coronary artery diseases. BMC CardiovascDisord. 2017;17(1):37\n3.\tFriso S, et al. A1298C methylenetetrahydrofolatereductase mutation and coronary artery disease: relationships with C677T polymorphism and homocysteine/folate metabolism. Clin Exp Med. 2002;2(1):7–12.\n4.\tKlee GG. Cobalamin and folate evaluation: measurement of methylmalonic acid and homocysteinevs vitamin B(12) and folate. Clin Chem. 2000;46(8 Pt 2):1277–1283.\n5.\tAngeline T, Aruna RM, Ramadevi K, Mohan G, Jeyaraj N. Homocysteine status and acute myocardial infarction among Tamilians. Indian J Clin Biochem. 2005;20(1):18–20.",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs1801131",
+   "genotype": "CC",
+   "genotypeFreq": 0.069440155225,
+   "summary": "Genótipo CC diminui  atividade MTHFR adicional; AA constitui o genotipo normal; combinado com a variante C677T o quadro agrava",
+   "patientText": "Seu resultado genético para o gene MTHFR no marcador A1298C indica o genótipo CC, associado à redução adicional da atividade enzimática neste segundo domínio da MTHFR. O genótipo CC no A1298C, em combinação com variantes desfavoráveis no C677T, pode resultar em comprometimento significativo do ciclo do metil, com impacto sobre a metilação do DNA, produção de neurotransmissores e detoxificação de homocisteína. Este perfil requer avaliação clínica cuidadosa, incluindo dosagem de homocisteína, folato eritrocitário e vitamina B12. A suplementação com as formas ativas das vitaminas — metilfolato (5-MTHF), metilcobalamina (B12) e piridoxal-5-fosfato (B6) — pode ser indicada por profissional de saúde para contornar o comprometimento enzimático e otimizar o ciclo do metil.",
+   "references": "1.\tShivkar RR,  et al Association of MTHFR C677T (rs1801133) and A1298C (rs1801131) Polymorphisms with Serum Homocysteine, Folate and Vitamin B12 in Patients with Young Coronary Artery Disease Indian J Clin Biochem. 2021 May 18;37(2):224–231.\n2.\tMa Y, et al Serum high concentrations of homocysteine and low levels of folic acid and vitamin B12 are significantly correlated with the categories of coronary artery diseases. BMC CardiovascDisord. 2017;17(1):37\n3.\tFriso S, et al. A1298C methylenetetrahydrofolatereductase mutation and coronary artery disease: relationships with C677T polymorphism and homocysteine/folate metabolism. Clin Exp Med. 2002;2(1):7–12.\n4.\tKlee GG. Cobalamin and folate evaluation: measurement of methylmalonic acid and homocysteinevs vitamin B(12) and folate. Clin Chem. 2000;46(8 Pt 2):1277–1283.\n5.\tAngeline T, Aruna RM, Ramadevi K, Mohan G, Jeyaraj N. Homocysteine status and acute myocardial infarction among Tamilians. Indian J Clin Biochem. 2005;20(1):18–20.",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs2228570",
+   "genotype": "CC",
+   "genotypeFreq": 0.43731769,
+   "summary": "Genótipo TT diminui  expressão VDR; CC aumenta absorção vitamina D",
+   "patientText": "Seu resultado genético para o gene VDR indica o genótipo CC, associado à maior expressão e eficiência do receptor de vitamina D, favorecendo a absorção e utilização deste micronutriente. O receptor VDR (Vitamin D Receptor) é a proteína nuclear responsável por mediar todas as ações genômicas da vitamina D no organismo — incluindo regulação da absorção intestinal de cálcio, modulação imunológica, controle da inflamação, saúde óssea e metabolismo glicídico. Portadores do genótipo CC apresentam maior expressão do VDR, o que favorece a ação da vitamina D mesmo em níveis séricos moderados, resultando em maior eficiência na utilização deste hormônio-vitamina. Recomendamos manter exposição solar regular (15-30 minutos diários), consumo de alimentos fontes (peixes gordurosos, ovos, laticínios enriquecidos) e monitoramento anual da 25-OH-vitamina D para manter os níveis entre 40-60 ng/mL.",
+   "references": "1.\tBischoff-Ferrari HA et al. 2004. Effect of Vitamin D on falls: a meta-analysis. JAMA. 291(16):1999-2006.\n2.\tCauci S et al. 2017. Low back pain and FokI (rs2228570) polymorphism of vitamin D receptor in athletes. BMC Sports Sci Med Rehabil. 9:4.\n3.\tHamilton B. 2010. Vitamin D and human skeletal muscle. Scand J Med Sci Sports. 20(2):182-90.",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs2228570",
+   "genotype": "CT",
+   "genotypeFreq": 0.44796462,
+   "summary": "Genótipo TT diminui  expressão VDR; CC aumenta absorção vitamina D",
+   "patientText": "Seu resultado genético para o gene VDR indica o genótipo CT (heterozigoto), com eficiência intermediária do receptor de vitamina D. No genótipo CT, a expressão do VDR é moderadamente reduzida, o que pode resultar em menor resposta celular à vitamina D mesmo quando os níveis séricos estão dentro da faixa normal. Isso significa que portadores deste genótipo podem precisar de níveis séricos um pouco mais elevados de vitamina D para obter os mesmos efeitos metabólicos e imunológicos que indivíduos com genótipo CC. Recomendamos monitoramento semestral dos níveis de 25-OH-vitamina D, exposição solar regular, dieta com alimentos fontes e, se necessário, suplementação de vitamina D3 (2000-4000 UI/dia, conforme orientação médica) para manter os níveis séricos entre 50-70 ng/mL.",
+   "references": "1.\tBischoff-Ferrari HA et al. 2004. Effect of Vitamin D on falls: a meta-analysis. JAMA. 291(16):1999-2006.\n2.\tCauci S et al. 2017. Low back pain and FokI (rs2228570) polymorphism of vitamin D receptor in athletes. BMC Sports Sci Med Rehabil. 9:4.\n3.\tHamilton B. 2010. Vitamin D and human skeletal muscle. Scand J Med Sci Sports. 20(2):182-90.",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs2228570",
+   "genotype": "TT",
+   "genotypeFreq": 0.11471769,
+   "summary": "Genótipo TT diminui  expressão VDR; CC aumenta absorção vitamina D",
+   "patientText": "Seu resultado genético para o gene VDR indica o genótipo TT, associado à menor expressão do receptor de vitamina D e redução da resposta celular a este hormônio. Portadores do genótipo TT podem apresentar menor eficiência na absorção de cálcio mediada pela vitamina D, maior predisposição à deficiência funcional de vitamina D (mesmo com níveis séricos normais), risco aumentado de osteopenia, osteoporose e disfunção imunológica. Este perfil requer atenção especial à vitamina D: recomendamos manutenção de níveis séricos de 25-OH-vitamina D entre 60-80 ng/mL (acima da referência usual para compensar a menor sensibilidade do receptor), exposição solar adequada, consumo de alimentos fontes e suplementação de vitamina D3 conforme orientação do profissional de saúde. Monitoramento trimestral ou semestral dos níveis séricos é recomendado para ajuste da dose suplementar.",
+   "references": "1.\tBischoff-Ferrari HA et al. 2004. Effect of Vitamin D on falls: a meta-analysis. JAMA. 291(16):1999-2006.\n2.\tCauci S et al. 2017. Low back pain and FokI (rs2228570) polymorphism of vitamin D receptor in athletes. BMC Sports Sci Med Rehabil. 9:4.\n3.\tHamilton B. 2010. Vitamin D and human skeletal muscle. Scand J Med Sci Sports. 20(2):182-90.",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs1800562",
+   "genotype": "GG",
+   "genotypeFreq": 0.926627638225,
+   "summary": "Genótipo AA corresponde a C282Y/C282Y  que aumenta risco hemocromatose; AG portador",
+   "patientText": "Seu resultado genético para o gene HFE no marcador C282Y indica o genótipo GG (ausência da mutação), representando o perfil normal para o metabolismo do ferro neste marcador. O gene HFE regula a absorção intestinal de ferro, e a mutação C282Y é a principal causa de hemocromatose hereditária tipo 1 — a doença genética mais comum de sobrecarga de ferro em populações de ascendência europeia. O genótipo GG indica que você não é portador da mutação C282Y, o que significa que este marcador não representa um fator de risco para sobrecarga de ferro. Recomendamos manter o consumo regular de fontes de ferro dentro das necessidades fisiológicas, evitando suplementação desnecessária sem indicação clínica e exame laboratorial prévio.",
+   "references": "1.\tKatsarou, MS Population-based analysis of the frequency of HFE gene polymorphisms: Correlation with the susceptibility to develop hereditary hemochromatosis Mol Med Re . 2016 May 20;14(1):630–636. \n2.\tYen AW, Fancher TL, Bowlus CL. Revisiting hereditary hemochromatosis: Current concepts and progress. Am J Med. 2006;119:391–399\n3.\tPuntarulo S. Iron, oxidative stress and human health. Mol Aspects Med. 2005;26:299–312. doi: 10.1016/j.mam.2005.07.001\n4.\tMerryweather-Clarke AT, et al. Digenic inheritance of mutations in HAMP and HFE results in different types of haemochromatosis. Hum Mol Genet. 2003;12:2241–2247.\n5.\tLyon E et al, . Hereditary hemochromatosis since discovery of the HFE gene. Clin Chem. 2001;47:1147–1156.",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs1800562",
+   "genotype": "AG",
+   "genotypeFreq": 0.07197472355000001,
+   "summary": "Genótipo AA corresponde a C282Y/C282Y  que aumenta risco hemocromatose; AG portador",
+   "patientText": "Seu resultado genético para o gene HFE no marcador C282Y indica o genótipo AG, caracterizando você como portador heterozigoto da mutação C282Y. Portadores heterozigotos geralmente não desenvolvem hemocromatose clínica, mas podem apresentar níveis de ferritina e saturação de transferrina discretamente mais elevados, especialmente na presença de alta ingestão de ferro heme ou suplementação de ferro. Suplementação indiscriminada de ferro sem avaliação laboratorial deve ser evitada neste perfil. Recomendamos monitoramento anual de hemograma completo, ferritina e saturação de transferrina, especialmente em homens adultos e mulheres na pós-menopausa. A ingestão de ferro deve ser adequada às necessidades individuais, priorizando fontes alimentares variadas e evitando suplementação sem indicação clínica.",
+   "references": "1.\tKatsarou, MS Population-based analysis of the frequency of HFE gene polymorphisms: Correlation with the susceptibility to develop hereditary hemochromatosis Mol Med Re . 2016 May 20;14(1):630–636. \n2.\tYen AW, Fancher TL, Bowlus CL. Revisiting hereditary hemochromatosis: Current concepts and progress. Am J Med. 2006;119:391–399\n3.\tPuntarulo S. Iron, oxidative stress and human health. Mol Aspects Med. 2005;26:299–312. doi: 10.1016/j.mam.2005.07.001\n4.\tMerryweather-Clarke AT, et al. Digenic inheritance of mutations in HAMP and HFE results in different types of haemochromatosis. Hum Mol Genet. 2003;12:2241–2247.\n5.\tLyon E et al, . Hereditary hemochromatosis since discovery of the HFE gene. Clin Chem. 2001;47:1147–1156.",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs1800562",
+   "genotype": "AA",
+   "genotypeFreq": 0.001397638225,
+   "summary": "Genótipo AA corresponde a C282Y/C282Y  que aumenta risco hemocromatose; AG portador",
+   "patientText": "Seu resultado genético para o gene HFE no marcador C282Y indica o genótipo AA, correspondente à condição de homozigose para a mutação C282Y — o principal genótipo associado à hemocromatose hereditária tipo 1. A hemocromatose hereditária é uma condição em que o organismo absorve ferro em excesso do intestino, resultando em acúmulo progressivo de ferro em órgãos como fígado, pâncreas, coração, articulações e hipófise. Se não tratada, pode levar a cirrose hepática, diabetes mellitus, cardiomiopatia, artropatia e hipogonadismo. Este resultado requer avaliação médica especializada (hematologista ou hepatologista) para investigação clínica e definição de conduta. Recomendações imediatas: dosar ferritina, saturação de transferrina, ferro sérico e TIBC; evitar suplementação de ferro; reduzir consumo de carne vermelha; evitar vitamina C em altas doses junto às refeições (que potencializa absorção de ferro); abstinência de álcool; e monitoramento hepático regular.",
+   "references": "1.\tKatsarou, MS Population-based analysis of the frequency of HFE gene polymorphisms: Correlation with the susceptibility to develop hereditary hemochromatosis Mol Med Re . 2016 May 20;14(1):630–636. \n2.\tYen AW, Fancher TL, Bowlus CL. Revisiting hereditary hemochromatosis: Current concepts and progress. Am J Med. 2006;119:391–399\n3.\tPuntarulo S. Iron, oxidative stress and human health. Mol Aspects Med. 2005;26:299–312. doi: 10.1016/j.mam.2005.07.001\n4.\tMerryweather-Clarke AT, et al. Digenic inheritance of mutations in HAMP and HFE results in different types of haemochromatosis. Hum Mol Genet. 2003;12:2241–2247.\n5.\tLyon E et al, . Hereditary hemochromatosis since discovery of the HFE gene. Clin Chem. 2001;47:1147–1156.",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs1799945",
+   "genotype": "CC",
+   "genotypeFreq": 0.807683258944,
+   "summary": "Genótipo GG corresponde a H63D/H63D que aumenta risco sobrecarga; CC normal",
+   "patientText": "Seu resultado genético para o gene HFE no marcador H63D indica o genótipo CC, representando o perfil normal para este marcador de metabolismo do ferro. A mutação H63D é uma variante comum do gene HFE com efeito mais brando sobre o metabolismo do ferro em comparação à C282Y. O genótipo CC indica que você não carrega esta variante, eliminando o risco associado ao H63D isolado. Recomendamos manter o consumo de ferro dentro das necessidades fisiológicas, avaliando a ingestão e o status de ferro por exames laboratoriais periodicamente, sem necessidade de restrições específicas relacionadas a este marcador.",
+   "references": "1.\tIvanova T, et al Risk Effects of rs1799945 Polymorphism of the HFEGene and Intergenic Interactions of GWAS-Significant Loci for Arterial Hypertension in the Caucasian Population of Central Russia Int J Mol Sci . 2023 May 5;24(9):8309.\n2.\tWilliams B., et al. 2018 ESC/ESH Guidelines for the management of arterial hypertension. Eur. Heart J. 2018;39:3021–3104.\n3.\tZhou B., et al,  Global epidemiology, health burden and effective interventions for elevated blood pressure and hypertension. Nat. Rev. Cardiol. 2021;18:785–802. \n4.\tLewington S., et al, Prospective Studies Collaboration Age-specific relevance of usual blood pressure to vascular mortality: A meta-analysis of individual data for one million adults in 61 prospective studies. Lancet. 2002;360:1903–1913.",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs1799945",
+   "genotype": "CG",
+   "genotypeFreq": 0.18205748211199999,
+   "summary": "Genótipo GG corresponde a H63D/H63D que aumenta risco sobrecarga; CC normal",
+   "patientText": "Seu resultado genético para o gene HFE no marcador H63D indica o genótipo CG (heterozigoto), portador de uma cópia da variante H63D. A variante H63D, em heterozigose, raramente causa sobrecarga clínica de ferro isoladamente. No entanto, em combinação com a mutação C282Y no outro alelo (genótipo composto C282Y/H63D), pode resultar em sobrecarga moderada de ferro com relevância clínica. Para este perfil, recomendamos: monitorar o status de ferro (ferritina e saturação de transferrina) anualmente, evitar suplementação de ferro sem necessidade comprovada por exames, e informar ao médico sobre este resultado para avaliação combinada com o marcador C282Y.",
+   "references": "1.\tIvanova T, et al Risk Effects of rs1799945 Polymorphism of the HFEGene and Intergenic Interactions of GWAS-Significant Loci for Arterial Hypertension in the Caucasian Population of Central Russia Int J Mol Sci . 2023 May 5;24(9):8309.\n2.\tWilliams B., et al. 2018 ESC/ESH Guidelines for the management of arterial hypertension. Eur. Heart J. 2018;39:3021–3104.\n3.\tZhou B., et al,  Global epidemiology, health burden and effective interventions for elevated blood pressure and hypertension. Nat. Rev. Cardiol. 2021;18:785–802. \n4.\tLewington S., et al, Prospective Studies Collaboration Age-specific relevance of usual blood pressure to vascular mortality: A meta-analysis of individual data for one million adults in 61 prospective studies. Lancet. 2002;360:1903–1913.",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs1799945",
+   "genotype": "GG",
+   "genotypeFreq": 0.010259258944,
+   "summary": "GG corresponde a H63D/H63D que aumenta risco sobrecarga; CC normal",
+   "patientText": "Seu resultado genético para o gene HFE no marcador H63D indica o genótipo GG (homozigoto para a variante H63D). A homozigose H63D/H63D está associada a risco moderadamente aumentado de sobrecarga de ferro, embora geralmente de intensidade menor do que a observada na homozigose C282Y/C282Y. Portadores do genótipo GG podem apresentar ferritina e saturação de transferrina mais elevadas, especialmente na presença de alto consumo de ferro heme, uso de álcool ou outros fatores que aumentam a absorção intestinal de ferro. Recomendamos avaliação do status de ferro, consulta médica para definição de acompanhamento, redução do consumo de carne vermelha processada, moderação no consumo de álcool e evitar suplementação de ferro sem indicação laboratorial clara.",
+   "references": "1.\tIvanova T, et al Risk Effects of rs1799945 Polymorphism of the HFEGene and Intergenic Interactions of GWAS-Significant Loci for Arterial Hypertension in the Caucasian Population of Central Russia Int J Mol Sci . 2023 May 5;24(9):8309.\n2.\tWilliams B., et al. 2018 ESC/ESH Guidelines for the management of arterial hypertension. Eur. Heart J. 2018;39:3021–3104.\n3.\tZhou B., et al,  Global epidemiology, health burden and effective interventions for elevated blood pressure and hypertension. Nat. Rev. Cardiol. 2021;18:785–802. \n4.\tLewington S., et al, Prospective Studies Collaboration Age-specific relevance of usual blood pressure to vascular mortality: A meta-analysis of individual data for one million adults in 61 prospective studies. Lancet. 2002;360:1903–1913.",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs4988235",
+   "genotype": "AA",
+   "genotypeFreq": 0.156857186704,
+   "summary": "Genótipo AA aumenta persistência lactase; GG diminui  lactase na idade adulta",
+   "patientText": "Seu resultado genético para o gene LCT indica o genótipo AA, associado à persistência da lactase na vida adulta — a capacidade de digerir lactose sem desconforto. A lactase é a enzima intestinal responsável pela digestão da lactose (o açúcar do leite). Portadores do genótipo AA mantêm expressão elevada de lactase ao longo da vida, preservando a capacidade de digerir laticínios sem sintomas gastrointestinais. Isso permite o consumo regular de leite, queijos e iogurtes, fontes importantes de cálcio, proteínas de alta qualidade e vitaminas do complexo B. Recomendamos aproveitar essa capacidade genética incluindo laticínios de qualidade na alimentação diária como parte de uma dieta equilibrada.",
+   "references": "1.\tElizabeth L Chin et al Association of Lactase Persistence Genotypes (rs4988235) and Ethnicity with Dairy Intake in a Healthy U.S. Population Nutrients . 2019 Aug 10;11(8):1860. \n2.\tIngram C.J.E., et al. Lactose digestion and the evolutionary genetics of lactase persistence. Hum. Genet. 2009;124:579–591. doi: 10.1007/s00439-008-0593-6. \n3.\tIngram C.J.E., et al. A novel polymorphism associated with lactose tolerance in Africa: Multiple causes for lactase persistence? Hum. Genet. 2007;120:779–788.",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs4988235",
+   "genotype": "AG",
+   "genotypeFreq": 0.47838962659199996,
+   "summary": "Genótipo AA aumenta persistência lactase; GG diminui  lactase na idade adulta",
+   "patientText": "Seu resultado genético para o gene LCT indica o genótipo AG (heterozigoto), com redução parcial da expressão de lactase na vida adulta. Portadores do genótipo AG podem apresentar tolerância variável à lactose — geralmente tolerando bem pequenas a moderadas quantidades de laticínios (especialmente queijos curados e iogurtes, com menor teor de lactose), mas podendo apresentar desconforto gastrointestinal ao consumir grandes volumes de leite ou laticínios frescos. A tolerância é dose-dependente e pode variar individualmente. Recomendamos: consumir laticínios em porções moderadas distribuídas ao longo do dia, preferir queijos curados e iogurtes (menor lactose), e testar individualmente a tolerância. A saúde da microbiota intestinal também influencia a tolerância à lactose — um microbioma diverso pode aumentar a capacidade de fermentação da lactose no cólon.",
+   "references": "1.\tElizabeth L Chin et al Association of Lactase Persistence Genotypes (rs4988235) and Ethnicity with Dairy Intake in a Healthy U.S. Population Nutrients . 2019 Aug 10;11(8):1860. \n2.\tIngram C.J.E., et al. Lactose digestion and the evolutionary genetics of lactase persistence. Hum. Genet. 2009;124:579–591. doi: 10.1007/s00439-008-0593-6. \n3.\tIngram C.J.E., et al. A novel polymorphism associated with lactose tolerance in Africa: Multiple causes for lactase persistence? Hum. Genet. 2007;120:779–788.",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs4988235",
+   "genotype": "GG",
+   "genotypeFreq": 0.3647531867039999,
+   "summary": "Genótipo AA aumenta persistência lactase; GG diminui  lactase na idade adulta",
+   "patientText": "Seu resultado genético para o gene LCT indica o genótipo GG, associado à não persistência da lactase — geneticamente provável intolerância à lactose na vida adulta. Portadores do genótipo GG têm declínio significativo da expressão de lactase após os primeiros anos de vida, resultando em incapacidade de digerir a lactose de forma eficiente. A lactose não digerida é fermentada pela microbiota intestinal, produzindo gases e ácidos orgânicos que causam sintomas como distensão abdominal, cólicas e diarreia. Este resultado ajuda a personalizar a alimentação de forma precisa. Recomendamos: reduzir ou eliminar leite e laticínios frescos com alto teor de lactose; optar por queijos curados (parmesão, gruyère, cheddar curado), manteiga, ghee e iogurte natural; e utilizar bebidas vegetais enriquecidas com cálcio como alternativa. Atenção à ingestão adequada de cálcio: vegetais de folha escura (brócolis, couve, rúcula), sardinha, sementes de gergelim e tofu são fontes alternativas excelentes.",
+   "references": "1.\tElizabeth L Chin et al Association of Lactase Persistence Genotypes (rs4988235) and Ethnicity with Dairy Intake in a Healthy U.S. Population Nutrients . 2019 Aug 10;11(8):1860. \n2.\tIngram C.J.E., et al. Lactose digestion and the evolutionary genetics of lactase persistence. Hum. Genet. 2009;124:579–591. doi: 10.1007/s00439-008-0593-6. \n3.\tIngram C.J.E., et al. A novel polymorphism associated with lactose tolerance in Africa: Multiple causes for lactase persistence? Hum. Genet. 2007;120:779–788.",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs33972313",
+   "genotype": "CC",
+   "genotypeFreq": 0.9300615736089999,
+   "summary": "Genótipo TT diminui  absorção ácido ascórbico;  aumenta necessidade dietética",
+   "patientText": "Seu resultado genético para o gene SLC23A1 indica o genótipo CC, associado à função normal do transportador de vitamina C (ácido ascórbico) no intestino e nos rins. O gene SLC23A1 codifica o cotransportador sódio-dependente de vitamina C tipo 1 (SVCT1), responsável pela absorção intestinal de vitamina C e pelo seu transporte epitelial. Portadores do genótipo CC apresentam absorção e reabsorção renal eficientes de vitamina C, conseguindo manter níveis plasmáticos adequados com uma dieta rica em frutas e vegetais. Recomendamos manter o consumo regular de fontes alimentares de vitamina C — frutas cítricas, acerola, goiaba, kiwi, pimentão, brócolis — para sustentar a função imunológica, síntese de colágeno e capacidade antioxidante.",
+   "references": "1.\tTimpson, NJ et al Genetic variation at the SLC23A1 locus is associated with circulating concentrations of L-ascorbic acid (vitamin C): evidence from 5 independent studies with >15,000 participant Am J Clin Nutr . 2010 Aug;92(2):375-82.\n2.\tNishikimi M, Fukuyama R, Minoshima S, Shimizu N, Yagi K. Cloning and chromosomal mapping of the human nonfunctional gene for L-gulono-gamma-lactone oxidase, the enzyme for L-ascorbic acid biosynthesis missing in man. Journal of Biological Chemistry. 1994;269:13685–8. \n3.\tLevine M, Rumsey SC, Daruwala R, Park JB, Wang Y. Criteria and recommendations for vitamin C intake. JAMA. 1999:1415–1423.\n4.\tKhaw KT, Bingham S, Welch A, et al. Relation between plasma ascorbic acid and mortality in men and women in EPIC-Norfolk prospective study: a prospective population study. Lancet. 2001;357:657–663",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs33972313",
+   "genotype": "CT",
+   "genotypeFreq": 0.068670852782,
+   "summary": "Genótipo TT diminui  absorção ácido ascórbico;  aumenta necessidade dietética do mesmo",
+   "patientText": "Seu resultado genético para o gene SLC23A1 indica o genótipo CT (heterozigoto), com eficiência intermediária no transporte de vitamina C. Portadores do genótipo CT podem apresentar absorção intestinal de vitamina C moderadamente reduzida, resultando em menor concentração plasmática para a mesma ingestão alimentar em comparação ao genótipo CC. Isso significa que pode ser necessária uma ingestão um pouco maior de vitamina C, especialmente em períodos de maior demanda (estresse, infecções, exercício intenso), para manter níveis plasmáticos ótimos. Recomendamos aumentar o consumo de alimentos ricos em vitamina C (especialmente acerola, camu-camu e goiaba) e considerar, com orientação profissional, a suplementação de vitamina C (500-1000 mg/dia) em períodos de maior demanda.",
+   "references": "1.\tTimpson, NJ et al Genetic variation at the SLC23A1 locus is associated with circulating concentrations of L-ascorbic acid (vitamin C): evidence from 5 independent studies with >15,000 participant Am J Clin Nutr . 2010 Aug;92(2):375-82.\n2.\tNishikimi M, Fukuyama R, Minoshima S, Shimizu N, Yagi K. Cloning and chromosomal mapping of the human nonfunctional gene for L-gulono-gamma-lactone oxidase, the enzyme for L-ascorbic acid biosynthesis missing in man. Journal of Biological Chemistry. 1994;269:13685–8. \n3.\tLevine M, Rumsey SC, Daruwala R, Park JB, Wang Y. Criteria and recommendations for vitamin C intake. JAMA. 1999:1415–1423.\n4.\tKhaw KT, Bingham S, Welch A, et al. Relation between plasma ascorbic acid and mortality in men and women in EPIC-Norfolk prospective study: a prospective population study. Lancet. 2001;357:657–663",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs33972313",
+   "genotype": "TT",
+   "genotypeFreq": 0.001267573609,
+   "summary": "Genótipo TT diminui  absorção ácido ascórbico;  aumenta necessidade dietética",
+   "patientText": "Seu resultado genético para o gene SLC23A1 indica o genótipo TT, associado à redução da eficiência no transporte de vitamina C e maior necessidade dietética deste micronutriente. A variante identificada reduz a capacidade de absorção intestinal da vitamina C, o que pode resultar em níveis plasmáticos subótimos mesmo com ingestão dietética aparentemente adequada. A vitamina C é essencial para a síntese de colágeno, função imunológica, absorção de ferro não-heme e proteção antioxidante. Para este perfil, recomendamos: aumentar expressivamente o consumo de alimentos ricos em vitamina C ao longo do dia (acerola, camu-camu, goiaba, kiwi, pimentão amarelo, brócolis), distribuindo em múltiplas refeições para maximizar a absorção. A suplementação de vitamina C (500-2000 mg/dia em doses divididas, preferencialmente na forma tamponada ou lipossomal) pode ser indicada pelo profissional de saúde para garantir níveis plasmáticos adequados neste perfil.",
+   "references": "1.\tTimpson, NJ et al Genetic variation at the SLC23A1 locus is associated with circulating concentrations of L-ascorbic acid (vitamin C): evidence from 5 independent studies with >15,000 participant Am J Clin Nutr . 2010 Aug;92(2):375-82.\n2.\tNishikimi M, Fukuyama R, Minoshima S, Shimizu N, Yagi K. Cloning and chromosomal mapping of the human nonfunctional gene for L-gulono-gamma-lactone oxidase, the enzyme for L-ascorbic acid biosynthesis missing in man. Journal of Biological Chemistry. 1994;269:13685–8. \n3.\tLevine M, Rumsey SC, Daruwala R, Park JB, Wang Y. Criteria and recommendations for vitamin C intake. JAMA. 1999:1415–1423.\n4.\tKhaw KT, Bingham S, Welch A, et al. Relation between plasma ascorbic acid and mortality in men and women in EPIC-Norfolk prospective study: a prospective population study. Lancet. 2001;357:657–663",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs762551",
+   "genotype": "AA",
+   "genotypeFreq": 0.4523060163689999,
+   "summary": "Genótipo AA é um metabolizador rápido cafeína; CC é um metabolizados lento aumenta risco doença cardio-vascular com café",
+   "patientText": "Seu resultado genético para o gene CYP1A2 indica o genótipo AA, associado ao metabolismo rápido da cafeína e de outros substratos da enzima CYP1A2 na fase I da detoxificação hepática. A enzima CYP1A2 é responsável pelo metabolismo de cerca de 95% da cafeína ingerida, além de processar compostos como estrogênios, policíclicos aromáticos e alguns medicamentos. Metabolizadores rápidos (AA) eliminam a cafeína com maior velocidade, apresentando menor risco cardiovascular associado ao consumo moderado de café (até 3-4 xícaras/dia), menor acúmulo de metabólitos intermediários e efeito estimulante mais curto e previsível. Recomendamos aproveitar esse perfil com o consumo moderado de café (associado a benefícios antioxidantes e cognitivos), respeitando o limiar individual de tolerância.",
+   "references": "1.\tGuest N et al. 2018. Caffeine, CYP1A2 Genotype, and Endurance Performance in Athletes. Medicine & Science in Sports & Exercise. 50(8):1570-1578.\n2.\tSouthward K et al. 2018. Correction to: The Effect of Acute Caffeine Ingestion on Endurance Performance: A Systematic Review and Meta Analysis. Sports Med 48(10): 2425-2441.\n3.\tWomack CJ et al. 2012. The influence of a CYP1A2 polymorphism on the ergogenic effects of caffeine. J Int Soc Sports Nutr. 9(1):7.",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs762551",
+   "genotype": "AC",
+   "genotypeFreq": 0.440461967262,
+   "summary": "Genótipo AA é um metabolizador rápido cafeína; CC é um metabolizados lento aumenta risco doença cardio-vascular com café",
+   "patientText": "Seu resultado genético para o gene CYP1A2 indica o genótipo AC (heterozigoto), com atividade intermediária da enzima CYP1A2 — classificado como metabolizador moderado de cafeína. Portadores do genótipo AC apresentam velocidade de metabolização da cafeína intermediária entre os metabolizadores rápidos (AA) e lentos (CC), podendo apresentar variabilidade individual na tolerância ao café. O consumo de cafeína em excesso (mais de 3 xícaras/dia) pode ser associado a risco cardiovascular ligeiramente maior neste perfil em comparação ao genótipo AA. Recomendamos consumo moderado de cafeína (2-3 xícaras de café/dia), evitando o consumo próximo ao período noturno, e prestar atenção à resposta individual — como palpitações, insônia ou ansiedade — como indicadores de metabolização mais lenta.",
+   "references": "1.\tGuest N et al. 2018. Caffeine, CYP1A2 Genotype, and Endurance Performance in Athletes. Medicine & Science in Sports & Exercise. 50(8):1570-1578.\n2.\tSouthward K et al. 2018. Correction to: The Effect of Acute Caffeine Ingestion on Endurance Performance: A Systematic Review and Meta Analysis. Sports Med 48(10): 2425-2441.\n3.\tWomack CJ et al. 2012. The influence of a CYP1A2 polymorphism on the ergogenic effects of caffeine. J Int Soc Sports Nutr. 9(1):7.",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs762551",
+   "genotype": "CC",
+   "genotypeFreq": 0.107232016369,
+   "summary": "Genótipo AA é um metabolizador rápido cafeína; CC é um metabolizados lento aumenta risco doença cardio-vascular com café",
+   "patientText": "Seu resultado genético para o gene CYP1A2 indica o genótipo CC, associado ao metabolismo lento da cafeína e redução da atividade da fase I de detoxificação. Metabolizadores lentos do CYP1A2 eliminam a cafeína com muito menor velocidade, resultando em maior tempo de permanência da cafeína e seus metabólitos no organismo. Estudos populacionais demonstraram que metabolizadores lentos com alto consumo de café apresentam risco significativamente aumentado de infarto do miocárdio e arritmias em comparação a não consumidores com o mesmo genótipo. Para portadores do genótipo CC, recomendamos: limitar o consumo de cafeína a 1-2 xícaras de café por dia (máximo 100-200 mg de cafeína), evitar energéticos e suplementos com cafeína, não consumir cafeína após as 14h. Além da cafeína, o CYP1A2 metaboliza vários compostos alimentares e farmacológicos — informe seu médico sobre este genótipo quando em uso de medicamentos.",
+   "references": "1.\tGuest N et al. 2018. Caffeine, CYP1A2 Genotype, and Endurance Performance in Athletes. Medicine & Science in Sports & Exercise. 50(8):1570-1578.\n2.\tSouthward K et al. 2018. Correction to: The Effect of Acute Caffeine Ingestion on Endurance Performance: A Systematic Review and Meta Analysis. Sports Med 48(10): 2425-2441.\n3.\tWomack CJ et al. 2012. The influence of a CYP1A2 polymorphism on the ergogenic effects of caffeine. J Int Soc Sports Nutr. 9(1):7.",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs1695",
+   "genotype": "AA",
+   "genotypeFreq": 0.4095526413690001,
+   "summary": "Genótipo GG corrsponde a Ile105Val e diminui  atividade GSTP1; AA aumenta capacidade detox",
+   "patientText": "Seu resultado genético para o gene GSTP1 indica o genótipo AA, associado à maior atividade da Glutationa-S-Transferase Pi — uma das principais enzimas da fase II da detoxificação hepática. A GSTP1 catalisa a conjugação de glutationa a compostos eletrofílicos (metais pesados, carcinógenos ambientais, metabólitos reativos de medicamentos), neutralizando-os e facilitando sua eliminação. Portadores do genótipo AA (Ile105/Ile105) apresentam a forma mais ativa da enzima, com maior eficiência na destoxificação de xenobióticos e menor acúmulo de compostos potencialmente danosos ao DNA. Esse perfil favorável se beneficia de uma alimentação rica em precursores de glutationa (ovos, alho, cebola, brócolis, carnes magras) e em indutores do sistema de detoxificação (família das brássicas, alho, cúrcuma).",
+   "references": "1.\tda Silva, MC, et al The GSTP1 rs1695 Polymorphism Is Associated with Mercury Levels and Neurodevelopmental Delay in Indigenous Munduruku Children from the Brazilian Amazon Toxics 2024 Jun 19;12(6):441.\n2.\tGong JY, et al . Evaluating the role of GSTP1 genetic polymorphism (rs1695, 313A>G) as a predictor in cyclophosphamide-induced toxicities.\n3.\tMedicine (Baltimore). 2021 Mar 19;100(11):e24423. \n4.\tHelsby NA,  et al. The importance of both CYP2C19 and CYP2B6 germline variations in cyclophosphamide pharmacokinetics and clinical outcomes. Br J Clin Pharmacol 2019;85:1925–34.\n5.\tZhang J, et al. Metabolism and transport of oxazaphosphorines and the clinical implications. Drug Metab Rev. 2005;37(4):611‐703\n6.\tBrummaier T, et al Using cyclophosphamide in inflammatory rheumatic diseases. Eur J Intern Med. 2013;24(7):590‐596.",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs1695",
+   "genotype": "AG",
+   "genotypeFreq": 0.460820717262,
+   "summary": "Genótipo GG corrsponde a Ile105Val e diminui  atividade GSTP1; AA aumenta capacidade detox",
+   "patientText": "Seu resultado genético para o gene GSTP1 indica o genótipo AG (heterozigoto Ile105Val), com atividade intermediária da Glutationa-S-Transferase Pi. No genótipo AG, a eficiência da GSTP1 é moderadamente reduzida, com uma cópia da variante Val105 que confere menor atividade catalítica. Isso pode resultar em menor capacidade de conjugação e eliminação de compostos tóxicos, especialmente em situações de alta exposição a xenobióticos (poluição, tabaco, pesticidas, medicamentos). Para este perfil, recomendamos: aumentar o consumo de vegetais crucíferos (brócolis, couve-flor, repolho, rúcula), garantir ingestão proteica adequada para síntese de glutationa, e reduzir a exposição a toxinas ambientais quando possível.",
+   "references": "1.\tda Silva, MC, et al The GSTP1 rs1695 Polymorphism Is Associated with Mercury Levels and Neurodevelopmental Delay in Indigenous Munduruku Children from the Brazilian Amazon Toxics 2024 Jun 19;12(6):441.\n2.\tGong JY, et al . Evaluating the role of GSTP1 genetic polymorphism (rs1695, 313A>G) as a predictor in cyclophosphamide-induced toxicities.\n3.\tMedicine (Baltimore). 2021 Mar 19;100(11):e24423. \n4.\tHelsby NA,  et al. The importance of both CYP2C19 and CYP2B6 germline variations in cyclophosphamide pharmacokinetics and clinical outcomes. Br J Clin Pharmacol 2019;85:1925–34.\n5.\tZhang J, et al. Metabolism and transport of oxazaphosphorines and the clinical implications. Drug Metab Rev. 2005;37(4):611‐703\n6.\tBrummaier T, et al Using cyclophosphamide in inflammatory rheumatic diseases. Eur J Intern Med. 2013;24(7):590‐596.",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs1695",
+   "genotype": "GG",
+   "genotypeFreq": 0.12962664136899998,
+   "summary": "Genótipo GG corrsponde a Ile105Val e diminui  atividade GSTP1; AA aumenta capacidade detox",
+   "patientText": "Seu resultado genético para o gene GSTP1 indica o genótipo GG (Val105/Val105), associado à menor atividade da Glutationa-S-Transferase Pi e redução da capacidade de detoxificação de fase II. A variante Val105 em homozigose resulta em uma GSTP1 com atividade catalítica significativamente menor, comprometendo a conjugação e eliminação de compostos eletrofílicos, carcinógenos ambientais e metabólitos reativos. O suporte nutricional à detoxificação de fase II é essencial para este perfil: aumentar expressivamente o consumo de crucíferas (brócolis, couve, couve-flor — especialmente crus ou levemente cozidos), alho e cebola (compostos sulfurados), cúrcuma (indutor do NRF2), e garantir ingestão proteica adequada para síntese de glutationa. A suplementação com NAC (N-acetilcisteína) ou glutationa lipossomal pode ser indicada por profissional de saúde para fortalecer a capacidade detoxificante deste perfil.",
+   "references": "1.\tda Silva, MC, et al The GSTP1 rs1695 Polymorphism Is Associated with Mercury Levels and Neurodevelopmental Delay in Indigenous Munduruku Children from the Brazilian Amazon Toxics 2024 Jun 19;12(6):441.\n2.\tGong JY, et al . Evaluating the role of GSTP1 genetic polymorphism (rs1695, 313A>G) as a predictor in cyclophosphamide-induced toxicities.\n3.\tMedicine (Baltimore). 2021 Mar 19;100(11):e24423. \n4.\tHelsby NA,  et al. The importance of both CYP2C19 and CYP2B6 germline variations in cyclophosphamide pharmacokinetics and clinical outcomes. Br J Clin Pharmacol 2019;85:1925–34.\n5.\tZhang J, et al. Metabolism and transport of oxazaphosphorines and the clinical implications. Drug Metab Rev. 2005;37(4):611‐703\n6.\tBrummaier T, et al Using cyclophosphamide in inflammatory rheumatic diseases. Eur J Intern Med. 2013;24(7):590‐596.",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs4880",
+   "genotype": "CC",
+   "genotypeFreq": 0.221187733636,
+   "summary": "Genótipo TT corresponde a Ala16Val atua como antioxidante; CC aumenta atividade",
+   "patientText": "Seu resultado genético para o gene SOD2 indica o genótipo CC, associado à maior eficiência da Superóxido Dismutase 2 mitocondrial — a principal defesa antioxidante dentro das mitocôndrias. A SOD2 (MnSOD) neutraliza o ânion superóxido produzido durante a respiração celular, convertendo-o em peróxido de hidrogênio e oxigênio molecular, protegendo o DNA mitocondrial e as membranas celulares do estresse oxidativo. O genótipo CC corresponde à variante Ala16, que é importada de forma mais eficiente para a matriz mitocondrial, resultando em maior atividade antioxidante intracelular. Recomendamos potencializar esse perfil com dieta rica em cofatores da SOD2 (manganês: nozes, sementes, leguminosas; cobre e zinco: carnes, mariscos, sementes) e antioxidantes variados.",
+   "references": "1.\tAhmetov II,  et al SOD2 gene polymorphism and muscle damage markers in elite athletes Free Radic Res. 2014 doi: 10.3109/10715762.2014.928410\n2.\tAkimoto AK, et al. Evaluation of gene polymorphisms in exercise-induced oxidative stress and damage. Free Radic Res. 2010 Mar;44(3):322-31. doi: 10.3109/10715760903494176.PMID: 20109103\n3.\tBanfi G, et al.  Metabolic markers in sports medicine.Adv Clin Chem. 2012;56:1-54. doi: 10.1016/b978-0-12-394317-0.00015-7.PMID: 22397027\n4.\tSchott KL et al.Brazil nut improves the oxidative metabolism of superoxide-hydrogen peroxide chemically-imbalanced human fibroblasts in a nutrigenomic manner  Food Chem Toxicol . 2018 Nov:121:519-526.  doi: 10.1016/j.fct.2018.09.038. Epub 2018 Sep 20.",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs4880",
+   "genotype": "CT",
+   "genotypeFreq": 0.498236532728,
+   "summary": "Genótipo TT corresponde a Ala16Val atua como antioxidante; CC aumenta atividade",
+   "patientText": "Seu resultado genético para o gene SOD2 indica o genótipo CT (heterozigoto Ala16Val), com eficiência intermediária da Superóxido Dismutase mitocondrial. No genótipo CT, um alelo produz a forma Ala16 (mais eficiente) e o outro a forma Val16 (menos eficiente na importação mitocondrial), resultando em capacidade antioxidante mitocondrial parcialmente reduzida. Isso pode resultar em maior suscetibilidade ao estresse oxidativo em situações de alta demanda metabólica, como exercício intenso, inflamação ou exposição a xenobióticos. Para este perfil, recomendamos dieta rica em antioxidantes (vitamina E, vitamina C, selênio, polifenóis), consumo adequado de manganês (cofator da SOD2) e ácidos graxos ômega-3, que reduzem o estresse oxidativo mitocondrial.",
+   "references": "1.\tAhmetov II,  et al SOD2 gene polymorphism and muscle damage markers in elite athletes Free Radic Res. 2014 doi: 10.3109/10715762.2014.928410\n2.\tAkimoto AK, et al. Evaluation of gene polymorphisms in exercise-induced oxidative stress and damage. Free Radic Res. 2010 Mar;44(3):322-31. doi: 10.3109/10715760903494176.PMID: 20109103\n3.\tBanfi G, et al.  Metabolic markers in sports medicine.Adv Clin Chem. 2012;56:1-54. doi: 10.1016/b978-0-12-394317-0.00015-7.PMID: 22397027\n4.\tSchott KL et al.Brazil nut improves the oxidative metabolism of superoxide-hydrogen peroxide chemically-imbalanced human fibroblasts in a nutrigenomic manner  Food Chem Toxicol . 2018 Nov:121:519-526.  doi: 10.1016/j.fct.2018.09.038. Epub 2018 Sep 20.",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs4880",
+   "genotype": "TT",
+   "genotypeFreq": 0.280575733636,
+   "summary": "Genótipo TT corresponde a Ala16Val atua como antioxidante; CC aumenta atividade",
+   "patientText": "Seu resultado genético para o gene SOD2 indica o genótipo TT (Val16/Val16), associado à menor eficiência da Superóxido Dismutase mitocondrial. A variante Val16 em homozigose compromete a eficiência de importação da SOD2 para a matriz mitocondrial, reduzindo a concentração e atividade antioxidante nas mitocôndrias. Isso resulta em maior acúmulo de superóxido intracelular, com potencial de dano oxidativo ao DNA mitocondrial, às proteínas e às membranas lipídicas — especialmente em tecidos com alta demanda energética, como coração, músculo e neurônios. O suporte antioxidante nutricional é prioritário para este perfil: vitamina E (amêndoas, girassol, gérmen de trigo), selênio (castanha-do-pará: 1-2 unidades/dia), vitamina C, coenzima Q10 e ácidos graxos ômega-3 demonstraram suporte à função mitocondrial neste genótipo. Evitar o excesso de exercício extenuante sem recuperação adequada e garantir sono reparador são também recomendações específicas para este perfil.",
+   "references": "1.\tAhmetov II,  et al SOD2 gene polymorphism and muscle damage markers in elite athletes Free Radic Res. 2014 doi: 10.3109/10715762.2014.928410\n2.\tAkimoto AK, et al. Evaluation of gene polymorphisms in exercise-induced oxidative stress and damage. Free Radic Res. 2010 Mar;44(3):322-31. doi: 10.3109/10715760903494176.PMID: 20109103\n3.\tBanfi G, et al.  Metabolic markers in sports medicine.Adv Clin Chem. 2012;56:1-54. doi: 10.1016/b978-0-12-394317-0.00015-7.PMID: 22397027\n4.\tSchott KL et al.Brazil nut improves the oxidative metabolism of superoxide-hydrogen peroxide chemically-imbalanced human fibroblasts in a nutrigenomic manner  Food Chem Toxicol . 2018 Nov:121:519-526.  doi: 10.1016/j.fct.2018.09.038. Epub 2018 Sep 20.",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs1799930",
+   "genotype": "GG",
+   "genotypeFreq": 0.5473780225,
+   "summary": "Genótipo AA é um acetilador lento aumenta toxicidade compostos N-acetilados",
+   "patientText": " Seu resultado genético para o gene NAT2 indica o genótipo GG, associado ao perfil de acetilador rápido da N-acetiltransferase 2. A enzima NAT2 catalisa reações de acetilação na fase II da biotransformação, metabolizando compostos como aminas aromáticas (presentes em carnes grelhadas em alta temperatura), fármacos como isoniazida e hidralazina, e outros xenobióticos. Acetiladores rápidos processam e eliminam esses compostos com maior velocidade, reduzindo o tempo de exposição dos tecidos a metabólitos intermediários potencialmente reativos. Para este perfil, o cuidado com técnicas de preparo de carnes ainda é recomendado (preferir cozimento a vapor ou em temperaturas moderadas) para minimizar a formação de aminas heterocíclicas, mesmo com maior capacidade de acetilação.",
+   "references": " \n1.\tPatillon B, et al A homogenizing process of selection has maintained an \"ultra-slow\" acetylation NAT2 variant in humans.  Hum Biol. 2014 Summer;86(3):185-214. \n2.\tSuarez-Kurtz G, et al. Single nucleotide polymorphism coverage and inference of N-acetyltransferase-2 acetylator phenotypes in wordwide population groups. Pharmacogenet Genomics. 2016 Aug;26(8):363-9\n3.\tPodgorná E, et al. Variation in NAT2 acetylation phenotypes is associated with differences in food-producing subsistence modes and ecoregions in Africa.\n4.\tBMC Evol Biol. 2015 Dec 1;15:263.\n5.\tWalker K, et al.   Genetic polymorphism in N-Acetyltransferase (NAT): Population distribution of NAT1 and NAT2 activity J Toxicol Environ Health B Crit Rev. 2009;12(5-6):440-72.\n6.\tValente C,    Exploring the relationship between lifestyles, diets and genetic adaptations in humans. BMC Genet. 2015 May 28;16:55.\n7.\tLopes MQP, et al.     Human N-acetyltransferase 2 (NAT2) gene variability in Brazilian populations from different geographical areas. Front Pharmacol. 2023 Nov 15;14:1278720.",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs1799930",
+   "genotype": "AG",
+   "genotypeFreq": 0.384943955,
+   "summary": "Genótipo AA é um acetilador lento aumenta toxicidade compostos N-acetilados",
+   "patientText": " Seu resultado genético para o gene NAT2 indica o genótipo AG (heterozigoto), com atividade intermediária de acetilação — classificado como acetilador intermediário. No genótipo AG, a capacidade de acetilação é parcialmente preservada, com uma cópia do alelo de menor atividade. A velocidade de metabolização de substratos da NAT2 é variável, podendo comportar-se de forma mais próxima ao acetilador rápido ou lento dependendo do substrato e da carga de exposição. Recomendamos: moderar o consumo de carnes processadas e grelhadas em alta temperatura, informar ao médico sobre este genótipo quando em uso de fármacos metabolizados pela NAT2 (isoniazida, dapsona, hidralazina), e apoiar a fase II da detoxificação com alimentação rica em crucíferas e antioxidantes.",
+   "references": " \n1.\tPatillon B, et al A homogenizing process of selection has maintained an \"ultra-slow\" acetylation NAT2 variant in humans.  Hum Biol. 2014 Summer;86(3):185-214. \n2.\tSuarez-Kurtz G, et al. Single nucleotide polymorphism coverage and inference of N-acetyltransferase-2 acetylator phenotypes in wordwide population groups. Pharmacogenet Genomics. 2016 Aug;26(8):363-9\n3.\tPodgorná E, et al. Variation in NAT2 acetylation phenotypes is associated with differences in food-producing subsistence modes and ecoregions in Africa.\n4.\tBMC Evol Biol. 2015 Dec 1;15:263.\n5.\tWalker K, et al.   Genetic polymorphism in N-Acetyltransferase (NAT): Population distribution of NAT1 and NAT2 activity J Toxicol Environ Health B Crit Rev. 2009;12(5-6):440-72.\n6.\tValente C,    Exploring the relationship between lifestyles, diets and genetic adaptations in humans. BMC Genet. 2015 May 28;16:55.\n7.\tLopes MQP, et al.     Human N-acetyltransferase 2 (NAT2) gene variability in Brazilian populations from different geographical areas. Front Pharmacol. 2023 Nov 15;14:1278720.",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs1799930",
+   "genotype": "AA",
+   "genotypeFreq": 0.06767802249999999,
+   "summary": "Genótipo AA é um acetilador lento aumenta toxicidade compostos N-acetilados",
+   "patientText": "Seu resultado genético para o gene NAT2 indica o genótipo AA, associado ao perfil de acetilador lento — menor atividade da N-acetiltransferase 2. Acetiladores lentos processam compostos via NAT2 com velocidade reduzida, resultando em maior exposição dos tecidos a aminas aromáticas não acetiladas (encontradas em carnes grelhadas, corantes e tabaco), compostos potencialmente genotóxicos. Do ponto de vista farmacológico, acetiladores lentos têm maior risco de efeitos adversos com fármacos metabolizados pela NAT2 (como isoniazida — risco de neuropatia periférica). Para este perfil, recomendamos: reduzir significativamente o consumo de carnes processadas e grelhadas em altas temperaturas, evitar tabagismo, informar o médico sobre este genótipo para ajuste de doses de medicamentos NAT2-dependentes. Nutricionalmente, apoiar a fase II com crucíferas, alho, cúrcuma e ingestão proteica adequada é especialmente relevante.",
+   "references": " \n1.\tPatillon B, et al A homogenizing process of selection has maintained an \"ultra-slow\" acetylation NAT2 variant in humans.  Hum Biol. 2014 Summer;86(3):185-214. \n2.\tSuarez-Kurtz G, et al. Single nucleotide polymorphism coverage and inference of N-acetyltransferase-2 acetylator phenotypes in wordwide population groups. Pharmacogenet Genomics. 2016 Aug;26(8):363-9\n3.\tPodgorná E, et al. Variation in NAT2 acetylation phenotypes is associated with differences in food-producing subsistence modes and ecoregions in Africa.\n4.\tBMC Evol Biol. 2015 Dec 1;15:263.\n5.\tWalker K, et al.   Genetic polymorphism in N-Acetyltransferase (NAT): Population distribution of NAT1 and NAT2 activity J Toxicol Environ Health B Crit Rev. 2009;12(5-6):440-72.\n6.\tValente C,    Exploring the relationship between lifestyles, diets and genetic adaptations in humans. BMC Genet. 2015 May 28;16:55.\n7.\tLopes MQP, et al.     Human N-acetyltransferase 2 (NAT2) gene variability in Brazilian populations from different geographical areas. Front Pharmacol. 2023 Nov 15;14:1278720.",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs4680",
+   "genotype": "GG",
+   "genotypeFreq": 0.315311448676,
+   "summary": "Genótipo AA corresponde a Val158Met e diminui  catabolismo Dopamina; GG corresponde a Val/Val aumenta catabolismo dopamina",
+   "patientText": " Seu resultado genético para o gene COMT indica o genótipo GG (variante Val158/Val158), associado à maior atividade da enzima Catecol-O-Metiltransferase. A COMT metaboliza dopamina, noradrenalina e adrenalina no córtex pré-frontal, regulando o processamento cognitivo, a resposta ao estresse e a modulação do humor. Portadores do genótipo GG (Val/Val) têm metabolismo mais rápido das catecolaminas, com menor acúmulo de dopamina no córtex pré-frontal. Isso confere maior resiliência ao estresse físico e maior tolerância a situações de pressão, porém com menor vantagem em tarefas cognitivas de alta precisão em ambiente tranquilo. Nutricionalmente, tirosina (precursora da dopamina — carnes, ovos, laticínios, soja), vitaminas do complexo B (cofatores da síntese), magnésio e antioxidantes são especialmente relevantes para este perfil. A prática de atividade física regular demonstrou aumentar os níveis de dopamina e otimizar a função do COMT neste genótipo.",
+   "references": "1.\tMorris KA et al The influence of COMT rs4680 on functional connectivity in healthy adults: A systematic review Eur J Neurosci. 2020 Oct;52(8):3851-3878\n2.\tApa Z et al Association between executive functions and COMT Val108/158Met polymorphism among healthy younger and older adults: A preliminary study. PLoS One. 2024 May 13;19(5):e0303343\n3.\tHumińska-Lisowska K, et al Association Between the rs4680 Polymorphism of the COMT Gene and Personality Traits among Combat Sports Athletes. Antrobus MR J Hum Kinet. 2023 Jul 6;89:89-99  \n4.\tConcussion-Associated Gene Variant COMT rs4680 Is Associated With Elite Rugby Athlete Status.",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs4680",
+   "genotype": "AG",
+   "genotypeFreq": 0.49242910264799994,
+   "summary": "Genótipo AA corresponde a Val158Met e diminui  catabolismo Dopamina; GG corresponde a Val/Val aumenta catabolismo dopamina",
+   "patientText": "Seu resultado genético para o gene COMT indica o genótipo AG (heterozigoto Val158Met), com atividade intermediária da enzima Catecol-O-Metiltransferase. O genótipo AG representa um equilíbrio entre os perfis Val/Val e Met/Met, com velocidade de metabolização das catecolaminas moderada. Portadores do heterozigoto apresentam uma flexibilidade única: respondem bem tanto em situações de alta demanda e estresse quanto em tarefas cognitivas de precisão em ambientes calmos, mas podem apresentar variabilidade maior entre contextos. O suporte nutricional inclui: tirosina como precursora da dopamina, vitaminas B6, B9 e B12 como cofatores da COMT (que utiliza SAMe como doador de metil), magnésio, e controle do consumo de cafeína e estressores que podem desregular a homeostase das catecolaminas.",
+   "references": "1.\tMorris KA et al The influence of COMT rs4680 on functional connectivity in healthy adults: A systematic review Eur J Neurosci. 2020 Oct;52(8):3851-3878\n2.\tApa Z et al Association between executive functions and COMT Val108/158Met polymorphism among healthy younger and older adults: A preliminary study. PLoS One. 2024 May 13;19(5):e0303343\n3.\tHumińska-Lisowska K, et al Association Between the rs4680 Polymorphism of the COMT Gene and Personality Traits among Combat Sports Athletes. Antrobus MR J Hum Kinet. 2023 Jul 6;89:89-99  \n4.\tConcussion-Associated Gene Variant COMT rs4680 Is Associated With Elite Rugby Athlete Status.",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs4680",
+   "genotype": "AA",
+   "genotypeFreq": 0.19225944867599998,
+   "summary": "Genótipo AA corresponde a Val158Met e diminui  catabolismo Dopamina; GG corresponde a Val/Val aumenta catabolismo dopamina",
+   "patientText": "Seu resultado genético para o gene COMT indica o genótipo AA (variante Met158/Met158), associado à menor atividade da enzima COMT e maior acúmulo de dopamina no córtex pré-frontal. A menor atividade da COMT Met/Met resulta em dopamina persistindo por mais tempo nas sinapses pré-frontais, o que pode ser vantajoso para funções cognitivas em condições de repouso, mas desvantajoso em situações de alto estresse (maior suscetibilidade à ansiedade, ruminação e sensibilidade à dor). Do ponto de vista nutricional, compostos que apoiam a metilação da COMT são especialmente relevantes: vitaminas B2, B6, B9 e B12 (cofatores do ciclo do metil que fornece SAMe para a COMT), magnésio e metilfolato. Estratégias de controle do estresse (meditação, exercício, sono adequado) têm papel central para este genótipo. Alimentos ricos em tirosina devem ser consumidos regularmente para garantir o precursor da dopamina.",
+   "references": "1.\tMorris KA et al The influence of COMT rs4680 on functional connectivity in healthy adults: A systematic review Eur J Neurosci. 2020 Oct;52(8):3851-3878\n2.\tApa Z et al Association between executive functions and COMT Val108/158Met polymorphism among healthy younger and older adults: A preliminary study. PLoS One. 2024 May 13;19(5):e0303343\n3.\tHumińska-Lisowska K, et al Association Between the rs4680 Polymorphism of the COMT Gene and Personality Traits among Combat Sports Athletes. Antrobus MR J Hum Kinet. 2023 Jul 6;89:89-99  \n4.\tConcussion-Associated Gene Variant COMT rs4680 Is Associated With Elite Rugby Athlete Status.",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs6265",
+   "genotype": "GG",
+   "genotypeFreq": 0.720809490025,
+   "summary": "Genótipo AA corresponde a Val66Met diminui  secreção BDNF; GG aumenta plasticidade neural",
+   "patientText": "Seu resultado genético para o gene BDNF indica o genótipo GG, associado à maior secreção e atividade do Fator Neurotrófico Derivado do Cérebro. O BDNF é uma neurotrofina fundamental para a neuroplasticidade, a formação de memórias, o aprendizado, a regulação do humor e a saúde cognitiva ao longo da vida. Portadores do genótipo GG (Val66/Val66) apresentam secreção eficiente do BDNF dependente de atividade neuronal, resultando em maior plasticidade sináptica, melhor consolidação de memória e maior resiliência neurológica. Para potencializar esse perfil, recomendamos: exercício aeróbico regular (o mais potente indutor de BDNF), dieta rica em ômega-3 DHA (componente estrutural das membranas neuronais), polifenóis (flavonoides do cacau, frutas vermelhas, chá verde) e consumo adequado de proteínas.",
+   "references": "1.\tBulgay  C et al BDNF coexpresses with MTOR and is associated with muscle fiber size, lean mass and power-related traits Eur J Appl Physiol 2025 Oct;125(10):2781-2792.\n2.\tMurtagh  CF et al The Genetic Association with Athlete Status, Physical Performance, and Injury Risk in Soccer Int J Sports Med . 2023 Dec;44(13):941-960. \n3.\tPark S Interaction of polygenic variants specific for abdominal obesity risk with energy metabolism in large Korean cohorts Nutr Bull . 2022 Sep;47(3):307-321. \n4.\tXi B, et al Influence of physical inactivity on associations between single nucleotide polymorphisms and genetic predisposition to childhood obesity. Am J Epidemiol. 2011 Jun 1;173(11):1256-62",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs6265",
+   "genotype": "AG",
+   "genotypeFreq": 0.25639101994999997,
+   "summary": "Genótipo AA corresponde a Val66Met diminui  secreção BDNF; GG aumenta plasticidade neural",
+   "patientText": "Seu resultado genético para o gene BDNF indica o genótipo AG (heterozigoto Val66Met), com secreção intermediária de BDNF dependente de atividade. No genótipo AG, a produção e secreção de BDNF é parcialmente comprometida em comparação ao GG, especialmente em situações de alta demanda cognitiva ou estresse. Portadores do heterozigoto podem apresentar maior variabilidade na resposta ao aprendizado e maior suscetibilidade a declínio cognitivo em contextos de estilo de vida inadequado (sedentarismo, dieta pró-inflamatória, privação de sono). O exercício aeróbico é a intervenção mais eficaz para aumentar o BDNF independentemente do genótipo: 30-45 min de atividade moderada a intensa, 4-5 vezes por semana, demonstrou aumentar o BDNF em até 32%. Recomendamos garantir ingestão adequada de DHA/ômega-3, polifenóis, magnésio e zinco — micronutrientes que apoiam a síntese e sinalização do BDNF.",
+   "references": "1.\tBulgay  C et al BDNF coexpresses with MTOR and is associated with muscle fiber size, lean mass and power-related traits Eur J Appl Physiol 2025 Oct;125(10):2781-2792.\n2.\tMurtagh  CF et al The Genetic Association with Athlete Status, Physical Performance, and Injury Risk in Soccer Int J Sports Med . 2023 Dec;44(13):941-960. \n3.\tPark S Interaction of polygenic variants specific for abdominal obesity risk with energy metabolism in large Korean cohorts Nutr Bull . 2022 Sep;47(3):307-321. \n4.\tXi B, et al Influence of physical inactivity on associations between single nucleotide polymorphisms and genetic predisposition to childhood obesity. Am J Epidemiol. 2011 Jun 1;173(11):1256-62",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs6265",
+   "genotype": "AA",
+   "genotypeFreq": 0.022799490024999997,
+   "summary": "Genótipo AA corresponde a Val66Met diminui  secreção BDNF; GG aumenta plasticidade neural",
+   "patientText": "Seu resultado genético para o gene BDNF indica o genótipo AA (Met66/Met66), associado à redução significativa da secreção de BDNF dependente de atividade neuronal. A variante Met66 em homozigose compromete o tráfego intracelular e a secreção de BDNF nas sinapses, resultando em menor disponibilidade desta neurotrofina para a plasticidade sináptica. Portadores do genótipo AA podem apresentar maior suscetibilidade a declínio cognitivo, maior risco de depressão (especialmente em contextos de estresse crônico) e menor neuroplasticidade hipocampal. A boa notícia é que o BDNF é altamente responsivo ao estilo de vida: exercício aeróbico regular é o modificador ambiental mais potente para este genótipo (30-60 min, 5 vezes/semana). Nutricionalmente, recomendamos: DHA (ômega-3 de origem marinha — mínimo 1g/dia de EPA+DHA), flavonoides do cacau amargo, resveratrol, curcumina, zinco e magnésio. Privação de sono e dieta inflamatória são os principais supressores do BDNF — evitá-los é especialmente importante para este perfil.",
+   "references": "1.\tBulgay  C et al BDNF coexpresses with MTOR and is associated with muscle fiber size, lean mass and power-related traits Eur J Appl Physiol 2025 Oct;125(10):2781-2792.\n2.\tMurtagh  CF et al The Genetic Association with Athlete Status, Physical Performance, and Injury Risk in Soccer Int J Sports Med . 2023 Dec;44(13):941-960. \n3.\tPark S Interaction of polygenic variants specific for abdominal obesity risk with energy metabolism in large Korean cohorts Nutr Bull . 2022 Sep;47(3):307-321. \n4.\tXi B, et al Influence of physical inactivity on associations between single nucleotide polymorphisms and genetic predisposition to childhood obesity. Am J Epidemiol. 2011 Jun 1;173(11):1256-62",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs1801260",
+   "genotype": "TT",
+   "genotypeFreq": 0.568035049761,
+   "summary": "Genótipo CC aumenta tendência vespertina e  aumenta risco obesidade noturna; O genótipo TT diminue o risco de obsidade noturna",
+   "patientText": "Seu resultado genético para o gene CLOCK indica o genótipo TT, associado ao perfil circadiano mais favorável para regulação do ritmo biológico e cronobiologia nutricional. O gene CLOCK é um componente central do relógio biológico circadiano, regulando os ciclos de sono-vigília, o metabolismo energético ao longo do dia, a secreção de hormônios e a expressão de genes metabólicos em ritmo circadiano. Portadores do genótipo TT tendem a apresentar perfil matutino ou intermediário, com melhor alinhamento entre o ritmo biológico interno e os horários sociais convencionais, favorecendo melhor qualidade de sono, metabolismo energético mais eficiente e menor tendência ao ganho de peso noturno. Recomendamos sincronizar a alimentação com o relógio biológico (concentrar a maior parte das calorias no período diurno) e manter horários regulares de refeições e sono.",
+   "references": "1.\tGarcia-Rios, A et al. Beneficial effect of CLOCK gene polymorphism rs1801260 in combination with a low-fat diet on insulin metabolism in patients with metabolic syndrome. Chronobiol Int.  2014 Apr;31(3):401-8.\n2.\tGaraulet M, et al. CLOCK genetic variation and metabolic syndrome risk: modulation by monounsaturated fatty acids. Am J Clin Nutr. 2009 Dec;90(6):1466-75. \n3.\tDashti HS, et al.   Gene-Environment Interactions of Circadian-Related Genes for Cardiometabolic Traits. CHARGE Nutrition Study Group.Diabetes Care. 2015 Aug;38(8):1456-66\n4.\tGaraulet M, et al. Chronobiology, genetics and metabolic syndrome.\n5.\tCurr Opin Lipidol. 2009 Apr;20(2):127-34.\n",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs1801260",
+   "genotype": "CT",
+   "genotypeFreq": 0.371291900478,
+   "summary": "Genótipo CC aumenta tendência vespertina e  aumenta risco obesidade noturna; O genótipo TT diminue o risco de obsidade noturna",
+   "patientText": "Seu resultado genético para o gene CLOCK indica o genótipo CT (heterozigoto), com tendência intermediária ao cronotipo vespertino. No genótipo CT, pode haver leve tendência ao cronotipo mais tardio, com preferência por horários de sono e pico de energia mais vespertinos. Isso pode resultar em leve dessincronização quando os horários sociais são predominantemente matutinos, impactando metabolicamente a ingestão calórica noturna, que tende a ser metabolizada de forma menos eficiente. Recomendamos: evitar refeições calóricas após as 20h, concentrar proteínas e gorduras no almoço, preferir carboidratos complexos no jantar, manter horários regulares de sono mesmo nos fins de semana, e utilizar luz natural pela manhã para sincronizar o relógio biológico.",
+   "references": "1.\tGarcia-Rios, A et al. Beneficial effect of CLOCK gene polymorphism rs1801260 in combination with a low-fat diet on insulin metabolism in patients with metabolic syndrome. Chronobiol Int.  2014 Apr;31(3):401-8.\n2.\tGaraulet M, et al. CLOCK genetic variation and metabolic syndrome risk: modulation by monounsaturated fatty acids. Am J Clin Nutr. 2009 Dec;90(6):1466-75. \n3.\tDashti HS, et al.   Gene-Environment Interactions of Circadian-Related Genes for Cardiometabolic Traits. CHARGE Nutrition Study Group.Diabetes Care. 2015 Aug;38(8):1456-66\n4.\tGaraulet M, et al. Chronobiology, genetics and metabolic syndrome.\n5.\tCurr Opin Lipidol. 2009 Apr;20(2):127-34.\n",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs1801260",
+   "genotype": "CC",
+   "genotypeFreq": 0.06067304976099998,
+   "summary": "Genótipo CC aumenta tendência vespertina e  aumenta risco obesidade noturna; O genótipo TT diminue o risco de obsidade noturna",
+   "patientText": " Seu resultado genético para o gene CLOCK indica o genótipo CC, associado ao cronotipo vespertino mais pronunciado e maior tendência à dessincronização circadiana. Portadores do genótipo CC tendem a apresentar preferência natural por horários tardios de sono e vigília, o que pode resultar em conflito com os horários sociais convencionais (jet lag social crônico). Do ponto de vista metabólico, a dessincronização circadiana está associada a: maior risco de obesidade (especialmente ganho de gordura visceral), resistência insulínica, dislipidemia e comprometimento cognitivo. As intervenções cronobiológicas são especialmente impactantes para este perfil: crononutrição (concentrar a maior parte das calorias até as 15-16h), exposição matinal à luz solar (20-30 min após acordar), horários regulares de sono, alimentação com tempo restrito (janela alimentar de 8-10h no período diurno), e evitar luz azul de telas à noite. A melatonina em baixas doses (0,5-1 mg, 1-2h antes do sono desejado) pode ser indicada pelo médico para ajudar na ressincronização circadiana.",
+   "references": "1.\tGarcia-Rios, A et al. Beneficial effect of CLOCK gene polymorphism rs1801260 in combination with a low-fat diet on insulin metabolism in patients with metabolic syndrome. Chronobiol Int.  2014 Apr;31(3):401-8.\n2.\tGaraulet M, et al. CLOCK genetic variation and metabolic syndrome risk: modulation by monounsaturated fatty acids. Am J Clin Nutr. 2009 Dec;90(6):1466-75. \n3.\tDashti HS, et al.   Gene-Environment Interactions of Circadian-Related Genes for Cardiometabolic Traits. CHARGE Nutrition Study Group.Diabetes Care. 2015 Aug;38(8):1456-66\n4.\tGaraulet M, et al. Chronobiology, genetics and metabolic syndrome.\n5.\tCurr Opin Lipidol. 2009 Apr;20(2):127-34.\n",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs1800497",
+   "genotype": "GG",
+   "genotypeFreq": 0.5484380003560001,
+   "summary": "Genótipo AA corresponde a Taq1A diminui  densidade receptor dopamina;  aumenta compulsão alimentar",
+   "patientText": "Seu resultado genético para o gene DRD2 indica o genótipo GG (ausência da variante Taq1A), associado à maior densidade de receptores D2 de dopamina no estriado e melhor regulação do comportamento de recompensa. Os receptores D2 de dopamina são fundamentais para a sinalização do sistema de recompensa cerebral, modulando o prazer, a motivação, o controle de impulsos e o comportamento alimentar. Portadores do genótipo GG tendem a apresentar maior densidade de receptores D2, resultando em resposta de recompensa mais eficiente com menor quantidade de estímulo — favorecendo o controle sobre comportamentos de busca de recompensa, incluindo o comportamento alimentar. Recomendamos manter esse perfil favorável com alimentação equilibrada em tirosina (precursora da dopamina), vitaminas B6 e B9, magnésio e atividade física regular.",
+   "references": "1.\tYu-Qing Pan et al Association between ANKK1 (rs1800497) polymorphism of DRD2 gene and attention deficit hyperactivity disorder: a meta-analysis Neurosci Lett . 2015 Mar 17:590:101-5.\n2.\tDeng XD, et al.  Association between DRD2/ANKK1 TaqIA polymorphism and common illicit drug dependence: evidence from a meta-analysis. Hum Immunol. 2015 Jan;76(1):42-51.\n3.\tSun X, et al .DRD2: Bridging the Genome and Ingestive Behavior. Trends Cogn Sci. 2017 May;21(5):372-384.\n4.\tGluskin BS, et al. Genetic variation and dopamine D2 receptor availability: a systematic review and meta-analysis of human in vivo molecular imaging studies. Transl Psychiatry. 2016 Mar 1;6(3):e747. \n5.\tYao J, et al.  Association between DRD2 (rs1799732 and rs1801028) and ANKK1 (rs1800497) polymorphisms and schizophrenia: a meta-analysis. Am J Med Genet B Neuropsychiatr Genet. 2015 Jan;168B(1):1-13. \n6.\tLuShun Zhang et al. The DRD2 rs1800497 polymorphism increase the risk of mood disorder: Evidence from an update meta-analysis Journal of Affective Disorders Volume 158, April 2014, Pages 71-77",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs1800497",
+   "genotype": "AG",
+   "genotypeFreq": 0.384255999288,
+   "summary": "Genótipo AA corresponde a Taq1A diminui  densidade receptor dopamina;  aumenta compulsão alimentar",
+   "patientText": "Seu resultado genético para o gene DRD2 indica o genótipo AG (heterozigoto Taq1A), com densidade intermediária de receptores D2 de dopamina. No genótipo AG, a densidade de receptores D2 é moderadamente reduzida, podendo resultar em sutil tendência à busca por estímulos mais intensos para atingir a mesma sensação de recompensa. Isso pode se manifestar como leve tendência ao consumo de alimentos altamente palatáveis (ricos em açúcar e gordura) em situações de estresse ou entediamento, sem necessariamente configurar compulsão alimentar clínica. Recomendamos: atenção aos padrões alimentares emocionais, substituição de alimentos ultraprocessados por opções naturalmente recompensadoras (frutas, cacau amargo, frutas secas), e prática de atividades estimulantes que ativam o sistema dopaminérgico de forma saudável.",
+   "references": "1.\tYu-Qing Pan et al Association between ANKK1 (rs1800497) polymorphism of DRD2 gene and attention deficit hyperactivity disorder: a meta-analysis Neurosci Lett . 2015 Mar 17:590:101-5.\n2.\tDeng XD, et al.  Association between DRD2/ANKK1 TaqIA polymorphism and common illicit drug dependence: evidence from a meta-analysis. Hum Immunol. 2015 Jan;76(1):42-51.\n3.\tSun X, et al .DRD2: Bridging the Genome and Ingestive Behavior. Trends Cogn Sci. 2017 May;21(5):372-384.\n4.\tGluskin BS, et al. Genetic variation and dopamine D2 receptor availability: a systematic review and meta-analysis of human in vivo molecular imaging studies. Transl Psychiatry. 2016 Mar 1;6(3):e747. \n5.\tYao J, et al.  Association between DRD2 (rs1799732 and rs1801028) and ANKK1 (rs1800497) polymorphisms and schizophrenia: a meta-analysis. Am J Med Genet B Neuropsychiatr Genet. 2015 Jan;168B(1):1-13. \n6.\tLuShun Zhang et al. The DRD2 rs1800497 polymorphism increase the risk of mood disorder: Evidence from an update meta-analysis Journal of Affective Disorders Volume 158, April 2014, Pages 71-77",
+   "reviewRequired": false,
+   "reviewNote": null
+  },
+  {
+   "rsId": "rs1800497",
+   "genotype": "AA",
+   "genotypeFreq": 0.067306000356,
+   "summary": "Genótipo AA corresponde a Taq1A diminui  densidade receptor dopamina;  aumenta compulsão alimentar",
+   "patientText": "Seu resultado genético para o gene DRD2 indica o genótipo AA (Taq1A/Taq1A), associado à menor densidade de receptores D2 de dopamina no estriado e maior predisposição a comportamentos compulsivos relacionados à alimentação. Portadores do genótipo AA apresentam densidade reduzida de receptores D2, o que significa que o sistema de recompensa requer estimulação mais intensa para atingir o mesmo nível de satisfação — um mecanismo relacionado a maior tendência ao consumo compulsivo de alimentos hiperpalatáveis. A abordagem para este perfil envolve tanto estratégias nutricionais quanto comportamentais: estruturar o ambiente alimentar (reduzir a disponibilidade de alimentos ultraprocessados), planejar refeições e lanches para evitar o estado de fome intensa, e garantir ingestão adequada de tirosina e cofatores da síntese de dopamina. A prática regular de exercício físico demonstrou aumentar a densidade de receptores D2 e melhorar a resposta de recompensa de forma sustentável. Em casos de compulsão alimentar com impacto funcional, avaliação por nutricionista especializado em comportamento alimentar e psicólogo é recomendada.",
+   "references": "1.\tYu-Qing Pan et al Association between ANKK1 (rs1800497) polymorphism of DRD2 gene and attention deficit hyperactivity disorder: a meta-analysis Neurosci Lett . 2015 Mar 17:590:101-5.\n2.\tDeng XD, et al.  Association between DRD2/ANKK1 TaqIA polymorphism and common illicit drug dependence: evidence from a meta-analysis. Hum Immunol. 2015 Jan;76(1):42-51.\n3.\tSun X, et al .DRD2: Bridging the Genome and Ingestive Behavior. Trends Cogn Sci. 2017 May;21(5):372-384.\n4.\tGluskin BS, et al. Genetic variation and dopamine D2 receptor availability: a systematic review and meta-analysis of human in vivo molecular imaging studies. Transl Psychiatry. 2016 Mar 1;6(3):e747. \n5.\tYao J, et al.  Association between DRD2 (rs1799732 and rs1801028) and ANKK1 (rs1800497) polymorphisms and schizophrenia: a meta-analysis. Am J Med Genet B Neuropsychiatr Genet. 2015 Jan;168B(1):1-13. \n6.\tLuShun Zhang et al. The DRD2 rs1800497 polymorphism increase the risk of mood disorder: Evidence from an update meta-analysis Journal of Affective Disorders Volume 158, April 2014, Pages 71-77",
+   "reviewRequired": false,
+   "reviewNote": null
+  }
+ ]
+}

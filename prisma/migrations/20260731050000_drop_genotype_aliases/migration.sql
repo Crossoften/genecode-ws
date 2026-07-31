@@ -1,0 +1,11 @@
+-- Remove a tabela de aliases de genótipo.
+--
+-- Os aliases eram persistidos por SNP, mas o conjunto válido depende do PAINEL:
+-- o BDNF rs6265 usa notação C/T em performance e G/A em nutrigenética. Semear o
+-- segundo painel sobrescrevia os aliases do primeiro, e um "CT" legítimo do
+-- laboratório passava a resolver para "GA" — que o painel de performance não
+-- pontua. O marcador saía do cálculo e o laudo era emitido sem ele.
+--
+-- Passam a ser derivados em tempo de carga, a partir dos genótipos canônicos do
+-- próprio painel. É função pura, então não há estado para divergir.
+DROP TABLE IF EXISTS `genotype_aliases`;

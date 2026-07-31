@@ -54,9 +54,22 @@ export interface ModalityResult {
 export interface CalculationResult {
   readonly categories: readonly CategoryResult[];
   readonly modalities: readonly ModalityResult[];
+  /** Markers the panel expects but the input did not contain at all. */
   readonly missingMarkers: readonly string[];
-  /** Genotypes that could not be resolved, with the reason. */
+  /** Genotypes that could not be normalised, with the reason. */
   readonly rejectedMarkers: readonly { rsId: string; rawValue: string; reason: string }[];
+  /**
+   * Markers whose genotype WAS supplied and normalised, but has no score in this
+   * panel.
+   *
+   * Kept separate from `missingMarkers` on purpose. An absent column is a
+   * legitimately incomplete exam; a supplied genotype the panel cannot score is
+   * a data defect — wrong notation, wrong panel, or a stale alias mapping. The
+   * distinction exists because conflating the two once let a real bug through:
+   * BDNF rs6265 resolved to the nutrigenetics spelling inside the performance
+   * panel, was filed as "missing", and a report went out without it.
+   */
+  readonly unmatchedMarkers: readonly { rsId: string; genotype: string }[];
 }
 
 /**
@@ -112,6 +125,7 @@ export class ReportCalculator {
 
     const categories: CategoryResult[] = [];
     const missingOverall: string[] = [];
+    const unmatched: { rsId: string; genotype: string }[] = [];
     // Keeps normalised category scores for the modality step below.
     const normalisedByCategory = new Map<string, number>();
 
@@ -121,12 +135,21 @@ export class ReportCalculator {
 
       for (const marker of category.markers) {
         const genotype = resolved.get(marker.rsId.toLowerCase());
-        const score = genotype === undefined ? undefined : marker.genotypeScores.get(genotype);
 
-        if (score === undefined) {
+        if (genotype === undefined) {
           missing.push(marker.rsId);
           continue;
         }
+
+        const score = marker.genotypeScores.get(genotype);
+        if (score === undefined) {
+          // Genótipo veio e foi normalizado, mas o painel não sabe pontuá-lo.
+          // Isso é defeito de dado, e quem chama precisa tratar como erro.
+          unmatched.push({ rsId: marker.rsId, genotype });
+          missing.push(marker.rsId);
+          continue;
+        }
+
         present.push({ rsId: marker.rsId, score, weight: marker.weight });
       }
 
@@ -158,6 +181,7 @@ export class ReportCalculator {
       modalities,
       missingMarkers: missingOverall,
       rejectedMarkers: rejected,
+      unmatchedMarkers: unmatched,
     };
   }
 

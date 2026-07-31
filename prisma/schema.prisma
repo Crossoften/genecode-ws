@@ -211,7 +211,14 @@ enum VerificationPurpose {
 /// que quem registra é quem coleta. O segundo é de privacidade: consultas de
 /// prevalência de marcadores para o BI operam aqui sem tocar em `users`.
 model Subject {
-  id        String   @id @default(uuid()) @db.Char(36)
+  id String @id @default(uuid()) @db.Char(36)
+
+  /// Código único do laboratório — o mesmo impresso no kit e usado na primeira
+  /// coluna do CSV de resultados. É o que liga kit → amostra → genótipo → laudo,
+  /// e o cliente foi enfático sobre a razão disso existir: o DNA não pode ser
+  /// atribuído à pessoa errada.
+  externalCode String? @unique @db.VarChar(32)
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -350,32 +357,11 @@ model Snp {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  aliases        GenotypeAlias[]
   panelSnps      PanelSnp[]
   subjectResults SubjectGenotype[]
 
   @@index([gene])
   @@map("snps")
-}
-
-/// Normalização de fita e de notação.
-///
-/// O BDNF rs6265 aparece como C/T numa fonte e G/A noutra — são a mesma variante
-/// lida em fitas opostas de DNA. Sem esta tabela, o genótipo "CC" não casaria com
-/// o painel que espera "GG", o marcador seria descartado em silêncio e o paciente
-/// receberia um escore calculado com menos marcadores do que deveria.
-model GenotypeAlias {
-  id    String @id @default(uuid()) @db.Char(36)
-  snpId String @db.Char(36)
-  snp   Snp    @relation(fields: [snpId], references: [id], onDelete: Cascade)
-
-  /// Forma como pode chegar no CSV (ex.: "CC", "cc", "C/C").
-  alias String @db.VarChar(24)
-  /// Forma canônica usada pelo painel (ex.: "GG").
-  canonical String @db.VarChar(24)
-
-  @@unique([snpId, alias])
-  @@map("genotype_aliases")
 }
 
 // ============================================================================
@@ -585,6 +571,16 @@ model Interpretation {
   patientText String @db.LongText
   /// Referências científicas do genótipo específico.
   references String? @db.LongText
+
+  /// Marca texto cuja polaridade contradiz o escore adotado.
+  ///
+  /// O ADRB3 rs4994 tinha classificação invertida entre as fontes. A decisão
+  /// B5-bis adotou a do Python (TT favorável), mas os textos vieram do mockup,
+  /// escritos para a polaridade contrária. Enquanto o Dr. Câmara não reescrever,
+  /// o laudo omite o texto e mostra um aviso — melhor não dizer nada do que
+  /// dizer ao paciente o oposto do que o escore dele indica.
+  reviewRequired Boolean @default(false)
+  reviewNote     String? @db.VarChar(500)
 
   @@unique([panelId, rsId, genotype])
   @@map("interpretations")

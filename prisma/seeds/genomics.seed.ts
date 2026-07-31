@@ -2,7 +2,6 @@ import { PrismaClient, type Classification, type PanelKind, type ScoringModel } 
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-import { GenotypeNormalizer } from '../../src/contexts/genomics/domain/scoring/genotype-normalizer';
 
 const DATA_DIR = join(__dirname, 'data');
 
@@ -62,6 +61,82 @@ export async function seedGenomics(prisma: PrismaClient): Promise<void> {
   for (const file of ['panel-performance.json', 'panel-nutrigenetics.json']) {
     const panel = JSON.parse(readFileSync(join(DATA_DIR, file), 'utf8')) as PanelJson;
     await seedPanel(prisma, panel);
+  }
+
+  for (const slug of ['performance', 'nutrigenetics']) {
+    await seedInterpretations(prisma, slug);
+  }
+}
+
+interface InterpretationsJson {
+  panelSlug: string;
+  snps: { rsId: string; gene: string; proteinAction: string | null }[];
+  interpretations: {
+    rsId: string;
+    genotype: string;
+    genotypeFreq: number | null;
+    summary: string | null;
+    patientText: string;
+    references: string | null;
+    reviewRequired: boolean;
+    reviewNote: string | null;
+  }[];
+}
+
+/**
+ * Loads the report content: the "protein action" text per marker and the
+ * interpretation per genotype, each with its scientific references.
+ *
+ * This is the laboratory's intellectual property and the reason the report is
+ * credible — roughly 300 thousand characters curated by the scientific team.
+ *
+ * Interpretations are scoped by panel, like scores, because where the polarity
+ * of a marker differs between panels the text the patient reads differs too.
+ */
+async function seedInterpretations(prisma: PrismaClient, panelSlug: string): Promise<void> {
+  const json = JSON.parse(
+    readFileSync(join(DATA_DIR, `interpretations-${panelSlug}.json`), 'utf8'),
+  ) as InterpretationsJson;
+
+  const panel = await prisma.panel.findFirst({
+    where: { slug: panelSlug, status: 'PUBLISHED' },
+    orderBy: { publishedAt: 'desc' },
+  });
+  if (!panel) return;
+
+  for (const snp of json.snps) {
+    if (!snp.proteinAction) continue;
+    await prisma.snp.updateMany({
+      where: { rsId: snp.rsId },
+      data: { proteinAction: snp.proteinAction },
+    });
+  }
+
+  await prisma.interpretation.deleteMany({ where: { panelId: panel.id } });
+  await prisma.interpretation.createMany({
+    data: json.interpretations.map((entry) => ({
+      panelId: panel.id,
+      rsId: entry.rsId,
+      genotype: entry.genotype,
+      genotypeFreq: entry.genotypeFreq,
+      summary: entry.summary,
+      patientText: entry.patientText,
+      references: entry.references,
+      reviewRequired: entry.reviewRequired,
+      reviewNote: entry.reviewNote,
+    })),
+  });
+
+  const flagged = json.interpretations.filter((entry) => entry.reviewRequired);
+  console.log(`✓ conteúdo ${panelSlug}: ${json.interpretations.length} interpretações`);
+
+  if (flagged.length > 0) {
+    // Ruidoso de propósito: é conteúdo que contradiz o escore adotado e não pode
+    // ser mostrado ao paciente enquanto o laboratório não reescrever.
+    console.warn(
+      `  ⚠️  ${flagged.length} interpretações marcadas para revisão: ` +
+        flagged.map((f) => `${f.rsId}/${f.genotype}`).join(', '),
+    );
   }
 }
 
@@ -153,11 +228,12 @@ async function seedPanel(prisma: PrismaClient, json: PanelJson): Promise<void> {
 }
 
 /**
- * Creates the markers and their accepted genotype spellings.
+ * Creates the markers.
  *
- * The alias table is what prevents a marker from being silently dropped when the
- * laboratory reports it on the opposite DNA strand — see the BDNF rs6265 case in
- * `GenotypeNormalizer`.
+ * Genotype aliases are NOT persisted: they are derived from each panel's own
+ * canonical genotypes at load time. Storing them per SNP made the second panel
+ * overwrite the first for markers reported on opposite strands — see the note in
+ * `PrismaPanelRepository`.
  */
 async function seedSnps(prisma: PrismaClient, json: PanelJson): Promise<void> {
   for (const snp of json.snps) {
@@ -167,23 +243,7 @@ async function seedSnps(prisma: PrismaClient, json: PanelJson): Promise<void> {
       create: { rsId: snp.rsId, gene: snp.gene },
     });
 
-    const canonical = json.categories
-      .flatMap((c) => c.markers)
-      .filter((m) => m.rsId === snp.rsId)
-      .flatMap((m) => m.genotypeScores.map((gs) => gs.genotype));
-
-    if (canonical.length === 0) continue;
-
-    const { aliases } = GenotypeNormalizer.buildAliases(snp.rsId, canonical);
-
-    await prisma.genotypeAlias.deleteMany({ where: { snpId: record.id } });
-    await prisma.genotypeAlias.createMany({
-      data: [...aliases].map(([alias, canonicalValue]) => ({
-        snpId: record.id,
-        alias,
-        canonical: canonicalValue,
-      })),
-    });
+    void record;
   }
 }
 
