@@ -1107,3 +1107,110 @@ enum KitStatus {
   /// Descartado: extraviado, danificado ou coleta inviável.
   DISCARDED
 }
+
+// ============================================================================
+// ACOMPANHAMENTO PROFISSIONAL
+// ============================================================================
+
+/// Perfil profissional: personal trainer, nutricionista, médico.
+///
+/// Cadastro **livre**, com autodeclaração de especialidade e sem validação de
+/// conselho de classe. Foi decisão explícita do cliente em 16/07 — o Dr. Câmara
+/// chamou de "princípio do consulado americano", e André argumentou que barreira
+/// de entrada reduz a base: *"quanto mais a gente bloqueia pessoas de entrar,
+/// menos público-alvo a gente tem"*.
+///
+/// O caso de uso que justifica: o ex-atleta que treina corrida sem ser formado
+/// em educação física.
+model ProfessionalProfile {
+  id     String @id @default(uuid()) @db.Char(36)
+  userId String @unique @db.Char(36)
+
+  /// Autodeclarada, de uma lista fechada.
+  specialty String  @db.VarChar(60)
+  /// Registro de conselho, se a pessoa tiver. Não é validado nem obrigatório.
+  councilId String? @db.VarChar(40)
+  bio       String? @db.VarChar(500)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  shares      DataSharing[]
+  assessments Assessment[]
+
+  @@map("professional_profiles")
+}
+
+/// Autorização de acesso ao laudo consolidado.
+///
+/// Os dois sentidos são suportados (decisão F1): o profissional solicita e o
+/// paciente autoriza, ou o paciente autoriza direto. A diferença é só quem cria
+/// o registro e se ele nasce pendente.
+model DataSharing {
+  id             String              @id @default(uuid()) @db.Char(36)
+  subjectId      String              @db.Char(36)
+  professionalId String              @db.Char(36)
+  professional   ProfessionalProfile @relation(fields: [professionalId], references: [id], onDelete: Cascade)
+
+  status      SharingStatus @default(PENDING)
+  initiatedBy SharingInitiator
+
+  /// Termo de consentimento aceito, com a versão exata.
+  consentDocumentId String? @db.Char(36)
+
+  requestedAt  DateTime  @default(now())
+  authorizedAt DateTime?
+  revokedAt    DateTime?
+  ipAddress    String?   @db.VarChar(45)
+
+  @@unique([subjectId, professionalId])
+  @@index([professionalId, status])
+  @@map("data_sharings")
+}
+
+enum SharingStatus {
+  PENDING
+  AUTHORIZED
+  REVOKED
+}
+
+enum SharingInitiator {
+  PATIENT
+  PROFESSIONAL
+}
+
+/// Entrevista ambiental conduzida pelo profissional.
+///
+/// Imutável depois de concluída. O Dr. Câmara foi categórico em 16/07:
+/// *"Uma vez feito o primeiro, aquilo ali tá bloqueado. Não dá para ir em outro:
+/// 'ah, faz aí agora que agora eu aprendi a responder melhor'."*
+model Assessment {
+  id             String              @id @default(uuid()) @db.Char(36)
+  subjectId      String              @db.Char(36)
+  professionalId String              @db.Char(36)
+  professional   ProfessionalProfile @relation(fields: [professionalId], references: [id])
+
+  /// Q0 a Q4, sequenciais e espaçados por 3 meses.
+  checkpoint Checkpoint
+
+  /// Respostas: questionId → índice da opção escolhida.
+  answers Json
+  /// Escore ambiental por categoria, calculado na conclusão.
+  environmentalScores Json?
+  /// Escore ajustado por categoria, combinando genético e ambiental.
+  adjustedScores Json?
+
+  completedAt DateTime @default(now())
+
+  @@unique([subjectId, checkpoint])
+  @@index([professionalId])
+  @@map("assessments")
+}
+
+enum Checkpoint {
+  Q0
+  Q1
+  Q2
+  Q3
+  Q4
+}

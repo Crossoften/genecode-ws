@@ -4,6 +4,7 @@ import { APP_FILTER, APP_GUARD } from '@nestjs/core';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 
 import { CatalogModule } from '@contexts/catalog/catalog.module';
+import { CoachingModule } from '@contexts/coaching/coaching.module';
 import { GenomicsModule } from '@contexts/genomics/genomics.module';
 import { LabModule } from '@contexts/lab/lab.module';
 import { OrderingModule } from '@contexts/ordering/ordering.module';
@@ -47,6 +48,7 @@ import { HealthController } from './health.controller';
     CatalogModule,
     OrderingModule,
     LabModule,
+    CoachingModule,
   ],
   controllers: [HealthController],
   providers: [
