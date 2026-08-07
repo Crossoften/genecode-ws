@@ -27,6 +27,20 @@ export const envSchema = z.object({
 
   BCRYPT_ROUNDS: z.coerce.number().int().min(10).max(15).default(12),
 
+  // --- TLS no próprio processo -----------------------------------------------
+  //
+  // Não há proxy reverso na VPS de homologação: o Apache serve só o estático e
+  // cada backend abre HTTPS sozinho, lendo o certificado do Let's Encrypt. É o
+  // padrão de 69 dos 83 backends que rodam lá.
+  //
+  // Sem isto a API responderia em HTTP, e o navegador bloquearia toda chamada
+  // vinda de uma página HTTPS como conteúdo misto — falha que aparece só no
+  // console do navegador, nunca no log do servidor.
+  ACTIVATE_SSL_CERTIFICATE: z.enum(['YES', 'NO']).default('NO'),
+  SSL_KEY: z.string().optional(),
+  SSL_CERT: z.string().optional(),
+  SSL_CA: z.string().optional(),
+
   ENABLE_SWAGGER: z
     .enum(['true', 'false'])
     .default('true')
@@ -67,7 +81,30 @@ export function validateEnv(raw: Record<string, unknown>): Env {
     assertProductionSecrets(parsed.data);
   }
 
+  assertTlsIsComplete(parsed.data);
+
   return parsed.data;
+}
+
+/**
+ * Refuses to start with TLS half-configured.
+ *
+ * `ACTIVATE_SSL_CERTIFICATE=YES` without the three paths would make the process
+ * fall back to plain HTTP silently, and the failure would only surface as mixed
+ * content in the browser console — never in the server log. Better to refuse the
+ * boot, where somebody is looking.
+ */
+function assertTlsIsComplete(env: Env): void {
+  if (env.ACTIVATE_SSL_CERTIFICATE !== 'YES') return;
+
+  const missing = (['SSL_KEY', 'SSL_CERT', 'SSL_CA'] as const).filter((name) => !env[name]);
+
+  if (missing.length > 0) {
+    throw new Error(
+      `ACTIVATE_SSL_CERTIFICATE=YES requires ${missing.join(', ')}. ` +
+        'On the homolog VPS these point at /etc/letsencrypt/live/homolog.crosoften.com/.',
+    );
+  }
 }
 
 /**

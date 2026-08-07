@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs';
+
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
@@ -8,9 +10,29 @@ import helmet from 'helmet';
 import type { Env } from '@shared/config/env.schema';
 
 import { AppModule } from './app.module';
+import { validateEnv } from '@shared/config/env.schema';
+
+/**
+ * Reads the Let's Encrypt certificate when TLS is enabled for this process.
+ *
+ * The homolog VPS has no reverse proxy: Apache serves static files only, and
+ * each backend terminates TLS itself. Returns `undefined` in development, where
+ * the container speaks plain HTTP behind the dev-server proxy.
+ */
+function httpsOptions(): { key: Buffer; cert: Buffer; ca: Buffer } | undefined {
+  const env = validateEnv(process.env);
+  if (env.ACTIVATE_SSL_CERTIFICATE !== 'YES') return undefined;
+
+  return {
+    key: readFileSync(env.SSL_KEY!),
+    cert: readFileSync(env.SSL_CERT!),
+    ca: readFileSync(env.SSL_CA!),
+  };
+}
 
 async function bootstrap(): Promise<void> {
-  const app = await NestFactory.create(AppModule);
+  const https = httpsOptions();
+  const app = await NestFactory.create(AppModule, https ? { httpsOptions: https } : {});
   const config = app.get(ConfigService<Env, true>);
   const logger = new Logger('Bootstrap');
 
@@ -58,6 +80,7 @@ async function bootstrap(): Promise<void> {
   // and the published port never answers.
   const port = config.get('PORT', { infer: true });
   await app.listen(port, '0.0.0.0');
+  logger.log(`API no ar em ${https ? 'https' : 'http'}://0.0.0.0:${port}/v1`);
   logger.log(`API ouvindo na porta ${port} (${config.get('NODE_ENV', { infer: true })})`);
 }
 
