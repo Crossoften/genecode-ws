@@ -1,10 +1,13 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Post, Put } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Get, HttpCode, HttpStatus, Post, Put, Query } from '@nestjs/common';
+import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 
 import { CurrentUser, RequireRoles } from '@contexts/identity/presentation/decorators';
 import type { AuthenticatedPrincipal } from '@contexts/identity/presentation/guards/jwt-auth.guard';
 import { PrismaService } from '@infra/database/prisma.service';
+import { NotFoundError } from '@shared/domain/domain-error';
 
+import { GetPartnerBankDetailsUseCase } from '../../application/use-cases/get-partner-bank-details.use-case';
+import { ListPartnerSalesUseCase } from '../../application/use-cases/list-partner-sales.use-case';
 import { PartnerDashboardUseCase } from '../../application/use-cases/partner-dashboard.use-case';
 import { suggestCouponCode } from '../../domain/coupon-code';
 import { BankDetailsDto, RegisterPartnerDto } from '../dtos/partner.dto';
@@ -19,6 +22,8 @@ const DEFAULT_DISCOUNT_PERCENT = 10;
 export class PartnerController {
   constructor(
     private readonly dashboard: PartnerDashboardUseCase,
+    private readonly listSales: ListPartnerSalesUseCase,
+    private readonly bankDetailsQuery: GetPartnerBankDetailsUseCase,
     private readonly prisma: PrismaService,
   ) {}
 
@@ -96,6 +101,38 @@ export class PartnerController {
     return result.value;
   }
 
+  /** Lista completa de vendas do cupom. */
+  @Get('vendas')
+  @RequireRoles('affiliate')
+  @ApiOperation({ summary: 'Todas as vendas do cupom, com filtro de repasse (CSV)' })
+  @ApiQuery({
+    name: 'repasse',
+    required: false,
+    description: 'CSV de PENDING, PROCESSING, SETTLED, REVERSED, NOT_ISSUED.',
+  })
+  async sales(@CurrentUser() user: AuthenticatedPrincipal, @Query('repasse') payout?: string) {
+    // CSV como no filtro de situação do admin: os chips da tela agrupam mais
+    // de um status sob o mesmo rótulo.
+    const statuses = (payout ?? '')
+      .split(',')
+      .map((value) => value.trim())
+      .filter((value) => value.length > 0);
+
+    const result = await this.listSales.execute(user.id, statuses);
+    if (result.isFail()) throw result.error;
+    return result.value;
+  }
+
+  /** Dados de repasse atuais, para preencher o formulário. */
+  @Get('dados-bancarios')
+  @RequireRoles('affiliate')
+  @ApiOperation({ summary: 'Dados de repasse cadastrados' })
+  async currentBankDetails(@CurrentUser() user: AuthenticatedPrincipal) {
+    const result = await this.bankDetailsQuery.execute(user.id);
+    if (result.isFail()) throw result.error;
+    return result.value;
+  }
+
   /**
    * Dados bancários para repasse.
    *
@@ -107,6 +144,10 @@ export class PartnerController {
   @RequireRoles('affiliate')
   @ApiOperation({ summary: 'Atualiza os dados de repasse' })
   async bankDetails(@Body() dto: BankDetailsDto, @CurrentUser() user: AuthenticatedPrincipal) {
+    // Mesmo 404 do GET: affiliate sem registro de parceiro não pode virar 500.
+    const partner = await this.prisma.partner.findUnique({ where: { userId: user.id } });
+    if (!partner) throw new NotFoundError('Perfil de parceiro não encontrado.');
+
     await this.prisma.partner.update({
       where: { userId: user.id },
       data: { ...dto },

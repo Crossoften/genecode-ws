@@ -4,18 +4,16 @@ import { PrismaService } from '@infra/database/prisma.service';
 import { NotFoundError } from '@shared/domain/domain-error';
 import { fail, ok, type Result } from '@shared/domain/result';
 
-export interface SaleRow {
-  /** Só o número do pedido e o produto. Nunca dado do comprador. */
-  readonly orderNumber: string;
-  readonly productName: string;
-  readonly amountCents: number;
-  readonly commissionCents: number;
-  readonly payoutStatus: string;
-  readonly date: Date;
-}
+import { fetchPartnerSales, type SaleRow } from '../partner-sales.query';
+
+export type { SaleRow } from '../partner-sales.query';
 
 export interface PartnerDashboard {
   readonly couponCode: string;
+  /** Comissão do parceiro em pontos percentuais — a tela exibe "15% por venda". */
+  readonly commissionPercent: number;
+  /** Desconto que o cupom dá ao cliente, em pontos percentuais. */
+  readonly discountPercent: number;
   readonly totalSales: number;
   readonly commissionGeneratedCents: number;
   readonly commissionPendingCents: number;
@@ -28,14 +26,8 @@ export interface PartnerDashboard {
 /**
  * Painel do parceiro afiliado.
  *
- * ### O que o parceiro NÃO vê
- *
- * O protótipo aprovado traz um aviso explícito na tela de vendas: *"exibimos
- * apenas o número do pedido e o produto — nunca dados pessoais"*. Faz sentido:
- * o parceiro não tem relação com o comprador além de ter indicado a compra, e
- * num produto de saúde saber quem comprou já é informação sensível.
- *
- * Então nome, e-mail, CPF e endereço do comprador não saem daqui.
+ * A regra de privacidade das linhas de venda — o parceiro nunca vê dados do
+ * comprador — vive em `fetchPartnerSales`, compartilhada com a lista completa.
  */
 @Injectable()
 export class PartnerDashboardUseCase {
@@ -45,50 +37,23 @@ export class PartnerDashboardUseCase {
     const partner = await this.prisma.partner.findUnique({ where: { userId } });
     if (!partner) return fail(new NotFoundError('Perfil de parceiro não encontrado.'));
 
-    const orders = await this.prisma.order.findMany({
-      where: {
-        couponCode: partner.couponCode,
-        status: { notIn: ['PENDING_PAYMENT', 'CANCELLED'] },
-      },
-      include: { items: true },
-      orderBy: { createdAt: 'desc' },
-    });
-
-    const payouts = await this.prisma.payout.findMany({ where: { partnerId: partner.id } });
-    const payoutByOrder = new Map(payouts.map((payout) => [payout.orderId, payout]));
-
-    const settled = payouts
-      .filter((payout) => payout.status === 'SETTLED')
-      .reduce((sum, payout) => sum + payout.amountCents, 0);
-    const pending = payouts
-      .filter((payout) => payout.status === 'PENDING' || payout.status === 'PROCESSING')
-      .reduce((sum, payout) => sum + payout.amountCents, 0);
+    const [coupon, { sales, settledCents, pendingCents }] = await Promise.all([
+      this.prisma.coupon.findUnique({ where: { code: partner.couponCode } }),
+      fetchPartnerSales(this.prisma, partner),
+    ]);
 
     return ok({
       couponCode: partner.couponCode,
-      totalSales: orders.length,
-      commissionGeneratedCents: orders.reduce((sum, order) => sum + (order.commissionCents ?? 0), 0),
-      commissionPendingCents: pending,
-      commissionSettledCents: settled,
-      weeklySales: this.groupByWeek(orders.map((order) => order.createdAt)),
-      recentSales: orders.slice(0, 20).map((order) => ({
-        orderNumber: order.number,
-        productName: order.items[0]?.productName ?? '—',
-        amountCents: order.totalCents,
-        commissionCents: order.commissionCents ?? 0,
-        // Sem registro de repasse a situação é NOT_ISSUED, não PENDING.
-        //
-        // O default anterior era 'PENDING', e isso produzia uma tela que não
-        // fechava: quatro vendas marcadas "a receber" enquanto o total pendente
-        // — que soma repasses reais — contava só duas. O parceiro veria a
-        // diferença e não teria como explicá-la.
-        //
-        // Na prática só afeta pedidos pagos antes de o repasse passar a nascer
-        // junto do pagamento; daqui para frente todo pedido com comissão tem
-        // registro. Mas o dado precisa ser honesto sobre o passado também.
-        payoutStatus: payoutByOrder.get(order.id)?.status ?? 'NOT_ISSUED',
-        date: order.createdAt,
-      })),
+      // O cupom nasce na mesma transação do parceiro, então só falta se alguém
+      // o apagou à mão no banco; 0% é o retrato honesto desse estado.
+      commissionPercent: Number(coupon?.commissionPercent ?? 0),
+      discountPercent: Number(coupon?.discountPercent ?? 0),
+      totalSales: sales.length,
+      commissionGeneratedCents: sales.reduce((sum, sale) => sum + sale.commissionCents, 0),
+      commissionPendingCents: pendingCents,
+      commissionSettledCents: settledCents,
+      weeklySales: this.groupByWeek(sales.map((sale) => sale.date)),
+      recentSales: sales.slice(0, 20),
     });
   }
 

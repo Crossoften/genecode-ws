@@ -17,6 +17,23 @@ export interface ShareRecord {
 }
 
 /**
+ * Card data for the professional's patient list.
+ *
+ * Deliberately mirrors what the patient-facing summary exposes — name, product
+ * and normalized scores only. Nothing here ever touches `subject_genotypes`.
+ */
+export interface ProfessionalPatient extends ShareRecord {
+  /** Data subject's display name — the client asked for the name, not the code (decision D2). */
+  readonly subjectName: string;
+  /** Product of the subject's kit order. Null when no kit reached an order. */
+  readonly productName: string | null;
+  /** Global index of the latest PUBLISHED report. Null while no report exists. */
+  readonly globalIndex: number | null;
+  readonly band: string | null;
+  readonly assessmentsCompleted: number;
+}
+
+/**
  * Compartilhamento do laudo com um profissional.
  *
  * Suporta os **dois sentidos**, conforme a decisão F1 — as fontes divergiam:
@@ -43,6 +60,7 @@ export class ManageSharingUseCase {
   async grantByPatient(
     subjectId: string,
     professionalEmail: string,
+    actorUserId?: string,
     ipAddress?: string,
   ): Promise<Result<ShareRecord>> {
     const professional = await this.findProfessionalByEmail(professionalEmail);
@@ -71,7 +89,7 @@ export class ManageSharingUseCase {
       },
     });
 
-    await this.audit(subjectId, 'sharing.granted', record.id, ipAddress);
+    await this.audit(actorUserId ?? null, 'sharing.granted', record.id, ipAddress);
 
     return ok(this.toRecord(record, professional));
   }
@@ -109,11 +127,19 @@ export class ManageSharingUseCase {
    * Só o titular pode. Um profissional não deve conseguir remover o próprio
    * registro para apagar o rastro de que teve acesso.
    */
-  async revoke(subjectId: string, sharingId: string, ipAddress?: string): Promise<Result<void>> {
+  async revoke(
+    subjectIds: readonly string[],
+    sharingId: string,
+    actorUserId?: string,
+    ipAddress?: string,
+  ): Promise<Result<void>> {
     const sharing = await this.prisma.dataSharing.findUnique({ where: { id: sharingId } });
 
     if (!sharing) return fail(new NotFoundError('Compartilhamento não encontrado.'));
-    if (sharing.subjectId !== subjectId) {
+    // Valida contra TODOS os titulares da conta: quem tem dois kits precisa
+    // conseguir revogar o compartilhamento do titular mais antigo — direito de
+    // revogação não pode depender de qual kit foi ativado por último.
+    if (!subjectIds.includes(sharing.subjectId)) {
       return fail(new ForbiddenError('Você só pode revogar os seus próprios compartilhamentos.'));
     }
 
@@ -122,7 +148,7 @@ export class ManageSharingUseCase {
       data: { status: 'REVOKED', revokedAt: new Date() },
     });
 
-    await this.audit(subjectId, 'sharing.revoked', sharingId, ipAddress);
+    await this.audit(actorUserId ?? null, 'sharing.revoked', sharingId, ipAddress);
 
     return okVoid();
   }
@@ -160,15 +186,133 @@ export class ManageSharingUseCase {
     );
   }
 
-  /** Pessoas que autorizaram este profissional. */
-  async listForProfessional(professionalId: string): Promise<ShareRecord[]> {
+  /**
+   * People who authorized this professional, enriched for the patient cards.
+   *
+   * REVOKED sharings stay in the list on purpose: the professional's screen
+   * shows a "consent revoked" card instead of silently dropping the person.
+   * The consolidated report use case is what actually denies the access.
+   *
+   * Everything is resolved in batches — one query per source, never per row.
+   */
+  async listForProfessional(professionalId: string): Promise<ProfessionalPatient[]> {
     const records = await this.prisma.dataSharing.findMany({
-      where: { professionalId, status: 'AUTHORIZED' },
+      where: { professionalId, status: { in: ['AUTHORIZED', 'REVOKED'] } },
       include: { professional: true },
       orderBy: { authorizedAt: 'desc' },
     });
+    if (records.length === 0) return [];
 
-    return records.map((record) => this.toRecord(record, { ...record.professional, name: '' }));
+    const subjectIds = [...new Set(records.map((record) => record.subjectId))];
+
+    const [links, kits, reports, assessmentGroups] = await Promise.all([
+      this.prisma.subjectLink.findMany({
+        where: { subjectId: { in: subjectIds } },
+        orderBy: { createdAt: 'asc' },
+        select: { subjectId: true, relation: true, user: { select: { name: true } } },
+      }),
+      this.prisma.kit.findMany({
+        where: { subjectId: { in: subjectIds } },
+        // Ordem estável: com dois kits no mesmo titular, o primeiro ativado
+        // define o produto exibido — não a ordem do plano de execução do banco.
+        orderBy: { createdAt: 'asc' },
+        select: { subjectId: true, orderId: true },
+      }),
+      this.prisma.report.findMany({
+        where: { subjectId: { in: subjectIds }, status: 'PUBLISHED' },
+        orderBy: { publishedAt: 'desc' },
+        select: {
+          subjectId: true,
+          modalityIndexes: {
+            where: { modality: { isGlobal: true } },
+            select: { normalizedIndex: true, band: true },
+          },
+        },
+      }),
+      this.prisma.assessment.groupBy({
+        by: ['subjectId'],
+        where: { subjectId: { in: subjectIds } },
+        _count: { _all: true },
+      }),
+    ]);
+
+    // SELF wins over gifted/dependent links because the subject's own account
+    // carries the name the person registered for themselves; the oldest link is
+    // the fallback for subjects that only exist through someone else's account.
+    const nameBySubject = new Map<string, { name: string; isSelf: boolean }>();
+    for (const link of links) {
+      const current = nameBySubject.get(link.subjectId);
+      if (!current || (link.relation === 'SELF' && !current.isSelf)) {
+        nameBySubject.set(link.subjectId, {
+          name: link.user.name,
+          isSelf: link.relation === 'SELF',
+        });
+      }
+    }
+
+    const orderBySubject = new Map<string, string | null>();
+    for (const kit of kits) {
+      if (kit.subjectId && !orderBySubject.has(kit.subjectId)) {
+        orderBySubject.set(kit.subjectId, kit.orderId);
+      }
+    }
+
+    const orderIds = [...orderBySubject.values()].filter((id): id is string => id !== null);
+    const orders =
+      orderIds.length === 0
+        ? []
+        : await this.prisma.order.findMany({
+            where: { id: { in: orderIds } },
+            select: { id: true, items: { select: { productName: true }, take: 1 } },
+          });
+    const productByOrder = new Map(
+      orders.map((order) => [order.id, order.items[0]?.productName ?? null]),
+    );
+
+    // Reports come newest-first, so the first row per subject is the current one.
+    const indexBySubject = new Map<string, { globalIndex: number | null; band: string | null }>();
+    for (const report of reports) {
+      if (indexBySubject.has(report.subjectId)) continue;
+      const global = report.modalityIndexes[0];
+      indexBySubject.set(report.subjectId, {
+        globalIndex: global ? Number(global.normalizedIndex) : null,
+        band: global?.band ?? null,
+      });
+    }
+
+    const assessmentsBySubject = new Map(
+      assessmentGroups.map((group) => [group.subjectId, group._count._all]),
+    );
+
+    return records.map((record) => {
+      const base = {
+        ...this.toRecord(record, { ...record.professional, name: '' }),
+        subjectName: nameBySubject.get(record.subjectId)?.name ?? '',
+      };
+
+      // Revogado é revogado: o card mostra nome e status, nada mais. Manter os
+      // índices vivos aqui deixaria o profissional monitorando a saúde da
+      // pessoa depois de "a gente tira o acesso" (Augusto, 16/07).
+      if (record.status === 'REVOKED') {
+        return {
+          ...base,
+          productName: null,
+          globalIndex: null,
+          band: null,
+          assessmentsCompleted: 0,
+        };
+      }
+
+      const orderId = orderBySubject.get(record.subjectId);
+      const index = indexBySubject.get(record.subjectId);
+      return {
+        ...base,
+        productName: orderId ? (productByOrder.get(orderId) ?? null) : null,
+        globalIndex: index?.globalIndex ?? null,
+        band: index?.band ?? null,
+        assessmentsCompleted: assessmentsBySubject.get(record.subjectId) ?? 0,
+      };
+    });
   }
 
   private async findProfessionalByEmail(email: string) {
@@ -186,17 +330,16 @@ export class ManageSharingUseCase {
     return { ...profile, name: user.name, email: user.email };
   }
 
-  /** Acesso a dado genético sempre entra na trilha. */
+  /** Acesso a dado genético sempre entra na trilha — com o autor da ação. */
   private async audit(
-    userId: string,
+    userId: string | null,
     action: string,
     resourceId: string,
     ipAddress?: string,
   ): Promise<void> {
     await this.prisma.auditLog.create({
-      data: { action, resource: 'data_sharing', resourceId, ipAddress },
+      data: { userId, action, resource: 'data_sharing', resourceId, ipAddress },
     });
-    void userId;
   }
 
   private toRecord(

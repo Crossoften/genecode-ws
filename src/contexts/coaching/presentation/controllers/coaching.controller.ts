@@ -77,6 +77,7 @@ export class CoachingController {
     const result = await this.sharing.grantByPatient(
       subjectId,
       dto.professionalEmail,
+      user.id,
       request.ip,
     );
     if (result.isFail()) throw result.error;
@@ -92,17 +93,32 @@ export class CoachingController {
     @CurrentUser() user: AuthenticatedPrincipal,
     @Req() request: Request,
   ): Promise<void> {
-    const subjectId = await this.resolveSubject(user.id);
-    if (!subjectId) throw new Error('Nenhum kit ativado nesta conta.');
+    // TODOS os titulares da conta: a tela de privacidade lista os sharings de
+    // todos, então a revogação precisa alcançar todos — não só o kit mais
+    // recente (direito de revogação da LGPD para conta com 2+ kits).
+    const links = await this.prisma.subjectLink.findMany({
+      where: { userId: user.id },
+      select: { subjectId: true },
+    });
 
-    const result = await this.sharing.revoke(subjectId, id, request.ip);
+    const result = await this.sharing.revoke(
+      links.map((link) => link.subjectId),
+      id,
+      user.id,
+      request.ip,
+    );
     if (result.isFail()) throw result.error;
   }
 
-  /** Pessoas que autorizaram este profissional. */
+  /**
+   * Patient cards for the professional's dashboard.
+   *
+   * Includes REVOKED sharings so the screen can show the "consent revoked"
+   * card; the consolidated report endpoint is what denies the actual access.
+   */
   @Get('profissional/pacientes')
   @RequireRoles('professional')
-  @ApiOperation({ summary: 'Lista quem autorizou o compartilhamento' })
+  @ApiOperation({ summary: 'Cards de quem compartilhou com este profissional (inclui revogados)' })
   async patients(@CurrentUser() user: AuthenticatedPrincipal) {
     const profile = await this.prisma.professionalProfile.findUnique({
       where: { userId: user.id },
