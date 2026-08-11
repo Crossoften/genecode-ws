@@ -177,8 +177,141 @@ async function main(): Promise<void> {
     console.log(`  para o caderno: ${amostra.map((k) => k.code).join(' · ')}`);
   }
 
+  await semearJornadaPaciente(ids.get('qa.paciente@genecode.test')!);
+
   console.log(`\nSenha de todas as contas: ${SENHA_QA}`);
   console.log('\n⚠️  Ambiente de homologação. Nenhuma destas contas deve existir em produção.');
+}
+
+/**
+ * A jornada da paciente de QA, no formato que o painel do protótipo espera:
+ * um exame com laudo, um em processamento e um pedido com kit despachado
+ * aguardando ativação (é ele que acende o banner "Você tem um kit para
+ * vincular"). Cada pedido carrega os eventos que alimentam o feed de
+ * atualizações. Idempotente por número de pedido.
+ */
+async function semearJornadaPaciente(userId: string): Promise<void> {
+  const diasAtras = (dias: number): Date => new Date(Date.now() - dias * 86_400_000);
+
+  const conta = { customerName: 'Camila Rocha', customerEmail: 'qa.paciente@genecode.test', customerDoc: '529.982.247-25' };
+
+  const PEDIDOS = [
+    {
+      number: 'GC-2026-48210',
+      produto: { slug: 'premium', nome: 'GeneCode Premium', cents: 69_000 },
+      status: 'REPORT_READY',
+      criadoDiasAtras: 70,
+      eventos: [
+        ['PAID', 70], ['KIT_SHIPPED', 68], ['KIT_DELIVERED', 64], ['SAMPLE_IN_TRANSIT', 60],
+        ['SAMPLE_RECEIVED', 55], ['PROCESSING', 50], ['REPORT_READY', 40],
+      ],
+      kit: 'vinculado-com-laudo',
+    },
+    {
+      number: 'GC-2026-50133',
+      produto: { slug: 'performance', nome: 'GeneCode Performance', cents: 46_800 },
+      status: 'PROCESSING',
+      criadoDiasAtras: 20,
+      eventos: [
+        ['PAID', 20], ['KIT_SHIPPED', 18], ['KIT_DELIVERED', 14], ['SAMPLE_IN_TRANSIT', 10],
+        ['SAMPLE_RECEIVED', 6], ['PROCESSING', 2],
+      ],
+      kit: 'vinculado-sem-laudo',
+    },
+    {
+      number: 'GC-2026-50890',
+      produto: { slug: 'nutrigenetics', nome: 'GeneCode Nutrigenética', cents: 39_700 },
+      status: 'KIT_SHIPPED',
+      criadoDiasAtras: 3,
+      eventos: [['PAID', 3], ['KIT_SHIPPED', 1]],
+      kit: 'aguardando-ativacao',
+    },
+  ] as const;
+
+  for (const pedido of PEDIDOS) {
+    const existente = await prisma.order.findUnique({ where: { number: pedido.number } });
+    if (existente) continue;
+
+    const order = await prisma.order.create({
+      data: {
+        number: pedido.number,
+        userId,
+        ...conta,
+        status: pedido.status,
+        subtotalCents: pedido.produto.cents,
+        totalCents: pedido.produto.cents,
+        createdAt: diasAtras(pedido.criadoDiasAtras),
+        paidAt: diasAtras(pedido.criadoDiasAtras),
+        items: {
+          create: {
+            productSlug: pedido.produto.slug,
+            productName: pedido.produto.nome,
+            unitCents: pedido.produto.cents,
+          },
+        },
+        events: {
+          create: pedido.eventos.map(([status, dias]) => ({
+            status,
+            actor: 'system',
+            createdAt: diasAtras(dias),
+          })),
+        },
+      },
+    });
+
+    const lote = await prisma.kitBatch.findFirst({ orderBy: { createdAt: 'desc' } });
+    if (!lote) continue;
+
+    if (pedido.kit === 'aguardando-ativacao') {
+      // O kit despachado e não ativado é o que o banner do painel anuncia.
+      await prisma.kit.create({
+        data: { code: await gerarCodigoUnico(), batchId: lote.id, status: 'ASSIGNED', orderId: order.id },
+      });
+      continue;
+    }
+
+    // Kits vinculados: o do laudo aponta para o titular que já tem laudo
+    // publicado; o outro ganha titular próprio, sem laudo, para o pedido em
+    // processamento não herdar o laudo do exame anterior.
+    let subjectId: string;
+    if (pedido.kit === 'vinculado-com-laudo') {
+      const link = await prisma.subjectLink.findFirst({
+        where: { userId },
+        orderBy: { createdAt: 'asc' },
+      });
+      if (!link) continue;
+      subjectId = link.subjectId;
+    } else {
+      const subject = await prisma.subject.create({ data: {} });
+      await prisma.subjectLink.create({
+        data: { userId, subjectId: subject.id, relation: 'SELF' },
+      });
+      subjectId = subject.id;
+    }
+
+    await prisma.kit.create({
+      data: {
+        code: await gerarCodigoUnico(),
+        batchId: lote.id,
+        status: 'ACTIVATED',
+        orderId: order.id,
+        subjectId,
+        activatedByUserId: userId,
+        activatedAt: diasAtras(pedido.criadoDiasAtras - 4),
+      },
+    });
+  }
+
+  console.log('✓ jornada da paciente: laudo pronto, exame em processamento e kit a vincular');
+}
+
+/** Código válido no módulo 11 e inédito na base. */
+async function gerarCodigoUnico(): Promise<string> {
+  for (;;) {
+    const code = gerarCodigoKit();
+    const existe = await prisma.kit.findUnique({ where: { code } });
+    if (!existe) return code;
+  }
 }
 
 main()
