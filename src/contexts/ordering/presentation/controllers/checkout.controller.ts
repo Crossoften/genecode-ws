@@ -1,8 +1,12 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, Query, Req } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
 import { Throttle } from '@nestjs/throttler';
+import type { Request } from 'express';
 
 import { IsPublic } from '@contexts/identity/presentation/decorators';
+import type { Env } from '@shared/config/env.schema';
 
 import { CheckoutUseCase } from '../../application/use-cases/checkout.use-case';
 import { TrackOrderUseCase } from '../../application/use-cases/track-order.use-case';
@@ -16,6 +20,8 @@ export class CheckoutController {
     private readonly checkout: CheckoutUseCase,
     private readonly quoteShipping: QuoteShippingUseCase,
     private readonly trackOrder: TrackOrderUseCase,
+    private readonly jwt: JwtService,
+    private readonly config: ConfigService<Env, true>,
   ) {}
 
   /** Cotação de frete para um CEP. Pública: acontece antes de haver conta. */
@@ -40,7 +46,7 @@ export class CheckoutController {
   @HttpCode(HttpStatus.CREATED)
   @Throttle({ default: { limit: 10, ttl: 60_000 } })
   @ApiOperation({ summary: 'Finaliza a compra' })
-  async create(@Body() dto: CheckoutDto) {
+  async create(@Body() dto: CheckoutDto, @Req() request: Request) {
     const result = await this.checkout.execute({
       customer: dto.customer,
       address: dto.address,
@@ -48,9 +54,28 @@ export class CheckoutController {
       shippingCode: dto.shippingCode,
       couponCode: dto.couponCode,
       payment: dto.payment,
+      // Guest checkout continua público (a conta é oferecida depois, 28/05),
+      // mas quem JÁ está logado tem o pedido vinculado à conta — senão a própria
+      // compradora não veria a compra na área dela. Token opcional: sem sessão,
+      // segue anônimo.
+      userId: await this.optionalUserId(request),
     });
     if (result.isFail()) throw result.error;
     return result.value;
+  }
+
+  /** Decodifica o Bearer se houver — sem token, checkout anônimo, sem erro. */
+  private async optionalUserId(request: Request): Promise<string | undefined> {
+    const header = request.headers.authorization;
+    if (!header?.startsWith('Bearer ')) return undefined;
+    try {
+      const claims = await this.jwt.verifyAsync<{ sub: string }>(header.slice(7), {
+        secret: this.config.get('JWT_ACCESS_SECRET', { infer: true }),
+      });
+      return claims.sub;
+    } catch {
+      return undefined;
+    }
   }
 
   /**
