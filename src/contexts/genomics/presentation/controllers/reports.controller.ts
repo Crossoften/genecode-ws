@@ -54,8 +54,8 @@ export class ReportsController {
   @Get('reports/:id')
   @RequirePermissions('reports.read')
   @ApiOperation({ summary: 'Resumo do laudo' })
-  async summary(@Param('id') id: string) {
-    const result = await this.getReport.summary(id);
+  async summary(@Param('id') id: string, @CurrentUser() user: AuthenticatedPrincipal) {
+    const result = await this.getReport.summary(id, user);
     if (result.isFail()) throw result.error;
     return result.value;
   }
@@ -64,8 +64,12 @@ export class ReportsController {
   @Get('reports/:id/categorias/:slug')
   @RequirePermissions('reports.read')
   @ApiOperation({ summary: 'Detalhe de uma categoria biológica' })
-  async category(@Param('id') id: string, @Param('slug') slug: string) {
-    const result = await this.getReport.category(id, slug);
+  async category(
+    @Param('id') id: string,
+    @Param('slug') slug: string,
+    @CurrentUser() user: AuthenticatedPrincipal,
+  ) {
+    const result = await this.getReport.category(id, slug, user);
     if (result.isFail()) throw result.error;
     return result.value;
   }
@@ -74,8 +78,12 @@ export class ReportsController {
   @Get('reports/:id/marcadores/:rsId')
   @RequirePermissions('reports.read')
   @ApiOperation({ summary: 'Detalhe de um marcador, com referências científicas' })
-  async marker(@Param('id') id: string, @Param('rsId') rsId: string) {
-    const result = await this.getReport.marker(id, rsId);
+  async marker(
+    @Param('id') id: string,
+    @Param('rsId') rsId: string,
+    @CurrentUser() user: AuthenticatedPrincipal,
+  ) {
+    const result = await this.getReport.marker(id, rsId, user);
     if (result.isFail()) throw result.error;
     return result.value;
   }

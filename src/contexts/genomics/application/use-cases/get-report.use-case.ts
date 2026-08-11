@@ -4,6 +4,21 @@ import { PrismaService } from '@infra/database/prisma.service';
 import { NotFoundError } from '@shared/domain/domain-error';
 import { fail, ok, type Result } from '@shared/domain/result';
 
+/**
+ * Who is asking for the report.
+ *
+ * A local shape instead of the identity context's principal type: the
+ * application layer only needs identity and roles, and depending on another
+ * context's presentation guard from here would invert the dependency rule.
+ */
+export interface ReportViewer {
+  readonly id: string;
+  readonly roles: readonly string[];
+}
+
+/** Papéis com leitura ampla de laudo — os mesmos que recebem reports.read de staff no seed. */
+const STAFF_ROLES: readonly string[] = ['lab', 'admin', 'master'];
+
 export interface ReportSummary {
   readonly id: string;
   readonly panel: { readonly name: string; readonly version: string };
@@ -91,7 +106,7 @@ export class GetReportUseCase {
   constructor(private readonly prisma: PrismaService) {}
 
   /** Level 1: cover of the report — global index, categories and modalities. */
-  async summary(reportId: string): Promise<Result<ReportSummary>> {
+  async summary(reportId: string, viewer: ReportViewer): Promise<Result<ReportSummary>> {
     const report = await this.prisma.report.findUnique({
       where: { id: reportId },
       include: {
@@ -106,6 +121,9 @@ export class GetReportUseCase {
     });
 
     if (!report) return fail(new NotFoundError('Laudo não encontrado.'));
+    if (!(await this.canView(report, viewer))) {
+      return fail(new NotFoundError('Laudo não encontrado.'));
+    }
 
     const global = report.modalityIndexes.find((entry) => entry.modality.isGlobal);
 
@@ -139,12 +157,19 @@ export class GetReportUseCase {
   }
 
   /** Level 2: the markers of one category, with the subject's genotype. */
-  async category(reportId: string, categorySlug: string): Promise<Result<CategoryDetail>> {
+  async category(
+    reportId: string,
+    categorySlug: string,
+    viewer: ReportViewer,
+  ): Promise<Result<CategoryDetail>> {
     const report = await this.prisma.report.findUnique({
       where: { id: reportId },
-      select: { id: true, subjectId: true, panelId: true },
+      select: { id: true, subjectId: true, panelId: true, status: true },
     });
     if (!report) return fail(new NotFoundError('Laudo não encontrado.'));
+    if (!(await this.canView(report, viewer))) {
+      return fail(new NotFoundError('Laudo não encontrado.'));
+    }
 
     const score = await this.prisma.reportCategoryScore.findFirst({
       where: { reportId, category: { slug: categorySlug } },
@@ -193,12 +218,19 @@ export class GetReportUseCase {
   }
 
   /** Level 3: one marker in full — protein action, genotype text and references. */
-  async marker(reportId: string, rsId: string): Promise<Result<MarkerFullDetail>> {
+  async marker(
+    reportId: string,
+    rsId: string,
+    viewer: ReportViewer,
+  ): Promise<Result<MarkerFullDetail>> {
     const report = await this.prisma.report.findUnique({
       where: { id: reportId },
-      select: { subjectId: true, panelId: true },
+      select: { subjectId: true, panelId: true, status: true },
     });
     if (!report) return fail(new NotFoundError('Laudo não encontrado.'));
+    if (!(await this.canView(report, viewer))) {
+      return fail(new NotFoundError('Laudo não encontrado.'));
+    }
 
     const panelSnp = await this.prisma.panelSnp.findFirst({
       where: { panelId: report.panelId, snp: { rsId } },
@@ -228,6 +260,34 @@ export class GetReportUseCase {
       patientText: underReview ? null : (interpretation?.patientText ?? null),
       references: interpretation?.references ?? null,
     });
+  }
+
+  /**
+   * Whether the viewer may read this report.
+   *
+   * `reports.read` alone answers "may this role open reports at all"; this
+   * check answers WHICH ones. Every account carries the `patient` role (it is
+   * granted on sign-up), so the permission is effectively universal — this is
+   * the load-bearing barrier, not the grant. Non-staff viewers only reach
+   * subjects they hold a `SubjectLink` to, and only `PUBLISHED` reports — the
+   * same two criteria the patient area applies; a draft or superseded version
+   * is not a current document. Staff keeps the platform-wide, any-status read
+   * it needs to operate (`STAFF_ROLES` mirrors the roles the seed marks as
+   * staff). Denial is reported as NOT_FOUND, never FORBIDDEN: a 403 on a
+   * guessed id would confirm the report exists, and report ids travel in URLs.
+   */
+  private async canView(
+    report: { subjectId: string; status: string },
+    viewer: ReportViewer,
+  ): Promise<boolean> {
+    if (viewer.roles.some((role) => STAFF_ROLES.includes(role))) return true;
+    if (report.status !== 'PUBLISHED') return false;
+
+    const link = await this.prisma.subjectLink.findUnique({
+      where: { userId_subjectId: { userId: viewer.id, subjectId: report.subjectId } },
+      select: { id: true },
+    });
+    return link !== null;
   }
 
   /** rsId → genótipo canônico observado para o titular. */

@@ -37,7 +37,17 @@ const PERMISSIONS = [
   ['audit.read', 'Consultar trilha de auditoria'],
 ] as const;
 
-/** Roles and the permissions each one carries. */
+/**
+ * Roles and the permissions each one carries.
+ *
+ * `professional` and `affiliate` carry NO permissions on purpose. Their routes
+ * are guarded by `@RequireRoles` plus per-record checks in the use cases
+ * (`DataSharing` for the consolidated report, `Partner.userId` for the panel) —
+ * and both roles are self-assigned on sign-up, so any permission granted here
+ * is effectively public to every logged-in account. In particular, `reports.*`
+ * must never appear on either: the professional would gain the genotype routes
+ * the client forbade, and the affiliate must never reach a report at all.
+ */
 const ROLES: ReadonlyArray<{
   slug: string;
   name: string;
@@ -48,7 +58,9 @@ const ROLES: ReadonlyArray<{
     slug: 'patient',
     name: 'Paciente',
     description: 'Cliente final: compra o kit, ativa a amostra e acessa o próprio laudo.',
-    permissions: [],
+    // reports.read abre as rotas do laudo; o escopo de QUAL laudo é o
+    // SubjectLink, verificado no GetReportUseCase — não conceder nada além.
+    permissions: ['reports.read'],
   },
   {
     slug: 'professional',
