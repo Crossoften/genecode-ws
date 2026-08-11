@@ -786,6 +786,11 @@ model Product {
 
   imageUrl String? @db.VarChar(500)
 
+  /// Dados físicos do kit, exibidos e editados no admin (tela adm-8).
+  weightGrams  Int?
+  dimensionsCm String? @db.VarChar(20)
+  category     String? @db.VarChar(40)
+
   /// Itens do "o que está incluso", um por posição.
   features ProductFeature[]
   /// Eixos usados pelo quiz de recomendação.
@@ -1312,4 +1317,64 @@ enum PayoutStatus {
   SETTLED
   /// Estornado junto com o pedido.
   REVERSED
+}
+
+/// Gatilho de mensagem automática ao paciente por etapa do exame (adm-10).
+///
+/// Configuração viva editada pelo admin — texto-modelo com placeholders
+/// literais ({nome}, {pedido}, {link_rastreio}, {link_laudo}), canais e
+/// liga/desliga. O disparo real passa pela porta NotificationSender; enquanto
+/// a operadora não é contratada, o sender de log registra em NotificationLog.
+model NotificationTrigger {
+  id  String @id @default(uuid()) @db.Char(36)
+  key NotificationTriggerKey @unique
+
+  enabled  Boolean @default(true)
+  /// Texto-modelo com placeholders literais, emojis inclusos.
+  template String  @db.Text
+
+  channelWhatsapp Boolean @default(true)
+  channelEmail    Boolean @default(true)
+  channelSms      Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("notification_triggers")
+}
+
+enum NotificationTriggerKey {
+  ORDER_CONFIRMED
+  KIT_SHIPPED
+  SAMPLE_RECEIVED
+  REMINDER
+  REPORT_READY
+}
+
+/// Registro de cada envio (ou tentativa) — alimenta os KPIs de mensageria.
+model NotificationLog {
+  id         String  @id @default(uuid()) @db.Char(36)
+  triggerKey NotificationTriggerKey
+  channel    NotificationChannel
+  /// E-mail ou telefone, como enviado.
+  recipient  String  @db.VarChar(255)
+  orderId    String? @db.Char(36)
+  status     NotificationLogStatus @default(SENT)
+  createdAt  DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([triggerKey, channel])
+  @@map("notification_logs")
+}
+
+enum NotificationChannel {
+  WHATSAPP
+  EMAIL
+  SMS
+}
+
+enum NotificationLogStatus {
+  SENT
+  DELIVERED
+  FAILED
 }

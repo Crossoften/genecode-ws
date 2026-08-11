@@ -17,6 +17,24 @@ export interface SalesMetrics {
     readonly revenueCents: number;
   }[];
   readonly byState: readonly { readonly state: string; readonly count: number }[];
+  /** Paid sales bucketed into the window's weeks — `S1` is the oldest. */
+  readonly weeklySales: readonly {
+    readonly week: string;
+    readonly count: number;
+    readonly revenueCents: number;
+  }[];
+  /** Revenue × commission for the last 6 calendar months, oldest first. */
+  readonly monthlySeries: readonly {
+    readonly month: string;
+    readonly revenueCents: number;
+    readonly commissionCents: number;
+  }[];
+  /** Same window shifted back once, for the comparison deltas. */
+  readonly previousPeriod: {
+    readonly ordersPaid: number;
+    readonly grossRevenueCents: number;
+    readonly netRevenueCents: number;
+  };
 }
 
 export interface OperationsMetrics {
@@ -29,6 +47,10 @@ export interface OperationsMetrics {
   }[];
   readonly kitsByStatus: readonly { readonly status: string; readonly count: number }[];
   readonly reportsPublished: number;
+  /** Exames que entraram na esteira no mês corrente — o "+34 no mês" do painel. */
+  readonly startedThisMonth: number;
+  /** Laudos publicados no mês corrente — o "+41 no mês" do painel. */
+  readonly reportsPublishedThisMonth: number;
 }
 
 export interface GenomicsMetrics {
@@ -85,14 +107,41 @@ export interface PartnersMetrics {
 export class BusinessIntelligenceUseCase {
   constructor(private readonly prisma: PrismaService) {}
 
-  /** BI de Vendas e Marketing. */
-  async sales(since: Date): Promise<SalesMetrics> {
-    const orders = await this.prisma.order.findMany({
-      where: { createdAt: { gte: since } },
-      include: { address: { select: { state: true } } },
-    });
+  /**
+   * Sales and marketing BI for a rolling window.
+   *
+   * @param windowDays - Size of the window in days (`?dias` on the endpoint).
+   * @param now - Reference instant; injectable so tests pin the window.
+   */
+  async sales(windowDays: number, now: Date = new Date()): Promise<SalesMetrics> {
+    const windowMs = windowDays * DAY_MS;
+    const since = new Date(now.getTime() - windowMs);
+    const previousSince = new Date(now.getTime() - 2 * windowMs);
+    // A série mensal alimenta o gráfico Receita × comissões do Financeiro, que
+    // é sempre semestral — por isso ignora a janela escolhida no painel.
+    const monthsStart = new Date(now.getFullYear(), now.getMonth() - 5, 1);
+
+    const [orders, previousPaid, monthlyPaid] = await Promise.all([
+      this.prisma.order.findMany({
+        where: { createdAt: { gte: since } },
+        include: { address: { select: { state: true } } },
+      }),
+      this.prisma.order.findMany({
+        where: { createdAt: { gte: previousSince, lt: since }, paidAt: { not: null } },
+        select: { totalCents: true, commissionCents: true },
+      }),
+      this.prisma.order.findMany({
+        where: { paidAt: { gte: monthsStart } },
+        select: { paidAt: true, totalCents: true, commissionCents: true },
+      }),
+    ]);
 
     const paid = orders.filter((order) => order.paidAt !== null);
+    const previousGross = previousPaid.reduce((sum, order) => sum + order.totalCents, 0);
+    const previousCommissions = previousPaid.reduce(
+      (sum, order) => sum + (order.commissionCents ?? 0),
+      0,
+    );
     const gross = paid.reduce((sum, order) => sum + order.totalCents, 0);
     const commissions = paid.reduce((sum, order) => sum + (order.commissionCents ?? 0), 0);
 
@@ -126,7 +175,72 @@ export class BusinessIntelligenceUseCase {
       byState: [...byState.entries()]
         .map(([state, count]) => ({ state, count }))
         .sort((a, b) => b.count - a.count),
+      weeklySales: this.groupByWeek(paid, since, windowDays),
+      monthlySeries: this.groupByMonth(monthlyPaid, now),
+      previousPeriod: {
+        ordersPaid: previousPaid.length,
+        grossRevenueCents: previousGross,
+        netRevenueCents: previousGross - previousCommissions,
+      },
     };
+  }
+
+  /**
+   * Buckets paid orders into the window's weeks by payment date, oldest first.
+   *
+   * Same shape as the partner dashboard chart, but labeled `S1..Sn` as the
+   * admin prototype shows.
+   */
+  private groupByWeek(
+    paid: readonly { paidAt: Date | null; totalCents: number }[],
+    since: Date,
+    windowDays: number,
+  ): { week: string; count: number; revenueCents: number }[] {
+    const weekCount = Math.max(1, Math.ceil(windowDays / 7));
+    const weeks = Array.from({ length: weekCount }, (_, index) => ({
+      week: `S${index + 1}`,
+      count: 0,
+      revenueCents: 0,
+    }));
+
+    for (const order of paid) {
+      if (order.paidAt === null) continue;
+      const index = Math.floor((order.paidAt.getTime() - since.getTime()) / WEEK_MS);
+      // Pagamento pode cair fora da janela de criação (ex.: boleto compensado
+      // depois) — vai para a ponta mais próxima em vez de sumir do gráfico.
+      const bucket = weeks[Math.min(Math.max(index, 0), weekCount - 1)];
+      bucket.count += 1;
+      bucket.revenueCents += order.totalCents;
+    }
+
+    return weeks;
+  }
+
+  /** Groups paid orders into the last 6 calendar months, oldest first. */
+  private groupByMonth(
+    paid: readonly { paidAt: Date | null; totalCents: number; commissionCents: number | null }[],
+    now: Date,
+  ): { month: string; revenueCents: number; commissionCents: number }[] {
+    const byMonth = new Map<number, { month: string; revenueCents: number; commissionCents: number }>();
+
+    for (let offset = 5; offset >= 0; offset -= 1) {
+      const start = new Date(now.getFullYear(), now.getMonth() - offset, 1);
+      byMonth.set(start.getFullYear() * 12 + start.getMonth(), {
+        month: MONTH_LABELS[start.getMonth()],
+        revenueCents: 0,
+        commissionCents: 0,
+      });
+    }
+
+    for (const order of paid) {
+      if (order.paidAt === null) continue;
+      const entry = byMonth.get(order.paidAt.getFullYear() * 12 + order.paidAt.getMonth());
+      if (!entry) continue;
+      entry.revenueCents += order.totalCents;
+      entry.commissionCents += order.commissionCents ?? 0;
+    }
+
+    return [...byMonth.values()];
   }
 
   /**
@@ -138,11 +252,18 @@ export class BusinessIntelligenceUseCase {
    * ficar parado sem ninguém ver.
    */
   async operations(): Promise<OperationsMetrics> {
-    const [ordersByStatus, kitsByStatus, reportsPublished] = await Promise.all([
-      this.prisma.order.groupBy({ by: ['status'], _count: true }),
-      this.prisma.kit.groupBy({ by: ['status'], _count: true }),
-      this.prisma.report.count({ where: { status: 'PUBLISHED' } }),
-    ]);
+    const monthStart = new Date();
+    monthStart.setDate(1);
+    monthStart.setHours(0, 0, 0, 0);
+
+    const [ordersByStatus, kitsByStatus, reportsPublished, startedThisMonth, reportsPublishedThisMonth] =
+      await Promise.all([
+        this.prisma.order.groupBy({ by: ['status'], _count: true }),
+        this.prisma.kit.groupBy({ by: ['status'], _count: true }),
+        this.prisma.report.count({ where: { status: 'PUBLISHED' } }),
+        this.prisma.order.count({ where: { paidAt: { gte: monthStart } } }),
+        this.prisma.report.count({ where: { status: 'PUBLISHED', publishedAt: { gte: monthStart } } }),
+      ]);
 
     // Estados terminais não contam como parados: um pedido concluído ou
     // cancelado está parado por definição.
@@ -159,6 +280,8 @@ export class BusinessIntelligenceUseCase {
       ordersByStatus: ordersByStatus.map((row) => ({ status: row.status, count: row._count })),
       kitsByStatus: kitsByStatus.map((row) => ({ status: row.status, count: row._count })),
       reportsPublished,
+      startedThisMonth,
+      reportsPublishedThisMonth,
       stalled: stalledOrders.map((order) => ({
         number: order.number,
         status: order.status,
@@ -297,6 +420,24 @@ export class BusinessIntelligenceUseCase {
     };
   }
 }
+
+const DAY_MS = 86_400_000;
+const WEEK_MS = 7 * DAY_MS;
+
+const MONTH_LABELS = [
+  'Jan',
+  'Fev',
+  'Mar',
+  'Abr',
+  'Mai',
+  'Jun',
+  'Jul',
+  'Ago',
+  'Set',
+  'Out',
+  'Nov',
+  'Dez',
+] as const;
 
 function round2(value: number): number {
   return Math.round(value * 100) / 100;

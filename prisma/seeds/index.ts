@@ -5,6 +5,7 @@ import { seedCatalog } from './catalog.seed';
 import { seedConsentDocuments } from './consent.seed';
 import { seedCoupons } from './coupon.seed';
 import { seedGenomics } from './genomics.seed';
+import { seedNotificationTriggers } from './notification.seed';
 
 const prisma = new PrismaClient();
 
@@ -32,6 +33,8 @@ const PERMISSIONS = [
   ['reports.publish', 'Publicar laudos'],
   ['partners.read', 'Visualizar parceiros'],
   ['partners.write', 'Gerenciar parceiros e comissões'],
+  ['notifications.read', 'Visualizar gatilhos de notificação'],
+  ['notifications.write', 'Gerenciar gatilhos de notificação'],
   ['finance.read', 'Visualizar financeiro'],
   ['analytics.read', 'Visualizar BI'],
   ['audit.read', 'Consultar trilha de auditoria'],
@@ -138,6 +141,7 @@ async function main(): Promise<void> {
   await seedCatalog(prisma);
   await seedConsentDocuments(prisma);
   await seedCoupons(prisma);
+  await seedNotificationTriggers(prisma);
   await seedDevelopmentAdmin();
 }
 

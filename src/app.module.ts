@@ -8,6 +8,7 @@ import { CatalogModule } from '@contexts/catalog/catalog.module';
 import { CoachingModule } from '@contexts/coaching/coaching.module';
 import { GenomicsModule } from '@contexts/genomics/genomics.module';
 import { LabModule } from '@contexts/lab/lab.module';
+import { MessagingModule } from '@contexts/messaging/messaging.module';
 import { PartnershipModule } from '@contexts/partnership/partnership.module';
 import { OrderingModule } from '@contexts/ordering/ordering.module';
 import { IdentityModule } from '@contexts/identity/identity.module';
@@ -53,6 +54,7 @@ import { HealthController } from './health.controller';
     CoachingModule,
     PartnershipModule,
     AnalyticsModule,
+    MessagingModule,
   ],
   controllers: [HealthController],
   providers: [

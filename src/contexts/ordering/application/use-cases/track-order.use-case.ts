@@ -35,8 +35,11 @@ export interface OrderTracking {
  * Dias entre a amostra chegar ao laboratório e o laudo sair. Valor operacional
  * informado pelo cliente para a UI de acompanhamento; não é promessa contratual
  * nem entra na máquina de estados.
+ *
+ * Exportado porque o detalhe do pedido no admin exibe a mesma previsão — a
+ * estimativa que o paciente vê e a que a operação vê precisam ser uma só.
  */
-const REPORT_SLA_DAYS = 15;
+export const REPORT_SLA_DAYS = 15;
 
 /**
  * Linha do tempo do pedido, para o cliente acompanhar.
