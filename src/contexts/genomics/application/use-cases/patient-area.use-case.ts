@@ -6,6 +6,8 @@ export interface PatientKit {
   readonly code: string;
   readonly status: string;
   readonly activatedAt: Date | null;
+  /** Pedido a que o kit foi atribuído no despacho — casa kit ↔ pedido na UI. */
+  readonly orderId: string | null;
 }
 
 export interface PatientReport {
@@ -21,10 +23,22 @@ export interface PatientArea {
   readonly reports: readonly PatientReport[];
   /** Pedidos em andamento, para a pessoa não precisar guardar o número. */
   readonly orders: readonly {
+    readonly id: string;
     readonly number: string;
     readonly status: string;
     readonly createdAt: Date;
+    readonly productName: string | null;
+    /** Laudo publicado do titular do kit deste pedido, quando houver. */
+    readonly reportId: string | null;
   }[];
+  /**
+   * Kit despachado para um pedido desta conta e ainda não ativado — alimenta o
+   * banner "Você tem um kit para vincular" do painel. Null quando não há.
+   */
+  readonly pendingKit: {
+    readonly orderNumber: string;
+    readonly productName: string | null;
+  } | null;
 }
 
 /**
@@ -64,7 +78,7 @@ export class PatientAreaUseCase {
       this.prisma.kit.findMany({
         where: { activatedByUserId: userId },
         orderBy: { activatedAt: 'desc' },
-        select: { code: true, status: true, activatedAt: true },
+        select: { code: true, status: true, activatedAt: true, orderId: true },
       }),
 
       subjectIds.length === 0
@@ -85,13 +99,58 @@ export class PatientAreaUseCase {
         where: { userId },
         orderBy: { createdAt: 'desc' },
         take: 10,
-        select: { number: true, status: true, createdAt: true },
+        select: {
+          id: true,
+          number: true,
+          status: true,
+          createdAt: true,
+          items: { select: { productName: true }, take: 1 },
+        },
       }),
     ]);
 
+    // Kit ↔ pedido ↔ laudo, num único lote de consultas: os kits despachados
+    // para os pedidos desta conta dizem tanto qual pedido tem kit aguardando
+    // ativação (banner do painel) quanto de qual titular vem o laudo do pedido.
+    const orderIds = orders.map((order) => order.id);
+    const orderKits =
+      orderIds.length === 0
+        ? []
+        : await this.prisma.kit.findMany({
+            where: { orderId: { in: orderIds } },
+            select: { orderId: true, status: true, subjectId: true },
+          });
+
+    const publishedBySubject = new Map(
+      reports
+        .filter((report) => report.subjectId !== null)
+        .map((report) => [report.subjectId, report.id]),
+    );
+
+    const pending = orderKits.find((kit) => kit.status === 'ASSIGNED');
+    const pendingOrder = pending
+      ? orders.find((order) => order.id === pending.orderId)
+      : undefined;
+
     return {
       kits,
-      orders,
+      orders: orders.map((order) => {
+        const kit = orderKits.find((entry) => entry.orderId === order.id);
+        return {
+          id: order.id,
+          number: order.number,
+          status: order.status,
+          createdAt: order.createdAt,
+          productName: order.items[0]?.productName ?? null,
+          reportId: kit?.subjectId ? (publishedBySubject.get(kit.subjectId) ?? null) : null,
+        };
+      }),
+      pendingKit: pendingOrder
+        ? {
+            orderNumber: pendingOrder.number,
+            productName: pendingOrder.items[0]?.productName ?? null,
+          }
+        : null,
       reports: reports.map((report) => {
         const global = report.modalityIndexes[0];
         return {

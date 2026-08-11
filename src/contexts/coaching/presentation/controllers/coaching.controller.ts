@@ -51,6 +51,17 @@ export class CoachingController {
     return { id: profile.id, specialty: profile.specialty };
   }
 
+  /** Estado do compartilhamento da conta logada — a tela de privacidade lê daqui. */
+  @Get('meus-dados/compartilhamentos')
+  @ApiOperation({ summary: 'Compartilhamentos vigentes dos titulares desta conta' })
+  async list(@CurrentUser() user: AuthenticatedPrincipal) {
+    const links = await this.prisma.subjectLink.findMany({
+      where: { userId: user.id },
+      select: { subjectId: true },
+    });
+    return this.sharing.listForSubjects(links.map((link) => link.subjectId));
+  }
+
   /** O titular autoriza um profissional. Efeito imediato. */
   @Post('meus-dados/compartilhamentos')
   @HttpCode(HttpStatus.CREATED)

@@ -41,6 +41,13 @@ model User {
   birthDate     DateTime?      @db.Date
   biologicalSex BiologicalSex?
 
+  /// Endereço de contato exibido no perfil (uma linha, derivada do CEP).
+  ///
+  /// Separado do endereço de entrega de propósito: o de entrega é congelado por
+  /// pedido em OrderAddress; este é o cadastro vivo da pessoa.
+  addressLine String? @db.VarChar(255)
+  addressZip  String? @db.VarChar(9)
+
   status           UserStatus @default(PENDING)
   emailVerifiedAt  DateTime?
   twoFactorEnabled Boolean    @default(false)

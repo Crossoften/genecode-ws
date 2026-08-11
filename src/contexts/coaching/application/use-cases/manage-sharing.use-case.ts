@@ -127,6 +127,39 @@ export class ManageSharingUseCase {
     return okVoid();
   }
 
+  /**
+   * Sharings of one account's subjects, for the privacy screen.
+   *
+   * Reads across ALL of the user's subjects — not just the most recent link —
+   * because an account can hold more than one kit (own + gifted activation),
+   * and the privacy modal must reflect every grant the person can revoke.
+   * Revoked records stay out: the screen derives "inactive" from the absence
+   * of an AUTHORIZED record, and history belongs to the audit trail.
+   */
+  async listForSubjects(subjectIds: readonly string[]): Promise<ShareRecord[]> {
+    if (subjectIds.length === 0) return [];
+
+    const records = await this.prisma.dataSharing.findMany({
+      where: { subjectId: { in: [...subjectIds] }, status: { not: 'REVOKED' } },
+      include: { professional: true },
+      orderBy: { requestedAt: 'desc' },
+    });
+    if (records.length === 0) return [];
+
+    const users = await this.prisma.user.findMany({
+      where: { id: { in: records.map((record) => record.professional.userId) } },
+      select: { id: true, name: true },
+    });
+    const names = new Map(users.map((user) => [user.id, user.name]));
+
+    return records.map((record) =>
+      this.toRecord(record, {
+        ...record.professional,
+        name: names.get(record.professional.userId) ?? '',
+      }),
+    );
+  }
+
   /** Pessoas que autorizaram este profissional. */
   async listForProfessional(professionalId: string): Promise<ShareRecord[]> {
     const records = await this.prisma.dataSharing.findMany({

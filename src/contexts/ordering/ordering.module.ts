@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 
 import { IdentityModule } from '@contexts/identity/identity.module';
 
+import { AccountFeedUseCase } from './application/use-cases/account-feed.use-case';
 import { CheckoutUseCase } from './application/use-cases/checkout.use-case';
 import { QuoteShippingUseCase } from './application/use-cases/quote-shipping.use-case';
 import { TrackOrderUseCase } from './application/use-cases/track-order.use-case';
@@ -9,6 +10,7 @@ import { PAYMENT_GATEWAY } from './domain/ports/payment-gateway.port';
 import { SHIPPING_PROVIDER } from './domain/ports/shipping-provider.port';
 import { SandboxPaymentGateway } from './infrastructure/gateways/sandbox-payment.gateway';
 import { SandboxShippingProvider } from './infrastructure/gateways/sandbox-shipping.provider';
+import { AccountFeedController } from './presentation/controllers/account-feed.controller';
 import { CheckoutController } from './presentation/controllers/checkout.controller';
 
 /**
@@ -21,8 +23,9 @@ import { CheckoutController } from './presentation/controllers/checkout.controll
  */
 @Module({
   imports: [IdentityModule],
-  controllers: [CheckoutController],
+  controllers: [CheckoutController, AccountFeedController],
   providers: [
+    AccountFeedUseCase,
     CheckoutUseCase,
     QuoteShippingUseCase,
     TrackOrderUseCase,

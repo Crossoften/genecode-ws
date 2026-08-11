@@ -23,7 +23,20 @@ export interface OrderTracking {
   readonly outboundTracking: string | null;
   readonly inboundTracking: string | null;
   readonly timeline: readonly TimelineStep[];
+  /**
+   * Estimativa de quando o laudo fica pronto — apresentação pura, calculada na
+   * leitura a partir da chegada da amostra ao laboratório. Null antes disso e
+   * depois de o laudo existir. A UI exibe com `~` de estimativa.
+   */
+  readonly estimatedReportAt: Date | null;
 }
+
+/**
+ * Dias entre a amostra chegar ao laboratório e o laudo sair. Valor operacional
+ * informado pelo cliente para a UI de acompanhamento; não é promessa contratual
+ * nem entra na máquina de estados.
+ */
+const REPORT_SLA_DAYS = 15;
 
 /**
  * Linha do tempo do pedido, para o cliente acompanhar.
@@ -53,6 +66,12 @@ export class TrackOrderUseCase {
     );
     const status = order.status as OrderStatus;
 
+    const sampleReceivedAt = reachedAt.get(OrderStatus.SAMPLE_RECEIVED) ?? null;
+    const reportPending = status !== OrderStatus.REPORT_READY && sampleReceivedAt !== null;
+    const estimatedReportAt = reportPending
+      ? new Date(sampleReceivedAt.getTime() + REPORT_SLA_DAYS * 24 * 60 * 60 * 1000)
+      : null;
+
     return ok({
       number: order.number,
       customerFirstName: order.customerName.split(' ')[0] ?? '',
@@ -61,6 +80,7 @@ export class TrackOrderUseCase {
       items: order.items.map((item) => ({ name: item.productName, quantity: item.quantity })),
       outboundTracking: order.outboundTracking,
       inboundTracking: order.inboundTracking,
+      estimatedReportAt,
       timeline: TIMELINE.map((step) => ({
         status: step,
         label: STATUS_LABEL[step],

@@ -5,6 +5,7 @@ import { HashService } from '@shared/crypto/hash.service';
 
 import { TokenIssuer } from './application/services/token-issuer.service';
 import { AuthenticateUseCase } from './application/use-cases/authenticate.use-case';
+import { ManageProfileUseCase } from './application/use-cases/manage-profile.use-case';
 import { RefreshSessionUseCase } from './application/use-cases/refresh-session.use-case';
 import { RegisterUserUseCase } from './application/use-cases/register-user.use-case';
 import { ResetPasswordUseCase } from './application/use-cases/reset-password.use-case';
@@ -17,6 +18,7 @@ import { PrismaRefreshTokenRepository } from './infrastructure/repositories/pris
 import { PrismaUserRepository } from './infrastructure/repositories/prisma-user.repository';
 import { AccountController } from './presentation/controllers/account.controller';
 import { AuthController } from './presentation/controllers/auth.controller';
+import { ProfileController } from './presentation/controllers/profile.controller';
 
 /**
  * Identity bounded context: accounts, sessions, roles and permissions.
@@ -35,11 +37,12 @@ import { AuthController } from './presentation/controllers/auth.controller';
     // here, because access and refresh tokens use different keys.
     JwtModule.register({}),
   ],
-  controllers: [AuthController, AccountController],
+  controllers: [AuthController, AccountController, ProfileController],
   providers: [
     HashService,
     TokenIssuer,
     AuthenticateUseCase,
+    ManageProfileUseCase,
     RegisterUserUseCase,
     VerifyEmailUseCase,
     ResetPasswordUseCase,
