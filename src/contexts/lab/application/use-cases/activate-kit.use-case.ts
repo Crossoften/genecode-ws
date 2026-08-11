@@ -18,6 +18,8 @@ export interface ActivateKitOutput {
   readonly code: string;
   readonly subjectId: string;
   readonly alreadyActivated: boolean;
+  /** Quando o vínculo aconteceu — a confirmação do wizard exibe, não inventa. */
+  readonly activatedAt: Date;
 }
 
 /**
@@ -74,7 +76,12 @@ export class ActivateKitUseCase {
       // Reativação pelo mesmo titular é idempotente — o cliente pode ter perdido
       // a tela ou clicado duas vezes.
       if (kit.activatedByUserId === input.userId) {
-        return ok({ code, subjectId: kit.subjectId, alreadyActivated: true });
+        return ok({
+          code,
+          subjectId: kit.subjectId,
+          alreadyActivated: true,
+          activatedAt: kit.activatedAt ?? new Date(),
+        });
       }
       // Por outra pessoa, não. Aqui está justamente o risco que o cliente
       // levantou: um kit já vinculado a um DNA não pode mudar de dono.
@@ -85,6 +92,7 @@ export class ActivateKitUseCase {
       );
     }
 
+    const activatedAt = new Date();
     const result = await this.prisma.$transaction(async (tx) => {
       const subject = await tx.subject.create({ data: { externalCode: code } });
 
@@ -98,7 +106,7 @@ export class ActivateKitUseCase {
           status: 'ACTIVATED',
           subjectId: subject.id,
           activatedByUserId: input.userId,
-          activatedAt: new Date(),
+          activatedAt,
         },
       });
 
@@ -120,6 +128,6 @@ export class ActivateKitUseCase {
 
     this.logger.log(`Kit ${code} ativado`);
 
-    return ok({ code, subjectId: result, alreadyActivated: false });
+    return ok({ code, subjectId: result, alreadyActivated: false, activatedAt });
   }
 }

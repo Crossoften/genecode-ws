@@ -44,6 +44,8 @@ interface ContaQa {
 const CONTAS: readonly ContaQa[] = [
   { email: 'qa.admin@genecode.test', nome: 'QA Administração', papeis: ['master'],
     descricao: 'painel administrativo, BI, esteira de pedidos' },
+  // Dados protegidos preenchidos: a tela Meu perfil formata CPF, nascimento e
+  // sexo biológico, e sem eles o QA só veria o fallback "Não informado".
   { email: 'qa.paciente@genecode.test', nome: 'Camila Rocha', papeis: ['patient'],
     descricao: 'área do paciente, laudo interativo, ativação de kit' },
   { email: 'qa.profissional@genecode.test', nome: 'Marina Costa', papeis: ['professional', 'patient'],
@@ -52,16 +54,27 @@ const CONTAS: readonly ContaQa[] = [
     descricao: 'painel do parceiro, comissões, cupom' },
 ];
 
+/** Dados protegidos da paciente de QA — CPF de gerador, válido no mod 11. */
+const PROTEGIDOS_PACIENTE = {
+  document: '529.982.247-25',
+  birthDate: new Date('1994-03-14'),
+  biologicalSex: 'FEMALE',
+} as const;
+
 async function criarConta(conta: ContaQa): Promise<string> {
+  const protegidos =
+    conta.email === 'qa.paciente@genecode.test' ? PROTEGIDOS_PACIENTE : {};
+
   const user = await prisma.user.upsert({
     where: { email: conta.email },
-    update: { status: 'ACTIVE', emailVerifiedAt: new Date() },
+    update: { status: 'ACTIVE', emailVerifiedAt: new Date(), ...protegidos },
     create: {
       email: conta.email,
       name: conta.nome,
       password: await hash(SENHA_QA, 12),
       status: 'ACTIVE',
       emailVerifiedAt: new Date(),
+      ...protegidos,
     },
   });
 
@@ -178,6 +191,10 @@ async function main(): Promise<void> {
   }
 
   await semearJornadaPaciente(ids.get('qa.paciente@genecode.test')!);
+  await semearCompartilhamento(
+    ids.get('qa.paciente@genecode.test')!,
+    ids.get('qa.profissional@genecode.test')!,
+  );
 
   console.log(`\nSenha de todas as contas: ${SENHA_QA}`);
   console.log('\n⚠️  Ambiente de homologação. Nenhuma destas contas deve existir em produção.');
@@ -303,6 +320,45 @@ async function semearJornadaPaciente(userId: string): Promise<void> {
   }
 
   console.log('✓ jornada da paciente: laudo pronto, exame em processamento e kit a vincular');
+}
+
+/**
+ * Perfil profissional da Marina e a autorização da Camila para ela — o vínculo
+ * que o docstring deste seed sempre prometeu. Destrava o caminho feliz do
+ * profissional (lista com a Camila e laudo consolidado) e o estado "ativo" do
+ * modal de privacidade da paciente.
+ */
+async function semearCompartilhamento(pacienteId: string, profissionalId: string): Promise<void> {
+  const perfil = await prisma.professionalProfile.upsert({
+    where: { userId: profissionalId },
+    update: {},
+    create: { userId: profissionalId, specialty: 'Nutricionista' },
+  });
+
+  const link = await prisma.subjectLink.findFirst({
+    where: { userId: pacienteId },
+    orderBy: { createdAt: 'asc' },
+  });
+  if (!link) {
+    console.log('· sem titular para compartilhar — rode o seed com um kit ativado antes');
+    return;
+  }
+
+  const existente = await prisma.dataSharing.findFirst({
+    where: { subjectId: link.subjectId, professionalId: perfil.id, status: 'AUTHORIZED' },
+  });
+  if (!existente) {
+    await prisma.dataSharing.create({
+      data: {
+        subjectId: link.subjectId,
+        professionalId: perfil.id,
+        status: 'AUTHORIZED',
+        initiatedBy: 'PATIENT',
+        authorizedAt: new Date(),
+      },
+    });
+  }
+  console.log('✓ compartilhamento: qa.paciente → qa.profissional (AUTHORIZED)');
 }
 
 /** Código válido no módulo 11 e inédito na base. */
