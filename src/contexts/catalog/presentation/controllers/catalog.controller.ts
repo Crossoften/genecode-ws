@@ -57,7 +57,7 @@ export class CatalogController {
    * pagar"). Throttle apertado + resposta uniforme: a rota é pública e não
    * pode virar enumerador de cupons.
    */
-  @Get('vitrine/cupons/:code')
+  @Get('cupons/:code')
   @IsPublic()
   @Throttle({ default: { limit: 10, ttl: 60_000 } })
   @ApiOperation({ summary: 'Valida um cupom e devolve o desconto' })
