@@ -5,10 +5,14 @@ import type { Request } from 'express';
 import { CurrentUser, RequireRoles } from '@contexts/identity/presentation/decorators';
 import type { AuthenticatedPrincipal } from '@contexts/identity/presentation/guards/jwt-auth.guard';
 import { PrismaService } from '@infra/database/prisma.service';
+import { NotFoundError } from '@shared/domain/domain-error';
 
+import { AnswerAssessmentUseCase } from '../../application/use-cases/answer-assessment.use-case';
 import { ConsolidatedReportUseCase } from '../../application/use-cases/consolidated-report.use-case';
 import { ManageSharingUseCase } from '../../application/use-cases/manage-sharing.use-case';
 import { CreateProfessionalDto, GrantSharingDto } from '../dtos/coaching.dto';
+import { SubmitAssessmentDto } from '../dtos/questionnaire.dto';
+import { Checkpoint } from '../../domain/checkpoint';
 
 @ApiTags('Profissional')
 @Controller()
@@ -16,6 +20,7 @@ export class CoachingController {
   constructor(
     private readonly sharing: ManageSharingUseCase,
     private readonly consolidated: ConsolidatedReportUseCase,
+    private readonly assessments: AnswerAssessmentUseCase,
     private readonly prisma: PrismaService,
   ) {}
 
@@ -146,6 +151,44 @@ export class CoachingController {
     if (!profile) throw new Error('Perfil profissional não encontrado.');
 
     const result = await this.consolidated.execute(subjectId, profile.id);
+    if (result.isFail()) throw result.error;
+    return result.value;
+  }
+
+  /** Questionário ambiental de um titular autorizado, com o checkpoint disponível. */
+  @Get('profissional/pacientes/:subjectId/questionario')
+  @RequireRoles('professional')
+  @ApiOperation({ summary: 'Questionário ambiental para responder pelo paciente' })
+  async questionnaire(
+    @Param('subjectId') subjectId: string,
+    @CurrentUser() user: AuthenticatedPrincipal,
+  ) {
+    const profile = await this.prisma.professionalProfile.findUnique({ where: { userId: user.id } });
+    if (!profile) throw new NotFoundError('Perfil profissional não encontrado.');
+
+    const result = await this.assessments.getQuestionnaire(subjectId, profile.id);
+    if (result.isFail()) throw result.error;
+    return result.value;
+  }
+
+  /** Registra a avaliação ambiental de um checkpoint e calcula o score ajustado. */
+  @Post('profissional/pacientes/:subjectId/avaliacoes')
+  @RequireRoles('professional')
+  @ApiOperation({ summary: 'Envia as respostas e grava o score ajustado' })
+  async submitAssessment(
+    @Param('subjectId') subjectId: string,
+    @Body() dto: SubmitAssessmentDto,
+    @CurrentUser() user: AuthenticatedPrincipal,
+  ) {
+    const profile = await this.prisma.professionalProfile.findUnique({ where: { userId: user.id } });
+    if (!profile) throw new NotFoundError('Perfil profissional não encontrado.');
+
+    const result = await this.assessments.submit(
+      subjectId,
+      profile.id,
+      dto.checkpoint as Checkpoint,
+      dto.answers,
+    );
     if (result.isFail()) throw result.error;
     return result.value;
   }

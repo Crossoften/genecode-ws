@@ -52,6 +52,8 @@ const CONTAS: readonly ContaQa[] = [
     descricao: 'área do profissional, laudo consolidado' },
   { email: 'qa.parceiro@genecode.test', nome: 'Rafael Afiliado', papeis: ['affiliate', 'patient'],
     descricao: 'painel do parceiro, comissões, cupom' },
+  { email: 'qa.lab@genecode.test', nome: 'QA Laboratório', papeis: ['lab'],
+    descricao: 'fila de amostras, upload do CSV, questionário ambiental' },
 ];
 
 /** Dados protegidos da paciente de QA — CPF de gerador, válido no mod 11. */

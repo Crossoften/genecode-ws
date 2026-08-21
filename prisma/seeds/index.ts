@@ -6,6 +6,7 @@ import { seedConsentDocuments } from './consent.seed';
 import { seedCoupons } from './coupon.seed';
 import { seedGenomics } from './genomics.seed';
 import { seedNotificationTriggers } from './notification.seed';
+import { seedQuestionnaire } from './questionnaire.seed';
 
 const prisma = new PrismaClient();
 
@@ -38,6 +39,8 @@ const PERMISSIONS = [
   ['finance.read', 'Visualizar financeiro'],
   ['analytics.read', 'Visualizar BI'],
   ['audit.read', 'Consultar trilha de auditoria'],
+  ['questionnaire.read', 'Visualizar questionário ambiental'],
+  ['questionnaire.write', 'Editar perguntas e pesos do questionário ambiental'],
 ] as const;
 
 /**
@@ -82,7 +85,14 @@ const ROLES: ReadonlyArray<{
     slug: 'lab',
     name: 'Laboratório',
     description: 'Envia os genótipos e opera a esteira interna de amostras.',
-    permissions: ['lab.upload', 'samples.read', 'samples.write', 'reports.read'],
+    permissions: [
+      'lab.upload',
+      'samples.read',
+      'samples.write',
+      'reports.read',
+      'questionnaire.read',
+      'questionnaire.write',
+    ],
   },
   {
     slug: 'admin',
@@ -142,6 +152,7 @@ async function main(): Promise<void> {
   await seedConsentDocuments(prisma);
   await seedCoupons(prisma);
   await seedNotificationTriggers(prisma);
+  await seedQuestionnaire(prisma);
   await seedDevelopmentAdmin();
 }
 

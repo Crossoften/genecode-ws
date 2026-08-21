@@ -22,7 +22,8 @@
     "prisma:deploy": "prisma migrate deploy",
     "prisma:studio": "prisma studio",
     "seed": "ts-node -r tsconfig-paths/register ./prisma/seeds/index.ts",
-    "seed:qa": "ts-node -r tsconfig-paths/register ./prisma/seeds/qa.seed.ts"
+    "seed:qa": "ts-node -r tsconfig-paths/register ./prisma/seeds/qa.seed.ts",
+    "seed:demo": "ts-node -r tsconfig-paths/register ./prisma/seeds/demo.seed.ts"
   },
   "prisma": {
     "seed": "ts-node -r tsconfig-paths/register ./prisma/seeds/index.ts"

@@ -120,9 +120,10 @@ export class ConsolidatedReportUseCase {
           adjustedScore: adjusted?.[entry.category.slug] ?? null,
         })),
       assessmentsCompleted: assessments.length,
-      // Enquanto o laboratório não entregar o algoritmo ambiental, qualquer
-      // ajustado é preliminar e a tela precisa dizer isso.
-      adjustedIsPreliminary: true,
+      // O ajustado agora vem do questionário ambiental respondido pelo
+      // profissional, combinado ao genético pela estratégia validada do painel.
+      // Deixa de ser preliminar assim que existe uma avaliação de verdade.
+      adjustedIsPreliminary: latest === undefined,
     });
   }
 }

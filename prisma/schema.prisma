@@ -1378,3 +1378,55 @@ enum NotificationLogStatus {
   DELIVERED
   FAILED
 }
+
+// ============================================================================
+// QUESTIONÁRIO AMBIENTAL (score ambientado — decisões B4/B5)
+// ============================================================================
+
+/// Pergunta da anamnese ambiental, ligada a um grupo genético.
+///
+/// O escore ambiental é calculado por CATEGORIA: cada pergunta influencia o
+/// grupo genético que ela mede (`categorySlug`), com um `weight` dentro dele.
+/// Assim o laboratório adiciona, remove e repesa perguntas por dados — sem
+/// deploy — como o Dr. Câmara pediu (decisão B5). A matemática de combinação
+/// (aditiva na performance, multiplicativa na nutrigenética) vive na
+/// ScoringStrategy e não muda por causa das perguntas.
+model EnvironmentalQuestion {
+  id String @id @default(uuid()) @db.Char(36)
+
+  /// Painel a que a pergunta pertence: 'nutrigenetics' ou 'performance'.
+  panelSlug String @db.VarChar(64)
+  /// Grupo genético (categoria) que a resposta influencia — o slug real da
+  /// categoria do painel (ex.: 'metabolismo_energetico', 'forca_potencia').
+  categorySlug String @db.VarChar(80)
+
+  text String @db.VarChar(400)
+  /// Peso da pergunta dentro da categoria, na média ponderada.
+  weight Float @default(1)
+  order  Int   @default(0)
+  active Boolean @default(true)
+
+  options EnvironmentalOption[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([panelSlug, categorySlug])
+  @@map("environmental_questions")
+}
+
+/// Opção de resposta de uma pergunta ambiental.
+model EnvironmentalOption {
+  id         String                @id @default(uuid()) @db.Char(36)
+  questionId String                @db.Char(36)
+  question   EnvironmentalQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  label String @db.VarChar(200)
+  /// Qualidade do hábito nesta resposta: 0 (pior) a 100 (melhor). A média
+  /// ponderada por categoria vira 0–1 e é mapeada para a escala da estratégia.
+  points Int
+  order  Int @default(0)
+
+  @@index([questionId])
+  @@map("environmental_options")
+}
