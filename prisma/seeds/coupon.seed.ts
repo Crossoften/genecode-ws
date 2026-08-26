@@ -12,6 +12,9 @@ const COUPONS = [
   { code: 'PARCEIRO10', discountPercent: 10, commissionPercent: 20, partnerName: 'Parceiro exemplo' },
   { code: 'GENE15', discountPercent: 15, commissionPercent: 20, partnerName: 'Campanha GeneCode' },
   { code: 'ESGOTADO', discountPercent: 10, commissionPercent: 20, partnerName: 'Teste de limite', maxUses: 0 },
+  // Cupom de lançamento do documento de correções de 26/08: R$ 650 → R$ 520 e
+  // R$ 1.105 → R$ 884, exatos 20%. Campanha da casa — sem comissão de parceiro.
+  { code: 'LANC26', discountPercent: 20, commissionPercent: 0, partnerName: 'Lançamento 2026' },
 ];
 
 /** Semeia os cupons. Idempotente por código. */

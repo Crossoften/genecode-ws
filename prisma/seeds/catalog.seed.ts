@@ -23,6 +23,7 @@ interface ProductSeed {
   readonly panelSlug: string | null;
   readonly markerCount: number;
   readonly priceCents: number;
+  readonly maxInstallments: number;
   readonly position: number;
   readonly highlight?: string;
   readonly features: readonly string[];
@@ -32,7 +33,7 @@ interface ProductSeed {
 const PRODUCTS: readonly ProductSeed[] = [
   {
     slug: 'nutrigenetica',
-    name: 'GeneCode Nutrigenética',
+    name: 'gene.code Nutrigenética',
     summary: 'Como seu corpo responde a nutrientes, dietas e sensibilidades alimentares.',
     description:
       'Analisa como o seu organismo processa carboidratos, gorduras, vitaminas e cafeína, ' +
@@ -42,19 +43,21 @@ const PRODUCTS: readonly ProductSeed[] = [
     // Protótipo anunciava 45. O painel semeado tem 30 (26 simples + 4 pendentes
     // de lógica combinada em MTHFR e HFE).
     markerCount: 30,
-    priceCents: 39_700,
+    // Preço e parcelamento do documento de correções de 26/08: R$ 650, até 5×
+    // sem juros. A teleorientação saiu da oferta no mesmo documento.
+    priceCents: 65_000,
+    maxInstallments: 5,
     position: 0,
     features: [
-      'Kit de coleta com swab bucal',
+      'Kit de coleta com swab de mucosa oral',
       'Envelope de retorno para envio ao laboratório',
       'Laudo interativo com referências científicas',
-      'Teleorientação de 15 minutos com nutricionista',
     ],
     traits: { nutrition: 100, performance: 20, health: 40 },
   },
   {
     slug: 'performance',
-    name: 'GeneCode Performance',
+    name: 'gene.code Performance',
     summary: 'Força, recuperação, resposta ao treino e predisposição a lesões.',
     description:
       'Mapeia seu perfil de força e resistência, capacidade de recuperação, resposta ao ' +
@@ -63,20 +66,22 @@ const PRODUCTS: readonly ProductSeed[] = [
     panelSlug: 'performance',
     // Protótipo anunciava 52. O painel tem 24.
     markerCount: 24,
-    priceCents: 46_800,
+    priceCents: 65_000,
+    maxInstallments: 5,
     position: 1,
     features: [
-      'Kit de coleta com swab bucal',
+      'Kit de coleta com swab de mucosa oral',
       'Envelope de retorno para envio ao laboratório',
       'Índice de aderência para 30 modalidades esportivas',
       'Laudo interativo com referências científicas',
-      'Teleorientação de 15 minutos com profissional',
     ],
     traits: { nutrition: 20, performance: 100, health: 40 },
   },
   {
     slug: 'premium',
-    name: 'GeneCode Premium',
+    // O documento de correções rebatizou o Premium. O slug fica: ele viaja em
+    // URLs, no PANEL_BY_PRODUCT do laboratório e em pedidos antigos.
+    name: 'gene.code NutriPerformance',
     summary: 'A análise completa: nutrigenética e performance num só exame.',
     description:
       'Une os painéis de nutrigenética e performance num único exame, cobrindo desde o ' +
@@ -87,15 +92,15 @@ const PRODUCTS: readonly ProductSeed[] = [
     // Protótipo anunciava 120+. A união real dos dois painéis são 44 marcadores
     // únicos: eles compartilham 10.
     markerCount: 44,
-    priceCents: 69_000,
+    priceCents: 110_500,
+    maxInstallments: 5,
     highlight: 'Mais vendido',
     position: 2,
     features: [
       'Tudo dos painéis Nutrigenética e Performance',
-      'Kit de coleta com swab bucal',
+      'Kit de coleta com swab de mucosa oral',
       'Envelope de retorno para envio ao laboratório',
       'Laudo interativo com referências científicas',
-      'Teleorientação de 15 minutos com médico ou nutricionista',
       'Atualizações futuras do laudo incluídas',
     ],
     traits: { nutrition: 85, performance: 85, health: 100 },
@@ -119,6 +124,10 @@ export async function seedCatalog(prisma: PrismaClient): Promise<void> {
         panelSlug: product.panelSlug,
         markerCount: product.markerCount,
         priceCents: product.priceCents,
+        // Zera qualquer promoção definida sobre o preço antigo: com a tabela
+        // nova de 26/08, uma promo velha em centavos ficaria abaixo do custo.
+        promoPriceCents: null,
+        maxInstallments: product.maxInstallments,
         highlight: product.highlight ?? null,
         position: product.position,
         published: true,
@@ -131,6 +140,7 @@ export async function seedCatalog(prisma: PrismaClient): Promise<void> {
         panelSlug: product.panelSlug,
         markerCount: product.markerCount,
         priceCents: product.priceCents,
+        maxInstallments: product.maxInstallments,
         highlight: product.highlight ?? null,
         position: product.position,
         published: true,

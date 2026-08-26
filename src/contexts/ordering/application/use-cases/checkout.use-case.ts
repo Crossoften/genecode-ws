@@ -94,7 +94,7 @@ export class CheckoutUseCase {
       return fail(new ValidationError('O carrinho está vazio.'));
     }
 
-    const items = await this.priceItems(input.items);
+    const items = await this.priceItems(input.items, input.payment.installments);
     if (items.isFail()) return fail(items.error);
 
     const shippingOption = await this.resolveShipping(input.address.zipCode, input.shippingCode);
@@ -273,6 +273,7 @@ export class CheckoutUseCase {
    */
   private async priceItems(
     requested: readonly { productSlug: string; quantity: number }[],
+    installments: number,
   ): Promise<Result<PricedItem[]>> {
     const products = await this.prisma.product.findMany({
       where: {
@@ -292,6 +293,17 @@ export class CheckoutUseCase {
       }
       if (item.quantity < 1 || item.quantity > 10) {
         return fail(new ValidationError('Quantidade inválida.', { field: 'quantity' }));
+      }
+      // O teto de parcelas é do catálogo (5× desde 26/08), não do DTO — que
+      // aceita até 12 por contrato histórico. Sem esta checagem, uma chamada
+      // direta à API parcelaria em 12× sem juros o que a vitrine anuncia em 5×.
+      if (installments > product.maxInstallments) {
+        return fail(
+          new ValidationError(
+            `"${product.name}" permite no máximo ${product.maxInstallments}× sem juros.`,
+            { field: 'installments' },
+          ),
+        );
       }
 
       priced.push({
