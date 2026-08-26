@@ -59,4 +59,14 @@ export interface PaymentGateway {
 
   /** Estorna, total ou parcialmente. */
   refund(externalId: string, amountCents?: number): Promise<void>;
+
+  /**
+   * Só o adapter de sandbox define isto como `true`.
+   *
+   * Enquanto a adquirente real não é ligada, o checkout **adianta** o pedido
+   * pago até a fila do laboratório (cria o kit e o titular) para demonstrar o
+   * fluxo completo em homologação. O adapter real não terá esta flag, então o
+   * adiantamento — o "mock" — desaparece sozinho ao trocar o gateway.
+   */
+  readonly simulatesFulfillment?: boolean;
 }

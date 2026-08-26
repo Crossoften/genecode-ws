@@ -54,6 +54,8 @@ export interface CheckoutOutput {
   readonly paymentCode?: string;
   readonly expiresAt?: Date;
   readonly failureReason?: string;
+  /** True enquanto o pagamento é simulado (sandbox) — some com a adquirente real. */
+  readonly simulated: boolean;
 }
 
 /** Peso aproximado do kit, para cotação de frete. */
@@ -167,21 +169,100 @@ export class CheckoutUseCase {
       },
     });
 
+    let finalStatus = charge.status === 'PAID' ? OrderStatus.PAID : OrderStatus.PENDING_PAYMENT;
+    const simulated = this.gateway.simulatesFulfillment === true;
+
     if (charge.status === 'PAID') {
       await this.markPaid(order.id);
+
+      // Enquanto a adquirente real não é ligada, o sandbox adianta o pedido até
+      // a fila do laboratório para demonstrar o fluxo completo. Desaparece
+      // sozinho quando o gateway real (sem a flag) assumir.
+      if (simulated) {
+        await this.simulateFulfillment(order.id, input.userId);
+        finalStatus = OrderStatus.SAMPLE_RECEIVED;
+      }
     }
 
-    this.logger.log(`Pedido ${order.number}: ${charge.status}`);
+    this.logger.log(`Pedido ${order.number}: ${charge.status}${simulated ? ' (simulado)' : ''}`);
 
     return ok({
       orderNumber: order.number,
-      status: charge.status === 'PAID' ? OrderStatus.PAID : OrderStatus.PENDING_PAYMENT,
+      status: finalStatus,
       totalCents: totals.totalCents,
       paymentStatus: charge.status,
       paymentCode: charge.paymentCode,
       expiresAt: charge.expiresAt,
       failureReason: charge.failureReason,
+      simulated,
     });
+  }
+
+  /**
+   * Adianta o pedido pago até a fila do laboratório — só no fluxo simulado.
+   *
+   * Cria um titular (com `externalCode`, que o CSV do laboratório casa), vincula
+   * ao comprador quando logado, ativa um kit e leva o pedido a `SAMPLE_RECEIVED`,
+   * pulando as etapas manuais de envio e coleta. É assim que o laboratório passa
+   * a ver a amostra na fila logo após o "pagamento", fechando o fluxo de ponta a
+   * ponta em homologação.
+   */
+  private async simulateFulfillment(orderId: string, userId?: string): Promise<void> {
+    const code = await this.uniqueKitCode();
+
+    const batch = await this.prisma.kitBatch.upsert({
+      where: { reference: 'SIMULACAO' },
+      update: {},
+      create: { reference: 'SIMULACAO', notes: 'Fluxo simulado do checkout (sandbox).' },
+    });
+
+    const subject = await this.prisma.subject.create({ data: { externalCode: code } });
+
+    if (userId) {
+      await this.prisma.subjectLink.upsert({
+        where: { userId_subjectId: { userId, subjectId: subject.id } },
+        update: {},
+        create: { userId, subjectId: subject.id, relation: 'SELF' },
+      });
+    }
+
+    await this.prisma.kit.create({
+      data: {
+        code,
+        batchId: batch.id,
+        status: 'ACTIVATED',
+        orderId,
+        subjectId: subject.id,
+        activatedByUserId: userId,
+        activatedAt: new Date(),
+      },
+    });
+
+    const steps = ['KIT_SHIPPED', 'KIT_DELIVERED', 'SAMPLE_IN_TRANSIT', 'SAMPLE_RECEIVED'] as const;
+    await this.prisma.$transaction([
+      ...steps.map((status) =>
+        this.prisma.orderEvent.create({
+          data: { orderId, status, actor: 'system', note: 'Fluxo simulado (homologação).' },
+        }),
+      ),
+      this.prisma.order.update({ where: { id: orderId }, data: { status: 'SAMPLE_RECEIVED' } }),
+    ]);
+  }
+
+  /** Código de kit válido no módulo 11 e inédito na base. */
+  private async uniqueKitCode(): Promise<string> {
+    for (;;) {
+      const corpo = String(Math.floor(Math.random() * 1_000_000)).padStart(6, '0');
+      const dv = (digitos: string, peso: number): number => {
+        const soma = [...digitos].reduce((acc, d, i) => acc + Number(d) * (peso - i), 0);
+        const resto = (soma * 10) % 11;
+        return resto === 10 ? 0 : resto;
+      };
+      const d1 = dv(corpo, 7);
+      const d2 = dv(corpo + d1, 8);
+      const code = `${corpo}-${d1}${d2}`;
+      if (!(await this.prisma.kit.findUnique({ where: { code } }))) return code;
+    }
   }
 
   /**

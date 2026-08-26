@@ -27,6 +27,9 @@ export class SandboxPaymentGateway implements PaymentGateway {
   private readonly logger = new Logger('SandboxPayment');
   private readonly charges = new Map<string, ChargeResult>();
 
+  /** Marca este adapter como simulado — ver a porta. O gateway real não terá. */
+  readonly simulatesFulfillment = true;
+
   async charge(request: ChargeRequest): Promise<ChargeResult> {
     const externalId = `sbx_${randomUUID()}`;
 

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, Query, Req } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Inject, Param, Post, Query, Req } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
@@ -11,6 +11,7 @@ import type { Env } from '@shared/config/env.schema';
 import { CheckoutUseCase } from '../../application/use-cases/checkout.use-case';
 import { TrackOrderUseCase } from '../../application/use-cases/track-order.use-case';
 import { QuoteShippingUseCase } from '../../application/use-cases/quote-shipping.use-case';
+import { PAYMENT_GATEWAY, type PaymentGateway } from '../../domain/ports/payment-gateway.port';
 import { CheckoutDto } from '../dtos/checkout.dto';
 
 @ApiTags('Checkout')
@@ -22,7 +23,16 @@ export class CheckoutController {
     private readonly trackOrder: TrackOrderUseCase,
     private readonly jwt: JwtService,
     private readonly config: ConfigService<Env, true>,
+    @Inject(PAYMENT_GATEWAY) private readonly gateway: PaymentGateway,
   ) {}
+
+  /** Diz à vitrine se o pagamento está simulado, para o checkout se rotular. */
+  @Get('checkout/config')
+  @IsPublic()
+  @ApiOperation({ summary: 'Configuração pública do checkout' })
+  checkoutConfig() {
+    return { paymentSimulated: this.gateway.simulatesFulfillment === true };
+  }
 
   /** Cotação de frete para um CEP. Pública: acontece antes de haver conta. */
   @Get('frete/cotacao')
