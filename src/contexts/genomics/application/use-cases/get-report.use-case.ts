@@ -29,7 +29,24 @@ export interface ReportSummary {
     readonly name: string;
     readonly score: number;
     readonly band: string;
+    /**
+     * Escore ajustado (0,30 × genético + 0,70 × ambiental), quando já houve
+     * avaliação ambiental — `null` enquanto não houver.
+     *
+     * Decisão 24 do André, 09/09: *"o paciente deve ver o score ajustado"*.
+     * Até então o ajustado só existia no laudo consolidado do profissional, e
+     * o titular via apenas o genético — o número que nunca muda. Como o valor
+     * é justamente o que responde "o que eu faço mudou alguma coisa?", esconder
+     * dele era esconder o ponto do produto.
+     */
+    readonly adjustedScore: number | null;
   }[];
+  /**
+   * Checkpoint da avaliação que gerou os ajustados acima (`Q0`…`Q4`), ou
+   * `null` se ainda não houve nenhuma. A tela precisa dizer de qual trimestre
+   * são os números; sem isso, o laudo mostra um ajustado sem data.
+   */
+  readonly lastAssessedCheckpoint: string | null;
   readonly modalities: readonly {
     readonly slug: string;
     readonly name: string;
@@ -125,6 +142,17 @@ export class GetReportUseCase {
       return fail(new NotFoundError('Laudo não encontrado.'));
     }
 
+    // Avaliação ambiental mais recente do titular, para o ajustado (decisão 24).
+    // É a mesma consulta que o ConsolidatedReportUseCase já faz para o
+    // profissional; aqui ela serve o dono do laudo. Uma linha por checkpoint,
+    // no máximo cinco — `orderBy` + `take: 1` resolve sem varrer nada.
+    const latest = await this.prisma.assessment.findFirst({
+      where: { subjectId: report.subjectId },
+      orderBy: { completedAt: 'desc' },
+      select: { checkpoint: true, adjustedScores: true },
+    });
+    const adjusted = (latest?.adjustedScores ?? null) as Record<string, number> | null;
+
     const global = report.modalityIndexes.find((entry) => entry.modality.isGlobal);
 
     return ok({
@@ -141,7 +169,9 @@ export class GetReportUseCase {
           name: entry.category.name,
           score: Number(entry.normalizedScore),
           band: entry.band,
+          adjustedScore: adjusted?.[entry.category.slug] ?? null,
         })),
+      lastAssessedCheckpoint: latest?.checkpoint ?? null,
       modalities: report.modalityIndexes
         .filter((entry) => !entry.modality.isGlobal)
         .sort((a, b) => a.modality.position - b.modality.position)

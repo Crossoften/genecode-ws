@@ -1,10 +1,24 @@
 import { Injectable, Logger } from '@nestjs/common';
+import type { KitStatus } from '@prisma/client';
 
 import { PrismaService } from '@infra/database/prisma.service';
 import { ConflictError, NotFoundError } from '@shared/domain/domain-error';
 import { fail, ok, type Result } from '@shared/domain/result';
 
-import { validateActivationCode } from '../../domain/activation-code';
+import { CodeValidation, validateActivationCode } from '../../domain/activation-code';
+
+/**
+ * Status em que o kit pode ser ativado.
+ *
+ * Só o kit que já saiu do estoque — `ASSIGNED` é exatamente "atribuído a um
+ * pedido e despachado", e é o status que o painel do paciente procura para
+ * anunciar "você tem um kit aguardando ativação".
+ *
+ * A lista tem um item só porque os status posteriores (`ACTIVATED`, `SAMPLE_*`)
+ * já têm titular e são resolvidos antes, no ramo de reativação. `GENERATED`
+ * fica fora de propósito: ver a camada 3 do `execute`.
+ */
+const ACTIVATABLE_STATUSES: ReadonlySet<KitStatus> = new Set<KitStatus>(['ASSIGNED']);
 
 export interface ActivateKitInput {
   readonly code: string;
@@ -39,12 +53,13 @@ export interface ActivateKitOutput {
  * laudo pertence. Amarrar o titular ao comprador entregaria o resultado à pessoa
  * errada exatamente no caso que o cliente mais destacou.
  *
- * ### Validação em duas camadas
+ * ### Validação em três camadas
  *
  * O dígito verificador pega erro de digitação — o código é lido de uma etiqueta
  * de papel. Mas passar no módulo 11 não prova nada sobre existência: cerca de 1
  * em cada 100 sequências aleatórias passa. Por isso a checagem no banco é
- * obrigatória e vem depois.
+ * obrigatória e vem depois. E existir no banco também não basta: o kit precisa
+ * ter saído do estoque (camada 3).
  */
 @Injectable()
 export class ActivateKitUseCase {
@@ -65,7 +80,7 @@ export class ActivateKitUseCase {
       // Mensagem deliberadamente igual à de código malformado. Distinguir
       // "não existe" de "formato errado" permitiria varrer o espaço de códigos
       // para descobrir quais foram emitidos.
-      return fail(new NotFoundError('Código Errado, Digite Novamente.', { code: input.code }));
+      return fail(new NotFoundError(CodeValidation.WRONG_CODE, { code: input.code }));
     }
 
     if (kit.status === 'DISCARDED') {
@@ -90,6 +105,24 @@ export class ActivateKitUseCase {
           'Este kit já foi ativado por outra pessoa. Se acredita que houve um engano, fale com o suporte.',
         ),
       );
+    }
+
+    // Camada 3: o kit chegou às mãos de alguém?
+    //
+    // Um kit `GENERATED` nunca saiu do estoque do laboratório — não existe
+    // pessoa legítima com esse código em mãos. Aceitá-lo transformava o pool
+    // inteiro em alvo: como ~1 em cada 100 sequências passa no módulo 11, quem
+    // varresse códigos acabaria acertando um kit não vendido e viraria titular
+    // do DNA dele. Foi o achado mais grave da revisão de 09/09.
+    //
+    // A recusa reusa a mensagem de código inexistente pelo mesmo motivo da
+    // camada 2: dizer "existe, mas ainda não foi despachado" já seria meia
+    // resposta a quem está varrendo.
+    if (!ACTIVATABLE_STATUSES.has(kit.status)) {
+      // Contrapeso da mensagem vaga: o suporte precisa conseguir explicar ao
+      // cliente o que aconteceu com o kit dele sem adivinhar.
+      this.logger.warn(`Ativação recusada: kit ${code} está em ${kit.status}`);
+      return fail(new NotFoundError(CodeValidation.WRONG_CODE, { code: input.code }));
     }
 
     const activatedAt = new Date();

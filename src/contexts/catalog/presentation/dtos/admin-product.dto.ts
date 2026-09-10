@@ -26,8 +26,11 @@ export class UpdateProductDto {
   @IsString()
   description!: string;
 
+  // 300 acompanha o VarChar(300) da coluna: o item de acompanhamentos de
+  // performance (09/09) passa de 200 caracteres e o André pediu para não
+  // quebrá-lo em vários itens.
   @ApiPropertyOptional({ type: [String], description: 'O que está incluso, um item por linha.' })
-  @IsOptional() @IsArray() @IsString({ each: true }) @MaxLength(200, { each: true })
+  @IsOptional() @IsArray() @IsString({ each: true }) @MaxLength(300, { each: true })
   features?: string[];
 
   @ApiPropertyOptional({ description: 'Quantidade de marcadores anunciada.' })

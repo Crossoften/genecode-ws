@@ -808,7 +808,10 @@ model ProductFeature {
   productId String  @db.Char(36)
   product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 
-  label    String @db.VarChar(200)
+  /// 300, não 200: o item de acompanhamentos de performance que o cliente
+  /// mandou em 09/09 tem 209 caracteres, e o André decidiu no mesmo dia
+  /// (item 27) mantê-lo como UM item só na lista, sem quebrar em vários.
+  label    String @db.VarChar(300)
   position Int    @default(0)
 
   @@index([productId])
@@ -1400,6 +1403,13 @@ model EnvironmentalQuestion {
   /// categoria do painel (ex.: 'metabolismo_energetico', 'forca_potencia').
   categorySlug String @db.VarChar(80)
 
+  /// Checkpoint a que a pergunta pertence. Null = vale para todos, que é como o
+  /// questionário nasceu (Q0–Q4 serviam o mesmo conjunto) e continua sendo o
+  /// padrão do que o laboratório cria pelo admin. A especificação do cliente
+  /// pede 24 perguntas POR checkpoint (12 fixas repetidas + 12 que mudam de
+  /// foco), então as 120 perguntas reais vêm com o checkpoint preenchido.
+  checkpoint Checkpoint?
+
   text String @db.VarChar(400)
   /// Peso da pergunta dentro da categoria, na média ponderada.
   weight Float @default(1)
@@ -1412,6 +1422,7 @@ model EnvironmentalQuestion {
   updatedAt DateTime @updatedAt
 
   @@index([panelSlug, categorySlug])
+  @@index([panelSlug, checkpoint])
   @@map("environmental_questions")
 }
 
@@ -1424,7 +1435,11 @@ model EnvironmentalOption {
   label String @db.VarChar(200)
   /// Qualidade do hábito nesta resposta: 0 (pior) a 100 (melhor). A média
   /// ponderada por categoria vira 0–1 e é mapeada para a escala da estratégia.
-  points Int
+  ///
+  /// Float, e não Int, porque a pontuação da spec é por POSIÇÃO da opção e a 2ª
+  /// e a 3ª valem 66,7 e 33,3 — arredondar para inteiro deslocaria o ambiental
+  /// de cada bloco.
+  points Float
   order  Int @default(0)
 
   @@index([questionId])

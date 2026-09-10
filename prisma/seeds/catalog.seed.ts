@@ -74,6 +74,13 @@ const PRODUCTS: readonly ProductSeed[] = [
       'Envelope de retorno para envio ao laboratório',
       'Índice de aderência para 30 modalidades esportivas',
       'Laudo interativo com referências científicas',
+      // Texto literal do cliente (09/09). Os quatro checkpoints ficam num item
+      // só porque o André decidiu assim no mesmo dia (item 27) — listá-los
+      // separados daria a impressão de quatro produtos avulsos. São 209
+      // caracteres, e por isso o label da coluna foi para VarChar(300).
+      'Acompanhamentos de Performance - Avaliação inicial (inclusa), seguida de avaliações ' +
+        'trimestrais identificadas como: Adaptação inicial (3 m); Primeiros resultados (6 m); ' +
+        'Refinamento (9 m); Balanço anual (12 m).',
     ],
     traits: { nutrition: 20, performance: 100, health: 40 },
   },
@@ -100,8 +107,10 @@ const PRODUCTS: readonly ProductSeed[] = [
       'Tudo dos painéis Nutrigenética e Performance',
       'Kit de coleta com swab de mucosa oral',
       'Envelope de retorno para envio ao laboratório',
+      // "Atualizações futuras do laudo incluídas" saiu em 09/09: a GeneCode não
+      // se compromete a reprocessar laudos antigos, e prometer isso na vitrine
+      // vira obrigação de contrato.
       'Laudo interativo com referências científicas',
-      'Atualizações futuras do laudo incluídas',
     ],
     traits: { nutrition: 85, performance: 85, health: 100 },
   },

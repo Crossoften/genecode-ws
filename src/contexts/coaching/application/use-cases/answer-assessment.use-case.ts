@@ -25,6 +25,8 @@ export interface QuestionnaireCategory {
   readonly slug: string;
   readonly name: string;
   readonly geneticScore: number;
+  /** Ambiental 0–100 da última avaliação. Null enquanto não houve entrevista. */
+  readonly environmentalScore: number | null;
   readonly adjustedScore: number | null;
   readonly questions: readonly QuestionnaireQuestion[];
 }
@@ -40,6 +42,8 @@ export interface Questionnaire {
   /** Data em que o próximo checkpoint libera, quando ainda travado. */
   readonly unlocksAt: Date | null;
   readonly completed: readonly Checkpoint[];
+  /** Checkpoint de onde vieram o ambiental e o ajustado exibidos. */
+  readonly lastAssessedCheckpoint: Checkpoint | null;
   readonly categories: readonly QuestionnaireCategory[];
 }
 
@@ -53,8 +57,29 @@ export interface AssessmentResult {
   readonly categories: readonly {
     readonly slug: string;
     readonly geneticScore: number;
+    /** Ambiental 0–100 do bloco, calculado agora a partir das respostas. */
+    readonly environmentalScore: number;
     readonly adjustedScore: number;
   }[];
+}
+
+/**
+ * Filtro das perguntas de um checkpoint.
+ *
+ * Pergunta com `checkpoint` nulo vale para todos os checkpoints — é como o
+ * questionário nasceu e continua sendo o que o laboratório cria pelo admin. As
+ * 120 perguntas do material do cliente vêm carimbadas com o seu checkpoint
+ * (decisão 23 do André em 09/09), então cada trimestre mostra as suas 24.
+ *
+ * Ciclo encerrado (`checkpoint` null): sobram só as perguntas genéricas, e no
+ * painel de performance isso é lista vazia — não há mais nada a responder.
+ */
+function questionsOfCheckpoint(panelSlug: string, checkpoint: Checkpoint | null) {
+  return {
+    panelSlug,
+    active: true,
+    ...(checkpoint === null ? { checkpoint: null } : { OR: [{ checkpoint: null }, { checkpoint }] }),
+  };
 }
 
 /**
@@ -86,12 +111,7 @@ export class AnswerAssessmentUseCase {
     if (context.isFail()) return fail(context.error);
     const { panelSlug, panelName, geneticByCategory, categories } = context.value;
 
-    const [questions, assessments, subject] = await Promise.all([
-      this.prisma.environmentalQuestion.findMany({
-        where: { panelSlug, active: true },
-        orderBy: { order: 'asc' },
-        include: { options: { orderBy: { order: 'asc' } } },
-      }),
+    const [assessments, subject] = await Promise.all([
       this.prisma.assessment.findMany({ where: { subjectId }, orderBy: { completedAt: 'desc' } }),
       this.subjectName(subjectId),
     ]);
@@ -101,12 +121,22 @@ export class AnswerAssessmentUseCase {
       now,
     );
 
+    // O conjunto de perguntas depende do checkpoint, então só dá para carregá-lo
+    // depois de saber qual é o próximo.
+    const questions = await this.prisma.environmentalQuestion.findMany({
+      where: questionsOfCheckpoint(panelSlug, availability.next),
+      orderBy: { order: 'asc' },
+      include: { options: { orderBy: { order: 'asc' } } },
+    });
+
     // Respostas do checkpoint corrente (se o profissional reabrir antes de fechar).
     const current = availability.next
       ? assessments.find((a) => a.checkpoint === availability.next)
       : undefined;
     const previousAnswers = (current?.answers as Record<string, string> | null) ?? {};
-    const latestAdjusted = (assessments[0]?.adjustedScores ?? null) as Record<string, number> | null;
+    const latest = assessments[0];
+    const latestEnvironmental = (latest?.environmentalScores ?? null) as Record<string, number> | null;
+    const latestAdjusted = (latest?.adjustedScores ?? null) as Record<string, number> | null;
 
     const byCategory = new Map<string, typeof questions>();
     for (const question of questions) {
@@ -124,10 +154,12 @@ export class AnswerAssessmentUseCase {
       unlocked: availability.unlocked,
       unlocksAt: availability.unlocksAt,
       completed: assessments.map((a) => a.checkpoint as Checkpoint),
+      lastAssessedCheckpoint: (latest?.checkpoint as Checkpoint | undefined) ?? null,
       categories: categories.map((category) => ({
         slug: category.slug,
         name: category.name,
         geneticScore: geneticByCategory.get(category.slug) ?? 0,
+        environmentalScore: latestEnvironmental?.[category.slug] ?? null,
         adjustedScore: latestAdjusted?.[category.slug] ?? null,
         questions: (byCategory.get(category.slug) ?? []).map((question) => ({
           id: question.id,
@@ -177,7 +209,7 @@ export class AnswerAssessmentUseCase {
     }
 
     const questions = await this.prisma.environmentalQuestion.findMany({
-      where: { panelSlug, active: true },
+      where: questionsOfCheckpoint(panelSlug, checkpoint),
       include: { options: { select: { id: true, points: true } } },
     });
 
@@ -195,6 +227,7 @@ export class AnswerAssessmentUseCase {
     const resultCategories: {
       slug: string;
       geneticScore: number;
+      environmentalScore: number;
       adjustedScore: number;
     }[] = [];
 
@@ -204,7 +237,12 @@ export class AnswerAssessmentUseCase {
       if (!scored) continue;
       environmentalScores[categorySlug] = scored.environmental;
       adjustedScores[categorySlug] = scored.adjusted;
-      resultCategories.push({ slug: categorySlug, geneticScore, adjustedScore: scored.adjusted });
+      resultCategories.push({
+        slug: categorySlug,
+        geneticScore,
+        environmentalScore: scored.environmental,
+        adjustedScore: scored.adjusted,
+      });
     }
 
     // O `answers` guardado é questionId → optionId, para reabrir a avaliação e

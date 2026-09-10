@@ -166,7 +166,13 @@ async function main(): Promise<void> {
   console.log('\n✓ parceiro QAPARCEIRO · 10% de desconto · 20% de comissão');
 
   // --- Lote de kits para o QA ativar ----------------------------------------
-  const existentes = await prisma.kit.count({ where: { status: 'GENERATED' } });
+  //
+  // Nascem em ASSIGNED, não em GENERATED. Desde a guarda de 09/09, o kit só é
+  // ativável depois de sair do estoque — um kit GENERATED devolve "código
+  // incorreto" de propósito, porque não existe pessoa legítima com ele em mãos.
+  // Semear GENERATED aqui entregaria ao QA dez códigos que a API recusa, e o
+  // caderno de testes reportaria bug onde há regra.
+  const existentes = await prisma.kit.count({ where: { status: 'ASSIGNED' } });
 
   if (existentes < 10) {
     const lote = await prisma.kitBatch.create({
@@ -177,14 +183,14 @@ async function main(): Promise<void> {
       const code = gerarCodigoKit();
       const jaExiste = await prisma.kit.findUnique({ where: { code } });
       if (jaExiste) continue;
-      await prisma.kit.create({ data: { code, batchId: lote.id, status: 'GENERATED' } });
+      await prisma.kit.create({ data: { code, batchId: lote.id, status: 'ASSIGNED' } });
       codigos.push(code);
     }
     console.log(`✓ lote ${lote.reference} com ${codigos.length} kits ativáveis`);
     console.log(`  para o caderno de testes: ${codigos.slice(0, 3).join(' · ')}`);
   } else {
     const amostra = await prisma.kit.findMany({
-      where: { status: 'GENERATED' },
+      where: { status: 'ASSIGNED' },
       take: 3,
       select: { code: true },
     });

@@ -3,7 +3,7 @@ import { Type } from 'class-transformer';
 import {
   ArrayMinSize,
   IsArray,
-  IsInt,
+  IsIn,
   IsNumber,
   IsString,
   Max,
@@ -13,6 +13,9 @@ import {
   ValidateNested,
 } from 'class-validator';
 
+/** Os cinco checkpoints da entrevista, na ordem em que liberam. */
+export const CHECKPOINTS = ['Q0', 'Q1', 'Q2', 'Q3', 'Q4'] as const;
+
 export class QuestionOptionDto {
   @ApiProperty({ example: 'Todos os dias' })
   @IsString()
@@ -20,8 +23,13 @@ export class QuestionOptionDto {
   @MaxLength(200)
   label!: string;
 
-  @ApiProperty({ example: 100, description: 'Qualidade do hábito: 0 (pior) a 100 (melhor).' })
-  @IsInt()
+  /**
+   * Aceita fracionário: a pontuação por posição da especificação (§3.3) usa 66,7
+   * e 33,3, e um `@IsInt` aqui recusaria a própria pergunta semeada quando o
+   * laboratório abrisse para editar.
+   */
+  @ApiProperty({ example: 66.7, description: 'Qualidade do hábito: 0 (pior) a 100 (melhor).' })
+  @IsNumber()
   @Min(0)
   @Max(100)
   points!: number;
@@ -69,8 +77,8 @@ export class AnswerDto {
 }
 
 export class SubmitAssessmentDto {
-  @ApiProperty({ example: 'Q0', enum: ['Q0', 'Q1', 'Q2', 'Q3', 'Q4'] })
-  @IsString()
+  @ApiProperty({ example: 'Q0', enum: CHECKPOINTS })
+  @IsIn(CHECKPOINTS)
   checkpoint!: string;
 
   @ApiProperty({ type: [AnswerDto] })

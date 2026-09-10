@@ -8,7 +8,13 @@ import { NotFoundError } from '@shared/domain/domain-error';
 
 import { ListProductsUseCase } from '../../application/use-cases/list-products.use-case';
 import { RecommendProductUseCase } from '../../application/use-cases/recommend-product.use-case';
-import { QUIZ } from '../../domain/quiz';
+import {
+  QUIZ_CUTOFF,
+  QUIZ_GUIDANCE_MESSAGE,
+  QUIZ_MAX_PER_BLOCK,
+  QUIZ_PRODUCT_LABELS,
+  QUIZ_STATEMENTS,
+} from '../../domain/quiz';
 import { QuizAnswersDto } from '../dtos/quiz.dto';
 
 @ApiTags('Vitrine')
@@ -28,19 +34,36 @@ export class CatalogController {
     return this.listProducts.execute();
   }
 
-  /** Perguntas do quiz de recomendação. */
+  /**
+   * Afirmações do quiz de recomendação.
+   *
+   * A chave continua `questions` para não quebrar o front no meio da troca do
+   * motor, embora o material novo chame cada item de afirmação. Vão junto os
+   * rótulos dos painéis (decisão 14 de 09/09), a mensagem do treinador e os
+   * números da regra, para que a tela não precise duplicar nada disso em código.
+   */
   @Get('quiz')
   @IsPublic()
-  @ApiOperation({ summary: 'Perguntas do quiz de recomendação' })
+  @ApiOperation({ summary: 'Afirmações do quiz de recomendação' })
   quiz() {
-    return { questions: QUIZ };
+    return {
+      questions: QUIZ_STATEMENTS,
+      productLabels: QUIZ_PRODUCT_LABELS,
+      guidanceMessage: QUIZ_GUIDANCE_MESSAGE,
+      cutoff: QUIZ_CUTOFF,
+      maxPerBlock: QUIZ_MAX_PER_BLOCK,
+    };
   }
 
   /**
-   * Recomenda um produto a partir das respostas.
+   * Recomenda um painel a partir das respostas.
    *
    * Sempre devolve uma recomendação enquanto houver produto publicado — foi
-   * requisito explícito do cliente em 15/06.
+   * requisito explícito do cliente em 15/06. No quadrante em que os dois blocos
+   * ficam abaixo do corte, o produto vem do mesmo jeito e `orientacao` sai como
+   * `consulte-treinador`, que é a terceira via aprovada por André em 09/09: o
+   * documento do quiz mandava não recomendar nada ali, o cliente já tinha
+   * proibido isso, e a saída foi fazer as duas coisas.
    */
   @Post('quiz')
   @IsPublic()

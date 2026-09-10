@@ -1,111 +1,93 @@
 import { Injectable } from '@nestjs/common';
 
-import { PrismaService } from '@infra/database/prisma.service';
-
-import { QUIZ_TRAITS, scoreAnswers, type QuizTrait } from '../../domain/quiz';
+import {
+  affinityFor,
+  coverageBySlug,
+  QUIZ_PRODUCT_SLUGS,
+  resolveQuiz,
+  type QuizBlockScores,
+  type QuizGuidance,
+  type QuizProductSlug,
+} from '../../domain/quiz';
 import { ListProductsUseCase, type ProductView } from './list-products.use-case';
 
+/**
+ * Resposta do quiz.
+ *
+ * Os nomes misturam inglês e português de propósito: `blocos` e `orientacao`
+ * entraram em 09/09 com esses nomes exatos, combinados com o front, e renomear
+ * agora só criaria um de/para inútil no meio do caminho.
+ */
 export interface RecommendationResult {
   readonly product: ProductView;
-  /** Aderência do produto recomendado, de 0 a 100. */
+  /**
+   * Aderência do produto recomendado, de 0 a 100 — agora é a fração dos pontos
+   * que o painel cobre, não mais a similaridade de cosseno do motor antigo.
+   */
   readonly affinity: number;
   /** Segunda melhor opção, para o cliente comparar. */
   readonly runnerUp: ProductView | null;
+  /** Pontuação de cada bloco, de 0 a 12. É o que a tela de resultado exibe. */
+  readonly blocos: QuizBlockScores;
+  /** `consulte-treinador` manda a tela mostrar também a mensagem do treinador. */
+  readonly orientacao: QuizGuidance;
 }
 
 /**
- * Recomenda um produto a partir das respostas do quiz.
+ * Recomenda um painel a partir das respostas do quiz.
  *
- * A regra inegociável: **sempre há uma recomendação**. Augusto foi explícito em
- * 15/06 de que o quiz não pode dizer que nenhum produto serve. Aqui isso não
- * depende de disciplina de quem escreve o código — é consequência de somar
- * pontos e pegar o máximo.
+ * A regra inegociável de 15/06 continua valendo: **sempre há uma recomendação**.
+ * Augusto foi explícito de que o quiz não pode dizer que nenhum produto serve, e
+ * isso aqui não depende da disciplina de quem escreve o código — a regra de
+ * quadrante do domínio sempre devolve um slug, e este caso de uso só tem um
+ * caminho sem produto: catálogo vazio, que é falha de operação, não resultado do
+ * quiz.
  *
- * O empate cai no produto de menor `position`, que é a ordem que o admin definiu
- * na vitrine. Determinístico, e o cliente controla o desempate sem tocar em código.
+ * O painel que o quadrante escolheu pode estar despublicado ou arquivado. Nesse
+ * caso cai para o painel publicado que cobre mais pontos das respostas, e o
+ * empate vai para o de menor `position` — a ordem que o admin definiu na vitrine,
+ * que é onde o cliente controla o desempate sem tocar em código.
  */
 @Injectable()
 export class RecommendProductUseCase {
-  constructor(
-    private readonly prisma: PrismaService,
-    private readonly listProducts: ListProductsUseCase,
-  ) {}
+  constructor(private readonly listProducts: ListProductsUseCase) {}
 
   /**
-   * @param answers - Mapa `questionId → optionId` com o que o visitante marcou.
-   * @returns O produto recomendado, sua aderência e o segundo colocado.
+   * @param answers - Mapa `statementId → optionId` com o que o visitante marcou.
+   * @returns Recomendação, pontuação por bloco e orientação; `null` só com a
+   *   vitrine sem nenhum produto publicado.
    */
   async execute(answers: ReadonlyMap<string, string>): Promise<RecommendationResult | null> {
     const products = await this.listProducts.execute();
     if (products.length === 0) return null;
 
-    const traitsByProduct = await this.loadTraits();
-    const scores = scoreAnswers(answers);
+    const outcome = resolveQuiz(answers);
+    const published = new Map(products.map((product) => [product.slug, product]));
+    const ranked = this.rankPanels(outcome.blocks, published);
 
-    const ranked = products
-      .map((product) => ({
-        product,
-        score: affinityFor(traitsByProduct.get(product.slug) ?? {}, scores),
-      }))
-      .sort((a, b) => b.score - a.score);
-
-    const best = ranked[0]!;
-    const maxPossible = Math.max(...ranked.map((entry) => entry.score), 1);
+    const chosen = published.has(outcome.productSlug) ? outcome.productSlug : ranked.at(0);
+    const runnerUp = ranked.find((slug) => slug !== chosen);
 
     return {
-      product: best.product,
-      affinity: Math.round((best.score / maxPossible) * 100),
-      runnerUp: ranked[1]?.product ?? null,
+      // Sem nenhum dos três painéis publicado sobra o primeiro da vitrine: pior
+      // recomendação, mas ainda uma recomendação.
+      product: (chosen ? published.get(chosen) : undefined) ?? products[0]!,
+      affinity: affinityFor(chosen ?? outcome.productSlug, outcome.blocks),
+      runnerUp: runnerUp ? (published.get(runnerUp) ?? null) : null,
+      blocos: outcome.blocks,
+      orientacao: outcome.guidance,
     };
   }
 
-  private async loadTraits(): Promise<Map<string, Partial<Record<QuizTrait, number>>>> {
-    const rows = await this.prisma.productTrait.findMany({
-      include: { product: { select: { slug: true } } },
-    });
+  private rankPanels(
+    blocks: QuizBlockScores,
+    published: ReadonlyMap<string, ProductView>,
+  ): QuizProductSlug[] {
+    const coverage = coverageBySlug(blocks);
+    const positions = new Map([...published.keys()].map((slug, index) => [slug, index]));
 
-    const byProduct = new Map<string, Partial<Record<QuizTrait, number>>>();
-    for (const row of rows) {
-      const current = byProduct.get(row.product.slug) ?? {};
-      current[row.trait as QuizTrait] = row.weight;
-      byProduct.set(row.product.slug, current);
-    }
-    return byProduct;
+    return QUIZ_PRODUCT_SLUGS.filter((slug) => published.has(slug)).sort(
+      (a, b) => coverage[b] - coverage[a] || positions.get(a)! - positions.get(b)!,
+    );
   }
-}
-
-/**
- * Similaridade de cosseno entre o perfil do visitante e o do produto.
- *
- * Cosseno, e não produto escalar, por um motivo concreto: um produto
- * "generalista" tem peso alto em todos os eixos, e com produto escalar ele vence
- * quase sempre — só perde para alguém extremamente unilateral.
- *
- * Medi isso: com produto escalar, o Premium (85/85/100) era recomendado em 32 das
- * 36 combinações possíveis do quiz. Um quiz que indica o produto mais caro em 89%
- * dos casos não está recomendando, está empurrando — e o cliente pediu o quiz
- * justamente para ajudar quem não sabe qual kit comprar.
- *
- * O cosseno compara a **direção** dos dois perfis, ignorando magnitude. Quem
- * responde tudo voltado a nutrição recebe Nutrigenética; quem dá respostas
- * equilibradas recebe Premium, que é quando ele realmente é a melhor escolha.
- */
-function affinityFor(
-  productTraits: Partial<Record<QuizTrait, number>>,
-  answerScores: Record<QuizTrait, number>,
-): number {
-  let dot = 0;
-  let productMagnitude = 0;
-  let answerMagnitude = 0;
-
-  for (const trait of QUIZ_TRAITS) {
-    const product = productTraits[trait] ?? 0;
-    const answer = answerScores[trait];
-    dot += product * answer;
-    productMagnitude += product * product;
-    answerMagnitude += answer * answer;
-  }
-
-  const denominator = Math.sqrt(productMagnitude) * Math.sqrt(answerMagnitude);
-  return denominator === 0 ? 0 : dot / denominator;
 }

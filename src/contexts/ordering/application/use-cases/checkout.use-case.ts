@@ -1,6 +1,8 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import type { Prisma } from '@prisma/client';
+import { randomInt } from 'node:crypto';
 
+import { buildActivationCode } from '@contexts/lab/domain/activation-code';
 import { PrismaService } from '@infra/database/prisma.service';
 import { ConflictError, ValidationError } from '@shared/domain/domain-error';
 import { fail, ok, type Result } from '@shared/domain/result';
@@ -60,6 +62,9 @@ export interface CheckoutOutput {
 
 /** Peso aproximado do kit, para cotação de frete. */
 const KIT_WEIGHT_GRAMS = 180;
+
+/** Espaço de bases do código de kit: 6 dígitos, igual ao do gerador de lotes. */
+const KIT_BASE_SPACE = 1_000_000;
 
 /**
  * Fecha o pedido: valida, precifica, cobra e persiste.
@@ -249,18 +254,22 @@ export class CheckoutUseCase {
     ]);
   }
 
-  /** Código de kit válido no módulo 11 e inédito na base. */
+  /**
+   * Código de kit válido no módulo 11 e inédito na base.
+   *
+   * O cálculo é o do domínio (`buildActivationCode`). Havia aqui uma segunda
+   * implementação da mesma regra, escrita no dialeto do CPF (`(soma * 10) % 11`
+   * em vez de `11 - resto`): as duas são equivalentes — conferidas nas 1.000.000
+   * de bases possíveis, zero divergência —, mas duas cópias da mesma regra é o
+   * que faz uma delas mudar sozinha um dia, e no dia em que mudar o kit criado
+   * aqui deixa de passar na ativação. Removida em 09/09.
+   *
+   * `randomInt` do `crypto` em vez de `Math.random` pelo mesmo motivo do gerador
+   * de lotes: código de kit adivinhável é kit sequestrável.
+   */
   private async uniqueKitCode(): Promise<string> {
     for (;;) {
-      const corpo = String(Math.floor(Math.random() * 1_000_000)).padStart(6, '0');
-      const dv = (digitos: string, peso: number): number => {
-        const soma = [...digitos].reduce((acc, d, i) => acc + Number(d) * (peso - i), 0);
-        const resto = (soma * 10) % 11;
-        return resto === 10 ? 0 : resto;
-      };
-      const d1 = dv(corpo, 7);
-      const d2 = dv(corpo + d1, 8);
-      const code = `${corpo}-${d1}${d2}`;
+      const code = buildActivationCode(String(randomInt(KIT_BASE_SPACE)).padStart(6, '0'));
       if (!(await this.prisma.kit.findUnique({ where: { code } }))) return code;
     }
   }

@@ -5,7 +5,7 @@ import { PrismaService } from '@infra/database/prisma.service';
 import { ValidationError } from '@shared/domain/domain-error';
 import { fail, ok, type Result } from '@shared/domain/result';
 
-import { buildActivationCode } from '../../domain/activation-code';
+import { buildActivationCode, isTrivialBase } from '../../domain/activation-code';
 
 export interface GenerateKitsOutput {
   readonly batchReference: string;
@@ -71,7 +71,10 @@ export class GenerateKitsUseCase {
     const codes: string[] = [];
     while (codes.length < quantity) {
       const base = String(randomInt(BASE_SPACE)).padStart(6, '0');
-      if (used.has(base)) continue;
+      // A base trivial passa no módulo 11 mas a validação a recusa. Imprimi-la
+      // numa caixa geraria um kit que nunca ativa, e o cliente só descobriria
+      // com a etiqueta na mão.
+      if (used.has(base) || isTrivialBase(base)) continue;
       used.add(base);
       codes.push(buildActivationCode(base));
     }

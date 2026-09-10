@@ -2,6 +2,7 @@ import {
   CodeValidation,
   buildActivationCode,
   checkDigitsFor,
+  isTrivialBase,
   validateActivationCode,
 } from './activation-code';
 
@@ -83,6 +84,12 @@ describe('Código de ativação do kit', () => {
         if (result.isFail()) expect(result.error.message).toBe(CodeValidation.WRONG_CODE);
       },
     );
+
+    it('expõe a mesma lista para quem gera, senão sai kit impresso que não ativa', () => {
+      expect(isTrivialBase('000000')).toBe(true);
+      expect(isTrivialBase('999999')).toBe(true);
+      expect(isTrivialBase('482913')).toBe(false);
+    });
   });
 
   describe('geração', () => {
@@ -98,6 +105,39 @@ describe('Código de ativação do kit', () => {
       expect(code).toMatch(/^\d{6}-\d{2}$/);
       expect(code).toHaveLength(9);
     });
+  });
+
+  describe('equivalência com o gerador que existia no checkout', () => {
+    /**
+     * Cópia literal da fórmula que vivia em `checkout.use-case.ts` até 09/09,
+     * escrita no dialeto do CPF (`(soma * 10) % 11`) em vez do `11 - resto`
+     * daqui. A duplicata foi removida; este teste é a testemunha dela: os kits
+     * criados por aquele código já estão no banco, e se o domínio mudar de
+     * regra eles param de validar.
+     */
+    const dvAntigo = (digitos: string, peso: number): number => {
+      const soma = [...digitos].reduce((acc, d, i) => acc + Number(d) * (peso - i), 0);
+      const resto = (soma * 10) % 11;
+      return resto === 10 ? 0 : resto;
+    };
+
+    it(
+      'produz o mesmo DV nas 1.000.000 de bases possíveis',
+      () => {
+        // Sem `expect` dentro do laço de propósito: um milhão de asserções leva
+        // minutos. A divergência vira exceção com a base que a causou.
+        for (let n = 0; n < 1_000_000; n += 1) {
+          const base = String(n).padStart(6, '0');
+          const primeiro = dvAntigo(base, 7);
+          const antigo = `${primeiro}${dvAntigo(base + primeiro, 8)}`;
+          const atual = checkDigitsFor(base);
+          if (atual !== antigo) {
+            throw new Error(`base ${base}: domínio ${atual} ≠ checkout ${antigo}`);
+          }
+        }
+      },
+      60_000,
+    );
   });
 
   describe('as quatro mensagens definidas pelo cliente', () => {

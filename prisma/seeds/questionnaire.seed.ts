@@ -1,29 +1,87 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, type Checkpoint } from '@prisma/client';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 
 /**
- * Perguntas de exemplo do questionário ambiental, uma por grupo genético.
+ * Perguntas do questionário ambiental.
  *
- * O peso ambiental de cada painel entra no score ajustado pela estratégia já
- * validada (aditiva em performance, multiplicativa em nutrigenética): cada opção
- * vale de 0 (pior hábito) a 100 (melhor), e o peso da pergunta pondera a média
- * dentro da categoria. Estas são um ponto de partida — o admin/laboratório
- * repesa e adiciona pelo próprio painel, sem deploy (decisão B5).
+ * ### Performance — as 120 do material do cliente
  *
- * Idempotente por (painel, categoria, ordem): reexecutar atualiza o texto/peso e
- * regrava as opções, sem duplicar.
+ * Decisão 23 do André em 09/09: valem as perguntas do mockup, 5 checkpoints ×
+ * 24 perguntas (4 por bloco genético). Elas moram em `data/questionario-
+ * performance.json` porque são conteúdo do laboratório, não código — o mesmo
+ * tratamento que o painel genético já recebe.
+ *
+ * A pontuação NÃO vem do JSON: ela é derivada da POSIÇÃO da opção, como manda a
+ * §3.3 da especificação (1ª=100, 2ª=66,7, 3ª=33,3, 4ª=0), e as opções já chegam
+ * ordenadas da melhor para a pior. Guardar os pontos no arquivo abriria espaço
+ * para o texto e a nota saírem de sincronia na primeira revisão de conteúdo.
+ * Peso 1 em todas: a §3.4 diz que as 4 perguntas do bloco pesam igual (25%).
+ *
+ * ### Nutrigenética — ainda exemplos
+ *
+ * O cliente só entregou o banco de perguntas do painel de performance. As de
+ * nutrigenética seguem sendo um ponto de partida, sem checkpoint (valem para
+ * Q0–Q4), até o laboratório mandar as definitivas — ele repesa e adiciona pelo
+ * próprio admin, sem deploy (decisão B5).
+ *
+ * Idempotente por (painel, checkpoint, categoria, ordem): reexecutar atualiza o
+ * texto/peso e regrava as opções, sem duplicar.
  */
 interface SeedOption {
   readonly label: string;
   readonly points: number;
 }
 interface SeedQuestion {
+  readonly checkpoint: Checkpoint | null;
   readonly categorySlug: string;
+  readonly order: number;
   readonly text: string;
   readonly weight: number;
   readonly options: readonly SeedOption[];
 }
 
-const NUTRI: readonly SeedQuestion[] = [
+/** Uma pergunta do arquivo do cliente: opções ordenadas da melhor para a pior. */
+interface PerformanceQuestionJson {
+  readonly checkpoint: Checkpoint;
+  readonly categorySlug: string;
+  readonly order: number;
+  readonly text: string;
+  readonly options: readonly string[];
+}
+
+const MAX_POINTS = 100;
+
+/**
+ * Pontos de uma opção pela sua posição (§3.3 da especificação).
+ *
+ * Generalizado para N opções para não quebrar caso o laboratório publique um
+ * bloco com 3 ou 5 alternativas: a primeira sempre vale 100, a última 0, e as do
+ * meio se distribuem por igual. Com 4 opções dá exatamente 100 / 66,7 / 33,3 / 0.
+ */
+function pointsByPosition(index: number, total: number): number {
+  if (total <= 1) return MAX_POINTS;
+  return Math.round((1 - index / (total - 1)) * MAX_POINTS * 10) / 10;
+}
+
+/**
+ * Textos das 6 perguntas de exemplo que o seed antigo criou para performance.
+ *
+ * Elas nasceram sem checkpoint, então continuariam aparecendo em TODOS os
+ * checkpoints ao lado das 120 reais, inflando cada bloco. Apagadas pelo texto —
+ * e não por ordem ou por "tudo que é performance sem checkpoint" — para não
+ * levar junto nada que o laboratório tenha criado pelo admin.
+ */
+const PERFORMANCE_EXEMPLOS_LEGADO: readonly string[] = [
+  'Você inclui treino de força na sua rotina?',
+  'Com que frequência você faz treino aeróbico (corrida, bike, natação)?',
+  'Como é sua recuperação entre treinos (sono e descanso)?',
+  'Você faz aquecimento e trabalho de mobilidade antes de treinar?',
+  'Como está sua alimentação voltada à composição corporal?',
+  'Qual seu nível de estresse e foco no dia a dia?',
+];
+
+const NUTRI_EXEMPLOS: readonly Omit<SeedQuestion, 'checkpoint' | 'order'>[] = [
   {
     categorySlug: 'metabolismo_energetico',
     text: 'Com que frequência você pratica atividade física na semana?',
@@ -78,107 +136,60 @@ const NUTRI: readonly SeedQuestion[] = [
   },
 ];
 
-const PERFORMANCE: readonly SeedQuestion[] = [
-  {
-    categorySlug: 'forca_potencia',
-    text: 'Você inclui treino de força na sua rotina?',
-    weight: 1.3,
-    options: [
-      { label: 'Não treino força', points: 0 },
-      { label: '1 vez por semana', points: 40 },
-      { label: '2 a 3 vezes', points: 80 },
-      { label: '4 vezes ou mais', points: 100 },
-    ],
-  },
-  {
-    categorySlug: 'resistencia_aerobica',
-    text: 'Com que frequência você faz treino aeróbico (corrida, bike, natação)?',
-    weight: 1.2,
-    options: [
-      { label: 'Nunca', points: 0 },
-      { label: '1 vez por semana', points: 40 },
-      { label: '2 a 3 vezes', points: 80 },
-      { label: '4 vezes ou mais', points: 100 },
-    ],
-  },
-  {
-    categorySlug: 'recuperacao_inflamacao',
-    text: 'Como é sua recuperação entre treinos (sono e descanso)?',
+/** Lê as 120 perguntas do arquivo do cliente e converte para o formato do seed. */
+function loadPerformance(): SeedQuestion[] {
+  const file = join(__dirname, 'data', 'questionario-performance.json');
+  const parsed = JSON.parse(readFileSync(file, 'utf-8')) as PerformanceQuestionJson[];
+
+  return parsed.map((question) => ({
+    checkpoint: question.checkpoint,
+    categorySlug: question.categorySlug,
+    order: question.order,
+    text: question.text,
     weight: 1,
-    options: [
-      { label: 'Insuficiente', points: 0 },
-      { label: 'Parcial', points: 50 },
-      { label: 'Adequada', points: 100 },
-    ],
-  },
-  {
-    categorySlug: 'risco_lesao',
-    text: 'Você faz aquecimento e trabalho de mobilidade antes de treinar?',
-    weight: 1,
-    options: [
-      { label: 'Nunca', points: 0 },
-      { label: 'Às vezes', points: 50 },
-      { label: 'Sempre', points: 100 },
-    ],
-  },
-  {
-    categorySlug: 'metabolismo_composicao',
-    text: 'Como está sua alimentação voltada à composição corporal?',
-    weight: 1,
-    options: [
-      { label: 'Desregrada', points: 0 },
-      { label: 'Razoável', points: 50 },
-      { label: 'Controlada e planejada', points: 100 },
-    ],
-  },
-  {
-    categorySlug: 'neuroperformance',
-    text: 'Qual seu nível de estresse e foco no dia a dia?',
-    weight: 1,
-    options: [
-      { label: 'Estresse alto, foco baixo', points: 0 },
-      { label: 'Moderado', points: 50 },
-      { label: 'Controlado, bom foco', points: 100 },
-    ],
-  },
-];
+    options: question.options.map((label, index) => ({
+      label,
+      points: pointsByPosition(index, question.options.length),
+    })),
+  }));
+}
 
 async function seedPanel(
   prisma: PrismaClient,
   panelSlug: string,
   questions: readonly SeedQuestion[],
 ): Promise<void> {
-  for (let order = 0; order < questions.length; order += 1) {
-    const q = questions[order];
+  for (const q of questions) {
     const existing = await prisma.environmentalQuestion.findFirst({
-      where: { panelSlug, categorySlug: q.categorySlug, order },
+      where: {
+        panelSlug,
+        checkpoint: q.checkpoint,
+        categorySlug: q.categorySlug,
+        order: q.order,
+      },
     });
+
+    const options = {
+      create: q.options.map((o, i) => ({ label: o.label, points: o.points, order: i })),
+    };
 
     if (existing) {
       await prisma.environmentalOption.deleteMany({ where: { questionId: existing.id } });
       await prisma.environmentalQuestion.update({
         where: { id: existing.id },
-        data: {
-          text: q.text,
-          weight: q.weight,
-          active: true,
-          options: {
-            create: q.options.map((o, i) => ({ label: o.label, points: o.points, order: i })),
-          },
-        },
+        data: { text: q.text, weight: q.weight, active: true, options },
       });
     } else {
       await prisma.environmentalQuestion.create({
         data: {
           panelSlug,
+          checkpoint: q.checkpoint,
           categorySlug: q.categorySlug,
           text: q.text,
           weight: q.weight,
-          order,
+          order: q.order,
           active: true,
-          options: {
-            create: q.options.map((o, i) => ({ label: o.label, points: o.points, order: i })),
-          },
+          options,
         },
       });
     }
@@ -187,7 +198,25 @@ async function seedPanel(
 
 /** Semeia as perguntas ambientais dos dois painéis. Idempotente. */
 export async function seedQuestionnaire(prisma: PrismaClient): Promise<void> {
-  await seedPanel(prisma, 'nutrigenetics', NUTRI);
-  await seedPanel(prisma, 'performance', PERFORMANCE);
-  console.log(`✓ questionário ambiental: ${NUTRI.length + PERFORMANCE.length} perguntas de exemplo`);
+  await prisma.environmentalQuestion.deleteMany({
+    where: {
+      panelSlug: 'performance',
+      checkpoint: null,
+      text: { in: [...PERFORMANCE_EXEMPLOS_LEGADO] },
+    },
+  });
+
+  const nutri: SeedQuestion[] = NUTRI_EXEMPLOS.map((q, order) => ({
+    ...q,
+    checkpoint: null,
+    order,
+  }));
+  const performance = loadPerformance();
+
+  await seedPanel(prisma, 'nutrigenetics', nutri);
+  await seedPanel(prisma, 'performance', performance);
+
+  console.log(
+    `✓ questionário ambiental: ${performance.length} perguntas de performance (Q0–Q4) e ${nutri.length} exemplos de nutrigenética`,
+  );
 }

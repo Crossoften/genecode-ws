@@ -67,7 +67,7 @@ export function validateActivationCode(raw: string): Result<string> {
   const base = digitsOnly.slice(0, 6);
   const providedCheck = digitsOnly.slice(6);
 
-  if (TRIVIAL_BASES.has(base)) {
+  if (isTrivialBase(base)) {
     return fail(new ValidationError(CodeValidation.WRONG_CODE, { code: raw }));
   }
 
@@ -76,6 +76,18 @@ export function validateActivationCode(raw: string): Result<string> {
   }
 
   return ok(`${base}-${providedCheck}`);
+}
+
+/**
+ * A base é uma das sequências triviais recusadas na validação?
+ *
+ * Exposta para quem **gera** código, não só para quem valida: um kit impresso
+ * sobre base trivial nunca ativaria, e a caixa já teria saído para o cliente.
+ *
+ * @param base - Exatamente 6 dígitos.
+ */
+export function isTrivialBase(base: string): boolean {
+  return TRIVIAL_BASES.has(base);
 }
 
 /**

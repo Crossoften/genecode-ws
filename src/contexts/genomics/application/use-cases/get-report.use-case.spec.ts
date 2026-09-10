@@ -29,15 +29,30 @@ describe('GetReportUseCase — escopo de dono', () => {
     missingMarkers: null,
     narrative: null,
     panel: { name: 'GeneCode Performance', version: '1.0.0' },
-    categoryScores: [],
+    categoryScores: [
+      {
+        normalizedScore: 72,
+        band: 'MODERADO',
+        category: { slug: 'forca-potencia', name: 'Força e Potência', position: 1 },
+      },
+    ],
     modalityIndexes: [],
   };
 
   function buildPrisma(
     links: ReadonlyArray<{ userId: string; subjectId: string }>,
     status = 'PUBLISHED',
+    /**
+     * Avaliação ambiental mais recente do titular, quando o teste quer provar o
+     * ajustado (decisão 24). O padrão é `null` — laudo sem avaliação —, que é o
+     * estado de todo laudo recém-emitido.
+     */
+    assessment: { checkpoint: string; adjustedScores: Record<string, number> } | null = null,
   ) {
     return {
+      assessment: {
+        findFirst: jest.fn(async () => assessment),
+      },
       report: {
         findUnique: jest.fn(async ({ where }: { where: { id: string } }) =>
           where.id === REPORT_ID ? { ...reportRow, status } : null,
@@ -66,6 +81,40 @@ describe('GetReportUseCase — escopo de dono', () => {
 
     expect(result.isOk()).toBe(true);
     if (result.isOk()) expect(result.value.id).toBe(REPORT_ID);
+  });
+
+  // Decisão 24 (09/09): o titular vê o ajustado, não só o genético. Até então o
+  // número que responde "o que eu mudei adiantou?" só existia no laudo
+  // consolidado do profissional.
+  it('entrega o escore ajustado da avaliação mais recente ao titular', async () => {
+    const prisma = buildPrisma([{ userId: patient.id, subjectId: SUBJECT_ID }], 'PUBLISHED', {
+      checkpoint: 'Q1',
+      adjustedScores: { 'forca-potencia': 81.4 },
+    });
+
+    const result = await useCase(prisma).summary(REPORT_ID, patient);
+
+    expect(result.isOk()).toBe(true);
+    if (result.isOk()) {
+      expect(result.value.categories[0].score).toBe(72);
+      expect(result.value.categories[0].adjustedScore).toBe(81.4);
+      expect(result.value.lastAssessedCheckpoint).toBe('Q1');
+    }
+  });
+
+  // O outro lado: sem avaliação, o ajustado é `null` — nunca o genético
+  // repetido. Repetir faria a tela mostrar duas barras idênticas e sugerir que
+  // o ambiental já foi medido e não mudou nada.
+  it('devolve ajustado nulo enquanto não houver avaliação ambiental', async () => {
+    const prisma = buildPrisma([{ userId: patient.id, subjectId: SUBJECT_ID }]);
+
+    const result = await useCase(prisma).summary(REPORT_ID, patient);
+
+    expect(result.isOk()).toBe(true);
+    if (result.isOk()) {
+      expect(result.value.categories[0].adjustedScore).toBeNull();
+      expect(result.value.lastAssessedCheckpoint).toBeNull();
+    }
   });
 
   it('nega o laudo de outro titular como NOT_FOUND, não FORBIDDEN', async () => {

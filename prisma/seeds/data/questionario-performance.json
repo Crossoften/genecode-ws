@@ -1,0 +1,1442 @@
+[
+ {
+  "checkpoint": "Q0",
+  "categorySlug": "forca_potencia",
+  "order": 0,
+  "text": "Volume de treinamento de força semanal?",
+  "options": [
+   "≥4x força intensa",
+   "2–3x força moderada",
+   "1x ou ocasional",
+   "Sedentário / sem treino de força"
+  ]
+ },
+ {
+  "checkpoint": "Q0",
+  "categorySlug": "forca_potencia",
+  "order": 1,
+  "text": "Uso de sobrecarga progressiva (aumento sistemático de carga/repetições)?",
+  "options": [
+   "Sempre, de forma estruturada e registrada",
+   "Na maioria das vezes",
+   "Ocasionalmente, sem estrutura clara",
+   "Nunca / carga estagnada"
+  ]
+ },
+ {
+  "checkpoint": "Q0",
+  "categorySlug": "forca_potencia",
+  "order": 2,
+  "text": "Já treinou força de forma estruturada antes deste programa?",
+  "options": [
+   "Sim, com acompanhamento profissional recente",
+   "Sim, por conta própria",
+   "Já treinei no passado, mas não recentemente",
+   "Nunca treinei força de forma estruturada"
+  ]
+ },
+ {
+  "checkpoint": "Q0",
+  "categorySlug": "forca_potencia",
+  "order": 3,
+  "text": "Histórico de lesões musculares ou articulares relacionadas a treino de força?",
+  "options": [
+   "Nenhuma lesão relevante",
+   "Lesões leves, totalmente recuperadas",
+   "Lesão moderada, com sequelas leves",
+   "Lesão grave ou recorrente"
+  ]
+ },
+ {
+  "checkpoint": "Q0",
+  "categorySlug": "resistencia_aerobica",
+  "order": 4,
+  "text": "Volume de treinamento aeróbico semanal?",
+  "options": [
+   "≥5h aeróbico moderado-intenso",
+   "3–5h aeróbico regular",
+   "1–3h aeróbico leve",
+   "<1h ou sedentário"
+  ]
+ },
+ {
+  "checkpoint": "Q0",
+  "categorySlug": "resistencia_aerobica",
+  "order": 5,
+  "text": "Ingestão de carboidratos para performance?",
+  "options": [
+   "Periodização CHO adequada ao treino",
+   "Ingestão adequada sem periodização",
+   "Ingestão irregular",
+   "Restrição crônica / very low-carb"
+  ]
+ },
+ {
+  "checkpoint": "Q0",
+  "categorySlug": "resistencia_aerobica",
+  "order": 6,
+  "text": "Nível de condicionamento aeróbico atual (autoavaliação)?",
+  "options": [
+   "Excelente, pratico regularmente",
+   "Bom, pratico com alguma regularidade",
+   "Regular, prática esporádica",
+   "Baixo, sedentário"
+  ]
+ },
+ {
+  "checkpoint": "Q0",
+  "categorySlug": "resistencia_aerobica",
+  "order": 7,
+  "text": "Experiência prévia com treinos ou testes de resistência (ex: corrida, ciclismo)?",
+  "options": [
+   "Sim, com monitoramento de performance",
+   "Sim, sem monitoramento formal",
+   "Pouca experiência",
+   "Nenhuma experiência"
+  ]
+ },
+ {
+  "checkpoint": "Q0",
+  "categorySlug": "recuperacao_inflamacao",
+  "order": 8,
+  "text": "Tempo de recuperação entre sessões intensas?",
+  "options": [
+   "48–72h com recuperação ativa estruturada",
+   "24–48h adequadas",
+   "Recuperação insuficiente (<24h)",
+   "Overtraining frequente / sem descanso"
+  ]
+ },
+ {
+  "checkpoint": "Q0",
+  "categorySlug": "recuperacao_inflamacao",
+  "order": 9,
+  "text": "Frequência de dores musculares tardias (DOMS) intensas?",
+  "options": [
+   "Raras, recuperação rápida (<24h)",
+   "Moderadas, 1–2 dias",
+   "Frequentes, 2–3 dias",
+   "Muito frequentes e prolongadas"
+  ]
+ },
+ {
+  "checkpoint": "Q0",
+  "categorySlug": "recuperacao_inflamacao",
+  "order": 10,
+  "text": "Como você avalia sua qualidade de recuperação entre esforços físicos, historicamente?",
+  "options": [
+   "Sempre me recuperei bem e rápido",
+   "Recuperação satisfatória na maioria das vezes",
+   "Recuperação lenta com frequência",
+   "Recuperação sempre difícil ou prolongada"
+  ]
+ },
+ {
+  "checkpoint": "Q0",
+  "categorySlug": "recuperacao_inflamacao",
+  "order": 11,
+  "text": "Como era sua rotina de sono antes de iniciar o programa?",
+  "options": [
+   "Rotina de sono consistente e regrada",
+   "Rotina razoável, com irregularidades ocasionais",
+   "Rotina irregular",
+   "Sono cronicamente inadequado"
+  ]
+ },
+ {
+  "checkpoint": "Q0",
+  "categorySlug": "risco_lesao",
+  "order": 12,
+  "text": "Qualidade do aquecimento e mobilidade pré-treino?",
+  "options": [
+   "Aquecimento estruturado sempre (10–15 min)",
+   "Aquecimento moderado frequente",
+   "Aquecimento breve ou irregular",
+   "Sem aquecimento ou muito curto"
+  ]
+ },
+ {
+  "checkpoint": "Q0",
+  "categorySlug": "risco_lesao",
+  "order": 13,
+  "text": "Progressão de carga no treinamento?",
+  "options": [
+   "Progressão gradual e periodizada (<10%/semana)",
+   "Progressão moderada com monitoramento",
+   "Progressão rápida sem controle",
+   "Saltos bruscos de carga / overload abrupto"
+  ]
+ },
+ {
+  "checkpoint": "Q0",
+  "categorySlug": "risco_lesao",
+  "order": 14,
+  "text": "Histórico de lesões musculoesqueléticas nos últimos 2 anos?",
+  "options": [
+   "Nenhuma lesão significativa",
+   "Lesões leves, recuperação completa",
+   "Lesão moderada, algum cuidado contínuo",
+   "Lesão grave ou recorrente, ainda em cuidado"
+  ]
+ },
+ {
+  "checkpoint": "Q0",
+  "categorySlug": "risco_lesao",
+  "order": 15,
+  "text": "Já praticou exercícios de mobilidade/prevenção antes deste programa?",
+  "options": [
+   "Sim, rotina estabelecida",
+   "Ocasionalmente",
+   "Raramente",
+   "Nunca pratiquei"
+  ]
+ },
+ {
+  "checkpoint": "Q0",
+  "categorySlug": "metabolismo_composicao",
+  "order": 16,
+  "text": "Frequência de monitoramento do progresso (pesagem, medidas, fotos) e ajuste do plano nutricional?",
+  "options": [
+   "Monitora regularmente e ajusta com orientação profissional",
+   "Monitora regularmente por conta própria",
+   "Monitora esporadicamente",
+   "Não monitora"
+  ]
+ },
+ {
+  "checkpoint": "Q0",
+  "categorySlug": "metabolismo_composicao",
+  "order": 17,
+  "text": "Qualidade geral da dieta para composição corporal?",
+  "options": [
+   "Periodização nutricional estruturada",
+   "Dieta equilibrada sem periodização",
+   "Dieta irregular, alguns excessos",
+   "Dieta inadequada / ultraprocessados frequentes"
+  ]
+ },
+ {
+  "checkpoint": "Q0",
+  "categorySlug": "metabolismo_composicao",
+  "order": 18,
+  "text": "Estabilidade do peso corporal nos últimos 12 meses?",
+  "options": [
+   "Peso estável, dentro da faixa desejada",
+   "Pequenas variações, sob controle",
+   "Variações significativas, sem controle",
+   "Grande instabilidade (ganho ou perda expressivos)"
+  ]
+ },
+ {
+  "checkpoint": "Q0",
+  "categorySlug": "metabolismo_composicao",
+  "order": 19,
+  "text": "Já seguiu acompanhamento nutricional estruturado antes?",
+  "options": [
+   "Sim, com acompanhamento profissional",
+   "Sim, por conta própria",
+   "Nunca segui de forma estruturada",
+   "Histórico de dietas restritivas sem orientação"
+  ]
+ },
+ {
+  "checkpoint": "Q0",
+  "categorySlug": "neuroperformance",
+  "order": 20,
+  "text": "Nível de estresse psicológico / ansiedade?",
+  "options": [
+   "Baixo, bem gerenciado",
+   "Moderado, controlado",
+   "Alto, frequente",
+   "Muito alto / burnout / ansiedade clínica"
+  ]
+ },
+ {
+  "checkpoint": "Q0",
+  "categorySlug": "neuroperformance",
+  "order": 21,
+  "text": "Prática de técnicas de foco e preparação mental?",
+  "options": [
+   "Treinamento mental estruturado",
+   "Práticas ocasionais de foco",
+   "Sem prática formal",
+   "Dificuldade significativa de foco"
+  ]
+ },
+ {
+  "checkpoint": "Q0",
+  "categorySlug": "neuroperformance",
+  "order": 22,
+  "text": "Como avalia sua motivação para iniciar este programa?",
+  "options": [
+   "Muito alta, extremamente engajado(a)",
+   "Alta, animado(a)",
+   "Moderada, ainda em dúvida",
+   "Baixa, insegurança quanto ao compromisso"
+  ]
+ },
+ {
+  "checkpoint": "Q0",
+  "categorySlug": "neuroperformance",
+  "order": 23,
+  "text": "Experiência prévia com situações de alta pressão / competição (se aplicável)?",
+  "options": [
+   "Boa gestão emocional em situações de pressão",
+   "Gestão razoável",
+   "Dificuldade moderada",
+   "Grande dificuldade / evito situações de pressão"
+  ]
+ },
+ {
+  "checkpoint": "Q1",
+  "categorySlug": "forca_potencia",
+  "order": 0,
+  "text": "Volume de treinamento de força semanal?",
+  "options": [
+   "≥4x força intensa",
+   "2–3x força moderada",
+   "1x ou ocasional",
+   "Sedentário / sem treino de força"
+  ]
+ },
+ {
+  "checkpoint": "Q1",
+  "categorySlug": "forca_potencia",
+  "order": 1,
+  "text": "Uso de sobrecarga progressiva (aumento sistemático de carga/repetições)?",
+  "options": [
+   "Sempre, de forma estruturada e registrada",
+   "Na maioria das vezes",
+   "Ocasionalmente, sem estrutura clara",
+   "Nunca / carga estagnada"
+  ]
+ },
+ {
+  "checkpoint": "Q1",
+  "categorySlug": "forca_potencia",
+  "order": 2,
+  "text": "Adesão ao plano de treino de força nas últimas 4 semanas?",
+  "options": [
+   "100% das sessões realizadas",
+   "75–99% das sessões",
+   "50–74% das sessões",
+   "<50% das sessões"
+  ]
+ },
+ {
+  "checkpoint": "Q1",
+  "categorySlug": "forca_potencia",
+  "order": 3,
+  "text": "Dificuldade percebida para executar os exercícios prescritos?",
+  "options": [
+   "Execução técnica excelente",
+   "Boa execução com pequenos ajustes",
+   "Dificuldade moderada de execução",
+   "Grande dificuldade / execução inadequada"
+  ]
+ },
+ {
+  "checkpoint": "Q1",
+  "categorySlug": "resistencia_aerobica",
+  "order": 4,
+  "text": "Volume de treinamento aeróbico semanal?",
+  "options": [
+   "≥5h aeróbico moderado-intenso",
+   "3–5h aeróbico regular",
+   "1–3h aeróbico leve",
+   "<1h ou sedentário"
+  ]
+ },
+ {
+  "checkpoint": "Q1",
+  "categorySlug": "resistencia_aerobica",
+  "order": 5,
+  "text": "Ingestão de carboidratos para performance?",
+  "options": [
+   "Periodização CHO adequada ao treino",
+   "Ingestão adequada sem periodização",
+   "Ingestão irregular",
+   "Restrição crônica / very low-carb"
+  ]
+ },
+ {
+  "checkpoint": "Q1",
+  "categorySlug": "resistencia_aerobica",
+  "order": 6,
+  "text": "Como está sua respiração durante os treinos aeróbicos prescritos?",
+  "options": [
+   "Controle total, sem fadiga excessiva",
+   "Boa adaptação, leve desconforto",
+   "Fôlego curto, esforço acima do esperado",
+   "Muito difícil, treino abaixo do prescrito"
+  ]
+ },
+ {
+  "checkpoint": "Q1",
+  "categorySlug": "resistencia_aerobica",
+  "order": 7,
+  "text": "Adesão às sessões aeróbicas nas últimas 4 semanas?",
+  "options": [
+   "100% das sessões realizadas",
+   "75–99% das sessões",
+   "50–74% das sessões",
+   "<50% das sessões"
+  ]
+ },
+ {
+  "checkpoint": "Q1",
+  "categorySlug": "recuperacao_inflamacao",
+  "order": 8,
+  "text": "Tempo de recuperação entre sessões intensas?",
+  "options": [
+   "48–72h com recuperação ativa estruturada",
+   "24–48h adequadas",
+   "Recuperação insuficiente (<24h)",
+   "Overtraining frequente / sem descanso"
+  ]
+ },
+ {
+  "checkpoint": "Q1",
+  "categorySlug": "recuperacao_inflamacao",
+  "order": 9,
+  "text": "Frequência de dores musculares tardias (DOMS) intensas?",
+  "options": [
+   "Raras, recuperação rápida (<24h)",
+   "Moderadas, 1–2 dias",
+   "Frequentes, 2–3 dias",
+   "Muito frequentes e prolongadas"
+  ]
+ },
+ {
+  "checkpoint": "Q1",
+  "categorySlug": "recuperacao_inflamacao",
+  "order": 10,
+  "text": "Como está sua energia geral nos dias de descanso?",
+  "options": [
+   "Muito boa, sinto-me renovado",
+   "Boa, leve cansaço residual",
+   "Regular, cansaço persistente",
+   "Ruim, exaustão frequente"
+  ]
+ },
+ {
+  "checkpoint": "Q1",
+  "categorySlug": "recuperacao_inflamacao",
+  "order": 11,
+  "text": "Está seguindo o protocolo de recuperação recomendado pelo treinador?",
+  "options": [
+   "Sim, sempre e com qualidade",
+   "Sim, na maioria das vezes",
+   "Parcialmente, com falhas frequentes",
+   "Não estou seguindo"
+  ]
+ },
+ {
+  "checkpoint": "Q1",
+  "categorySlug": "risco_lesao",
+  "order": 12,
+  "text": "Qualidade do aquecimento e mobilidade pré-treino?",
+  "options": [
+   "Aquecimento estruturado sempre (10–15 min)",
+   "Aquecimento moderado frequente",
+   "Aquecimento breve ou irregular",
+   "Sem aquecimento ou muito curto"
+  ]
+ },
+ {
+  "checkpoint": "Q1",
+  "categorySlug": "risco_lesao",
+  "order": 13,
+  "text": "Progressão de carga no treinamento?",
+  "options": [
+   "Progressão gradual e periodizada (<10%/semana)",
+   "Progressão moderada com monitoramento",
+   "Progressão rápida sem controle",
+   "Saltos bruscos de carga / overload abrupto"
+  ]
+ },
+ {
+  "checkpoint": "Q1",
+  "categorySlug": "risco_lesao",
+  "order": 14,
+  "text": "Surgiram dores articulares ou desconfortos novos desde o início do programa?",
+  "options": [
+   "Nenhum desconforto novo",
+   "Leve desconforto, sem impacto no treino",
+   "Dor moderada, adaptações necessárias",
+   "Dor significativa, treino comprometido"
+  ]
+ },
+ {
+  "checkpoint": "Q1",
+  "categorySlug": "risco_lesao",
+  "order": 15,
+  "text": "Está realizando os exercícios corretivos / preventivos prescritos?",
+  "options": [
+   "Sim, todos e com consistência",
+   "Sim, a maioria com regularidade",
+   "Parcialmente, com falhas",
+   "Não estou realizando"
+  ]
+ },
+ {
+  "checkpoint": "Q1",
+  "categorySlug": "metabolismo_composicao",
+  "order": 16,
+  "text": "Frequência de monitoramento do progresso (pesagem, medidas, fotos) e ajuste do plano nutricional?",
+  "options": [
+   "Monitora regularmente e ajusta com orientação profissional",
+   "Monitora regularmente por conta própria",
+   "Monitora esporadicamente",
+   "Não monitora"
+  ]
+ },
+ {
+  "checkpoint": "Q1",
+  "categorySlug": "metabolismo_composicao",
+  "order": 17,
+  "text": "Qualidade geral da dieta para composição corporal?",
+  "options": [
+   "Periodização nutricional estruturada",
+   "Dieta equilibrada sem periodização",
+   "Dieta irregular, alguns excessos",
+   "Dieta inadequada / ultraprocessados frequentes"
+  ]
+ },
+ {
+  "checkpoint": "Q1",
+  "categorySlug": "metabolismo_composicao",
+  "order": 18,
+  "text": "Está conseguindo manter a dieta prescrita nos primeiros 3 meses?",
+  "options": [
+   "Sim, total adesão",
+   "Boa adesão, falhas esporádicas",
+   "Adesão parcial, muitas falhas",
+   "Não estou conseguindo seguir"
+  ]
+ },
+ {
+  "checkpoint": "Q1",
+  "categorySlug": "metabolismo_composicao",
+  "order": 19,
+  "text": "Percebeu mudanças na composição corporal desde o início?",
+  "options": [
+   "Sim, mudanças visíveis e positivas",
+   "Leve melhora percebida",
+   "Sem mudanças perceptíveis",
+   "Piora percebida"
+  ]
+ },
+ {
+  "checkpoint": "Q1",
+  "categorySlug": "neuroperformance",
+  "order": 20,
+  "text": "Nível de estresse psicológico / ansiedade?",
+  "options": [
+   "Baixo, bem gerenciado",
+   "Moderado, controlado",
+   "Alto, frequente",
+   "Muito alto / burnout / ansiedade clínica"
+  ]
+ },
+ {
+  "checkpoint": "Q1",
+  "categorySlug": "neuroperformance",
+  "order": 21,
+  "text": "Prática de técnicas de foco e preparação mental?",
+  "options": [
+   "Treinamento mental estruturado",
+   "Práticas ocasionais de foco",
+   "Sem prática formal",
+   "Dificuldade significativa de foco"
+  ]
+ },
+ {
+  "checkpoint": "Q1",
+  "categorySlug": "neuroperformance",
+  "order": 22,
+  "text": "Qual é sua motivação para treinar nos primeiros 3 meses do programa?",
+  "options": [
+   "Muito alta, animado e focado",
+   "Boa, com pequenas oscilações",
+   "Regular, esforço para manter consistência",
+   "Baixa, dificuldade de se manter comprometido"
+  ]
+ },
+ {
+  "checkpoint": "Q1",
+  "categorySlug": "neuroperformance",
+  "order": 23,
+  "text": "As orientações e objetivos do seu plano de treino estão claros para você?",
+  "options": [
+   "Sim, sempre muito claros",
+   "Sim, na maioria das vezes",
+   "Às vezes tenho dúvidas",
+   "Frequentemente tenho dúvidas ou falta de clareza"
+  ]
+ },
+ {
+  "checkpoint": "Q2",
+  "categorySlug": "forca_potencia",
+  "order": 0,
+  "text": "Volume de treinamento de força semanal?",
+  "options": [
+   "≥4x força intensa",
+   "2–3x força moderada",
+   "1x ou ocasional",
+   "Sedentário / sem treino de força"
+  ]
+ },
+ {
+  "checkpoint": "Q2",
+  "categorySlug": "forca_potencia",
+  "order": 1,
+  "text": "Uso de sobrecarga progressiva (aumento sistemático de carga/repetições)?",
+  "options": [
+   "Sempre, de forma estruturada e registrada",
+   "Na maioria das vezes",
+   "Ocasionalmente, sem estrutura clara",
+   "Nunca / carga estagnada"
+  ]
+ },
+ {
+  "checkpoint": "Q2",
+  "categorySlug": "forca_potencia",
+  "order": 2,
+  "text": "Percebeu ganho real de força em relação ao início do programa?",
+  "options": [
+   "Ganho expressivo e mensurável",
+   "Ganho moderado e consistente",
+   "Ganho lento, abaixo do esperado",
+   "Sem ganho perceptível"
+  ]
+ },
+ {
+  "checkpoint": "Q2",
+  "categorySlug": "forca_potencia",
+  "order": 3,
+  "text": "Ingestão proteica diária (g/kg de peso)?",
+  "options": [
+   "≥1,8 g/kg/dia",
+   "1,4–1,8 g/kg/dia",
+   "1,0–1,4 g/kg/dia",
+   "<1,0 g/kg/dia"
+  ]
+ },
+ {
+  "checkpoint": "Q2",
+  "categorySlug": "resistencia_aerobica",
+  "order": 4,
+  "text": "Volume de treinamento aeróbico semanal?",
+  "options": [
+   "≥5h aeróbico moderado-intenso",
+   "3–5h aeróbico regular",
+   "1–3h aeróbico leve",
+   "<1h ou sedentário"
+  ]
+ },
+ {
+  "checkpoint": "Q2",
+  "categorySlug": "resistencia_aerobica",
+  "order": 5,
+  "text": "Ingestão de carboidratos para performance?",
+  "options": [
+   "Periodização CHO adequada ao treino",
+   "Ingestão adequada sem periodização",
+   "Ingestão irregular",
+   "Restrição crônica / very low-carb"
+  ]
+ },
+ {
+  "checkpoint": "Q2",
+  "categorySlug": "resistencia_aerobica",
+  "order": 6,
+  "text": "Como está seu VO₂máx estimado ou percepção de capacidade aeróbica comparado ao início?",
+  "options": [
+   "Melhora expressiva, muito mais fôlego",
+   "Melhora moderada percebida",
+   "Sem diferença perceptível",
+   "Piora percebida"
+  ]
+ },
+ {
+  "checkpoint": "Q2",
+  "categorySlug": "resistencia_aerobica",
+  "order": 7,
+  "text": "Consegue realizar treinos de maior intensidade sem queda de desempenho?",
+  "options": [
+   "Sim, suporta cargas maiores com facilidade",
+   "Sim, com leve esforço adicional",
+   "Parcialmente, ainda com dificuldades",
+   "Não, desempenho ainda muito limitado"
+  ]
+ },
+ {
+  "checkpoint": "Q2",
+  "categorySlug": "recuperacao_inflamacao",
+  "order": 8,
+  "text": "Tempo de recuperação entre sessões intensas?",
+  "options": [
+   "48–72h com recuperação ativa estruturada",
+   "24–48h adequadas",
+   "Recuperação insuficiente (<24h)",
+   "Overtraining frequente / sem descanso"
+  ]
+ },
+ {
+  "checkpoint": "Q2",
+  "categorySlug": "recuperacao_inflamacao",
+  "order": 9,
+  "text": "Frequência de dores musculares tardias (DOMS) intensas?",
+  "options": [
+   "Raras, recuperação rápida (<24h)",
+   "Moderadas, 1–2 dias",
+   "Frequentes, 2–3 dias",
+   "Muito frequentes e prolongadas"
+  ]
+ },
+ {
+  "checkpoint": "Q2",
+  "categorySlug": "recuperacao_inflamacao",
+  "order": 10,
+  "text": "Consumo de antioxidantes e anti-inflamatórios na dieta?",
+  "options": [
+   "Alta ingestão diária (frutas, vegetais, ômega-3)",
+   "Moderada e regular",
+   "Baixa, irregular",
+   "Dieta pobre em antioxidantes"
+  ]
+ },
+ {
+  "checkpoint": "Q2",
+  "categorySlug": "recuperacao_inflamacao",
+  "order": 11,
+  "text": "Percebe melhora na velocidade de recuperação após treinos intensos?",
+  "options": [
+   "Sim, recupero muito mais rápido",
+   "Sim, leve melhora percebida",
+   "Sem diferença",
+   "Recuperação ainda lenta ou pior"
+  ]
+ },
+ {
+  "checkpoint": "Q2",
+  "categorySlug": "risco_lesao",
+  "order": 12,
+  "text": "Qualidade do aquecimento e mobilidade pré-treino?",
+  "options": [
+   "Aquecimento estruturado sempre (10–15 min)",
+   "Aquecimento moderado frequente",
+   "Aquecimento breve ou irregular",
+   "Sem aquecimento ou muito curto"
+  ]
+ },
+ {
+  "checkpoint": "Q2",
+  "categorySlug": "risco_lesao",
+  "order": 13,
+  "text": "Progressão de carga no treinamento?",
+  "options": [
+   "Progressão gradual e periodizada (<10%/semana)",
+   "Progressão moderada com monitoramento",
+   "Progressão rápida sem controle",
+   "Saltos bruscos de carga / overload abrupto"
+  ]
+ },
+ {
+  "checkpoint": "Q2",
+  "categorySlug": "risco_lesao",
+  "order": 14,
+  "text": "Exposição solar regular e/ou suplementação de vitamina D conforme orientação?",
+  "options": [
+   "Sim, rotina estabelecida e orientada",
+   "Exposição solar regular, sem suplementação",
+   "Exposição irregular",
+   "Pouca ou nenhuma exposição/suplementação"
+  ]
+ },
+ {
+  "checkpoint": "Q2",
+  "categorySlug": "risco_lesao",
+  "order": 15,
+  "text": "Histórico de lesões ou afastamentos desde o início do programa?",
+  "options": [
+   "Nenhuma lesão ou afastamento",
+   "1 episódio leve, sem afastamento",
+   "1–2 afastamentos breves",
+   "Lesão recorrente ou afastamento prolongado"
+  ]
+ },
+ {
+  "checkpoint": "Q2",
+  "categorySlug": "metabolismo_composicao",
+  "order": 16,
+  "text": "Frequência de monitoramento do progresso (pesagem, medidas, fotos) e ajuste do plano nutricional?",
+  "options": [
+   "Monitora regularmente e ajusta com orientação profissional",
+   "Monitora regularmente por conta própria",
+   "Monitora esporadicamente",
+   "Não monitora"
+  ]
+ },
+ {
+  "checkpoint": "Q2",
+  "categorySlug": "metabolismo_composicao",
+  "order": 17,
+  "text": "Qualidade geral da dieta para composição corporal?",
+  "options": [
+   "Periodização nutricional estruturada",
+   "Dieta equilibrada sem periodização",
+   "Dieta irregular, alguns excessos",
+   "Dieta inadequada / ultraprocessados frequentes"
+  ]
+ },
+ {
+  "checkpoint": "Q2",
+  "categorySlug": "metabolismo_composicao",
+  "order": 18,
+  "text": "Sensibilidade insulínica / controle glicêmico percebido (energia estável ao longo do dia)?",
+  "options": [
+   "Energia muito estável, sem picos ou quedas",
+   "Boa estabilidade, oscilações leves",
+   "Oscilações moderadas de energia",
+   "Quedas frequentes de energia / fadiga pós-prandial"
+  ]
+ },
+ {
+  "checkpoint": "Q2",
+  "categorySlug": "metabolismo_composicao",
+  "order": 19,
+  "text": "Comparando com o início, como está sua composição corporal agora?",
+  "options": [
+   "Melhora expressiva (perda de gordura / ganho muscular)",
+   "Melhora moderada e consistente",
+   "Sem mudança significativa",
+   "Piora em relação ao baseline"
+  ]
+ },
+ {
+  "checkpoint": "Q2",
+  "categorySlug": "neuroperformance",
+  "order": 20,
+  "text": "Nível de estresse psicológico / ansiedade?",
+  "options": [
+   "Baixo, bem gerenciado",
+   "Moderado, controlado",
+   "Alto, frequente",
+   "Muito alto / burnout / ansiedade clínica"
+  ]
+ },
+ {
+  "checkpoint": "Q2",
+  "categorySlug": "neuroperformance",
+  "order": 21,
+  "text": "Prática de técnicas de foco e preparação mental?",
+  "options": [
+   "Treinamento mental estruturado",
+   "Práticas ocasionais de foco",
+   "Sem prática formal",
+   "Dificuldade significativa de foco"
+  ]
+ },
+ {
+  "checkpoint": "Q2",
+  "categorySlug": "neuroperformance",
+  "order": 22,
+  "text": "Percebe melhora na qualidade do sono e recuperação cognitiva ao longo dos 6 meses?",
+  "options": [
+   "Sim, melhora expressiva e consistente",
+   "Sim, leve melhora",
+   "Sem diferença perceptível",
+   "Piora no sono / cognitivo"
+  ]
+ },
+ {
+  "checkpoint": "Q2",
+  "categorySlug": "neuroperformance",
+  "order": 23,
+  "text": "Como está seu nível de confiança e autoeficácia no esporte/atividade praticada?",
+  "options": [
+   "Muito alto, sinto evolução clara",
+   "Bom, com momentos de dúvida",
+   "Regular, insegurança frequente",
+   "Baixo, muita insegurança ou desmotivação"
+  ]
+ },
+ {
+  "checkpoint": "Q3",
+  "categorySlug": "forca_potencia",
+  "order": 0,
+  "text": "Volume de treinamento de força semanal?",
+  "options": [
+   "≥4x força intensa",
+   "2–3x força moderada",
+   "1x ou ocasional",
+   "Sedentário / sem treino de força"
+  ]
+ },
+ {
+  "checkpoint": "Q3",
+  "categorySlug": "forca_potencia",
+  "order": 1,
+  "text": "Uso de sobrecarga progressiva (aumento sistemático de carga/repetições)?",
+  "options": [
+   "Sempre, de forma estruturada e registrada",
+   "Na maioria das vezes",
+   "Ocasionalmente, sem estrutura clara",
+   "Nunca / carga estagnada"
+  ]
+ },
+ {
+  "checkpoint": "Q3",
+  "categorySlug": "forca_potencia",
+  "order": 2,
+  "text": "Percebe estagnação (platô) nos ganhos de força nos últimos 2 meses?",
+  "options": [
+   "Sem platô, progressão contínua",
+   "Platô leve, superado com ajustes",
+   "Platô moderado, evolução lenta",
+   "Platô prolongado sem solução"
+  ]
+ },
+ {
+  "checkpoint": "Q3",
+  "categorySlug": "forca_potencia",
+  "order": 3,
+  "text": "Uso atual de suplementação para performance de força (creatina, etc.)?",
+  "options": [
+   "Sim, protocolo adequado e regular",
+   "Não usa, mas dieta é adequada",
+   "Sim, uso ocasional, sem protocolo",
+   "Não usa e dieta é inadequada"
+  ]
+ },
+ {
+  "checkpoint": "Q3",
+  "categorySlug": "resistencia_aerobica",
+  "order": 4,
+  "text": "Volume de treinamento aeróbico semanal?",
+  "options": [
+   "≥5h aeróbico moderado-intenso",
+   "3–5h aeróbico regular",
+   "1–3h aeróbico leve",
+   "<1h ou sedentário"
+  ]
+ },
+ {
+  "checkpoint": "Q3",
+  "categorySlug": "resistencia_aerobica",
+  "order": 5,
+  "text": "Ingestão de carboidratos para performance?",
+  "options": [
+   "Periodização CHO adequada ao treino",
+   "Ingestão adequada sem periodização",
+   "Ingestão irregular",
+   "Restrição crônica / very low-carb"
+  ]
+ },
+ {
+  "checkpoint": "Q3",
+  "categorySlug": "resistencia_aerobica",
+  "order": 6,
+  "text": "Percebe platô na capacidade aeróbica (fôlego, ritmo, distância) nos últimos 2 meses?",
+  "options": [
+   "Sem platô, melhora contínua",
+   "Platô leve, superado com ajuste de treino",
+   "Platô moderado e persistente",
+   "Regressão percebida na capacidade aeróbica"
+  ]
+ },
+ {
+  "checkpoint": "Q3",
+  "categorySlug": "resistencia_aerobica",
+  "order": 7,
+  "text": "Estratégias de periodização aeróbica (variação de ritmo, intervalado, base aeróbica)?",
+  "options": [
+   "Periodização estruturada e variada",
+   "Alguma variação no treino aeróbico",
+   "Treino monótono, pouca variação",
+   "Sem periodização, treino estagnado"
+  ]
+ },
+ {
+  "checkpoint": "Q3",
+  "categorySlug": "recuperacao_inflamacao",
+  "order": 8,
+  "text": "Tempo de recuperação entre sessões intensas?",
+  "options": [
+   "48–72h com recuperação ativa estruturada",
+   "24–48h adequadas",
+   "Recuperação insuficiente (<24h)",
+   "Overtraining frequente / sem descanso"
+  ]
+ },
+ {
+  "checkpoint": "Q3",
+  "categorySlug": "recuperacao_inflamacao",
+  "order": 9,
+  "text": "Frequência de dores musculares tardias (DOMS) intensas?",
+  "options": [
+   "Raras, recuperação rápida (<24h)",
+   "Moderadas, 1–2 dias",
+   "Frequentes, 2–3 dias",
+   "Muito frequentes e prolongadas"
+  ]
+ },
+ {
+  "checkpoint": "Q3",
+  "categorySlug": "recuperacao_inflamacao",
+  "order": 10,
+  "text": "Uso de crioterapia, compressão ou fisioterapia pós-treino?",
+  "options": [
+   "Protocolo regular e estruturado",
+   "Uso ocasional",
+   "Raramente utiliza",
+   "Nunca utiliza"
+  ]
+ },
+ {
+  "checkpoint": "Q3",
+  "categorySlug": "recuperacao_inflamacao",
+  "order": 11,
+  "text": "Sinais de fadiga crônica ou overtraining nos últimos 3 meses?",
+  "options": [
+   "Nenhum sinal, energia excelente",
+   "Sinais leves, contornados com descanso",
+   "Sinais moderados, impacto no treino",
+   "Overtraining claro, performance comprometida"
+  ]
+ },
+ {
+  "checkpoint": "Q3",
+  "categorySlug": "risco_lesao",
+  "order": 12,
+  "text": "Qualidade do aquecimento e mobilidade pré-treino?",
+  "options": [
+   "Aquecimento estruturado sempre (10–15 min)",
+   "Aquecimento moderado frequente",
+   "Aquecimento breve ou irregular",
+   "Sem aquecimento ou muito curto"
+  ]
+ },
+ {
+  "checkpoint": "Q3",
+  "categorySlug": "risco_lesao",
+  "order": 13,
+  "text": "Progressão de carga no treinamento?",
+  "options": [
+   "Progressão gradual e periodizada (<10%/semana)",
+   "Progressão moderada com monitoramento",
+   "Progressão rápida sem controle",
+   "Saltos bruscos de carga / overload abrupto"
+  ]
+ },
+ {
+  "checkpoint": "Q3",
+  "categorySlug": "risco_lesao",
+  "order": 14,
+  "text": "Ingestão de colágeno / gelatina e vitamina C para saúde articular?",
+  "options": [
+   "Suplementação regular e adequada",
+   "Ingestão dietética boa",
+   "Ingestão irregular",
+   "Ingestão insuficiente ou nula"
+  ]
+ },
+ {
+  "checkpoint": "Q3",
+  "categorySlug": "risco_lesao",
+  "order": 15,
+  "text": "Qualidade do movimento técnico nos exercícios principais (padrão motor)?",
+  "options": [
+   "Excelente, padrão motor refinado",
+   "Bom, pequenas correções ainda necessárias",
+   "Regular, compensações frequentes",
+   "Padrão motor inadequado, risco elevado"
+  ]
+ },
+ {
+  "checkpoint": "Q3",
+  "categorySlug": "metabolismo_composicao",
+  "order": 16,
+  "text": "Frequência de monitoramento do progresso (pesagem, medidas, fotos) e ajuste do plano nutricional?",
+  "options": [
+   "Monitora regularmente e ajusta com orientação profissional",
+   "Monitora regularmente por conta própria",
+   "Monitora esporadicamente",
+   "Não monitora"
+  ]
+ },
+ {
+  "checkpoint": "Q3",
+  "categorySlug": "metabolismo_composicao",
+  "order": 17,
+  "text": "Qualidade geral da dieta para composição corporal?",
+  "options": [
+   "Periodização nutricional estruturada",
+   "Dieta equilibrada sem periodização",
+   "Dieta irregular, alguns excessos",
+   "Dieta inadequada / ultraprocessados frequentes"
+  ]
+ },
+ {
+  "checkpoint": "Q3",
+  "categorySlug": "metabolismo_composicao",
+  "order": 18,
+  "text": "Percebe platô na perda de gordura ou ganho muscular nos últimos 2 meses?",
+  "options": [
+   "Sem platô, evolução contínua",
+   "Platô leve, superado com ajustes",
+   "Platô moderado e persistente",
+   "Platô prolongado, composição estagnada"
+  ]
+ },
+ {
+  "checkpoint": "Q3",
+  "categorySlug": "metabolismo_composicao",
+  "order": 19,
+  "text": "Taxa metabólica / resposta ao exercício para perda de gordura comparado ao início?",
+  "options": [
+   "Melhora expressiva, resposta muito mais eficiente",
+   "Leve melhora percebida",
+   "Sem mudança perceptível",
+   "Resposta ainda muito lenta / platô metabólico"
+  ]
+ },
+ {
+  "checkpoint": "Q3",
+  "categorySlug": "neuroperformance",
+  "order": 20,
+  "text": "Nível de estresse psicológico / ansiedade?",
+  "options": [
+   "Baixo, bem gerenciado",
+   "Moderado, controlado",
+   "Alto, frequente",
+   "Muito alto / burnout / ansiedade clínica"
+  ]
+ },
+ {
+  "checkpoint": "Q3",
+  "categorySlug": "neuroperformance",
+  "order": 21,
+  "text": "Prática de técnicas de foco e preparação mental?",
+  "options": [
+   "Treinamento mental estruturado",
+   "Práticas ocasionais de foco",
+   "Sem prática formal",
+   "Dificuldade significativa de foco"
+  ]
+ },
+ {
+  "checkpoint": "Q3",
+  "categorySlug": "neuroperformance",
+  "order": 22,
+  "text": "Como está sua motivação para treinar após 9 meses de programa?",
+  "options": [
+   "Muito alta, renovada e focada nos objetivos",
+   "Boa, com oscilações normais",
+   "Regular, sinais de desgaste",
+   "Baixa, desmotivação significativa"
+  ]
+ },
+ {
+  "checkpoint": "Q3",
+  "categorySlug": "neuroperformance",
+  "order": 23,
+  "text": "Uso de cafeína ou outros recursos ergogênicos cognitivos de forma estratégica?",
+  "options": [
+   "Uso estratégico e eficaz (3–6 mg/kg, ≤3–4x/sem)",
+   "Uso regular moderado (1–2x/dia)",
+   "Não utiliza recursos ergogênicos",
+   "Uso excessivo ou inadequado"
+  ]
+ },
+ {
+  "checkpoint": "Q4",
+  "categorySlug": "forca_potencia",
+  "order": 0,
+  "text": "Volume de treinamento de força semanal?",
+  "options": [
+   "≥4x força intensa",
+   "2–3x força moderada",
+   "1x ou ocasional",
+   "Sedentário / sem treino de força"
+  ]
+ },
+ {
+  "checkpoint": "Q4",
+  "categorySlug": "forca_potencia",
+  "order": 1,
+  "text": "Uso de sobrecarga progressiva (aumento sistemático de carga/repetições)?",
+  "options": [
+   "Sempre, de forma estruturada e registrada",
+   "Na maioria das vezes",
+   "Ocasionalmente, sem estrutura clara",
+   "Nunca / carga estagnada"
+  ]
+ },
+ {
+  "checkpoint": "Q4",
+  "categorySlug": "forca_potencia",
+  "order": 2,
+  "text": "Comparando com o baseline, qual o ganho de força real após 12 meses?",
+  "options": [
+   "Ganho expressivo e mensurável (>20%)",
+   "Ganho moderado e consistente (10–20%)",
+   "Ganho pequeno (<10%)",
+   "Sem ganho ou regressão"
+  ]
+ },
+ {
+  "checkpoint": "Q4",
+  "categorySlug": "forca_potencia",
+  "order": 3,
+  "text": "Os hábitos de treino de força estão consolidados para o próximo ciclo?",
+  "options": [
+   "Sim, totalmente incorporados à rotina",
+   "Sim, com pequenos ajustes necessários",
+   "Parcialmente, ainda requer disciplina extra",
+   "Não, difícil manter consistência"
+  ]
+ },
+ {
+  "checkpoint": "Q4",
+  "categorySlug": "resistencia_aerobica",
+  "order": 4,
+  "text": "Volume de treinamento aeróbico semanal?",
+  "options": [
+   "≥5h aeróbico moderado-intenso",
+   "3–5h aeróbico regular",
+   "1–3h aeróbico leve",
+   "<1h ou sedentário"
+  ]
+ },
+ {
+  "checkpoint": "Q4",
+  "categorySlug": "resistencia_aerobica",
+  "order": 5,
+  "text": "Ingestão de carboidratos para performance?",
+  "options": [
+   "Periodização CHO adequada ao treino",
+   "Ingestão adequada sem periodização",
+   "Ingestão irregular",
+   "Restrição crônica / very low-carb"
+  ]
+ },
+ {
+  "checkpoint": "Q4",
+  "categorySlug": "resistencia_aerobica",
+  "order": 6,
+  "text": "Comparando com o baseline, qual a evolução na capacidade aeróbica após 12 meses?",
+  "options": [
+   "Melhora expressiva e mensurável",
+   "Melhora moderada e consistente",
+   "Melhora pequena",
+   "Sem melhora ou regressão"
+  ]
+ },
+ {
+  "checkpoint": "Q4",
+  "categorySlug": "resistencia_aerobica",
+  "order": 7,
+  "text": "Os hábitos de treino aeróbico estão sustentáveis para o longo prazo?",
+  "options": [
+   "Sim, parte natural da rotina",
+   "Sim, com alguns ajustes de agenda",
+   "Difícil manter, requer esforço constante",
+   "Não, muito difícil de sustentar"
+  ]
+ },
+ {
+  "checkpoint": "Q4",
+  "categorySlug": "recuperacao_inflamacao",
+  "order": 8,
+  "text": "Tempo de recuperação entre sessões intensas?",
+  "options": [
+   "48–72h com recuperação ativa estruturada",
+   "24–48h adequadas",
+   "Recuperação insuficiente (<24h)",
+   "Overtraining frequente / sem descanso"
+  ]
+ },
+ {
+  "checkpoint": "Q4",
+  "categorySlug": "recuperacao_inflamacao",
+  "order": 9,
+  "text": "Frequência de dores musculares tardias (DOMS) intensas?",
+  "options": [
+   "Raras, recuperação rápida (<24h)",
+   "Moderadas, 1–2 dias",
+   "Frequentes, 2–3 dias",
+   "Muito frequentes e prolongadas"
+  ]
+ },
+ {
+  "checkpoint": "Q4",
+  "categorySlug": "recuperacao_inflamacao",
+  "order": 10,
+  "text": "Percebe sinais físicos de inflamação persistente (inchaço, dor articular, fadiga prolongada)?",
+  "options": [
+   "Nenhum sinal perceptível",
+   "Sinais leves ocasionais",
+   "Sinais moderados frequentes",
+   "Sinais significativos e persistentes"
+  ]
+ },
+ {
+  "checkpoint": "Q4",
+  "categorySlug": "recuperacao_inflamacao",
+  "order": 11,
+  "text": "Como você avalia sua recuperação geral ao longo dos 12 meses?",
+  "options": [
+   "Muito melhor que no início, recuperação eficiente",
+   "Melhor que no início, melhora consistente",
+   "Similar ao início, pouca evolução",
+   "Pior que no início, fadiga crônica"
+  ]
+ },
+ {
+  "checkpoint": "Q4",
+  "categorySlug": "risco_lesao",
+  "order": 12,
+  "text": "Qualidade do aquecimento e mobilidade pré-treino?",
+  "options": [
+   "Aquecimento estruturado sempre (10–15 min)",
+   "Aquecimento moderado frequente",
+   "Aquecimento breve ou irregular",
+   "Sem aquecimento ou muito curto"
+  ]
+ },
+ {
+  "checkpoint": "Q4",
+  "categorySlug": "risco_lesao",
+  "order": 13,
+  "text": "Progressão de carga no treinamento?",
+  "options": [
+   "Progressão gradual e periodizada (<10%/semana)",
+   "Progressão moderada com monitoramento",
+   "Progressão rápida sem controle",
+   "Saltos bruscos de carga / overload abrupto"
+  ]
+ },
+ {
+  "checkpoint": "Q4",
+  "categorySlug": "risco_lesao",
+  "order": 14,
+  "text": "Quantidade de lesões ou afastamentos nos últimos 12 meses?",
+  "options": [
+   "Nenhuma lesão ou afastamento",
+   "1 episódio leve, sem afastamento",
+   "1–2 afastamentos breves",
+   "Lesão recorrente ou afastamento prolongado"
+  ]
+ },
+ {
+  "checkpoint": "Q4",
+  "categorySlug": "risco_lesao",
+  "order": 15,
+  "text": "As práticas preventivas (aquecimento, mobilidade, progressão) estão consolidadas?",
+  "options": [
+   "Sim, totalmente incorporadas",
+   "Sim, com pequenas falhas ocasionais",
+   "Parcialmente, ainda inconsistente",
+   "Não, difícil manter prevenção"
+  ]
+ },
+ {
+  "checkpoint": "Q4",
+  "categorySlug": "metabolismo_composicao",
+  "order": 16,
+  "text": "Frequência de monitoramento do progresso (pesagem, medidas, fotos) e ajuste do plano nutricional?",
+  "options": [
+   "Monitora regularmente e ajusta com orientação profissional",
+   "Monitora regularmente por conta própria",
+   "Monitora esporadicamente",
+   "Não monitora"
+  ]
+ },
+ {
+  "checkpoint": "Q4",
+  "categorySlug": "metabolismo_composicao",
+  "order": 17,
+  "text": "Qualidade geral da dieta para composição corporal?",
+  "options": [
+   "Periodização nutricional estruturada",
+   "Dieta equilibrada sem periodização",
+   "Dieta irregular, alguns excessos",
+   "Dieta inadequada / ultraprocessados frequentes"
+  ]
+ },
+ {
+  "checkpoint": "Q4",
+  "categorySlug": "metabolismo_composicao",
+  "order": 18,
+  "text": "Comparando com o baseline, qual a evolução na composição corporal após 12 meses?",
+  "options": [
+   "Melhora expressiva e sustentada",
+   "Melhora moderada e consistente",
+   "Melhora pequena ou instável",
+   "Sem melhora ou piora"
+  ]
+ },
+ {
+  "checkpoint": "Q4",
+  "categorySlug": "metabolismo_composicao",
+  "order": 19,
+  "text": "Os hábitos alimentares estão sustentáveis para o longo prazo?",
+  "options": [
+   "Sim, nova relação saudável com a alimentação",
+   "Sim, com ajustes finos necessários",
+   "Parcialmente, ainda requer muito esforço",
+   "Não, difícil manter a dieta"
+  ]
+ },
+ {
+  "checkpoint": "Q4",
+  "categorySlug": "neuroperformance",
+  "order": 20,
+  "text": "Nível de estresse psicológico / ansiedade?",
+  "options": [
+   "Baixo, bem gerenciado",
+   "Moderado, controlado",
+   "Alto, frequente",
+   "Muito alto / burnout / ansiedade clínica"
+  ]
+ },
+ {
+  "checkpoint": "Q4",
+  "categorySlug": "neuroperformance",
+  "order": 21,
+  "text": "Prática de técnicas de foco e preparação mental?",
+  "options": [
+   "Treinamento mental estruturado",
+   "Práticas ocasionais de foco",
+   "Sem prática formal",
+   "Dificuldade significativa de foco"
+  ]
+ },
+ {
+  "checkpoint": "Q4",
+  "categorySlug": "neuroperformance",
+  "order": 22,
+  "text": "Como você avalia sua qualidade de vida geral após 12 meses de programa?",
+  "options": [
+   "Muito melhor, transformação significativa",
+   "Melhor, evolução consistente",
+   "Igual ao início, pouca transformação",
+   "Pior ou sem mudança positiva percebida"
+  ]
+ },
+ {
+  "checkpoint": "Q4",
+  "categorySlug": "neuroperformance",
+  "order": 23,
+  "text": "Você se sente preparado e motivado para iniciar um novo ciclo anual?",
+  "options": [
+   "Sim, muito motivado e com objetivos claros",
+   "Sim, com pequenas correções de rota",
+   "Indeciso, precisa redefinir objetivos",
+   "Não, desgastado ou sem objetivos claros"
+  ]
+ }
+]

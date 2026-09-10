@@ -9,6 +9,16 @@ export interface ConsolidatedCategory {
   readonly name: string;
   readonly geneticScore: number;
   readonly band: string;
+  /**
+   * Escore ambiental 0–100 da última entrevista.
+   *
+   * Era calculado, gravado em `Assessment.environmentalScores` e nunca mais lido
+   * — a API só devolvia genético e ajustado, e o profissional não tinha como
+   * saber de onde o ajustado veio. Passa a sair daqui para a tela mostrar os
+   * TRÊS escores, que é o que a especificação do laboratório descreve e o que o
+   * André confirmou em 09/09 que o paciente também deve ver (decisão 24).
+   */
+  readonly environmentalScore: number | null;
   /** Presente só quando houve entrevista. Null significa "ainda não avaliado". */
   readonly adjustedScore: number | null;
 }
@@ -19,6 +29,8 @@ export interface ConsolidatedReport {
   readonly globalIndex: number | null;
   readonly categories: readonly ConsolidatedCategory[];
   readonly assessmentsCompleted: number;
+  /** Checkpoint da entrevista que produziu o ambiental e o ajustado exibidos. */
+  readonly lastAssessedCheckpoint: string | null;
   /** Avisa que o ajustado ainda usa a fórmula preliminar. */
   readonly adjustedIsPreliminary: boolean;
 }
@@ -99,6 +111,7 @@ export class ConsolidatedReportUseCase {
     });
 
     const latest = assessments[0];
+    const environmental = (latest?.environmentalScores ?? null) as Record<string, number> | null;
     const adjusted = (latest?.adjustedScores ?? null) as Record<string, number> | null;
 
     const global = report.modalityIndexes[0];
@@ -114,12 +127,14 @@ export class ConsolidatedReportUseCase {
           name: entry.category.name,
           geneticScore: Number(entry.normalizedScore),
           band: entry.band,
+          environmentalScore: environmental?.[entry.category.slug] ?? null,
           // Null quando não houve entrevista. O card do ajustado some na tela,
           // em vez de repetir o genético — foi o que o cliente aprovou em 16/07:
           // sem entrevista, não existe ajustado.
           adjustedScore: adjusted?.[entry.category.slug] ?? null,
         })),
       assessmentsCompleted: assessments.length,
+      lastAssessedCheckpoint: latest?.checkpoint ?? null,
       // O ajustado agora vem do questionário ambiental respondido pelo
       // profissional, combinado ao genético pela estratégia validada do painel.
       // Deixa de ser preliminar assim que existe uma avaliação de verdade.

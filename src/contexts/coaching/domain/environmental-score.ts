@@ -9,8 +9,8 @@ import {
  *
  * The chain is deliberate and keeps the validated genetic engine untouched:
  *
- *   answers → quality per category (0–1) → environmental score on the strategy's
- *   scale → `ScoringStrategy.combine(genetic, environmental)` → adjusted score.
+ *   answers → quality per category (0–1) → environmental score 0–100 →
+ *   `ScoringStrategy.combine(genetic, …)` → adjusted score.
  *
  * The person authoring questions works in ONE intuitive scale — each option is
  * worth 0 (worst habit) to 100 (best) — and the mapping to each product's math
@@ -49,18 +49,42 @@ export function strategyForPanel(panelSlug: string): ScoringStrategy {
 }
 
 /**
- * Maps a 0–1 habit quality to the environmental score the strategy expects.
+ * Mapeia a qualidade de hábito (0–1) para o escore ambiental.
  *
- * - Performance (additive): 20–90, same population scale as the genetic score.
- * - Nutrigenetics (multiplicative): 0.6–1.4 modifier.
+ * Escala 0–100 para os dois painéis — decisão 25 do André em 09/09, alinhando o
+ * cálculo à especificação do laboratório (§3.3/§3.4: a posição da opção vale
+ * 100 / 66,7 / 33,3 / 0 e o ambiental da categoria é a média das 4 perguntas do
+ * bloco). Antes disso o performance era espremido em 20–90, a mesma faixa do
+ * genético; o efeito colateral era que um cliente com hábitos péssimos ainda
+ * levava 20 pontos de brinde, e o paciente — que passa a ver os três escores —
+ * não teria como conferir a conta contra o laudo.
+ *
+ * A nutrigenética continua multiplicativa, mas o número GRAVADO e exibido é o
+ * ambiental 0–100; a conversão para o modificador é interna
+ * ({@link environmentalToModifier}), para que "escore ambiental" signifique a
+ * mesma coisa nos dois produtos.
  */
-export function qualityToEnvironmental(panelSlug: string, quality: number): number {
-  if (panelSlug === 'performance') return round1(20 + quality * 70);
-  return round2(0.6 + quality * 0.8);
+export function qualityToEnvironmental(quality: number): number {
+  return round1(clamp(quality, 0, 1) * MAX_POINTS);
+}
+
+/**
+ * Converte o ambiental 0–100 no modificador 0,6–1,4 da nutrigenética.
+ *
+ * Fica aqui, e não na estratégia, porque é tradução de escala e não regra de
+ * combinação: a `MultiplicativeScoringStrategy` continua recebendo o modificador
+ * que ela sempre esperou.
+ */
+function environmentalToModifier(environmental: number): number {
+  return round2(
+    MultiplicativeScoringStrategy.MIN_MODIFIER +
+      (environmental / MAX_POINTS) *
+        (MultiplicativeScoringStrategy.MAX_MODIFIER - MultiplicativeScoringStrategy.MIN_MODIFIER),
+  );
 }
 
 export interface CategoryEnvironmental {
-  /** Score ambiental na escala da estratégia (20–90 ou 0,6–1,4). */
+  /** Escore ambiental da categoria, 0–100 nos dois painéis. */
   readonly environmental: number;
   /** Score ajustado final, combinando genético e ambiental. */
   readonly adjusted: number;
@@ -96,8 +120,10 @@ export function scoreCategory(
   if (totalWeight === 0) return null;
 
   const quality = clamp(weighted / totalWeight, 0, 1);
-  const environmental = qualityToEnvironmental(panelSlug, quality);
-  const adjusted = strategyForPanel(panelSlug).combine(geneticScore, environmental);
+  const environmental = qualityToEnvironmental(quality);
+  const combinable =
+    panelSlug === 'performance' ? environmental : environmentalToModifier(environmental);
+  const adjusted = strategyForPanel(panelSlug).combine(geneticScore, combinable);
   return { environmental, adjusted };
 }
 

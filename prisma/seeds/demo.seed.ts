@@ -240,11 +240,13 @@ async function main(): Promise<void> {
     create: { reference: 'DEMO', notes: 'Lote de demonstração' },
   });
 
-  const ativaveis = await prisma.kit.count({ where: { batchId: lote.id, status: 'GENERATED' } });
+  // ASSIGNED pelo mesmo motivo da qa.seed: a guarda de 09/09 só deixa ativar
+  // kit que já saiu do estoque.
+  const ativaveis = await prisma.kit.count({ where: { batchId: lote.id, status: 'ASSIGNED' } });
   const codigos: string[] = [];
   for (let i = ativaveis; i < 5; i += 1) {
     const code = await codigoKitUnico();
-    await prisma.kit.create({ data: { code, batchId: lote.id, status: 'GENERATED' } });
+    await prisma.kit.create({ data: { code, batchId: lote.id, status: 'ASSIGNED' } });
     codigos.push(code);
   }
   const amostraKits =
@@ -252,7 +254,7 @@ async function main(): Promise<void> {
       ? codigos
       : (
           await prisma.kit.findMany({
-            where: { batchId: lote.id, status: 'GENERATED' },
+            where: { batchId: lote.id, status: 'ASSIGNED' },
             take: 3,
             select: { code: true },
           })
