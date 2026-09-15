@@ -47,7 +47,7 @@ const PRODUCTS: readonly ProductSeed[] = [
     // sem juros. A teleorientação saiu da oferta no mesmo documento.
     priceCents: 65_000,
     maxInstallments: 5,
-    position: 0,
+    position: 1,
     features: [
       'Kit de coleta com swab de mucosa oral',
       'Envelope de retorno para envio ao laboratório',
@@ -68,7 +68,9 @@ const PRODUCTS: readonly ProductSeed[] = [
     markerCount: 24,
     priceCents: 65_000,
     maxInstallments: 5,
-    position: 1,
+    // Primeira na vitrine desde 15/09: o cliente pediu Performance à esquerda,
+    // Nutrigenética no meio e NutriPerformance à direita.
+    position: 0,
     features: [
       'Kit de coleta com swab de mucosa oral',
       'Envelope de retorno para envio ao laboratório',
