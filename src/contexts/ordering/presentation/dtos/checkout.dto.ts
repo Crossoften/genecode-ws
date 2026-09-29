@@ -20,9 +20,15 @@ export class CustomerDto {
   @IsCpfOrCnpj({ message: 'CPF ou CNPJ inválido.' })
   document!: string;
 
-  @ApiPropertyOptional()
-  @IsOptional() @IsString() @MaxLength(20)
-  phone?: string;
+  /**
+   * Obrigatório, e não é rigor nosso: sem telefone a página de pagamento da
+   * PagoLivre trava na etapa de contato e o comprador não consegue pagar.
+   */
+  @ApiProperty({ example: '(11) 98765-4321' })
+  @Matches(/^\(?\d{2}\)?\s?9?\d{4}-?\d{4}$/, {
+    message: 'Telefone inválido. Informe DDD + número.',
+  })
+  phone!: string;
 }
 
 export class AddressDto {
@@ -60,11 +66,10 @@ export class PaymentDto {
   @IsInt() @Min(1) @Max(12)
   installments!: number;
 
-  @ApiPropertyOptional({
-    description: 'Token gerado pelo SDK da adquirente no navegador. Nunca o número do cartão.',
-  })
-  @IsOptional() @IsString() @MaxLength(200)
-  cardToken?: string;
+  // Não há campo de cartão aqui, e não é esquecimento: a PagoLivre não oferece
+  // checkout transparente nem SDK de tokenização. O pagamento acontece na página
+  // hospedada da Afinz, para onde o checkout devolve `redirectUrl`. Nenhum dado
+  // de cartão passa por esta API — é o que mantém o escopo PCI em SAQ A.
 }
 
 export class CheckoutDto {

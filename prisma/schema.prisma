@@ -997,6 +997,12 @@ model Payment {
   failureReason String? @db.VarChar(255)
   installments  Int     @default(1)
 
+  /// Página de pagamento hospedada da adquirente, para onde o comprador vai.
+  ///
+  /// Guardada porque o comprador pode fechar a aba e voltar depois: sem isto,
+  /// retomar um pagamento pendente exigiria criar outra cobrança.
+  redirectUrl String? @db.VarChar(500)
+
   createdAt   DateTime  @default(now())
   confirmedAt DateTime?
 
@@ -1269,6 +1275,17 @@ model Partner {
   bankName   String? @db.VarChar(80)
   bankBranch String? @db.VarChar(20)
   bankAccount String? @db.VarChar(30)
+
+  /// Id da unidade do parceiro NA ADQUIRENTE (GUID da PagoLivre).
+  ///
+  /// O split da PagoLivre não aceita código de cupom nem chave Pix: exige uma
+  /// unidade cadastrada lá dentro. Este é o de-para, e é o que separa repasse
+  /// automático de repasse manual.
+  ///
+  /// Nulo de propósito enquanto o parceiro não estiver cadastrado na Afinz: a
+  /// venda acontece normalmente, o `Payout` continua sendo criado, e o repasse
+  /// vira trabalho manual do financeiro em vez de bloquear a compra do cliente.
+  splitMerchantId String? @db.Char(36)
 
   active    Boolean  @default(true)
   createdAt DateTime @default(now())

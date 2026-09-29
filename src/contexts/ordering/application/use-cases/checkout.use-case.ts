@@ -1,5 +1,5 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import type { Prisma } from '@prisma/client';
+import type { PaymentStatus as PaymentStatusDb, Prisma } from '@prisma/client';
 import { randomInt } from 'node:crypto';
 
 import { buildActivationCode } from '@contexts/lab/domain/activation-code';
@@ -8,9 +8,11 @@ import { ConflictError, ValidationError } from '@shared/domain/domain-error';
 import { fail, ok, type Result } from '@shared/domain/result';
 
 import { calculateTotals, formatOrderNumber, type PricedItem } from '../../domain/order-pricing';
+import { ConfirmPaymentUseCase } from './confirm-payment.use-case';
 import { OrderStatus } from '../../domain/order-status';
 import {
   PAYMENT_GATEWAY,
+  type ChargeStatus,
   type PaymentGateway,
   type PaymentMethod,
 } from '../../domain/ports/payment-gateway.port';
@@ -24,7 +26,8 @@ export interface CheckoutInput {
     readonly name: string;
     readonly email: string;
     readonly document: string;
-    readonly phone?: string;
+    /** Obrigatório: sem ele a página de pagamento da adquirente não abre. */
+    readonly phone: string;
   };
   readonly address: {
     readonly zipCode: string;
@@ -41,7 +44,6 @@ export interface CheckoutInput {
   readonly payment: {
     readonly method: PaymentMethod;
     readonly installments: number;
-    readonly cardToken?: string;
   };
   /** Conta logada, quando houver. O checkout também funciona anônimo. */
   readonly userId?: string;
@@ -52,13 +54,35 @@ export interface CheckoutOutput {
   readonly status: OrderStatus;
   readonly totalCents: number;
   readonly paymentStatus: string;
-  /** Copia e cola do Pix ou linha digitável do boleto. */
-  readonly paymentCode?: string;
+  /**
+   * Para onde a vitrine deve mandar o comprador para pagar.
+   *
+   * Presente sempre que a cobrança ficou pendente. É a mudança que o modelo
+   * hospedado impõe à tela: o checkout não termina em "pago", termina em
+   * "siga para o pagamento".
+   */
+  readonly redirectUrl?: string;
   readonly expiresAt?: Date;
   readonly failureReason?: string;
   /** True enquanto o pagamento é simulado (sandbox) — some com a adquirente real. */
   readonly simulated: boolean;
 }
+
+/**
+ * Status da cobrança (porta) → status do `Payment` (banco).
+ *
+ * Os dois enums não coincidem: a porta tem `CANCELED`, que o banco não tem, e o
+ * banco tem `REFUNDED`, que a adquirente não distingue de cancelado. Uma cobrança
+ * cancelada depois de criada é, para o nosso financeiro, dinheiro devolvido.
+ */
+const PAYMENT_STATUS: Record<ChargeStatus, PaymentStatusDb> = {
+  PENDING: 'PENDING',
+  AUTHORIZED: 'AUTHORIZED',
+  PAID: 'PAID',
+  REFUSED: 'REFUSED',
+  CANCELED: 'REFUNDED',
+  EXPIRED: 'EXPIRED',
+};
 
 /** Peso aproximado do kit, para cotação de frete. */
 const KIT_WEIGHT_GRAMS = 180;
@@ -91,6 +115,7 @@ export class CheckoutUseCase {
   constructor(
     @Inject(PAYMENT_GATEWAY) private readonly gateway: PaymentGateway,
     @Inject(SHIPPING_PROVIDER) private readonly shipping: ShippingProvider,
+    private readonly confirmPayment: ConfirmPaymentUseCase,
     private readonly prisma: PrismaService,
   ) {}
 
@@ -154,22 +179,19 @@ export class CheckoutUseCase {
       method: input.payment.method,
       installments: input.payment.installments,
       customer: input.customer,
-      cardToken: input.payment.cardToken,
-      split:
-        totals.commissionCents && coupon.value
-          ? { recipientRef: coupon.value.code, amountCents: totals.commissionCents }
-          : undefined,
+      split: await this.resolveSplit(coupon.value?.code, totals.commissionCents),
     });
 
     await this.prisma.payment.create({
       data: {
         orderId: order.id,
         method: input.payment.method,
-        status: charge.status === 'AUTHORIZED' ? 'AUTHORIZED' : charge.status,
+        status: PAYMENT_STATUS[charge.status],
         amountCents: totals.totalCents,
         externalId: charge.externalId,
         failureReason: charge.failureReason,
         installments: input.payment.installments,
+        redirectUrl: charge.redirectUrl,
         confirmedAt: charge.status === 'PAID' ? new Date() : undefined,
       },
     });
@@ -178,7 +200,7 @@ export class CheckoutUseCase {
     const simulated = this.gateway.simulatesFulfillment === true;
 
     if (charge.status === 'PAID') {
-      await this.markPaid(order.id);
+      await this.confirmPayment.execute(order.id);
 
       // Enquanto a adquirente real não é ligada, o sandbox adianta o pedido até
       // a fila do laboratório para demonstrar o fluxo completo. Desaparece
@@ -196,7 +218,7 @@ export class CheckoutUseCase {
       status: finalStatus,
       totalCents: totals.totalCents,
       paymentStatus: charge.status,
-      paymentCode: charge.paymentCode,
+      redirectUrl: charge.redirectUrl,
       expiresAt: charge.expiresAt,
       failureReason: charge.failureReason,
       simulated,
@@ -348,6 +370,40 @@ export class CheckoutUseCase {
     return ok({ code: chosen.code, priceCents: chosen.priceCents });
   }
 
+  /**
+   * Monta o split da venda a partir do cupom.
+   *
+   * O cupom identifica o parceiro, mas **não serve como destinatário**: a
+   * adquirente exige o id de uma unidade cadastrada nela (`splitMerchantId`).
+   *
+   * Quando o parceiro ainda não está cadastrado lá, isto devolve `undefined` e a
+   * venda segue **sem** split. É deliberado: o `Payout` continua sendo criado em
+   * `ConfirmPaymentUseCase`, então a comissão não se perde — vira repasse manual do
+   * financeiro. Bloquear a compra porque falta cadastro do parceiro na Afinz
+   * seria punir o cliente por uma pendência que não é dele.
+   */
+  private async resolveSplit(
+    couponCode: string | undefined,
+    commissionCents: number | null,
+  ): Promise<{ merchantRef: string; amountCents: number }[] | undefined> {
+    if (!couponCode || !commissionCents || commissionCents <= 0) return undefined;
+
+    const partner = await this.prisma.partner.findUnique({
+      where: { couponCode },
+      select: { splitMerchantId: true, displayName: true },
+    });
+
+    if (!partner?.splitMerchantId) {
+      this.logger.warn(
+        `Cupom ${couponCode}: parceiro sem splitMerchantId — venda sem split, ` +
+          'repasse ficará manual.',
+      );
+      return undefined;
+    }
+
+    return [{ merchantRef: partner.splitMerchantId, amountCents: commissionCents }];
+  }
+
   /** Valida o cupom: ativo, dentro da validade e do limite de usos. */
   private async resolveCoupon(
     code: string | undefined,
@@ -373,62 +429,6 @@ export class CheckoutUseCase {
       discountPercent: Number(coupon.discountPercent),
       commissionPercent: Number(coupon.commissionPercent),
     });
-  }
-
-  /**
-   * Marca como pago, registra o evento e abre o repasse do parceiro.
-   *
-   * O repasse nasce **junto do pagamento**, na mesma transação, e não num
-   * fechamento posterior. O motivo é o que o cliente pediu ver no painel do
-   * parceiro em 15/06: *"quanto vendeu, quanto converteu, previsibilidade do
-   * mês"*. Previsibilidade exige que a comissão apareça no instante em que ela
-   * passa a ser devida — um repasse criado só no fechamento faria o parceiro
-   * olhar o painel no dia 10 e ver zero, tendo vendido.
-   *
-   * O `@@unique([orderId])` do `Payout` é a rede de segurança: reprocessar um
-   * pagamento não paga o parceiro duas vezes.
-   */
-  private async markPaid(orderId: string): Promise<void> {
-    const order = await this.prisma.order.findUniqueOrThrow({
-      where: { id: orderId },
-      select: { number: true, couponCode: true, commissionCents: true },
-    });
-
-    // Sem cupom não há parceiro; sem comissão não há o que repassar.
-    const partner =
-      order.couponCode && (order.commissionCents ?? 0) > 0
-        ? await this.prisma.partner.findUnique({
-            where: { couponCode: order.couponCode },
-            select: { id: true },
-          })
-        : null;
-
-    await this.prisma.$transaction([
-      this.prisma.order.update({
-        where: { id: orderId },
-        data: { status: 'PAID', paidAt: new Date() },
-      }),
-      this.prisma.orderEvent.create({
-        data: { orderId, status: 'PAID', actor: 'system', note: 'Pagamento confirmado.' },
-      }),
-      ...(partner
-        ? [
-            this.prisma.payout.upsert({
-              where: { orderId },
-              // O split acontece na adquirente; este registro é o que permite ao
-              // parceiro conferir e ao admin fechar o mês. Nasce PENDING porque
-              // a liquidação é da adquirente, não nossa.
-              create: {
-                partnerId: partner.id,
-                orderId,
-                orderNumber: order.number,
-                amountCents: order.commissionCents!,
-              },
-              update: {},
-            }),
-          ]
-        : []),
-    ]);
   }
 
   /**

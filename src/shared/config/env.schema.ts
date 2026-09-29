@@ -56,6 +56,37 @@ export const envSchema = z.object({
   AI_NARRATIVE_URL: z.string().url().default('https://api.anthropic.com/v1/messages'),
   AI_NARRATIVE_MODEL: z.string().default('claude-sonnet-5'),
   AI_NARRATIVE_API_KEY: z.string().optional(),
+
+  // --- Adquirente: PagoLivre (Afinz) ----------------------------------------
+  //
+  // `sandbox` mantém o adapter simulado, que adianta o pedido até a fila do
+  // laboratório para demonstrar o fluxo inteiro sem adquirente. `pagolivre` liga
+  // a de verdade. É a única linha que separa demonstrar de cobrar.
+  PAYMENT_PROVIDER: z.enum(['sandbox', 'pagolivre']).default('sandbox'),
+
+  // O host de sandbox NÃO está na documentação da PagoLivre (ela só declara o de
+  // produção). Foi descoberto e confirmado em 24/09/2026 — ver
+  // docs/11-pagamento/pagolivre/README.md.
+  PAGOLIVRE_BASE_URL: z.string().url().default('https://api.sbx.pagolivre.com.br/api/v2'),
+  /** Token Basic já em base64, como a PagoLivre entrega. */
+  PAGOLIVRE_TOKEN: z.string().optional(),
+  PAGOLIVRE_MERCHANT_ID: z.string().uuid().optional(),
+  /** Para onde a PagoLivre posta os eventos. */
+  PAGOLIVRE_CALLBACK_URL: z.string().url().optional(),
+  /** Para onde o comprador volta depois de pagar na página da Afinz. */
+  PAGOLIVRE_RETURN_URL: z.string().url().optional(),
+  /**
+   * Token esperado na query do webhook.
+   *
+   * **Opcional de propósito.** A PagoLivre não emite segredo de webhook: ela
+   * devolve o próprio `PAGOLIVRE_TOKEN` na query (verificado em homologação,
+   * 25/09/2026), e é com ele que o handler compara quando esta variável está
+   * vazia. Ela existe para o dia em que emitirem um segredo separado.
+   *
+   * De todo modo não há HMAC sobre o corpo, então o handler confere o token e,
+   * mesmo assim, reconsulta a ordem antes de acreditar no que chegou.
+   */
+  PAGOLIVRE_WEBHOOK_TOKEN: z.string().min(16).optional(),
 });
 
 export type Env = z.infer<typeof envSchema>;
@@ -82,6 +113,7 @@ export function validateEnv(raw: Record<string, unknown>): Env {
   }
 
   assertTlsIsComplete(parsed.data);
+  assertAcquirerIsComplete(parsed.data);
 
   return parsed.data;
 }
@@ -104,6 +136,25 @@ function assertTlsIsComplete(env: Env): void {
       `ACTIVATE_SSL_CERTIFICATE=YES requires ${missing.join(', ')}. ` +
         'On the homolog VPS these point at /etc/letsencrypt/live/homolog.crosoften.com/.',
     );
+  }
+}
+
+/**
+ * Refuses to start with the acquirer half-configured.
+ *
+ * `PAYMENT_PROVIDER=pagolivre` sem token ou sem callback subiria uma API que
+ * aceita checkout e falha na hora de cobrar — o pior momento possível para
+ * descobrir configuração faltando, porque já há cliente com o cartão na mão.
+ */
+function assertAcquirerIsComplete(env: Env): void {
+  if (env.PAYMENT_PROVIDER !== 'pagolivre') return;
+
+  const missing = (['PAGOLIVRE_TOKEN', 'PAGOLIVRE_CALLBACK_URL'] as const).filter(
+    (name) => !env[name],
+  );
+
+  if (missing.length > 0) {
+    throw new Error(`PAYMENT_PROVIDER=pagolivre requires ${missing.join(', ')}.`);
   }
 }
 
