@@ -101,13 +101,40 @@ export class RegisterUserUseCase {
       return ok({ userId: existing.id, verificationSent: true });
     }
 
-    const user = await this.users.create({
-      email: email.value.value,
-      passwordHash: await this.hash.hashPassword(password.value.value),
-      name,
-      document: input.document,
-      phone: input.phone,
-    });
+    let user;
+    try {
+      user = await this.users.create({
+        email: email.value.value,
+        passwordHash: await this.hash.hashPassword(password.value.value),
+        name,
+        document: input.document,
+        phone: input.phone,
+      });
+    } catch (erro) {
+      // `document` é único no banco, e até 01/10/2026 ninguém tratava a
+      // violação: o segundo cadastro com o mesmo CPF e um e-mail novo devolvia
+      // **500** ("Erro interno. Tente novamente em instantes."). A pessoa
+      // repetia para sempre, e nada na tela indicava qual campo era o problema.
+      //
+      // A mensagem **não nomeia o CPF**, de propósito. Dizer "este CPF já tem
+      // cadastro" transformaria a rota num verificador de quem é cliente do
+      // laboratório — o mesmo risco que fez o e-mail duplicado responder como
+      // se fosse cadastro novo, e num laboratório de genética isso é inferir
+      // informação de saúde. Decidir se o ganho de usabilidade compensa esse
+      // vazamento é da Genoa, não nossa: até lá, o erro é genérico e o log
+      // guarda o detalhe para o suporte conseguir explicar.
+      if (!duplicidadeDeDocumento(erro)) throw erro;
+
+      this.logger.warn(
+        `Cadastro recusado: o CPF informado para ${email.value.value} já pertence a outra conta.`,
+      );
+      return fail(
+        new ConflictError(
+          'Não foi possível concluir o cadastro com estes dados. ' +
+            'Se você já tem conta, entre ou recupere sua senha.',
+        ),
+      );
+    }
 
     await this.recordConsents(user.id, input);
     await this.assignPatientRole(user.id);
@@ -170,4 +197,22 @@ export class RegisterUserUseCase {
     if (!role) return;
     await this.prisma.userRole.create({ data: { userId, roleId: role.id } });
   }
+}
+
+/**
+ * O erro é a violação da unicidade de `document`?
+ *
+ * Checado pelo código `P2002` e pelo alvo que o Prisma devolve, e não pelo texto
+ * da mensagem: texto de biblioteca muda entre versões, e um `includes` nele
+ * passaria a deixar o 500 voltar em silêncio no dia da atualização.
+ */
+function duplicidadeDeDocumento(erro: unknown): boolean {
+  if (typeof erro !== 'object' || erro === null) return false;
+
+  const { code, meta } = erro as { code?: unknown; meta?: { target?: unknown } };
+  if (code !== 'P2002') return false;
+
+  const alvo = meta?.target;
+  const campos = Array.isArray(alvo) ? alvo : typeof alvo === 'string' ? [alvo] : [];
+  return campos.some((campo) => String(campo).includes('document'));
 }
