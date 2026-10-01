@@ -101,6 +101,51 @@ export class RegisterUserUseCase {
       return ok({ userId: existing.id, verificationSent: true });
     }
 
+    // O CPF, antes de criar.
+    //
+    // Cadastro que **nunca foi confirmado** não prova dono nenhum: ninguém
+    // consegue entrar nele (o login recusa conta não verificada), ele não tem
+    // laudo, kit nem pedido, e o código de confirmação sempre vai para o e-mail
+    // informado agora. Então, quando o CPF bate com uma conta pendente, a coisa
+    // certa é deixar a pessoa **recadastrar** — foi o que o André apontou em
+    // 01/10: quem errou o próprio e-mail na primeira tentativa não tem outra
+    // saída, porque o código foi para uma caixa que não é dele.
+    //
+    // Conta já confirmada é outra história, e aí vale a recusa.
+    const documento = input.document?.replace(/\D/g, '');
+    if (documento) {
+      const dono = await this.prisma.user.findFirst({
+        where: { document: documento, deletedAt: null },
+        select: { id: true, emailVerifiedAt: true },
+      });
+
+      if (dono?.emailVerifiedAt) {
+        // A mensagem **não nomeia o CPF**, de propósito: dizer "este CPF já tem
+        // cadastro" transformaria a rota num verificador de quem é cliente do
+        // laboratório, que é o mesmo risco que faz o e-mail duplicado responder
+        // como se fosse cadastro novo. Num laboratório de genética isso é
+        // inferir informação de saúde.
+        this.logger.warn(
+          `Cadastro recusado: o CPF informado para ${email.value.value} pertence a uma conta confirmada.`,
+        );
+        return fail(
+          new ConflictError(
+            'Não foi possível concluir o cadastro com estes dados. ' +
+              'Se você já tem conta, entre ou recupere sua senha.',
+          ),
+        );
+      }
+
+      if (dono) {
+        return this.recadastrar(dono.id, {
+          email: email.value.value,
+          passwordHash: await this.hash.hashPassword(password.value.value),
+          name,
+          input,
+        });
+      }
+    }
+
     let user;
     try {
       user = await this.users.create({
@@ -111,22 +156,13 @@ export class RegisterUserUseCase {
         phone: input.phone,
       });
     } catch (erro) {
-      // `document` é único no banco, e até 01/10/2026 ninguém tratava a
-      // violação: o segundo cadastro com o mesmo CPF e um e-mail novo devolvia
-      // **500** ("Erro interno. Tente novamente em instantes."). A pessoa
-      // repetia para sempre, e nada na tela indicava qual campo era o problema.
-      //
-      // A mensagem **não nomeia o CPF**, de propósito. Dizer "este CPF já tem
-      // cadastro" transformaria a rota num verificador de quem é cliente do
-      // laboratório — o mesmo risco que fez o e-mail duplicado responder como
-      // se fosse cadastro novo, e num laboratório de genética isso é inferir
-      // informação de saúde. Decidir se o ganho de usabilidade compensa esse
-      // vazamento é da Genoa, não nossa: até lá, o erro é genérico e o log
-      // guarda o detalhe para o suporte conseguir explicar.
+      // Rede de segurança para a corrida entre a consulta acima e o insert:
+      // dois cadastros com o mesmo CPF no mesmo instante. Sem isto, o segundo
+      // volta como 500 — que é como este caso se comportava inteiro até 01/10.
       if (!duplicidadeDeDocumento(erro)) throw erro;
 
       this.logger.warn(
-        `Cadastro recusado: o CPF informado para ${email.value.value} já pertence a outra conta.`,
+        `Cadastro recusado por corrida: o CPF informado para ${email.value.value} foi gravado por outra requisição.`,
       );
       return fail(
         new ConflictError(
@@ -167,6 +203,83 @@ export class RegisterUserUseCase {
   }
 
   /**
+   * Recadastro de uma conta que nunca foi confirmada.
+   *
+   * Sobrescreve e-mail, nome, senha e telefone da conta pendente que já tem
+   * aquele CPF, e manda um código novo. É o caminho de quem digitou o próprio
+   * e-mail errado: o código foi para uma caixa que não é dele, e sem isto não há
+   * como corrigir — o CPF trava o cadastro novo e a conta velha é inalcançável.
+   *
+   * Três cuidados:
+   *
+   * - **a resposta é idêntica à de um cadastro novo**, então nada aqui revela
+   *   que aquele CPF já tinha passado pela plataforma;
+   * - **o código anterior é invalidado**, senão o que foi para o e-mail errado
+   *   continuaria valendo pelos 30 minutos;
+   * - **o aceite dos documentos é gravado de novo**, com a versão vigente agora.
+   *   A tentativa anterior consentiu numa sessão que não se concluiu; o que vale
+   *   é o aceite desta.
+   */
+  private async recadastrar(
+    userId: string,
+    dados: {
+      readonly email: string;
+      readonly passwordHash: string;
+      readonly name: string;
+      readonly input: RegisterUserInput;
+    },
+  ): Promise<Result<RegisterUserOutput>> {
+    try {
+      await this.prisma.user.update({
+        where: { id: userId },
+        data: {
+          email: dados.email,
+          name: dados.name,
+          password: dados.passwordHash,
+          phone: dados.input.phone,
+          status: 'PENDING',
+        },
+      });
+    } catch (erro) {
+      // O e-mail novo pertence a outra conta. Responde como o caminho de e-mail
+      // duplicado — igual a um cadastro novo, sem dizer o que aconteceu.
+      if (!duplicidadeDeEmail(erro)) throw erro;
+      this.logger.warn(`Recadastro abortado: ${dados.email} já pertence a outra conta.`);
+      return ok({ userId, verificationSent: true });
+    }
+
+    await this.recordConsents(userId, dados.input);
+    await this.assignPatientRole(userId);
+
+    await this.prisma.verificationCode.updateMany({
+      where: { userId, purpose: 'EMAIL_VERIFICATION', usedAt: null },
+      data: { usedAt: new Date() },
+    });
+
+    const { code, codeHash } = this.hash.generateNumericCode(6);
+    await this.prisma.verificationCode.create({
+      data: {
+        userId,
+        purpose: 'EMAIL_VERIFICATION',
+        codeHash,
+        expiresAt: new Date(Date.now() + VERIFICATION_TTL_MINUTES * 60_000),
+      },
+    });
+
+    await this.notifications.send(dados.email, {
+      kind: 'email-verification',
+      code,
+      name: dados.name,
+    });
+
+    this.logger.log(`Recadastro de conta pendente ${userId} com o e-mail ${dados.email}.`);
+
+    return this.exporCodigo()
+      ? ok({ userId, verificationSent: true, codigoDeTeste: code })
+      : ok({ userId, verificationSent: true });
+  }
+
+  /**
    * Grava o aceite dos documentos legais.
    *
    * Com IP, user-agent e a versão exata do texto aceito. É o que permite provar,
@@ -195,18 +308,34 @@ export class RegisterUserUseCase {
   private async assignPatientRole(userId: string): Promise<void> {
     const role = await this.prisma.role.findUnique({ where: { slug: 'patient' } });
     if (!role) return;
-    await this.prisma.userRole.create({ data: { userId, roleId: role.id } });
+    // `upsert`, e não `create`: no recadastro a conta já tem o papel, e o
+    // `create` quebraria na chave composta.
+    await this.prisma.userRole.upsert({
+      where: { userId_roleId: { userId, roleId: role.id } },
+      update: {},
+      create: { userId, roleId: role.id },
+    });
   }
 }
 
+/** O erro é a violação da unicidade de `document`? */
+function duplicidadeDeDocumento(erro: unknown): boolean {
+  return violacaoDeUnicidade(erro, 'document');
+}
+
+/** O erro é a violação da unicidade de `email`? */
+function duplicidadeDeEmail(erro: unknown): boolean {
+  return violacaoDeUnicidade(erro, 'email');
+}
+
 /**
- * O erro é a violação da unicidade de `document`?
+ * O erro do Prisma é uma violação de unicidade naquele campo?
  *
  * Checado pelo código `P2002` e pelo alvo que o Prisma devolve, e não pelo texto
  * da mensagem: texto de biblioteca muda entre versões, e um `includes` nele
  * passaria a deixar o 500 voltar em silêncio no dia da atualização.
  */
-function duplicidadeDeDocumento(erro: unknown): boolean {
+function violacaoDeUnicidade(erro: unknown, campo: string): boolean {
   if (typeof erro !== 'object' || erro === null) return false;
 
   const { code, meta } = erro as { code?: unknown; meta?: { target?: unknown } };
@@ -214,5 +343,5 @@ function duplicidadeDeDocumento(erro: unknown): boolean {
 
   const alvo = meta?.target;
   const campos = Array.isArray(alvo) ? alvo : typeof alvo === 'string' ? [alvo] : [];
-  return campos.some((campo) => String(campo).includes('document'));
+  return campos.some((nome) => String(nome).includes(campo));
 }
