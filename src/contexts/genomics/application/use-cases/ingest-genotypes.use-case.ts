@@ -196,9 +196,23 @@ function detectSeparator(headerLine: string): string {
  * The laboratory writes columns as `ACTN3_rs1815739`, and the same marker has
  * appeared as `TNF_rs1800629` in one source and `TNF-alfa_rs1800629` in another.
  * Keying on the rsID makes the gene label irrelevant to the join.
+ *
+ * ### Por que o rsID precisa ser um pedaço inteiro do nome
+ *
+ * A primeira versão procurava `rs\d+` em qualquer posição, e isso quebrava um
+ * nome de coluna perfeitamente razoável: o gene do marcador `rs1801278` é o
+ * **IRS1**, e em `IRS1_rs1801278` o trecho `RS1` casa antes — a coluna virava o
+ * marcador inexistente `rs1`, e cada linha do arquivo era recusada com
+ * *"Marcador rs1 não pertence a este painel"*, uma mensagem que não aponta para
+ * lugar nenhum. Achado em 01/10/2026 ao montar os arquivos de teste do
+ * laboratório.
+ *
+ * Exigir separador (ou começo do texto) antes, e nada alfanumérico depois, faz
+ * `IRS1_rs1801278` resolver para `rs1801278` sem perder nenhuma das grafias que
+ * já funcionavam.
  */
-function normaliseHeader(cell: string): string {
+export function normaliseHeader(cell: string): string {
   const trimmed = cell.trim();
-  const match = /(rs\d+)/i.exec(trimmed);
+  const match = /(?:^|[^A-Za-z0-9])(rs\d+)(?![A-Za-z0-9])/i.exec(trimmed);
   return match ? match[1]!.toLowerCase() : trimmed;
 }
