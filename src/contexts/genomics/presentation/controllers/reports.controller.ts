@@ -6,6 +6,7 @@ import type { AuthenticatedPrincipal } from '@contexts/identity/presentation/gua
 
 import { GetReportUseCase } from '../../application/use-cases/get-report.use-case';
 import { IngestGenotypesUseCase } from '../../application/use-cases/ingest-genotypes.use-case';
+import { LabHistoryUseCase } from '../../application/use-cases/lab-history.use-case';
 import { LabSamplesUseCase } from '../../application/use-cases/lab-samples.use-case';
 import { PatientAreaUseCase } from '../../application/use-cases/patient-area.use-case';
 import { IngestCsvDto } from '../dtos/ingest-csv.dto';
@@ -16,6 +17,7 @@ export class ReportsController {
   constructor(
     private readonly ingest: IngestGenotypesUseCase,
     private readonly labSamples: LabSamplesUseCase,
+    private readonly labHistory: LabHistoryUseCase,
     private readonly patientArea: PatientAreaUseCase,
     private readonly getReport: GetReportUseCase,
   ) {}
@@ -26,6 +28,20 @@ export class ReportsController {
   @ApiOperation({ summary: 'Amostras aguardando o CSV de genótipos' })
   async labSamplesQueue() {
     return this.labSamples.execute();
+  }
+
+  /**
+   * Laudos já publicados, para o laboratório conferir o que saiu do CSV.
+   *
+   * Mesma permissão da fila: é o mesmo operador, na mesma tela, terminando o
+   * mesmo trabalho. Abrir um laudo daqui cai em `GET /reports/:id`, que já
+   * aceita o papel `lab`.
+   */
+  @Get('lab/historico')
+  @RequirePermissions('samples.read')
+  @ApiOperation({ summary: 'Laudos publicados, por pedido e kit' })
+  async labHistoryList() {
+    return this.labHistory.execute();
   }
 
   /**

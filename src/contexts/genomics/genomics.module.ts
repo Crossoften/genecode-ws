@@ -6,6 +6,7 @@ import { IdentityModule } from '@contexts/identity/identity.module';
 import { ComputeReportUseCase } from './application/use-cases/compute-report.use-case';
 import { GetReportUseCase } from './application/use-cases/get-report.use-case';
 import { IngestGenotypesUseCase } from './application/use-cases/ingest-genotypes.use-case';
+import { LabHistoryUseCase } from './application/use-cases/lab-history.use-case';
 import { LabSamplesUseCase } from './application/use-cases/lab-samples.use-case';
 import { PatientAreaUseCase } from './application/use-cases/patient-area.use-case';
 import { NARRATIVE_PROVIDER } from './domain/ports/narrative.provider';
@@ -29,6 +30,7 @@ import { ReportsController } from './presentation/controllers/reports.controller
     ComputeReportUseCase,
     GetReportUseCase,
     IngestGenotypesUseCase,
+    LabHistoryUseCase,
     LabSamplesUseCase,
     PatientAreaUseCase,
     { provide: PANEL_REPOSITORY, useClass: PrismaPanelRepository },
