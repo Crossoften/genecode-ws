@@ -18,5 +18,9 @@ import { AdminController } from './presentation/controllers/admin.controller';
   imports: [IdentityModule],
   controllers: [AdminController],
   providers: [BusinessIntelligenceUseCase, AdminOrderDetailUseCase, OrderStatusNotificationUseCase],
+  // Exportado para a importação de genótipos: quando o laboratório publica um
+  // laudo, o pedido anda e o aviso de "laudo disponível" é registrado pelo mesmo
+  // caminho do admin — duplicar a regra de gatilho criaria duas verdades.
+  exports: [OrderStatusNotificationUseCase],
 })
 export class AnalyticsModule {}

@@ -4,6 +4,7 @@ import { PrismaService } from '@infra/database/prisma.service';
 import { ValidationError } from '@shared/domain/domain-error';
 import { fail, ok, type Result } from '@shared/domain/result';
 
+import { ORDER_PROGRESS, type OrderProgress } from '../../domain/ports/order-progress.port';
 import { PANEL_REPOSITORY, type PanelRepository } from '../../domain/ports/panel.repository';
 import { ComputeReportUseCase } from './compute-report.use-case';
 
@@ -48,6 +49,7 @@ export class IngestGenotypesUseCase {
 
   constructor(
     @Inject(PANEL_REPOSITORY) private readonly panels: PanelRepository,
+    @Inject(ORDER_PROGRESS) private readonly orders: OrderProgress,
     private readonly prisma: PrismaService,
     private readonly computeReport: ComputeReportUseCase,
   ) {}
@@ -110,6 +112,12 @@ export class IngestGenotypesUseCase {
         failures.push({ line, subjectCode, reason: result.error.message });
         continue;
       }
+
+      // Publicar o laudo é o que deixa o laudo disponível para o titular: sem
+      // isto o pedido fica parado em "amostra recebida" e a área do titular
+      // mantém o laudo trancado. Decisão do André em 01/10 (pendência 19b).
+      await this.orders.reportPublished(result.value.subjectId);
+
       processed += 1;
     }
 

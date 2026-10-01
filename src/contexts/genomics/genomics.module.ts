@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
+import { AnalyticsModule } from '@contexts/analytics/analytics.module';
 import { IdentityModule } from '@contexts/identity/identity.module';
 
 import { ComputeReportUseCase } from './application/use-cases/compute-report.use-case';
@@ -10,7 +11,9 @@ import { LabHistoryUseCase } from './application/use-cases/lab-history.use-case'
 import { LabSamplesUseCase } from './application/use-cases/lab-samples.use-case';
 import { PatientAreaUseCase } from './application/use-cases/patient-area.use-case';
 import { NARRATIVE_PROVIDER } from './domain/ports/narrative.provider';
+import { ORDER_PROGRESS } from './domain/ports/order-progress.port';
 import { PANEL_REPOSITORY } from './domain/ports/panel.repository';
+import { PrismaOrderProgressGateway } from './infrastructure/gateways/prisma-order-progress.gateway';
 import { AiNarrativeProvider } from './infrastructure/narrative/ai-narrative.provider';
 import { TableNarrativeProvider } from './infrastructure/narrative/table-narrative.provider';
 import { PrismaPanelRepository } from './infrastructure/repositories/prisma-panel.repository';
@@ -24,7 +27,7 @@ import { ReportsController } from './presentation/controllers/reports.controller
  * contraprova run the 80 real patients in about a second without a database.
  */
 @Module({
-  imports: [IdentityModule],
+  imports: [IdentityModule, AnalyticsModule],
   controllers: [ReportsController],
   providers: [
     ComputeReportUseCase,
@@ -34,6 +37,7 @@ import { ReportsController } from './presentation/controllers/reports.controller
     LabSamplesUseCase,
     PatientAreaUseCase,
     { provide: PANEL_REPOSITORY, useClass: PrismaPanelRepository },
+    { provide: ORDER_PROGRESS, useClass: PrismaOrderProgressGateway },
 
     // Ambos são instanciáveis, porque a IA cai para a tabela quando o guardrail
     // recusa a saída. Qual deles atende a porta é decisão de configuração — é
