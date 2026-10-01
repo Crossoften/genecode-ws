@@ -23,6 +23,24 @@ export interface ConsolidatedCategory {
   readonly adjustedScore: number | null;
 }
 
+/**
+ * Um ponto da linha do tempo: uma entrevista concluída.
+ *
+ * O dado já existia — cada `Assessment` grava o ambiental e o ajustado do seu
+ * checkpoint — e nunca era lido além do mais recente. Sem a série, a pergunta
+ * que o produto existe para responder ("o que eu faço mudou alguma coisa?")
+ * só podia ser respondida de memória.
+ */
+export interface AssessmentPoint {
+  readonly checkpoint: string;
+  readonly completedAt: Date;
+  readonly categories: readonly {
+    readonly slug: string;
+    readonly environmentalScore: number | null;
+    readonly adjustedScore: number | null;
+  }[];
+}
+
 export interface ConsolidatedReport {
   readonly subjectId: string;
   readonly panelName: string;
@@ -33,6 +51,14 @@ export interface ConsolidatedReport {
   readonly lastAssessedCheckpoint: string | null;
   /** Avisa que o ajustado ainda usa a fórmula preliminar. */
   readonly adjustedIsPreliminary: boolean;
+  /**
+   * Entrevistas em ordem cronológica, da primeira para a última.
+   *
+   * Cronológica e não a ordem da consulta (que é decrescente, para pegar a
+   * última): um gráfico de evolução desenhado de trás para frente conta a
+   * história ao contrário.
+   */
+  readonly evolution: readonly AssessmentPoint[];
 }
 
 /**
@@ -139,6 +165,26 @@ export class ConsolidatedReportUseCase {
       // profissional, combinado ao genético pela estratégia validada do painel.
       // Deixa de ser preliminar assim que existe uma avaliação de verdade.
       adjustedIsPreliminary: latest === undefined,
+      evolution: [...assessments]
+        .reverse()
+        .map((assessment) => {
+          const amb = (assessment.environmentalScores ?? null) as Record<string, number> | null;
+          const aju = (assessment.adjustedScores ?? null) as Record<string, number> | null;
+          return {
+            checkpoint: assessment.checkpoint,
+            completedAt: assessment.completedAt,
+            // As categorias do laudo, não as chaves do JSON: assim a série tem
+            // sempre a mesma forma, e uma categoria que faltou numa entrevista
+            // vira um furo explícito na linha em vez de deslocar o eixo.
+            categories: report.categoryScores
+              .sort((a, b) => a.category.position - b.category.position)
+              .map((entry) => ({
+                slug: entry.category.slug,
+                environmentalScore: amb?.[entry.category.slug] ?? null,
+                adjustedScore: aju?.[entry.category.slug] ?? null,
+              })),
+          };
+        }),
     });
   }
 }
