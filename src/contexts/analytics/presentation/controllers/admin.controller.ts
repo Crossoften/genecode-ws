@@ -33,6 +33,16 @@ export class ChangeOrderStatusDto {
   })
   @IsOptional() @IsArray() @IsIn(NOTIFICATION_CHANNELS, { each: true })
   channels?: ('WHATSAPP' | 'EMAIL' | 'SMS')[];
+
+  @ApiProperty({
+    required: false,
+    description:
+      'Código do kit que está sendo despachado. Obrigatório ao mover para KIT_SHIPPED ' +
+      'quando o pedido ainda não tem kit: é ele que liga a caixa ao pedido e permite ' +
+      'que o titular ative.',
+  })
+  @IsOptional() @IsString() @MaxLength(12)
+  kitCode?: string;
 }
 
 @ApiTags('Admin')
@@ -187,11 +197,33 @@ export class AdminController {
       );
     }
 
+    // O despacho precisa dizer QUAL caixa saiu.
+    //
+    // Sem isto o kit nunca sai de `GENERATED`, e a ativação — que só aceita
+    // `ASSIGNED` — recusa todo código gerado pela plataforma. Em homologação
+    // ninguém percebeu porque a semente grava `ASSIGNED` direto; num pedido
+    // real, provado em GC-2026-00029 em 30/09, o titular levava "Código Errado,
+    // Digite Novamente." com um código legítimo na mão.
+    //
+    // O código é digitado por quem despacha, não sorteado do estoque: o sistema
+    // não tem como saber qual caixa a pessoa pegou da prateleira, e adivinhar
+    // produziria um vínculo errado que só apareceria quando a amostra chegasse
+    // ao laboratório com o nome de outra pessoa.
+    const kitAssignment = await this.resolveDispatchedKit(order, dto);
+
     await this.prisma.$transaction([
       this.prisma.order.update({
         where: { id: order.id },
         data: { status: dto.status },
       }),
+      ...(kitAssignment
+        ? [
+            this.prisma.kit.update({
+              where: { id: kitAssignment.id },
+              data: { orderId: order.id, status: 'ASSIGNED' },
+            }),
+          ]
+        : []),
       this.prisma.orderEvent.create({
         data: {
           orderId: order.id,
@@ -215,6 +247,50 @@ export class AdminController {
       status: dto.status,
       allowedTransitions: nextStatuses(dto.status),
       notifications,
+      kitCode: kitAssignment?.code ?? null,
     };
+  }
+
+  /**
+   * Resolve o kit que está sendo despachado, ou null quando não é um despacho.
+   *
+   * As recusas são explícitas, ao contrário das da ativação: aqui quem lê a
+   * mensagem é o operador da Genoa, com a caixa na mão, e ele precisa saber se
+   * o código não existe, se já foi usado ou se pertence a outro pedido.
+   */
+  private async resolveDispatchedKit(
+    order: { id: string },
+    dto: ChangeOrderStatusDto,
+  ): Promise<{ id: string; code: string } | null> {
+    if (dto.status !== OrderStatus.KIT_SHIPPED) return null;
+
+    const existente = await this.prisma.kit.findFirst({
+      where: { orderId: order.id },
+      select: { id: true, code: true },
+    });
+    // Repetir o despacho (correção de status, reenvio) não exige o código de novo.
+    if (existente) return null;
+
+    const informado = (dto.kitCode ?? '').trim();
+    if (informado.length === 0) {
+      throw new ConflictError(
+        'Informe o código do kit que está sendo despachado. Sem ele o titular não consegue ativar a caixa.',
+      );
+    }
+
+    const kit = await this.prisma.kit.findUnique({
+      where: { code: informado },
+      select: { id: true, code: true, status: true, orderId: true },
+    });
+    if (!kit) throw new NotFoundError(`Kit ${informado} não existe.`);
+    if (kit.orderId && kit.orderId !== order.id) {
+      throw new ConflictError(`O kit ${informado} já está atribuído a outro pedido.`);
+    }
+    if (kit.status !== 'GENERATED') {
+      throw new ConflictError(
+        `O kit ${informado} está em "${kit.status}" e não pode ser despachado de novo.`,
+      );
+    }
+    return { id: kit.id, code: kit.code };
   }
 }
