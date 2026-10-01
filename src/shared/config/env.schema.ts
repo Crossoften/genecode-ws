@@ -87,6 +87,33 @@ export const envSchema = z.object({
    * mesmo assim, reconsulta a ordem antes de acreditar no que chegou.
    */
   PAGOLIVRE_WEBHOOK_TOKEN: z.string().min(16).optional(),
+
+  // --- Cadastro em ambiente sem e-mail ---------------------------------------
+  //
+  // Homologação não tem servidor de e-mail: o código de verificação é escrito no
+  // log e nunca chega a ninguém. Quem tenta criar conta fica preso — a conta
+  // nasce PENDING e não autentica.
+  //
+  // Com `YES`, o cadastro devolve o código na resposta e a tela o exibe, para
+  // que o fluxo possa ser percorrido inteiro. É uma porta de saída explícita
+  // para ambiente de teste: o padrão é `NO`, e cada uso deixa aviso no log.
+  //
+  // ⚠️ Nunca ligar em produção. O conserto de verdade é configurar o envio de
+  // e-mail; esta chave existe só enquanto ele não existe.
+  MOSTRAR_CODIGO_VERIFICACAO: z.enum(['YES', 'NO']).default('NO'),
+
+  // --- Envio de notificação transacional -------------------------------------
+  //
+  // `log` só escreve no log do servidor — serve para desenvolvimento e foi o que
+  // deixou o cadastro impossível de concluir em homologação, porque o código de
+  // verificação não chegava a ninguém. `smtp` entrega de verdade.
+  CANAL_NOTIFICACAO: z.enum(['log', 'smtp']).default('log'),
+  SMTP_HOST: z.string().optional(),
+  SMTP_PORT: z.coerce.number().int().positive().default(587),
+  SMTP_USER: z.string().optional(),
+  SMTP_PASSWORD: z.string().optional(),
+  /** Remetente, no formato que o provedor aceita como verificado. */
+  SMTP_FROM: z.string().optional(),
 });
 
 export type Env = z.infer<typeof envSchema>;
@@ -114,6 +141,7 @@ export function validateEnv(raw: Record<string, unknown>): Env {
 
   assertTlsIsComplete(parsed.data);
   assertAcquirerIsComplete(parsed.data);
+  assertNotificationIsComplete(parsed.data);
 
   return parsed.data;
 }
@@ -136,6 +164,25 @@ function assertTlsIsComplete(env: Env): void {
       `ACTIVATE_SSL_CERTIFICATE=YES requires ${missing.join(', ')}. ` +
         'On the homolog VPS these point at /etc/letsencrypt/live/homolog.crosoften.com/.',
     );
+  }
+}
+
+/**
+ * Recusa subir com o envio de e-mail pela metade.
+ *
+ * `CANAL_NOTIFICACAO=smtp` sem credencial produziria uma API que aceita cadastro
+ * e nunca entrega o código — o mesmo sintoma que esta configuração existe para
+ * resolver, só que mais difícil de perceber.
+ */
+function assertNotificationIsComplete(env: Env): void {
+  if (env.CANAL_NOTIFICACAO !== 'smtp') return;
+
+  const missing = (['SMTP_HOST', 'SMTP_USER', 'SMTP_PASSWORD', 'SMTP_FROM'] as const).filter(
+    (name) => !env[name],
+  );
+
+  if (missing.length > 0) {
+    throw new Error(`CANAL_NOTIFICACAO=smtp requires ${missing.join(', ')}.`);
   }
 }
 

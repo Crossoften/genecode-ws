@@ -103,7 +103,11 @@ export class AccountController {
       userAgent: request.headers['user-agent'],
     });
     if (result.isFail()) throw result.error;
-    return { verificationSent: result.value.verificationSent };
+    return {
+      verificationSent: result.value.verificationSent,
+      // Só vem preenchido em ambiente sem e-mail, com a chave ligada.
+      ...(result.value.codigoDeTeste ? { codigoDeTeste: result.value.codigoDeTeste } : {}),
+    };
   }
 
   /** Confirma o e-mail e já abre a sessão. */

@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 
 import { HashService } from '@shared/crypto/hash.service';
@@ -10,8 +11,10 @@ import { RefreshSessionUseCase } from './application/use-cases/refresh-session.u
 import { RegisterUserUseCase } from './application/use-cases/register-user.use-case';
 import { ResetPasswordUseCase } from './application/use-cases/reset-password.use-case';
 import { VerifyEmailUseCase } from './application/use-cases/verify-email.use-case';
+import type { Env } from '@shared/config/env.schema';
 import { NOTIFICATION_SENDER } from './domain/ports/notification.port';
 import { LogNotificationSender } from './infrastructure/log-notification.sender';
+import { SmtpNotificationSender } from './infrastructure/smtp-notification.sender';
 import { REFRESH_TOKEN_REPOSITORY } from './domain/ports/refresh-token.repository';
 import { USER_REPOSITORY } from './domain/ports/user.repository';
 import { PrismaRefreshTokenRepository } from './infrastructure/repositories/prisma-refresh-token.repository';
@@ -47,7 +50,16 @@ import { ProfileController } from './presentation/controllers/profile.controller
     VerifyEmailUseCase,
     ResetPasswordUseCase,
     RefreshSessionUseCase,
-    { provide: NOTIFICATION_SENDER, useClass: LogNotificationSender },
+    {
+      // O canal é decidido no boot: `log` para desenvolvimento, `smtp` para
+      // qualquer ambiente onde alguém de verdade precise receber o código.
+      provide: NOTIFICATION_SENDER,
+      inject: [ConfigService],
+      useFactory: (config: ConfigService<Env, true>) =>
+        config.get('CANAL_NOTIFICACAO', { infer: true }) === 'smtp'
+          ? new SmtpNotificationSender(config)
+          : new LogNotificationSender(),
+    },
     { provide: USER_REPOSITORY, useClass: PrismaUserRepository },
     { provide: REFRESH_TOKEN_REPOSITORY, useClass: PrismaRefreshTokenRepository },
   ],

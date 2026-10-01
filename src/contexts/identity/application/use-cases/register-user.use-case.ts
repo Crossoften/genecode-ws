@@ -1,6 +1,8 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 
 import { PrismaService } from '@infra/database/prisma.service';
+import type { Env } from '@shared/config/env.schema';
 import { ConflictError } from '@shared/domain/domain-error';
 import { HashService } from '@shared/crypto/hash.service';
 import { fail, ok, type Result } from '@shared/domain/result';
@@ -29,6 +31,13 @@ export interface RegisterUserOutput {
   readonly userId: string;
   /** Sempre true — o cadastro não confirma se o e-mail já existia. */
   readonly verificationSent: boolean;
+  /**
+   * O código, e só quando `MOSTRAR_CODIGO_VERIFICACAO=YES`.
+   *
+   * Existe para ambiente sem e-mail, onde o código não chegaria a ninguém e o
+   * cadastro ficaria impossível de concluir. Fora daí é sempre indefinido.
+   */
+  readonly codigoDeTeste?: string;
 }
 
 /** Validade do código de verificação. Curto o bastante para limitar reuso. */
@@ -58,7 +67,15 @@ export class RegisterUserUseCase {
     @Inject(NOTIFICATION_SENDER) private readonly notifications: NotificationSender,
     private readonly hash: HashService,
     private readonly prisma: PrismaService,
+    private readonly config: ConfigService<Env, true>,
   ) {}
+
+  private readonly logger = new Logger(RegisterUserUseCase.name);
+
+  /** Liga só com a chave explícita — ver a nota no schema de ambiente. */
+  private exporCodigo(): boolean {
+    return this.config.get('MOSTRAR_CODIGO_VERIFICACAO', { infer: true }) === 'YES';
+  }
 
   async execute(input: RegisterUserInput): Promise<Result<RegisterUserOutput>> {
     const email = Email.create(input.email);
@@ -109,6 +126,14 @@ export class RegisterUserUseCase {
       code,
       name,
     });
+
+    if (this.exporCodigo()) {
+      this.logger.warn(
+        `Código de verificação devolvido na resposta para ${email.value.value} — ` +
+          'MOSTRAR_CODIGO_VERIFICACAO está ligado. Isto não deve valer em produção.',
+      );
+      return ok({ userId: user.id, verificationSent: true, codigoDeTeste: code });
+    }
 
     return ok({ userId: user.id, verificationSent: true });
   }

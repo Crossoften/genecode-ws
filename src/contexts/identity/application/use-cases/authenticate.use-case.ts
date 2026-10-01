@@ -65,6 +65,21 @@ export class AuthenticateUseCase {
     const passwordMatches = await this.hash.verifyPassword(input.password, user.passwordHash);
     if (!passwordMatches) return fail(this.genericFailure());
 
+    // Aqui a senha JÁ conferiu. Continuar respondendo "e-mail ou senha
+    // inválidos" não protege nada — quem chegou até aqui provou que sabe a
+    // senha — e manda a pessoa tentar de novo para sempre. Foi exatamente o que
+    // travou o cliente em 29/09: a conta existia, a senha estava certa, e a
+    // mensagem dizia que estavam errados.
+    //
+    // A resposta genérica continua valendo para e-mail inexistente e senha
+    // errada, que é onde a enumeração aconteceria.
+    if (user.status === 'PENDING') {
+      return fail(
+        new UnauthenticatedError(
+          'Sua conta ainda não foi verificada. Confirme o código enviado para o seu e-mail.',
+        ),
+      );
+    }
     if (user.status !== 'ACTIVE') return fail(this.genericFailure());
 
     const tokens = await this.tokens.issueFor(user, {
