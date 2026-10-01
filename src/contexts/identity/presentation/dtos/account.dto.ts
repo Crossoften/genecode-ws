@@ -76,6 +76,20 @@ export class VerifyEmailDto {
   code!: string;
 }
 
+/**
+ * Pedido de reenvio do código de verificação.
+ *
+ * Só o e-mail: quem está nesta tela ainda não tem sessão, e pedir qualquer outra
+ * coisa daria a quem sonda um sinal a mais sobre a conta.
+ */
+export class ResendVerificationDto {
+  @ApiProperty({ example: 'voce@email.com' })
+  @IsEmail({}, { message: 'Informe um e-mail válido.' })
+  @IsNotEmpty()
+  @MaxLength(255)
+  email!: string;
+}
+
 export class ForgotPasswordDto {
   @ApiProperty({ example: 'ana@email.com' })
   @IsEmail()

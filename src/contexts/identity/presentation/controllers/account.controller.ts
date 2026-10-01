@@ -6,6 +6,7 @@ import type { Request } from 'express';
 import { PrismaService } from '@infra/database/prisma.service';
 
 import { RefreshSessionUseCase } from '../../application/use-cases/refresh-session.use-case';
+import { ResendVerificationUseCase } from '../../application/use-cases/resend-verification.use-case';
 import { RegisterUserUseCase } from '../../application/use-cases/register-user.use-case';
 import { ResetPasswordUseCase } from '../../application/use-cases/reset-password.use-case';
 import { VerifyEmailUseCase } from '../../application/use-cases/verify-email.use-case';
@@ -16,6 +17,7 @@ import {
   RegisterDto,
   ResetPasswordDto,
   VerifyEmailDto,
+  ResendVerificationDto,
 } from '../dtos/account.dto';
 
 /**
@@ -42,6 +44,7 @@ export class AccountController {
   constructor(
     private readonly register: RegisterUserUseCase,
     private readonly verifyEmail: VerifyEmailUseCase,
+    private readonly resend: ResendVerificationUseCase,
     private readonly resetPassword: ResetPasswordUseCase,
     private readonly refreshSession: RefreshSessionUseCase,
     private readonly prisma: PrismaService,
@@ -125,6 +128,25 @@ export class AccountController {
     });
     if (result.isFail()) throw result.error;
     return result.value.tokens;
+  }
+
+  /**
+   * Reenvia o código de verificação.
+   *
+   * Responde 204 sempre, exista a conta ou não — mesmo motivo da redefinição de
+   * senha logo abaixo. O limite é mais apertado que o do cadastro porque esta
+   * rota **dispara e-mail a cada chamada**, e um limite frouxo transformaria um
+   * endereço alheio em alvo de inundação.
+   */
+  @Post('verificacao/reenviar')
+  @IsPublic()
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @Throttle({ default: { limit: 3, ttl: 60_000 } })
+  @ApiOperation({ summary: 'Reenvia o código de verificação de e-mail' })
+  @ApiResponse({ status: 204, description: 'Pedido recebido' })
+  async resendVerification(@Body() dto: ResendVerificationDto) {
+    const result = await this.resend.execute(dto.email);
+    if (result.isFail()) throw result.error;
   }
 
   /**

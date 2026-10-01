@@ -8,6 +8,7 @@ import { TokenIssuer } from './application/services/token-issuer.service';
 import { AuthenticateUseCase } from './application/use-cases/authenticate.use-case';
 import { ManageProfileUseCase } from './application/use-cases/manage-profile.use-case';
 import { RefreshSessionUseCase } from './application/use-cases/refresh-session.use-case';
+import { ResendVerificationUseCase } from './application/use-cases/resend-verification.use-case';
 import { RegisterUserUseCase } from './application/use-cases/register-user.use-case';
 import { ResetPasswordUseCase } from './application/use-cases/reset-password.use-case';
 import { VerifyEmailUseCase } from './application/use-cases/verify-email.use-case';
@@ -47,6 +48,7 @@ import { ProfileController } from './presentation/controllers/profile.controller
     AuthenticateUseCase,
     ManageProfileUseCase,
     RegisterUserUseCase,
+    ResendVerificationUseCase,
     VerifyEmailUseCase,
     ResetPasswordUseCase,
     RefreshSessionUseCase,

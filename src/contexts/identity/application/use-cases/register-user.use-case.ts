@@ -41,7 +41,8 @@ export interface RegisterUserOutput {
 }
 
 /** Validade do código de verificação. Curto o bastante para limitar reuso. */
-const VERIFICATION_TTL_MINUTES = 30;
+/** Validade do código de verificação. Exportada: o reenvio usa a mesma. */
+export const VERIFICATION_TTL_MINUTES = 30;
 
 /**
  * Cria uma conta e dispara o código de verificação.
