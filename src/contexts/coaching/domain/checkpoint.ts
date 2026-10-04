@@ -114,7 +114,10 @@ export function assertCheckpointAvailable(
   }
 
   if (!availability.unlocked) {
-    const when = availability.unlocksAt?.toLocaleDateString('pt-BR') ?? '—';
+    // Formatado em UTC pelo mesmo motivo do `addMonths`: sem fixar o fuso, a
+    // data calculada em UTC era impressa em hora local e voltava um dia.
+    const when =
+      availability.unlocksAt?.toLocaleDateString('pt-BR', { timeZone: 'UTC' }) ?? '—';
     return fail(
       new ConflictError(`A entrevista ${checkpoint} libera em ${when}.`, {
         checkpoint,
@@ -127,19 +130,26 @@ export function assertCheckpointAvailable(
 }
 
 /**
- * Soma meses preservando o fim do mês.
+ * Soma meses preservando o fim do mês. Tudo em UTC.
  *
  * 30 de novembro + 3 meses cai em 28 ou 29 de fevereiro, não em 2 de março —
  * que é o que o `setMonth` do JavaScript faria sozinho.
+ *
+ * O UTC não é detalhe: `completedAt` vem do banco como instante UTC, em geral
+ * perto da meia-noite. Lendo com `getDate()`/`setMonth()`, que são de hora
+ * LOCAL, um servidor em UTC−3 enxerga o dia anterior e a conta inteira anda um
+ * dia para trás — uma entrevista concluída em 15/01 liberava "14/04" na tela
+ * do titular, e a trava abria um dia cedo. Era o que os dois testes de data
+ * acusavam desde antes de 03/10.
  */
 function addMonths(date: Date, months: number): Date {
   const result = new Date(date);
-  const targetDay = result.getDate();
-  result.setMonth(result.getMonth() + months);
+  const targetDay = result.getUTCDate();
+  result.setUTCMonth(result.getUTCMonth() + months);
 
-  if (result.getDate() < targetDay) {
+  if (result.getUTCDate() < targetDay) {
     // Estourou para o mês seguinte: recua para o último dia do mês pretendido.
-    result.setDate(0);
+    result.setUTCDate(0);
   }
   return result;
 }

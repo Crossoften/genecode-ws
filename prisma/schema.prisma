@@ -52,6 +52,16 @@ model User {
   emailVerifiedAt  DateTime?
   twoFactorEnabled Boolean    @default(false)
 
+  /// Preferências de aviso do titular, da aba "Notificações" do perfil.
+  ///
+  /// Moram no User, não em tabela própria: são três booleanos por conta, lidos
+  /// junto com o perfil e sem histórico. Uma tabela só se justificaria com
+  /// preferência por tipo de evento, que ninguém pediu. Os gatilhos globais
+  /// continuam em NotificationTrigger — isto aqui é o opt-out de cada pessoa.
+  notifyEmail    Boolean @default(true)
+  notifyWhatsapp Boolean @default(true)
+  notifySms      Boolean @default(false)
+
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   /// Exclusão lógica: pedido de exclusão da LGPD não pode destruir a trilha de auditoria.

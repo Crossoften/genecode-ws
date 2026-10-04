@@ -6,6 +6,8 @@ import { HashService } from '@shared/crypto/hash.service';
 
 import { TokenIssuer } from './application/services/token-issuer.service';
 import { AuthenticateUseCase } from './application/use-cases/authenticate.use-case';
+import { AccountSecurityUseCase } from './application/use-cases/account-security.use-case';
+import { ChangePasswordUseCase } from './application/use-cases/change-password.use-case';
 import { ManageProfileUseCase } from './application/use-cases/manage-profile.use-case';
 import { RefreshSessionUseCase } from './application/use-cases/refresh-session.use-case';
 import { ResendVerificationUseCase } from './application/use-cases/resend-verification.use-case';
@@ -47,6 +49,8 @@ import { ProfileController } from './presentation/controllers/profile.controller
     TokenIssuer,
     AuthenticateUseCase,
     ManageProfileUseCase,
+    ChangePasswordUseCase,
+    AccountSecurityUseCase,
     RegisterUserUseCase,
     ResendVerificationUseCase,
     VerifyEmailUseCase,

@@ -45,15 +45,24 @@ const TRANSITIONS: Readonly<Record<OrderStatus, readonly OrderStatus[]>> = {
   [OrderStatus.REFUNDED]: [],
 };
 
-/** Rótulo que o cliente vê no acompanhamento. */
+/**
+ * Rótulo que o cliente vê no acompanhamento.
+ *
+ * Igual, palavra por palavra, ao `SITUACAO_ROTULO_CURTO` do front
+ * (`shared/domain/situacao-pedido.ts`). Até 03/10 havia quatro mapas em
+ * desacordo — este, o do modal do admin, o da linha do tempo do admin e o da
+ * área do paciente. Dois estados diferentes chegavam a ter o mesmo nome na
+ * mesma tela, o que fez a operação concluir que a gravação falhava quando ela
+ * funcionava (GEN-03 e GEN-05 do relatório de 01/10). Mexer aqui pede mexer lá.
+ */
 export const STATUS_LABEL: Readonly<Record<OrderStatus, string>> = {
   [OrderStatus.PENDING_PAYMENT]: 'Aguardando pagamento',
-  [OrderStatus.PAID]: 'Pagamento confirmado',
-  [OrderStatus.KIT_SHIPPED]: 'Kit a caminho',
+  [OrderStatus.PAID]: 'Pago',
+  [OrderStatus.KIT_SHIPPED]: 'Kit enviado',
   [OrderStatus.KIT_DELIVERED]: 'Kit entregue',
-  [OrderStatus.SAMPLE_IN_TRANSIT]: 'Amostra enviada ao laboratório',
+  [OrderStatus.SAMPLE_IN_TRANSIT]: 'Amostra a caminho',
   [OrderStatus.SAMPLE_RECEIVED]: 'Amostra recebida',
-  [OrderStatus.PROCESSING]: 'Em processamento',
+  [OrderStatus.PROCESSING]: 'Em análise',
   [OrderStatus.REPORT_READY]: 'Laudo disponível',
   [OrderStatus.CANCELLED]: 'Cancelado',
   [OrderStatus.REFUNDED]: 'Reembolsado',

@@ -1,5 +1,5 @@
-import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsOptional, IsString, Matches, MaxLength, MinLength } from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsBoolean, IsOptional, IsString, Matches, MaxLength, MinLength } from 'class-validator';
 
 export class UpdateProfileDto {
   @ApiPropertyOptional({ example: 'Ana Martins' })
@@ -26,4 +26,21 @@ export class UpdateProfileDto {
   @IsString()
   @Matches(/^\d{5}-?\d{3}$/, { message: 'CEP inválido.' })
   addressZip?: string;
+}
+
+
+export class ChangePasswordDto {
+  @ApiProperty({ description: 'Senha atual, para confirmar que é a pessoa.' })
+  @IsString()
+  currentPassword!: string;
+
+  @ApiProperty({ description: 'Nova senha — mesma política do cadastro.' })
+  @IsString()
+  newPassword!: string;
+}
+
+export class NotificationPrefsDto {
+  @ApiPropertyOptional() @IsOptional() @IsBoolean() email?: boolean;
+  @ApiPropertyOptional() @IsOptional() @IsBoolean() whatsapp?: boolean;
+  @ApiPropertyOptional() @IsOptional() @IsBoolean() sms?: boolean;
 }

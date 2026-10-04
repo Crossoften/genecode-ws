@@ -4,12 +4,17 @@ import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { CurrentUser, RequireRoles } from '@contexts/identity/presentation/decorators';
 import type { AuthenticatedPrincipal } from '@contexts/identity/presentation/guards/jwt-auth.guard';
 import { PrismaService } from '@infra/database/prisma.service';
-import { NotFoundError } from '@shared/domain/domain-error';
+import { NotFoundError, ValidationError } from '@shared/domain/domain-error';
 
 import { GetPartnerBankDetailsUseCase } from '../../application/use-cases/get-partner-bank-details.use-case';
 import { ListPartnerSalesUseCase } from '../../application/use-cases/list-partner-sales.use-case';
 import { PartnerDashboardUseCase } from '../../application/use-cases/partner-dashboard.use-case';
 import { suggestCouponCode } from '../../domain/coupon-code';
+import {
+  validarAgencia,
+  validarChavePix,
+  validarConta,
+} from '@shared/validation/chave-pix';
 import { BankDetailsDto, RegisterPartnerDto } from '../dtos/partner.dto';
 
 /** Comissão padrão de novos parceiros. Variável por parceiro (decisão F6). */
@@ -148,10 +153,53 @@ export class PartnerController {
     const partner = await this.prisma.partner.findUnique({ where: { userId: user.id } });
     if (!partner) throw new NotFoundError('Perfil de parceiro não encontrado.');
 
-    await this.prisma.partner.update({
-      where: { userId: user.id },
-      data: { ...dto },
-    });
+    // Crítica dos dados de repasse.
+    //
+    // O DTO só sabia dizer "é string e cabe em 140". Em 01/10 o QA gravou a
+    // chave "123321123321" como TELEFONE, com agência "1" e conta "2", e
+    // recebeu "Dados salvos." (GEN-08). Chave errada aqui é bonificação paga a
+    // quem não deveria, ou travada no gateway — e a crítica tem de viver no
+    // servidor, não só na máscara da tela, porque o PUT é alcançável sem ela.
+    const dados: Record<string, string> = {};
+    const erros: Record<string, string> = {};
+
+    if (dto.pixKeyType !== undefined || dto.pixKey !== undefined) {
+      const tipo = dto.pixKeyType ?? partner.pixKeyType ?? '';
+      const chave = dto.pixKey ?? partner.pixKey ?? '';
+      const resultado = validarChavePix(tipo, chave);
+      if (!resultado.valida) {
+        erros.pixKey = resultado.erro ?? 'Chave PIX inválida.';
+      } else {
+        dados.pixKeyType = tipo;
+        dados.pixKey = resultado.normalizada as string;
+      }
+    }
+
+    if (dto.bankBranch !== undefined) {
+      const agencia = validarAgencia(dto.bankBranch);
+      if (!agencia.valida) erros.bankBranch = agencia.erro as string;
+      else dados.bankBranch = agencia.normalizada as string;
+    }
+
+    if (dto.bankAccount !== undefined) {
+      const conta = validarConta(dto.bankAccount);
+      if (!conta.valida) erros.bankAccount = conta.erro as string;
+      else dados.bankAccount = conta.normalizada as string;
+    }
+
+    if (dto.bankName !== undefined) {
+      const banco = dto.bankName.trim();
+      if (banco.length < 2) erros.bankName = 'Informe o nome do banco.';
+      else dados.bankName = banco;
+    }
+
+    if (Object.keys(erros).length > 0) {
+      // `fields` é o formato que o mapper do front lê para marcar o campo
+      // exato — o outro formato que ele aceita é o array do class-validator.
+      throw new ValidationError('Confira os dados de repasse.', { fields: erros });
+    }
+
+    await this.prisma.partner.update({ where: { userId: user.id }, data: dados });
     return { updated: true };
   }
 }
