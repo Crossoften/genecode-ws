@@ -4,7 +4,11 @@ import { randomInt } from 'node:crypto';
 
 import { buildActivationCode } from '@contexts/lab/domain/activation-code';
 import { PrismaService } from '@infra/database/prisma.service';
-import { ConflictError, ValidationError } from '@shared/domain/domain-error';
+import {
+  ConflictError,
+  UpstreamError,
+  ValidationError,
+} from '@shared/domain/domain-error';
 import { fail, ok, type Result } from '@shared/domain/result';
 
 import { calculateTotals, formatOrderNumber, type PricedItem } from '../../domain/order-pricing';
@@ -19,6 +23,7 @@ import {
 import { OrderStatus } from '../../domain/order-status';
 import {
   PAYMENT_GATEWAY,
+  type ChargeResult,
   type ChargeStatus,
   type PaymentGateway,
   type PaymentMethod,
@@ -199,14 +204,58 @@ export class CheckoutUseCase {
       return created;
     });
 
-    const charge = await this.gateway.charge({
-      orderNumber: order.number,
-      amountCents: totals.totalCents,
-      method: input.payment.method,
-      installments: input.payment.installments,
-      customer: input.customer,
-      split: split.paraAdquirente,
-    });
+    // A cobrança falhando não pode deixar pedido órfão.
+    //
+    // O pedido nasce ANTES da cobrança — precisa, porque a adquirente recebe o
+    // número dele. Quando a chamada falha (a da Afinz estourou o tempo em
+    // 04/10, no meio desta jornada), o pedido ficava PENDING_PAYMENT para
+    // sempre, sem registro de pagamento e sem link: o comprador via um erro e
+    // tinha um pedido que ninguém conseguia pagar, com o uso do cupom já
+    // contado. Cancelar devolve o estado para algo verdadeiro, e o evento
+    // registra o motivo para o financeiro não ficar adivinhando.
+    let charge: ChargeResult;
+    try {
+      charge = await this.gateway.charge({
+        orderNumber: order.number,
+        amountCents: totals.totalCents,
+        method: input.payment.method,
+        installments: input.payment.installments,
+        customer: input.customer,
+        split: split.paraAdquirente,
+      });
+    } catch (erro) {
+      const motivo = erro instanceof Error ? erro.message : 'falha na adquirente';
+      this.logger.error(`Pedido ${order.number}: a cobrança falhou (${motivo}). Cancelando.`);
+      await this.prisma.$transaction([
+        this.prisma.order.update({
+          where: { id: order.id },
+          data: { status: OrderStatus.CANCELLED },
+        }),
+        this.prisma.orderEvent.create({
+          data: {
+            orderId: order.id,
+            status: OrderStatus.CANCELLED,
+            actor: 'system',
+            note: `Cobrança não pôde ser criada: ${motivo}`.slice(0, 500),
+          },
+        }),
+        ...(coupon.value
+          ? [
+              // Devolve o uso do cupom: a venda não aconteceu.
+              this.prisma.coupon.update({
+                where: { code: coupon.value.code },
+                data: { usedCount: { decrement: 1 } },
+              }),
+            ]
+          : []),
+      ]);
+      return fail(
+        new UpstreamError(
+          'Não foi possível iniciar o pagamento agora. Tente de novo em alguns minutos.',
+          { orderNumber: order.number },
+        ),
+      );
+    }
 
     await this.prisma.payment.create({
       data: {

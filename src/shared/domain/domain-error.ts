@@ -60,6 +60,19 @@ export class NotFoundError extends DomainError {
   readonly kind = DomainErrorKind.NOT_FOUND;
 }
 
+/**
+ * Uma dependência externa falhou — adquirente, transportadora, e-mail.
+ *
+ * O `kind` UPSTREAM já existia no enum desde a Onda 0; faltava a classe. Entrou
+ * em 04/10, quando a cobrança na adquirente estourou o tempo no meio de uma
+ * jornada e não havia erro de domínio que dissesse "não é culpa do pedido, é
+ * de fora" — o que virava 500 e pedido órfão.
+ */
+export class UpstreamError extends DomainError {
+  readonly code = 'UPSTREAM';
+  readonly kind = DomainErrorKind.UPSTREAM;
+}
+
 export class ConflictError extends DomainError {
   readonly code = 'CONFLICT';
   readonly kind = DomainErrorKind.CONFLICT;
