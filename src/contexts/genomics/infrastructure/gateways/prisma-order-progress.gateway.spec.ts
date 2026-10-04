@@ -58,66 +58,118 @@ describe('PrismaOrderProgressGateway', () => {
     return registros.map((r) => (r as { data: { status: string } }).data.status);
   }
 
-  it('leva de amostra recebida a laudo disponível passando por processamento', async () => {
-    const { gateway, atualizacoes, eventos, notificar } = montar();
+  describe('reportComputed — o laboratório calculou, ninguém conferiu ainda', () => {
+    it('leva de amostra recebida até EM ANÁLISE, e para aí', async () => {
+      const { gateway, atualizacoes, eventos, notificar } = montar();
 
-    await gateway.reportPublished('titular-1');
+      await gateway.reportComputed('titular-1');
 
-    expect(estados(atualizacoes)).toEqual([OrderStatus.PROCESSING, OrderStatus.REPORT_READY]);
-    expect(estados(eventos)).toEqual([OrderStatus.PROCESSING, OrderStatus.REPORT_READY]);
-    expect(notificar.execute).toHaveBeenCalledTimes(1);
+      expect(estados(atualizacoes)).toEqual([OrderStatus.PROCESSING]);
+      expect(estados(eventos)).toEqual([OrderStatus.PROCESSING]);
+      // O cliente NÃO é avisado: não há o que avisar enquanto ninguém conferiu.
+      expect(notificar.execute).not.toHaveBeenCalled();
+    });
+
+    it('já em análise, não repete a etapa', async () => {
+      const { gateway, atualizacoes } = montar({ ...PEDIDO, status: OrderStatus.PROCESSING });
+
+      await gateway.reportComputed('titular-1');
+
+      expect(atualizacoes).toHaveLength(0);
+    });
+
+    it('o evento é atribuído ao laboratório, não ao sistema', async () => {
+      const { gateway, eventos } = montar();
+
+      await gateway.reportComputed('titular-1');
+
+      for (const evento of eventos) {
+        expect((evento as { data: { actor: string } }).data.actor).toBe('laboratorio');
+      }
+    });
+
+    it('não mexe em pedido que já está com o laudo disponível', async () => {
+      const { gateway, atualizacoes, notificar } = montar({
+        ...PEDIDO,
+        status: OrderStatus.REPORT_READY,
+      });
+
+      await gateway.reportComputed('titular-1');
+
+      expect(atualizacoes).toHaveLength(0);
+      expect(notificar.execute).not.toHaveBeenCalled();
+    });
+
+    it('não força pedido cancelado', async () => {
+      const { gateway, atualizacoes } = montar({ ...PEDIDO, status: OrderStatus.CANCELLED });
+
+      await gateway.reportComputed('titular-1');
+
+      expect(atualizacoes).toHaveLength(0);
+    });
+
+    // Laudo gerado por CSV cujo código não é de kit nenhum — é o caso das
+    // sementes antigas, e não há pedido para acompanhar.
+    it('ignora titular sem kit', async () => {
+      const { gateway, prisma, atualizacoes } = montar(PEDIDO, null);
+
+      await gateway.reportComputed('titular-orfao');
+
+      expect(prisma.order.findUnique).not.toHaveBeenCalled();
+      expect(atualizacoes).toHaveLength(0);
+    });
+
+    it('engole a falha do banco: o laudo já está gravado', async () => {
+      const { gateway, prisma } = montar();
+      (prisma.kit.findFirst as jest.Mock).mockRejectedValueOnce(new Error('conexão caiu'));
+
+      await expect(gateway.reportComputed('titular-1')).resolves.toBeUndefined();
+    });
   });
 
-  it('de processamento vai direto, sem repetir a etapa', async () => {
-    const { gateway, atualizacoes } = montar({ ...PEDIDO, status: OrderStatus.PROCESSING });
+  describe('reportReleased — alguém conferiu e liberou', () => {
+    it('leva a LAUDO DISPONÍVEL e avisa o cliente', async () => {
+      const { gateway, atualizacoes, eventos, notificar } = montar({
+        ...PEDIDO,
+        status: OrderStatus.PROCESSING,
+      });
 
-    await gateway.reportPublished('titular-1');
+      await gateway.reportReleased('titular-1', 'admin-1');
 
-    expect(estados(atualizacoes)).toEqual([OrderStatus.REPORT_READY]);
-  });
+      expect(estados(atualizacoes)).toEqual([OrderStatus.REPORT_READY]);
+      expect(estados(eventos)).toEqual([OrderStatus.REPORT_READY]);
+      expect(notificar.execute).toHaveBeenCalledTimes(1);
+    });
 
-  it('o evento é atribuído ao laboratório, não ao sistema', async () => {
-    const { gateway, eventos } = montar();
+    it('o evento guarda QUEM liberou', async () => {
+      const { gateway, eventos } = montar({ ...PEDIDO, status: OrderStatus.PROCESSING });
 
-    await gateway.reportPublished('titular-1');
+      await gateway.reportReleased('titular-1', 'admin-7');
 
-    for (const evento of eventos) {
-      expect((evento as { data: { actor: string } }).data.actor).toBe('laboratorio');
-    }
-  });
+      expect((eventos[0] as { data: { actor: string } }).data.actor).toBe('admin-7');
+    });
 
-  it('não mexe em pedido que já está com o laudo disponível', async () => {
-    const { gateway, atualizacoes, notificar } = montar({ ...PEDIDO, status: OrderStatus.REPORT_READY });
+    it('liberar de novo não avisa o cliente duas vezes', async () => {
+      const { gateway, atualizacoes, notificar } = montar({
+        ...PEDIDO,
+        status: OrderStatus.REPORT_READY,
+      });
 
-    await gateway.reportPublished('titular-1');
+      await gateway.reportReleased('titular-1', 'admin-1');
 
-    expect(atualizacoes).toHaveLength(0);
-    expect(notificar.execute).not.toHaveBeenCalled();
-  });
+      expect(atualizacoes).toHaveLength(0);
+      expect(notificar.execute).not.toHaveBeenCalled();
+    });
 
-  it('não força pedido cancelado', async () => {
-    const { gateway, atualizacoes } = montar({ ...PEDIDO, status: OrderStatus.CANCELLED });
+    // Aqui, ao contrário do reportComputed, a falha SOBE: publicar o laudo e
+    // deixar o pedido para trás devolveria o defeito de 01/10, com o titular
+    // vendo o botão cinza.
+    it('recusa quando a máquina de estados não permite', async () => {
+      const { gateway } = montar({ ...PEDIDO, status: OrderStatus.CANCELLED });
 
-    await gateway.reportPublished('titular-1');
-
-    expect(atualizacoes).toHaveLength(0);
-  });
-
-  // Laudo gerado por CSV cujo código não é de kit nenhum — é o caso das
-  // sementes antigas, e não há pedido para acompanhar.
-  it('ignora titular sem kit', async () => {
-    const { gateway, prisma, atualizacoes } = montar(PEDIDO, null);
-
-    await gateway.reportPublished('titular-orfao');
-
-    expect(prisma.order.findUnique).not.toHaveBeenCalled();
-    expect(atualizacoes).toHaveLength(0);
-  });
-
-  it('engole a falha do banco: o laudo já está publicado', async () => {
-    const { gateway, prisma } = montar();
-    (prisma.kit.findFirst as jest.Mock).mockRejectedValueOnce(new Error('conexão caiu'));
-
-    await expect(gateway.reportPublished('titular-1')).resolves.toBeUndefined();
+      await expect(gateway.reportReleased('titular-1', 'admin-1')).rejects.toThrow(
+        /não pode ir para/i,
+      );
+    });
   });
 });

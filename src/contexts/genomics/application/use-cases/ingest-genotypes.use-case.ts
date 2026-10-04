@@ -116,7 +116,7 @@ export class IngestGenotypesUseCase {
       // Publicar o laudo é o que deixa o laudo disponível para o titular: sem
       // isto o pedido fica parado em "amostra recebida" e a área do titular
       // mantém o laudo trancado. Decisão do André em 01/10 (pendência 19b).
-      await this.orders.reportPublished(result.value.subjectId);
+      await this.orders.reportComputed(result.value.subjectId);
 
       processed += 1;
     }

@@ -6,6 +6,7 @@ import { IdentityModule } from '@contexts/identity/identity.module';
 
 import { ComputeReportUseCase } from './application/use-cases/compute-report.use-case';
 import { GetReportUseCase } from './application/use-cases/get-report.use-case';
+import { LiberarLaudoUseCase } from './application/use-cases/liberar-laudo.use-case';
 import { IngestGenotypesUseCase } from './application/use-cases/ingest-genotypes.use-case';
 import { LabHistoryUseCase } from './application/use-cases/lab-history.use-case';
 import { LabSamplesUseCase } from './application/use-cases/lab-samples.use-case';
@@ -30,6 +31,7 @@ import { ReportsController } from './presentation/controllers/reports.controller
   imports: [IdentityModule, AnalyticsModule],
   controllers: [ReportsController],
   providers: [
+    LiberarLaudoUseCase,
     ComputeReportUseCase,
     GetReportUseCase,
     IngestGenotypesUseCase,

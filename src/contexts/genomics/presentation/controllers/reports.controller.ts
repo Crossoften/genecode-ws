@@ -5,6 +5,7 @@ import { CurrentUser, RequirePermissions } from '@contexts/identity/presentation
 import type { AuthenticatedPrincipal } from '@contexts/identity/presentation/guards/jwt-auth.guard';
 
 import { GetReportUseCase } from '../../application/use-cases/get-report.use-case';
+import { LiberarLaudoUseCase } from '../../application/use-cases/liberar-laudo.use-case';
 import { IngestGenotypesUseCase } from '../../application/use-cases/ingest-genotypes.use-case';
 import { LabHistoryUseCase } from '../../application/use-cases/lab-history.use-case';
 import { LabSamplesUseCase } from '../../application/use-cases/lab-samples.use-case';
@@ -16,6 +17,7 @@ import { IngestCsvDto } from '../dtos/ingest-csv.dto';
 export class ReportsController {
   constructor(
     private readonly ingest: IngestGenotypesUseCase,
+    private readonly liberarLaudo: LiberarLaudoUseCase,
     private readonly labSamples: LabSamplesUseCase,
     private readonly labHistory: LabHistoryUseCase,
     private readonly patientArea: PatientAreaUseCase,
@@ -113,4 +115,34 @@ export class ReportsController {
     if (result.isFail()) throw result.error;
     return result.value;
   }
+  // ── Conferência humana antes de o laudo chegar ao titular ────────────────
+  //
+  // Decisão do Camara em 02/10: "deve haver uma conferência humana responsável
+  // por disparar o aviso ao cliente". Até lá, a importação do CSV publicava o
+  // laudo e avisava o titular na mesma hora.
+
+  /** Laudos calculados que ainda aguardam conferência. */
+  //
+  // `reports.publish`, e não `reports.read`: a leitura é do PACIENTE (o escopo
+  // de qual laudo vem do SubjectLink), então usá-la aqui deixaria qualquer
+  // titular listar os laudos de todo mundo. `reports.publish` é de admin e
+  // master — o laboratório não a tem, e é de propósito: quem confere não é
+  // quem produziu.
+  @Get('admin/laudos/aguardando')
+  @RequirePermissions('reports.publish')
+  @ApiOperation({ summary: 'Laudos calculados aguardando conferência humana' })
+  async laudosAguardando() {
+    return this.liberarLaudo.aguardando();
+  }
+
+  /** Libera o laudo: publica, aposenta a versão anterior e avisa o cliente. */
+  @Post('admin/laudos/:id/liberar')
+  @RequirePermissions('reports.publish')
+  @ApiOperation({ summary: 'Confere e libera o laudo para o titular' })
+  async liberar(@Param('id') id: string, @CurrentUser() admin: AuthenticatedPrincipal) {
+    const result = await this.liberarLaudo.liberar(id, admin.id);
+    if (result.isFail()) throw result.error;
+    return result.value;
+  }
+
 }

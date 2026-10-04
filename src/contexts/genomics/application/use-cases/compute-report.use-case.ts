@@ -120,32 +120,32 @@ export class ComputeReportUseCase {
           })),
       });
 
-      // Supersede pelo SLUG do painel, não pelo id da versão.
+      // A versão nasce depois da última, pelo SLUG do painel.
       //
-      // A primeira versão comparava `panelId`, e com isso publicar o painel
-      // v1.0.1 deixava o laudo da v1.0.0 ainda PUBLISHED: o titular passava a
-      // ter dois laudos "atuais" do mesmo produto, com números diferentes. Num
-      // documento de saúde isso é inaceitável — o laudo antigo tem de continuar
-      // recuperável, mas não vigente.
+      // Comparar `panelId` em vez do slug deixaria o laudo da v1.0.0 vigente ao
+      // publicar a v1.0.1, e o titular ficaria com dois laudos "atuais" do
+      // mesmo produto, com números diferentes. Num documento de saúde isso é
+      // inaceitável: o antigo tem de continuar recuperável, mas não vigente.
+      //
+      // O SUPERSEDE do anterior **não acontece aqui**: acontece na liberação.
+      // Enquanto o novo é rascunho, derrubar o vigente deixaria o titular sem
+      // laudo nenhum durante a conferência — e, se a conferência reprovasse, o
+      // laudo bom já teria sido aposentado por um que não entrou.
       const previous = await tx.report.findMany({
         where: { subjectId, panel: { slug: panel.ref.slug } },
         orderBy: { version: 'desc' },
       });
-
-      if (previous.length > 0) {
-        await tx.report.updateMany({
-          where: { id: { in: previous.map((report) => report.id) } },
-          data: { status: 'SUPERSEDED' },
-        });
-      }
 
       return tx.report.create({
         data: {
           subjectId,
           panelId: input.panelId,
           version: (previous[0]?.version ?? 0) + 1,
-          status: 'PUBLISHED',
-          publishedAt: new Date(),
+          // Rascunho: o titular não vê, o profissional não vê, e o pedido não
+          // avança além de "Em análise". Sai do rascunho na conferência humana
+          // que o Camara pediu em 02/10.
+          status: 'DRAFT',
+          publishedAt: null,
           missingMarkers:
             result.missingMarkers.length > 0 ? [...result.missingMarkers] : undefined,
           narrative: { ...narrative, generatedAt: new Date().toISOString() },
