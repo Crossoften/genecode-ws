@@ -157,12 +157,12 @@ model RefreshToken {
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   /// SHA-256 do token. O valor em claro só existe no cliente.
-  tokenHash String    @unique @db.Char(64)
-  expiresAt DateTime
-  revokedAt DateTime?
+  tokenHash    String    @unique @db.Char(64)
+  expiresAt    DateTime
+  revokedAt    DateTime?
   /// Rotação: aponta para o token que substituiu este. Reuso de um token já
   /// rotacionado indica roubo de sessão e derruba a cadeia inteira.
-  replacedById String? @db.Char(36)
+  replacedById String?   @db.Char(36)
 
   userAgent String?  @db.VarChar(255)
   ipAddress String?  @db.VarChar(45)
@@ -363,9 +363,9 @@ model Snp {
   fullName String? @db.VarChar(160)
 
   /// Frequência do alelo menor na população (GnomAD), para exibição no laudo.
-  minorAllele     String? @db.VarChar(8)
+  minorAllele     String?  @db.VarChar(8)
   minorAlleleFreq Decimal? @db.Decimal(8, 6)
-  majorAllele     String? @db.VarChar(8)
+  majorAllele     String?  @db.VarChar(8)
   majorAlleleFreq Decimal? @db.Decimal(8, 6)
 
   /// Texto "ação da proteína": explica o gene e é idêntico para os 3 genótipos.
@@ -392,11 +392,11 @@ model Snp {
 /// seria adulterar documento de saúde. Por isso não se faz UPDATE em painel
 /// publicado: publica-se uma nova versão, e cada laudo guarda a que usou.
 model Panel {
-  id      String      @id @default(uuid()) @db.Char(36)
-  slug    String      @db.VarChar(64) // performance, nutrigenetics
-  version String      @db.VarChar(20) // 1.0.0
-  name    String      @db.VarChar(160)
-  kind    PanelKind
+  id           String       @id @default(uuid()) @db.Char(36)
+  slug         String       @db.VarChar(64) // performance, nutrigenetics
+  version      String       @db.VarChar(20) // 1.0.0
+  name         String       @db.VarChar(160)
+  kind         PanelKind
   /// Modelo matemático de combinação genético × ambiental.
   scoringModel ScoringModel
 
@@ -407,12 +407,12 @@ model Panel {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  categories     PanelCategory[]
-  snps           PanelSnp[]
-  modalities     Modality[]
+  categories      PanelCategory[]
+  snps            PanelSnp[]
+  modalities      Modality[]
   interpretations Interpretation[]
   composites      PanelComposite[]
-  reports        Report[]
+  reports         Report[]
 
   @@unique([slug, version])
   @@index([status])
@@ -514,14 +514,14 @@ model Modality {
   panelId String @db.Char(36)
   panel   Panel  @relation(fields: [panelId], references: [id], onDelete: Cascade)
 
-  slug      String  @db.VarChar(64) // global, futebol, e_sports
-  name      String  @db.VarChar(120)
+  slug     String  @db.VarChar(64) // global, futebol, e_sports
+  name     String  @db.VarChar(120)
   /// O índice Global é o número de capa do laudo; os demais são por esporte.
-  isGlobal  Boolean @default(false)
-  position  Int     @default(0)
+  isGlobal Boolean @default(false)
+  position Int     @default(0)
 
-  weights     ModalityWeight[]
-  percentiles PercentilePoint[]
+  weights       ModalityWeight[]
+  percentiles   PercentilePoint[]
   reportIndexes ReportModalityIndex[]
 
   @@unique([panelId, slug])
@@ -552,9 +552,9 @@ model ModalityWeight {
 /// ela, metade da população cai numa faixa de 12 pontos e o laudo parece dizer
 /// que ninguém tira nota alta.
 model PercentilePoint {
-  id         String  @id @default(uuid()) @db.Char(36)
-  categoryId String? @db.Char(36)
-  modalityId String? @db.Char(36)
+  id         String         @id @default(uuid()) @db.Char(36)
+  categoryId String?        @db.Char(36)
+  modalityId String?        @db.Char(36)
   category   PanelCategory? @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   modality   Modality?      @relation(fields: [modalityId], references: [id], onDelete: Cascade)
 
@@ -585,11 +585,11 @@ model Interpretation {
   /// Frequência populacional deste genótipo, para contexto no laudo.
   genotypeFreq Decimal? @db.Decimal(10, 8)
   /// Resumo clínico curto.
-  summary String? @db.Text
+  summary      String?  @db.Text
   /// Texto voltado ao paciente — cerca de mil caracteres.
-  patientText String @db.LongText
+  patientText  String   @db.LongText
   /// Referências científicas do genótipo específico.
-  references String? @db.LongText
+  references   String?  @db.LongText
 
   /// Marca texto cuja polaridade contradiz o escore adotado.
   ///
@@ -616,11 +616,11 @@ model GenotypeBatch {
   uploadedById String?     @db.Char(36)
   status       BatchStatus @default(PENDING)
 
-  rowCount     Int    @default(0)
-  processedCount Int  @default(0)
-  failedCount  Int    @default(0)
+  rowCount       Int   @default(0)
+  processedCount Int   @default(0)
+  failedCount    Int   @default(0)
   /// Erros por linha, para o admin corrigir o arquivo e reenviar.
-  errors       Json?
+  errors         Json?
 
   createdAt   DateTime  @default(now())
   completedAt DateTime?
@@ -671,8 +671,8 @@ model Report {
   /// Versão do painel usada — é o que torna o laudo reproduzível no futuro.
   panel     Panel  @relation(fields: [panelId], references: [id])
 
-  version   Int          @default(1)
-  status    ReportStatus @default(DRAFT)
+  version        Int          @default(1)
+  status         ReportStatus @default(DRAFT)
   /// Marcadores que faltaram no CSV, se houver. Some no laudo como aviso.
   missingMarkers Json?
 
@@ -684,8 +684,8 @@ model Report {
   /// como, daqui a um ano, saber sob quais instruções aquele texto nasceu.
   narrative Json?
 
-  computedAt   DateTime  @default(now())
-  publishedAt  DateTime?
+  computedAt  DateTime  @default(now())
+  publishedAt DateTime?
 
   categoryScores  ReportCategoryScore[]
   modalityIndexes ReportModalityIndex[]
@@ -710,9 +710,9 @@ model ReportCategoryScore {
   category   PanelCategory @relation(fields: [categoryId], references: [id])
 
   /// Soma ponderada dos SNPs, antes da normalização.
-  rawScore Decimal @db.Decimal(8, 4)
+  rawScore        Decimal   @db.Decimal(8, 4)
   /// Após percentil populacional — a escala 20–90 que o paciente vê.
-  normalizedScore Decimal @db.Decimal(6, 2)
+  normalizedScore Decimal   @db.Decimal(6, 2)
   band            ScoreBand
 
   @@unique([reportId, categoryId])
@@ -741,10 +741,10 @@ model ReportModalityIndex {
 /// 37,5 / 55 / 72,5. As faixas antigas (0–34 e 80–100) tinham trechos
 /// inalcançáveis, já que nenhum escore sai da faixa 20–90.
 enum ScoreBand {
-  FAVORAVEL   // 73–90 · quartil superior
-  MODERADO    // 55–72 · acima da mediana
-  ATENCAO     // 38–54 · abaixo da mediana
-  PRIORIDADE  // 20–37 · quartil inferior
+  FAVORAVEL // 73–90 · quartil superior
+  MODERADO // 55–72 · acima da mediana
+  ATENCAO // 38–54 · abaixo da mediana
+  PRIORIDADE // 20–37 · quartil inferior
 }
 
 // ============================================================================
@@ -758,9 +758,9 @@ enum ScoreBand {
 /// explicitamente que escale para quantos o portfólio crescer. Cadastrar um
 /// produto novo não pode exigir deploy.
 model Product {
-  id    String @id @default(uuid()) @db.Char(36)
-  slug  String @unique @db.VarChar(80)
-  name  String @db.VarChar(160)
+  id   String @id @default(uuid()) @db.Char(36)
+  slug String @unique @db.VarChar(80)
+  name String @db.VarChar(160)
 
   /// Resumo do card da vitrine — o protótipo limita a 160 caracteres.
   summary     String @db.VarChar(200)
@@ -778,11 +778,11 @@ model Product {
   /// escondê-la atrás de um COUNT que ninguém confere.
   markerCount Int
 
-  priceCents Int
+  priceCents      Int
   /// Preço promocional, quando houver.
   promoPriceCents Int?
   /// Parcelas sem juros oferecidas no checkout.
-  maxInstallments Int @default(12)
+  maxInstallments Int  @default(12)
 
   /// Publicar é passo intencional: todo produto novo nasce despublicado.
   published Boolean @default(false)
@@ -895,9 +895,9 @@ model Order {
   userId String? @db.Char(36)
 
   /// Dados de quem comprou, congelados no momento do pedido.
-  customerName  String @db.VarChar(160)
-  customerEmail String @db.VarChar(255)
-  customerDoc   String @db.VarChar(18)
+  customerName  String  @db.VarChar(160)
+  customerEmail String  @db.VarChar(255)
+  customerDoc   String  @db.VarChar(18)
   customerPhone String? @db.VarChar(20)
 
   status OrderStatus @default(PENDING_PAYMENT)
@@ -909,13 +909,13 @@ model Order {
   shippingCents Int @default(0)
   totalCents    Int
 
-  couponCode String? @db.VarChar(40)
+  couponCode      String?  @db.VarChar(40)
   /// Percentual de comissão vigente no momento do pedido, congelado.
   /// Alterar a comissão de um parceiro não pode reprecificar vendas passadas.
-  commissionRate Decimal? @db.Decimal(5, 2)
+  commissionRate  Decimal? @db.Decimal(5, 2)
   commissionCents Int?
 
-  shippingMethod String? @db.VarChar(40)
+  shippingMethod   String? @db.VarChar(40)
   /// Rastreio da ida: laboratório → casa do cliente.
   outboundTracking String? @db.VarChar(60)
   /// Rastreio da volta: cliente → laboratório.
@@ -925,10 +925,10 @@ model Order {
   updatedAt DateTime  @updatedAt
   paidAt    DateTime?
 
-  address    OrderAddress?
-  items      OrderItem[]
-  payments   Payment[]
-  events     OrderEvent[]
+  address  OrderAddress?
+  items    OrderItem[]
+  payments Payment[]
+  events   OrderEvent[]
 
   @@index([status])
   @@index([userId])
@@ -1002,7 +1002,7 @@ model Payment {
   amountCents Int
 
   /// Identificador na adquirente. Nulo até ela responder.
-  externalId String? @db.VarChar(120)
+  externalId    String? @db.VarChar(120)
   /// Motivo da recusa, quando houver.
   failureReason String? @db.VarChar(255)
   installments  Int     @default(1)
@@ -1046,10 +1046,10 @@ model OrderEvent {
   order   Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
 
   status    OrderStatus
-  note      String?  @db.VarChar(500)
+  note      String?     @db.VarChar(500)
   /// Quem provocou: `system`, ou o id do admin.
-  actor     String?  @db.VarChar(80)
-  createdAt DateTime @default(now())
+  actor     String?     @db.VarChar(80)
+  createdAt DateTime    @default(now())
 
   @@index([orderId, createdAt])
   @@map("order_events")
@@ -1061,16 +1061,16 @@ model Coupon {
   code String @unique @db.VarChar(40)
 
   /// Desconto ao cliente, em pontos percentuais.
-  discountPercent Decimal @db.Decimal(5, 2)
+  discountPercent   Decimal @db.Decimal(5, 2)
   /// Comissão do parceiro. Variável por parceiro, definida no admin.
   commissionPercent Decimal @db.Decimal(5, 2)
 
-  partnerName String? @db.VarChar(160)
-  active      Boolean @default(true)
+  partnerName String?   @db.VarChar(160)
+  active      Boolean   @default(true)
   expiresAt   DateTime?
   /// Limite de usos. Nulo é ilimitado.
-  maxUses  Int?
-  usedCount Int @default(0)
+  maxUses     Int?
+  usedCount   Int       @default(0)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -1112,14 +1112,14 @@ model Kit {
   status KitStatus @default(GENERATED)
 
   /// Pedido a que o kit foi atribuído no despacho.
-  orderId String? @db.Char(36)
+  orderId           String? @db.Char(36)
   /// Titular do dado genético, definido na ativação.
   ///
   /// Separado do pedido de propósito: o comprador pode não ser o paciente. O
   /// cliente foi enfático em 01/06 sobre o kit poder ser presente, e sobre o
   /// registro ser feito por quem coleta — *"DNA tem que ser exatamente para a
   /// pessoa que está adquirindo aquele kit"*.
-  subjectId String? @db.Char(36)
+  subjectId         String? @db.Char(36)
   /// Conta que ativou o kit.
   activatedByUserId String? @db.Char(36)
 
@@ -1191,7 +1191,7 @@ model DataSharing {
   professionalId String              @db.Char(36)
   professional   ProfessionalProfile @relation(fields: [professionalId], references: [id], onDelete: Cascade)
 
-  status      SharingStatus @default(PENDING)
+  status      SharingStatus    @default(PENDING)
   initiatedBy SharingInitiator
 
   /// Termo de consentimento aceito, com a versão exata.
@@ -1233,11 +1233,11 @@ model Assessment {
   checkpoint Checkpoint
 
   /// Respostas: questionId → índice da opção escolhida.
-  answers Json
+  answers             Json
   /// Escore ambiental por categoria, calculado na conclusão.
   environmentalScores Json?
   /// Escore ajustado por categoria, combinando genético e ambiental.
-  adjustedScores Json?
+  adjustedScores      Json?
 
   completedAt DateTime @default(now())
 
@@ -1277,13 +1277,46 @@ model Partner {
   channel     String? @db.VarChar(200)
 
   /// Cupom exclusivo, gerado no cadastro.
+  ///
+  /// Para o parceiro ele é **identificador, não desconto**: decisão do André em
+  /// 03/10 — desconto fica só com a Genoa, em campanha própria. O cupom diz
+  /// quem vendeu, e é por ele que a cadeia é encontrada na hora do split.
   couponCode String @unique @db.VarChar(40)
 
+  // --- Rede de parceiros (03/10) ------------------------------------------
+
+  /// Quem indicou este parceiro. Nulo é raiz de rede.
+  parentId String?   @db.Char(36)
+  parent   Partner?  @relation("RedeDeParceiros", fields: [parentId], references: [id])
+  children Partner[] @relation("RedeDeParceiros")
+
+  /// Profundidade na rede: 1 é a raiz, 5 é o teto. O quinto nível é terminal —
+  /// não convida ninguém e não reparte a própria fatia.
+  level Int @default(1)
+
+  /// Fatia do pedido que esta posição recebe, em pontos percentuais.
+  ///
+  /// A raiz nasce com o bolo da rede (20 por padrão; o admin pode mudar). Um nó
+  /// nunca recebe mais que o pai. O que cada um leva numa venda é derivado daqui
+  /// — ver `domain/rede.ts`.
+  sharePercent Decimal @default(20.00) @db.Decimal(5, 2)
+
+  convitesEnviados    PartnerInvite[] @relation("ConvitesDoParceiro")
+  convitePorQueEntrou PartnerInvite?  @relation("ConviteAceito")
+
+  // --- Conta bancária, para a filial do split na Afinz ---------------------
+
+  /// Código do banco (341, 001…), que a Afinz pede como `bankNumber`.
+  bankCode         String?          @db.VarChar(5)
+  bankAgencyDigit  String?          @db.VarChar(2)
+  bankAccountDigit String?          @db.VarChar(2)
+  bankAccountType  BankAccountType?
+
   /// Dados de repasse.
-  pixKeyType String? @db.VarChar(20)
-  pixKey     String? @db.VarChar(140)
-  bankName   String? @db.VarChar(80)
-  bankBranch String? @db.VarChar(20)
+  pixKeyType  String? @db.VarChar(20)
+  pixKey      String? @db.VarChar(140)
+  bankName    String? @db.VarChar(80)
+  bankBranch  String? @db.VarChar(20)
   bankAccount String? @db.VarChar(30)
 
   /// Id da unidade do parceiro NA ADQUIRENTE (GUID da PagoLivre).
@@ -1304,6 +1337,7 @@ model Partner {
   payouts Payout[]
 
   @@index([active])
+  @@index([parentId])
   @@map("partners")
 }
 
@@ -1317,6 +1351,53 @@ enum PartnerType {
 /// O split acontece na adquirente no ato da venda, mas o registro aqui é o que
 /// permite ao parceiro conferir o que entrou e ao admin fechar o mês. O cliente
 /// pediu no painel: quanto vendeu, quanto converteu, previsibilidade do mês.
+/// Tipo da conta bancária, no vocabulário da Afinz (`BankAccountType`).
+enum BankAccountType {
+  CHECKING
+  SAVINGS
+}
+
+/// Convite de um parceiro para outro entrar na rede abaixo dele.
+///
+/// O convite é por **link**, e o link carrega um token opaco — não o id do
+/// parceiro. Com o id na URL, qualquer um montaria um link se pendurando na
+/// rede de quem quisesse. O token é guardado só como hash, como o de
+/// redefinição de senha.
+///
+/// A fatia do convidado é decidida por quem convida, no momento do convite, e
+/// fica congelada no link: mudar a fatia depois do aceite mexeria em repasse já
+/// combinado.
+model PartnerInvite {
+  id String @id @default(uuid()) @db.Char(36)
+
+  /// Quem convidou.
+  partnerId String  @db.Char(36)
+  partner   Partner @relation("ConvitesDoParceiro", fields: [partnerId], references: [id], onDelete: Cascade)
+
+  /// SHA-256 do token do link. O valor em claro só existe no link.
+  tokenHash String @unique @db.Char(64)
+
+  /// Fatia prometida ao convidado, em pontos percentuais do pedido.
+  sharePercent Decimal @db.Decimal(5, 2)
+
+  /// Como quem convida identifica este convite ("Loja Centro", "Grupo do João").
+  label String? @db.VarChar(120)
+
+  expiresAt  DateTime
+  acceptedAt DateTime?
+
+  /// Parceiro que nasceu deste convite.
+  acceptedByPartnerId String?  @unique @db.Char(36)
+  acceptedByPartner   Partner? @relation("ConviteAceito", fields: [acceptedByPartnerId], references: [id])
+
+  revokedAt DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([partnerId])
+  @@index([expiresAt])
+  @@map("partner_invites")
+}
+
 model Payout {
   id        String  @id @default(uuid()) @db.Char(36)
   partnerId String  @db.Char(36)
@@ -1356,7 +1437,7 @@ enum PayoutStatus {
 /// liga/desliga. O disparo real passa pela porta NotificationSender; enquanto
 /// a operadora não é contratada, o sender de log registra em NotificationLog.
 model NotificationTrigger {
-  id  String @id @default(uuid()) @db.Char(36)
+  id  String                 @id @default(uuid()) @db.Char(36)
   key NotificationTriggerKey @unique
 
   enabled  Boolean @default(true)
@@ -1383,14 +1464,14 @@ enum NotificationTriggerKey {
 
 /// Registro de cada envio (ou tentativa) — alimenta os KPIs de mensageria.
 model NotificationLog {
-  id         String  @id @default(uuid()) @db.Char(36)
+  id         String                 @id @default(uuid()) @db.Char(36)
   triggerKey NotificationTriggerKey
   channel    NotificationChannel
   /// E-mail ou telefone, como enviado.
-  recipient  String  @db.VarChar(255)
-  orderId    String? @db.Char(36)
-  status     NotificationLogStatus @default(SENT)
-  createdAt  DateTime @default(now())
+  recipient  String                 @db.VarChar(255)
+  orderId    String?                @db.Char(36)
+  status     NotificationLogStatus  @default(SENT)
+  createdAt  DateTime               @default(now())
 
   @@index([createdAt])
   @@index([triggerKey, channel])
@@ -1425,7 +1506,7 @@ model EnvironmentalQuestion {
   id String @id @default(uuid()) @db.Char(36)
 
   /// Painel a que a pergunta pertence: 'nutrigenetics' ou 'performance'.
-  panelSlug String @db.VarChar(64)
+  panelSlug    String @db.VarChar(64)
   /// Grupo genético (categoria) que a resposta influencia — o slug real da
   /// categoria do painel (ex.: 'metabolismo_energetico', 'forca_potencia').
   categorySlug String @db.VarChar(80)
@@ -1437,10 +1518,10 @@ model EnvironmentalQuestion {
   /// foco), então as 120 perguntas reais vêm com o checkpoint preenchido.
   checkpoint Checkpoint?
 
-  text String @db.VarChar(400)
+  text   String  @db.VarChar(400)
   /// Peso da pergunta dentro da categoria, na média ponderada.
-  weight Float @default(1)
-  order  Int   @default(0)
+  weight Float   @default(1)
+  order  Int     @default(0)
   active Boolean @default(true)
 
   options EnvironmentalOption[]
@@ -1459,7 +1540,7 @@ model EnvironmentalOption {
   questionId String                @db.Char(36)
   question   EnvironmentalQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
 
-  label String @db.VarChar(200)
+  label  String @db.VarChar(200)
   /// Qualidade do hábito nesta resposta: 0 (pior) a 100 (melhor). A média
   /// ponderada por categoria vira 0–1 e é mapeada para a escala da estratégia.
   ///
@@ -1467,7 +1548,7 @@ model EnvironmentalOption {
   /// e a 3ª valem 66,7 e 33,3 — arredondar para inteiro deslocaria o ambiental
   /// de cada bloco.
   points Float
-  order  Int @default(0)
+  order  Int    @default(0)
 
   @@index([questionId])
   @@map("environmental_options")

@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 
 import { IdentityModule } from '@contexts/identity/identity.module';
 
+import { ConvidarParceiroUseCase } from './application/use-cases/convidar-parceiro.use-case';
 import { GetPartnerBankDetailsUseCase } from './application/use-cases/get-partner-bank-details.use-case';
 import { ListAdminPartnersUseCase } from './application/use-cases/list-admin-partners.use-case';
 import { ListPartnerSalesUseCase } from './application/use-cases/list-partner-sales.use-case';
@@ -15,6 +16,7 @@ import { PartnerController } from './presentation/controllers/partner.controller
   imports: [IdentityModule],
   controllers: [PartnerController, AdminPartnersController],
   providers: [
+    ConvidarParceiroUseCase,
     PartnerDashboardUseCase,
     ListPartnerSalesUseCase,
     GetPartnerBankDetailsUseCase,

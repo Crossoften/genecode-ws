@@ -1,7 +1,18 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Post, Put, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  Post,
+  Put,
+  Query,
+} from '@nestjs/common';
 import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 
-import { CurrentUser, RequireRoles } from '@contexts/identity/presentation/decorators';
+import { CurrentUser, IsPublic, RequireRoles } from '@contexts/identity/presentation/decorators';
 import type { AuthenticatedPrincipal } from '@contexts/identity/presentation/guards/jwt-auth.guard';
 import { PrismaService } from '@infra/database/prisma.service';
 import { NotFoundError, ValidationError } from '@shared/domain/domain-error';
@@ -15,12 +26,22 @@ import {
   validarChavePix,
   validarConta,
 } from '@shared/validation/chave-pix';
-import { BankDetailsDto, RegisterPartnerDto } from '../dtos/partner.dto';
+import { ConvidarParceiroUseCase } from '../../application/use-cases/convidar-parceiro.use-case';
+import { BOLO_PADRAO_PERCENT } from '../../domain/rede';
+import { BankDetailsDto, CriarConviteDto, RegisterPartnerDto } from '../dtos/partner.dto';
 
-/** Comissão padrão de novos parceiros. Variável por parceiro (decisão F6). */
-const DEFAULT_COMMISSION_PERCENT = 20;
-/** Desconto padrão oferecido ao cliente pelo cupom. */
-const DEFAULT_DISCOUNT_PERCENT = 10;
+/**
+ * Comissão gravada no cupom do parceiro.
+ *
+ * É o bolo da rede — os mesmos 20 pontos de `BOLO_PADRAO_PERCENT`. Fica aqui
+ * por compatibilidade: `order-pricing` ainda calcula `commissionCents` a partir
+ * do cupom, e a cascata da rede reparte **esse** valor. Quando a onda 2 mover o
+ * cálculo para a cadeia, este campo vira só o total do bolo.
+ *
+ * O desconto padrão saiu em 03/10: cupom de parceiro é identificador, não
+ * oferta. Desconto fica com a Genoa, em campanha própria.
+ */
+const DEFAULT_COMMISSION_PERCENT = BOLO_PADRAO_PERCENT;
 
 @ApiTags('Parceiro')
 @Controller('parceiro')
@@ -30,6 +51,7 @@ export class PartnerController {
     private readonly listSales: ListPartnerSalesUseCase,
     private readonly bankDetailsQuery: GetPartnerBankDetailsUseCase,
     private readonly prisma: PrismaService,
+    private readonly convites: ConvidarParceiroUseCase,
   ) {}
 
   /**
@@ -48,18 +70,33 @@ export class PartnerController {
       return { couponCode: existing.couponCode, alreadyRegistered: true };
     }
 
+    // Com convite, a pessoa entra na rede de quem convidou, no nível seguinte e
+    // com a fatia que foi combinada no link. Sem convite, nasce raiz com o bolo
+    // inteiro — que é como todo parceiro nascia antes de 03/10.
+    let heranca: { conviteId: string; parentId: string; level: number; sharePercent: number } | null =
+      null;
+    if (dto.inviteToken) {
+      const resolvido = await this.convites.resolverParaCadastro(dto.inviteToken);
+      if (resolvido.isFail()) throw resolvido.error;
+      heranca = resolvido.value;
+    }
+
     const taken = new Set(
       (await this.prisma.coupon.findMany({ select: { code: true } })).map((c) => c.code),
     );
     const couponCode = suggestCouponCode(dto.displayName, taken);
 
     const partner = await this.prisma.$transaction(async (tx) => {
-      // O cupom e o parceiro nascem juntos: um cupom sem parceiro daria desconto
-      // sem destinatário de comissão, e um parceiro sem cupom não vende nada.
+      // O cupom e o parceiro nascem juntos: um parceiro sem cupom não vende
+      // nada, e é pelo cupom que a cadeia é encontrada na hora do split.
+      //
+      // Desconto ZERO: para o parceiro o cupom é identificador, não oferta.
+      // Decisão do André em 03/10 — desconto fica só com a Genoa, em campanha
+      // própria, para a margem do split não disputar com a da promoção.
       await tx.coupon.create({
         data: {
           code: couponCode,
-          discountPercent: DEFAULT_DISCOUNT_PERCENT,
+          discountPercent: 0,
           commissionPercent: DEFAULT_COMMISSION_PERCENT,
           partnerName: dto.displayName,
         },
@@ -73,8 +110,18 @@ export class PartnerController {
           document: dto.document,
           channel: dto.channel,
           couponCode,
+          parentId: heranca?.parentId ?? null,
+          level: heranca?.level ?? 1,
+          sharePercent: heranca?.sharePercent ?? BOLO_PADRAO_PERCENT,
         },
       });
+
+      if (heranca) {
+        await tx.partnerInvite.update({
+          where: { id: heranca.conviteId },
+          data: { acceptedAt: new Date(), acceptedByPartnerId: created.id },
+        });
+      }
 
       const role = await tx.role.findUnique({ where: { slug: 'affiliate' } });
       if (role) {
@@ -90,9 +137,96 @@ export class PartnerController {
 
     return {
       couponCode: partner.couponCode,
-      discountPercent: DEFAULT_DISCOUNT_PERCENT,
-      commissionPercent: DEFAULT_COMMISSION_PERCENT,
+      // O cupom do parceiro não dá desconto: é identificador.
+      discountPercent: 0,
+      sharePercent: Number(partner.sharePercent),
+      level: partner.level,
       alreadyRegistered: false,
+    };
+  }
+
+  // --- Rede de parceiros ---------------------------------------------------
+
+  /** Cria um convite e devolve o token que vai no link. */
+  @Post('rede/convites')
+  @RequireRoles('affiliate')
+  @HttpCode(HttpStatus.CREATED)
+  @ApiOperation({ summary: 'Convida um parceiro para a rede, com a fatia dele' })
+  async criarConvite(@Body() dto: CriarConviteDto, @CurrentUser() user: AuthenticatedPrincipal) {
+    const result = await this.convites.criar(user.id, dto);
+    if (result.isFail()) throw result.error;
+    return result.value;
+  }
+
+  @Get('rede/convites')
+  @RequireRoles('affiliate')
+  @ApiOperation({ summary: 'Convites que este parceiro enviou' })
+  async listarConvites(@CurrentUser() user: AuthenticatedPrincipal) {
+    const result = await this.convites.listar(user.id);
+    if (result.isFail()) throw result.error;
+    return result.value;
+  }
+
+  @Delete('rede/convites/:id')
+  @RequireRoles('affiliate')
+  @ApiOperation({ summary: 'Cancela um convite ainda não aceito' })
+  async revogarConvite(@Param('id') id: string, @CurrentUser() user: AuthenticatedPrincipal) {
+    const result = await this.convites.revogar(user.id, id);
+    if (result.isFail()) throw result.error;
+    return { revoked: true };
+  }
+
+  /**
+   * Consulta pública do convite, pelo token do link.
+   *
+   * Sem sessão de propósito: quem recebe o link ainda não tem conta. Devolve só
+   * quem convidou, a fatia e o nível — nada que identifique a rede inteira.
+   */
+  @Get('rede/convites/:token')
+  @IsPublic()
+  @ApiOperation({ summary: 'Mostra o convite antes do cadastro' })
+  async consultarConvite(@Param('token') token: string) {
+    const result = await this.convites.consultar(token);
+    if (result.isFail()) throw result.error;
+    return result.value;
+  }
+
+  /** A rede abaixo deste parceiro, para a tela de indicações. */
+  @Get('rede')
+  @RequireRoles('affiliate')
+  @ApiOperation({ summary: 'A rede abaixo deste parceiro' })
+  async minhaRede(@CurrentUser() user: AuthenticatedPrincipal) {
+    const eu = await this.prisma.partner.findUnique({ where: { userId: user.id } });
+    if (!eu) throw new NotFoundError('Perfil de parceiro não encontrado.');
+
+    const filhos = await this.prisma.partner.findMany({
+      where: { parentId: eu.id },
+      select: {
+        id: true,
+        displayName: true,
+        couponCode: true,
+        level: true,
+        sharePercent: true,
+        active: true,
+        createdAt: true,
+      },
+      orderBy: { createdAt: 'desc' },
+    });
+
+    return {
+      eu: {
+        displayName: eu.displayName,
+        couponCode: eu.couponCode,
+        level: eu.level,
+        sharePercent: Number(eu.sharePercent),
+        podeConvidar: eu.level < 5,
+      },
+      indicados: filhos.map((f) => ({
+        ...f,
+        sharePercent: Number(f.sharePercent),
+        // O que sobra para mim quando este indicado vende.
+        minhaParteQuandoEleVende: Number(eu.sharePercent) - Number(f.sharePercent),
+      })),
     };
   }
 
