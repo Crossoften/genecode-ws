@@ -1,7 +1,7 @@
 {
  "slug": "nutrigenetics",
  "version": "1.0.1",
- "name": "GeneCode Nutrigenética",
+ "name": "gene.code Nutrigenética",
  "kind": "NUTRIGENETICS",
  "scoringModel": "MULTIPLICATIVE",
  "snps": [

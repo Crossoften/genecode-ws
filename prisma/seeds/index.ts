@@ -177,7 +177,7 @@ async function seedDevelopmentAdmin(): Promise<void> {
     update: {},
     create: {
       email,
-      name: 'Admin GeneCode',
+      name: 'Admin gene.code',
       password: await hash(password, 12),
       status: 'ACTIVE',
       emailVerifiedAt: new Date(),

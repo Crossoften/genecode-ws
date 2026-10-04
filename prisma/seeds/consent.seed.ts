@@ -17,7 +17,7 @@ const DOCUMENTS = [
     version: '1.0',
     content:
       '# Termos de Uso\n\n_Minuta preliminar — aguardando texto jurídico definitivo do cliente._\n\n' +
-      'Ao criar uma conta na GeneCode, você concorda com a coleta e o processamento da sua ' +
+      'Ao criar uma conta na gene.code, você concorda com a coleta e o processamento da sua ' +
       'amostra biológica para a finalidade do exame contratado.',
   },
   {

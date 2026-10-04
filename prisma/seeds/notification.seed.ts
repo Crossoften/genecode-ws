@@ -17,7 +17,7 @@ const TRIGGERS = [
   {
     key: NotificationTriggerKey.KIT_SHIPPED,
     enabled: true,
-    template: '{nome}, seu kit GeneCode saiu para entrega! Rastreie em {link_rastreio}.',
+    template: '{nome}, seu kit gene.code saiu para entrega! Rastreie em {link_rastreio}.',
     channelWhatsapp: true,
     channelEmail: false,
     channelSms: true,

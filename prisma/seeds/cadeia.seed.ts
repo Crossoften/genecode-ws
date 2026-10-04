@@ -26,7 +26,7 @@ const PACIENTES = [
   { email: 'diego.martins@teste.com', nome: 'Diego Martins', code: 'CADEIA-02', order: 'GC-CAD-0002', share: false },
 ] as const;
 
-const PRODUTO = { slug: 'performance', nome: 'GeneCode Performance', cents: 46_800 } as const;
+const PRODUTO = { slug: 'performance', nome: 'gene.code Performance', cents: 46_800 } as const;
 
 function codigoKit(): string {
   const corpo = String(Math.floor(Math.random() * 1_000_000)).padStart(6, '0');

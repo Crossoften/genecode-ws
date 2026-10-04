@@ -1,7 +1,7 @@
 {
  "slug": "performance",
  "version": "1.0.0",
- "name": "GeneCode Performance",
+ "name": "gene.code Performance",
  "kind": "PERFORMANCE",
  "scoringModel": "ADDITIVE",
  "snps": [

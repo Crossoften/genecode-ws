@@ -60,7 +60,7 @@ const PACIENTES_COM_LAUDO = [
   { email: 'paciente3@email.com', code: 'DEMO-P3', order: 'GC-DEMO-0003', shareComTreinador: false },
 ] as const;
 
-const PRODUTO = { slug: 'performance', nome: 'GeneCode Performance', cents: 46_800 } as const;
+const PRODUTO = { slug: 'performance', nome: 'gene.code Performance', cents: 46_800 } as const;
 
 async function criarConta(conta: ContaDemo): Promise<string> {
   const user = await prisma.user.upsert({

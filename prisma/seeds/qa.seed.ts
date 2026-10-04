@@ -223,7 +223,7 @@ async function semearJornadaPaciente(userId: string): Promise<void> {
   const PEDIDOS = [
     {
       number: 'GC-2026-48210',
-      produto: { slug: 'premium', nome: 'GeneCode Premium', cents: 69_000 },
+      produto: { slug: 'premium', nome: 'gene.code Premium', cents: 69_000 },
       status: 'REPORT_READY',
       criadoDiasAtras: 70,
       eventos: [
@@ -234,7 +234,7 @@ async function semearJornadaPaciente(userId: string): Promise<void> {
     },
     {
       number: 'GC-2026-50133',
-      produto: { slug: 'performance', nome: 'GeneCode Performance', cents: 46_800 },
+      produto: { slug: 'performance', nome: 'gene.code Performance', cents: 46_800 },
       status: 'PROCESSING',
       criadoDiasAtras: 20,
       eventos: [
@@ -245,7 +245,7 @@ async function semearJornadaPaciente(userId: string): Promise<void> {
     },
     {
       number: 'GC-2026-50890',
-      produto: { slug: 'nutrigenetics', nome: 'GeneCode Nutrigenética', cents: 39_700 },
+      produto: { slug: 'nutrigenetics', nome: 'gene.code Nutrigenética', cents: 39_700 },
       status: 'KIT_SHIPPED',
       criadoDiasAtras: 3,
       eventos: [['PAID', 3], ['KIT_SHIPPED', 1]],
