@@ -10,11 +10,25 @@ export interface AdminPartnerRow {
   readonly type: string;
   readonly channel: string | null;
   readonly couponCode: string;
+  /** A fatia deste parceiro, em pontos percentuais do pedido. */
   readonly commissionPercent: number;
   readonly active: boolean;
   readonly orders: number;
   readonly revenueCents: number;
   readonly initials: string;
+  /** Nível na rede: 1 é raiz, 5 é o teto. */
+  readonly level: number;
+  /** Quem indicou. Nulo quando é raiz de rede. */
+  readonly indicadoPor: string | null;
+  /** Quantos entraram pela indicação deste. */
+  readonly indicados: number;
+  /**
+   * Repasse que NÃO foi pela adquirente e espera transferência manual.
+   *
+   * É o número que trava o fechamento do mês: parceiro sem unidade cadastrada
+   * na Afinz tem a fatia retida pela Genoa, e alguém precisa pagar na mão.
+   */
+  readonly repasseManualCents: number;
 }
 
 export interface AdminPartnersKpis {
@@ -22,6 +36,10 @@ export interface AdminPartnersKpis {
   readonly totalCount: number;
   readonly salesCents: number;
   readonly pendingCommissionCents: number;
+  /** Total parado em repasse manual, somando todos os parceiros. */
+  readonly repasseManualCents: number;
+  /** Parceiros sem unidade na adquirente — a causa do repasse manual. */
+  readonly semCadastroNaAdquirente: number;
 }
 
 export interface AdminPartnersView {
@@ -42,19 +60,32 @@ export class ListAdminPartnersUseCase {
     const partners = await this.prisma.partner.findMany({ orderBy: { createdAt: 'asc' } });
     const codes = partners.map((partner) => partner.couponCode);
 
-    const [coupons, salesByCoupon] = await Promise.all([
-      this.prisma.coupon.findMany({ where: { code: { in: codes } } }),
+    // O cupom não entra mais aqui: a fatia do parceiro vem da REDE, e o
+    // desconto do cupom de parceiro é zero desde 03/10.
+    const [salesByCoupon, manuais] = await Promise.all([
       this.prisma.order.groupBy({
         by: ['couponCode'],
         where: { couponCode: { in: codes }, paidAt: { not: null } },
         _count: { _all: true },
         _sum: { totalCents: true },
       }),
+      // O que ficou retido por falta de unidade na adquirente.
+      this.prisma.payout.groupBy({
+        by: ['partnerId'],
+        where: { viaSplit: false, status: { in: ['PENDING', 'PROCESSING'] } },
+        _sum: { amountCents: true },
+      }),
     ]);
 
-    const commissionByCode = new Map(
-      coupons.map((coupon) => [coupon.code, Number(coupon.commissionPercent)]),
+    const manualPorParceiro = new Map(
+      manuais.map((grupo) => [grupo.partnerId, grupo._sum.amountCents ?? 0]),
     );
+    const nomePorId = new Map(partners.map((p) => [p.id, p.displayName]));
+    const filhosPorPai = new Map<string, number>();
+    for (const p of partners) {
+      if (p.parentId) filhosPorPai.set(p.parentId, (filhosPorPai.get(p.parentId) ?? 0) + 1);
+    }
+
     const salesByCode = new Map(salesByCoupon.map((group) => [group.couponCode, group]));
 
     const rows = partners.map((partner) => {
@@ -65,11 +96,17 @@ export class ListAdminPartnersUseCase {
         type: partner.type,
         channel: partner.channel,
         couponCode: partner.couponCode,
-        commissionPercent: commissionByCode.get(partner.couponCode) ?? 0,
+        // A fatia vem da REDE. O cupom guarda o bolo, que é outra coisa: numa
+        // venda do quinto nível o pedido gera 20% e a raiz leva 7.
+        commissionPercent: Number(partner.sharePercent),
         active: partner.active,
         orders: sales?._count._all ?? 0,
         revenueCents: sales?._sum.totalCents ?? 0,
         initials: initialsOf(partner.displayName),
+        level: partner.level,
+        indicadoPor: partner.parentId ? (nomePorId.get(partner.parentId) ?? null) : null,
+        indicados: filhosPorPai.get(partner.id) ?? 0,
+        repasseManualCents: manualPorParceiro.get(partner.id) ?? 0,
       };
     });
 
@@ -79,6 +116,8 @@ export class ListAdminPartnersUseCase {
         totalCount: partners.length,
         salesCents: rows.reduce((sum, row) => sum + row.revenueCents, 0),
         pendingCommissionCents: await this.pendingCommissionCents(codes),
+        repasseManualCents: rows.reduce((soma, linha) => soma + linha.repasseManualCents, 0),
+        semCadastroNaAdquirente: partners.filter((p) => p.splitMerchantId === null).length,
       },
       partners: rows,
     };

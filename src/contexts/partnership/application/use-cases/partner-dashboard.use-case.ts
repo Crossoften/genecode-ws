@@ -4,16 +4,36 @@ import { PrismaService } from '@infra/database/prisma.service';
 import { NotFoundError } from '@shared/domain/domain-error';
 import { fail, ok, type Result } from '@shared/domain/result';
 
+import { podeConvidar } from '../../domain/rede';
 import { fetchPartnerSales, type SaleRow } from '../partner-sales.query';
 
 export type { SaleRow } from '../partner-sales.query';
 
 export interface PartnerDashboard {
   readonly couponCode: string;
-  /** Comissão do parceiro em pontos percentuais — a tela exibe "15% por venda". */
+  /**
+   * A fatia deste parceiro, em pontos percentuais do pedido.
+   *
+   * Vem da REDE, não do cupom. Com cadeia, o cupom guarda o bolo inteiro e a
+   * fatia de cada um é outra coisa: numa venda do quinto nível o pedido gera
+   * 20% e a raiz leva 7. Ler o cupom aqui faria o parceiro esperar o bolo.
+   */
   readonly commissionPercent: number;
-  /** Desconto que o cupom dá ao cliente, em pontos percentuais. */
+  /**
+   * Desconto que o cupom dá ao cliente.
+   *
+   * Zero para cupom de parceiro desde 03/10: para ele o cupom é identificador,
+   * não oferta. Desconto fica com a Genoa, em campanha própria.
+   */
   readonly discountPercent: number;
+  /** Nível na rede: 1 é raiz, 5 é o teto. */
+  readonly level: number;
+  /** O quinto nível não convida. */
+  readonly podeConvidar: boolean;
+  /** Quantos parceiros entraram pela indicação deste. */
+  readonly indicados: number;
+  /** Quanto veio de venda da rede abaixo, e não do próprio cupom. */
+  readonly commissionDaRedeCents: number;
   readonly totalSales: number;
   readonly commissionGeneratedCents: number;
   readonly commissionPendingCents: number;
@@ -37,17 +57,24 @@ export class PartnerDashboardUseCase {
     const partner = await this.prisma.partner.findUnique({ where: { userId } });
     if (!partner) return fail(new NotFoundError('Perfil de parceiro não encontrado.'));
 
-    const [coupon, { sales, settledCents, pendingCents }] = await Promise.all([
+    const [coupon, { sales, settledCents, pendingCents }, indicados] = await Promise.all([
       this.prisma.coupon.findUnique({ where: { code: partner.couponCode } }),
       fetchPartnerSales(this.prisma, partner),
+      this.prisma.partner.count({ where: { parentId: partner.id } }),
     ]);
 
     return ok({
       couponCode: partner.couponCode,
+      commissionPercent: Number(partner.sharePercent),
       // O cupom nasce na mesma transação do parceiro, então só falta se alguém
       // o apagou à mão no banco; 0% é o retrato honesto desse estado.
-      commissionPercent: Number(coupon?.commissionPercent ?? 0),
       discountPercent: Number(coupon?.discountPercent ?? 0),
+      level: partner.level,
+      podeConvidar: podeConvidar(partner.level),
+      indicados,
+      commissionDaRedeCents: sales
+        .filter((venda) => venda.origem === 'REDE')
+        .reduce((soma, venda) => soma + venda.commissionCents, 0),
       totalSales: sales.length,
       commissionGeneratedCents: sales.reduce((sum, sale) => sum + sale.commissionCents, 0),
       commissionPendingCents: pendingCents,
