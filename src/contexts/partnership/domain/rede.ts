@@ -167,3 +167,53 @@ export function validarCadeia(cadeia: readonly NoDaRede[]): Result<void> {
   }
   return ok(undefined);
 }
+
+/** Uma fatia do plano de split, como fica gravada no pedido. */
+export interface FatiaDoPlano {
+  readonly partnerId: string;
+  readonly level: number;
+  readonly sharePercent: number;
+  readonly amountCents: number;
+  /** Entrou na lista mandada à adquirente? Falso = fica para repasse manual. */
+  readonly viaSplit: boolean;
+}
+
+/**
+ * Monta o plano de split da venda.
+ *
+ * Separa o que vai para a adquirente do que fica para repasse manual. Quem não
+ * tem `splitMerchantId` não entra na lista da adquirente — a fatia dele
+ * permanece com a Genoa e o financeiro repassa na mão. Bloquear a venda porque
+ * falta cadastro de um parceiro seria punir o cliente por pendência que não é
+ * dele, e o plano guarda a fatia mesmo assim: ela é devida, tenha ido pelo
+ * split ou não.
+ *
+ * @param cadeia - Da raiz até quem vendeu.
+ * @param merchantPorParceiro - `splitMerchantId` de cada um, ou null.
+ * @param baseCents - Valor dos produtos já com desconto.
+ */
+export function montarPlano(
+  cadeia: readonly NoDaRede[],
+  merchantPorParceiro: ReadonlyMap<string, string | null>,
+  baseCents: number,
+): {
+  readonly plano: readonly FatiaDoPlano[];
+  readonly paraAdquirente: readonly { merchantRef: string; amountCents: number }[];
+} {
+  const plano = repartir(cadeia, baseCents).map((parte) => ({
+    partnerId: parte.partnerId,
+    level: parte.nivel,
+    sharePercent: parte.percent,
+    amountCents: parte.cents,
+    viaSplit: (merchantPorParceiro.get(parte.partnerId) ?? null) !== null,
+  }));
+
+  const paraAdquirente = plano
+    .filter((fatia) => fatia.viaSplit)
+    .map((fatia) => ({
+      merchantRef: merchantPorParceiro.get(fatia.partnerId) as string,
+      amountCents: fatia.amountCents,
+    }));
+
+  return { plano, paraAdquirente };
+}

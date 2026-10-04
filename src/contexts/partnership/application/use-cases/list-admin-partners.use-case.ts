@@ -105,12 +105,28 @@ export class ListAdminPartnersUseCase {
         where: { couponCode: { in: codes }, paidAt: { not: null }, commissionCents: { not: null } },
         select: { id: true, commissionCents: true },
       }),
-      this.prisma.payout.findMany({ where: { status: 'SETTLED' }, select: { orderId: true } }),
+      this.prisma.payout.findMany({
+        where: { status: 'SETTLED' },
+        select: { orderId: true, amountCents: true },
+      }),
     ]);
 
-    const settledOrders = new Set(settled.map((payout) => payout.orderId));
-    return orders
-      .filter((order) => !settledOrders.has(order.id))
-      .reduce((sum, order) => sum + (order.commissionCents ?? 0), 0);
+    // Desconta VALOR liquidado, não o pedido inteiro.
+    //
+    // Com rede, um pedido tem vários repasses: dar o pedido por quitado porque
+    // um dos níveis foi pago esconderia o que falta pagar aos outros.
+    const liquidadoPorPedido = new Map<string, number>();
+    for (const payout of settled) {
+      liquidadoPorPedido.set(
+        payout.orderId,
+        (liquidadoPorPedido.get(payout.orderId) ?? 0) + payout.amountCents,
+      );
+    }
+
+    return orders.reduce((sum, order) => {
+      const devido = order.commissionCents ?? 0;
+      const pago = liquidadoPorPedido.get(order.id) ?? 0;
+      return sum + Math.max(devido - pago, 0);
+    }, 0);
   }
 }

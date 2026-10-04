@@ -22,7 +22,8 @@ describe('ListPartnerSalesUseCase', () => {
       customerName: 'Helena Vasconcelos',
       customerEmail: 'helena.v@email.com',
       customerDoc: '312.448.190-55',
-      items: [{ productName: 'GeneCode Completo' }],
+      couponCode: 'MARINA10',
+      items: [{ productName: 'gene.code Completo' }],
       ...overrides,
     };
   }
@@ -34,14 +35,25 @@ describe('ListPartnerSalesUseCase', () => {
   ];
 
   const PAYOUTS = [
-    { orderId: 'pedido-1', status: 'SETTLED', amountCents: 5_235 },
-    { orderId: 'pedido-2', status: 'PENDING', amountCents: 5_235 },
+    { orderId: 'pedido-1', status: 'SETTLED', amountCents: 5_235, level: 1 },
+    { orderId: 'pedido-2', status: 'PENDING', amountCents: 5_235, level: 1 },
     // pedido-3 sem repasse: status derivado NOT_ISSUED.
   ];
 
-  function buildPrisma(partner: typeof PARTNER | null = PARTNER, orders = ORDERS, payouts = PAYOUTS) {
+  /** Parceiros da rede, para resolver o nome de quem vendeu. */
+  const DA_REDE = [{ couponCode: 'VENDEDOR20', displayName: 'Vendedor da Unidade' }];
+
+  function buildPrisma(
+    partner: typeof PARTNER | null = PARTNER,
+    orders = ORDERS,
+    payouts = PAYOUTS,
+    daRede = DA_REDE,
+  ) {
     return {
-      partner: { findUnique: jest.fn(async () => partner) },
+      partner: {
+        findUnique: jest.fn(async () => partner),
+        findMany: jest.fn(async () => daRede),
+      },
       order: { findMany: jest.fn(async () => orders) },
       payout: { findMany: jest.fn(async () => payouts) },
     };
@@ -109,13 +121,18 @@ describe('ListPartnerSalesUseCase', () => {
 
     expect(result.isOk()).toBe(true);
     if (result.isOk()) {
+      // Lista branca: só o que o parceiro pode ver. `vendidoPor` é o nome do
+      // parceiro da rede que fez a venda — nunca o do comprador.
       expect(Object.keys(result.value.sales[0] ?? {}).sort()).toEqual([
         'amountCents',
         'commissionCents',
         'date',
+        'level',
         'orderNumber',
+        'origem',
         'payoutStatus',
         'productName',
+        'vendidoPor',
       ]);
     }
   });
@@ -125,5 +142,59 @@ describe('ListPartnerSalesUseCase', () => {
 
     expect(result.isFail()).toBe(true);
     if (result.isFail()) expect(result.error).toBeInstanceOf(NotFoundError);
+  });
+
+  describe('vendas da rede', () => {
+    it('mostra a venda feita por quem está abaixo, com a MINHA fatia', async () => {
+      // Pedido com o cupom do vendedor, e repasse de nível 1 para mim: numa
+      // venda da rede o pedido gera 20% de bolo e a raiz leva 7.
+      const daRede = orderRow('pedido-rede', 'GC-2026-00099', {
+        couponCode: 'VENDEDOR20',
+        commissionCents: 12_096,
+      });
+      const prisma = buildPrisma(
+        PARTNER,
+        [daRede],
+        [{ orderId: 'pedido-rede', status: 'PENDING', amountCents: 4_233, level: 1 }],
+      );
+
+      const result = await useCase(prisma).execute('user-1');
+      expect(result.isOk()).toBe(true);
+      if (result.isOk()) {
+        const venda = result.value.sales[0];
+        // A fatia do parceiro, não a comissão do pedido.
+        expect(venda.commissionCents).toBe(4_233);
+        expect(venda.origem).toBe('REDE');
+        expect(venda.vendidoPor).toBe('Vendedor da Unidade');
+        expect(venda.level).toBe(1);
+      }
+    });
+
+    it('venda do próprio cupom é PROPRIA e não nomeia vendedor', async () => {
+      const result = await useCase(buildPrisma()).execute('user-1');
+      expect(result.isOk()).toBe(true);
+      if (result.isOk()) {
+        expect(result.value.sales.every((v) => v.origem === 'PROPRIA')).toBe(true);
+        expect(result.value.sales.every((v) => v.vendidoPor === null)).toBe(true);
+      }
+    });
+
+    it('a venda da rede também não expõe o comprador', async () => {
+      const daRede = orderRow('pedido-rede', 'GC-2026-00099', { couponCode: 'VENDEDOR20' });
+      const prisma = buildPrisma(
+        PARTNER,
+        [daRede],
+        [{ orderId: 'pedido-rede', status: 'PENDING', amountCents: 4_233, level: 1 }],
+      );
+
+      const result = await useCase(prisma).execute('user-1');
+      expect(result.isOk()).toBe(true);
+      if (result.isOk()) {
+        const serializado = JSON.stringify(result.value.sales);
+        expect(serializado).not.toContain('Helena');
+        expect(serializado).not.toContain('helena.v@email.com');
+        expect(serializado).not.toContain('312.448.190-55');
+      }
+    });
   });
 });

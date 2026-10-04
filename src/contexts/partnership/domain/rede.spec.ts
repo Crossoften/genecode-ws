@@ -1,5 +1,6 @@
 import {
   BOLO_PADRAO_PERCENT,
+  montarPlano,
   NIVEL_MAXIMO,
   podeConvidar,
   repartir,
@@ -154,5 +155,61 @@ describe('Coerência da cadeia', () => {
   it('cadeia vazia é venda orgânica: não reparte nada', () => {
     expect(repartir([], PEDIDO)).toEqual([]);
     expect(validarCadeia([]).isOk()).toBe(true);
+  });
+});
+
+describe('Plano de split', () => {
+  const CADEIA = [
+    { partnerId: 'rede', nivel: 1, fatiaPercent: 20 },
+    { partnerId: 'unidade', nivel: 2, fatiaPercent: 13 },
+    { partnerId: 'vendedor', nivel: 3, fatiaPercent: 8 },
+  ];
+  const TODOS = new Map([
+    ['rede', 'm-rede'],
+    ['unidade', 'm-unidade'],
+    ['vendedor', 'm-vendedor'],
+  ]);
+
+  it('com todos cadastrados, tudo vai pela adquirente', () => {
+    const { plano, paraAdquirente } = montarPlano(CADEIA, TODOS, PEDIDO);
+    expect(plano.every((f) => f.viaSplit)).toBe(true);
+    expect(paraAdquirente).toHaveLength(3);
+    expect(paraAdquirente.reduce((s, r) => s + r.amountCents, 0)).toBe(
+      plano.reduce((s, f) => s + f.amountCents, 0),
+    );
+  });
+
+  it('quem não tem merchantId fica de fora da adquirente, mas continua no plano', () => {
+    const faltando = new Map<string, string | null>([
+      ['rede', 'm-rede'],
+      ['unidade', null],
+      ['vendedor', 'm-vendedor'],
+    ]);
+    const { plano, paraAdquirente } = montarPlano(CADEIA, faltando, PEDIDO);
+
+    // A fatia é devida de qualquer jeito: ela está no plano.
+    expect(plano).toHaveLength(3);
+    const unidade = plano.find((f) => f.partnerId === 'unidade');
+    expect(unidade?.viaSplit).toBe(false);
+    expect(unidade?.amountCents).toBeGreaterThan(0);
+
+    // Mas não vai na lista da adquirente.
+    expect(paraAdquirente.map((r) => r.merchantRef)).toEqual(['m-rede', 'm-vendedor']);
+  });
+
+  it('ninguém cadastrado: a lista da adquirente sai vazia e nada se perde', () => {
+    const nenhum = new Map<string, string | null>();
+    const { plano, paraAdquirente } = montarPlano(CADEIA, nenhum, PEDIDO);
+    expect(paraAdquirente).toHaveLength(0);
+    expect(plano).toHaveLength(3);
+    expect(plano.every((f) => !f.viaSplit)).toBe(true);
+    expect(plano.reduce((s, f) => s + f.amountCents, 0)).toBe(Math.floor((PEDIDO * 20) / 100));
+  });
+
+  it('a soma do plano é sempre o bolo, cadastrados ou não', () => {
+    for (const mapa of [TODOS, new Map<string, string | null>()]) {
+      const { plano } = montarPlano(CADEIA, mapa, PEDIDO);
+      expect(plano.reduce((s, f) => s + f.amountCents, 0)).toBe(Math.floor((PEDIDO * 20) / 100));
+    }
   });
 });

@@ -9,6 +9,13 @@ import { fail, ok, type Result } from '@shared/domain/result';
 
 import { calculateTotals, formatOrderNumber, type PricedItem } from '../../domain/order-pricing';
 import { ConfirmPaymentUseCase } from './confirm-payment.use-case';
+import {
+  NIVEL_MAXIMO,
+  montarPlano,
+  validarCadeia,
+  type FatiaDoPlano,
+  type NoDaRede,
+} from '@contexts/partnership/domain/rede';
 import { OrderStatus } from '../../domain/order-status';
 import {
   PAYMENT_GATEWAY,
@@ -135,6 +142,21 @@ export class CheckoutUseCase {
 
     const totals = calculateTotals(items.value, shippingOption.value.priceCents, coupon.value);
 
+    // O plano da rede é calculado antes de o pedido nascer, porque é ele que
+    // dita o bolo.
+    //
+    // A comissão do cupom e a fatia da raiz são dois números para a mesma
+    // coisa, e divergir seria a soma dos repasses não bater com o
+    // `commissionCents` do pedido — o admin fecharia o mês com dois totais
+    // diferentes. A cadeia é a fonte: quando ela existe, o bolo é a fatia da
+    // raiz, e a comissão do pedido passa a ser a soma do plano.
+    const base = totals.subtotalCents - totals.discountCents;
+    const split = await this.planejarSplit(coupon.value?.code, base);
+    const commissionCents =
+      split.plano.length > 0
+        ? split.plano.reduce((soma, fatia) => soma + fatia.amountCents, 0)
+        : totals.commissionCents;
+
     const order = await this.prisma.$transaction(async (tx) => {
       const number = await this.nextOrderNumber(tx);
 
@@ -152,8 +174,12 @@ export class CheckoutUseCase {
           shippingCents: totals.shippingCents,
           totalCents: totals.totalCents,
           couponCode: coupon.value?.code,
-          commissionRate: totals.commissionRate,
-          commissionCents: totals.commissionCents,
+          // A taxa segue o bolo: com cadeia, é a fatia da raiz.
+          commissionRate: split.boloPercent ?? totals.commissionRate,
+          commissionCents,
+          ...(split.plano.length > 0
+            ? { splitPlan: split.plano as unknown as Prisma.InputJsonValue }
+            : {}),
           shippingMethod: shippingOption.value.code,
           items: { create: items.value.map((item) => ({ ...item })) },
           address: { create: { ...input.address } },
@@ -179,7 +205,7 @@ export class CheckoutUseCase {
       method: input.payment.method,
       installments: input.payment.installments,
       customer: input.customer,
-      split: await this.resolveSplit(coupon.value?.code, totals.commissionCents),
+      split: split.paraAdquirente,
     });
 
     await this.prisma.payment.create({
@@ -371,37 +397,111 @@ export class CheckoutUseCase {
   }
 
   /**
-   * Monta o split da venda a partir do cupom.
+   * Sobe a cadeia da rede a partir do cupom que fez a venda.
+   *
+   * Devolve da raiz até quem vendeu, que é a ordem que `repartir` espera. O
+   * teto de `NIVEL_MAXIMO` também é guarda contra ciclo: uma cadeia que se
+   * mordesse o rabo rodaria para sempre aqui.
+   */
+  private async cadeiaDoCupom(couponCode: string): Promise<NoDaRede[]> {
+    const vendedor = await this.prisma.partner.findUnique({
+      where: { couponCode },
+      select: { id: true, level: true, sharePercent: true, parentId: true, splitMerchantId: true },
+    });
+    if (!vendedor) return [];
+
+    const cadeia: NoDaRede[] = [];
+    const merchants = new Map<string, string | null>();
+    let atual: typeof vendedor | null = vendedor;
+
+    for (let passo = 0; atual && passo < NIVEL_MAXIMO; passo += 1) {
+      cadeia.unshift({
+        partnerId: atual.id,
+        nivel: atual.level,
+        fatiaPercent: Number(atual.sharePercent),
+      });
+      merchants.set(atual.id, atual.splitMerchantId);
+      atual = atual.parentId
+        ? await this.prisma.partner.findUnique({
+            where: { id: atual.parentId },
+            select: {
+              id: true,
+              level: true,
+              sharePercent: true,
+              parentId: true,
+              splitMerchantId: true,
+            },
+          })
+        : null;
+    }
+
+    this.merchantsDaCadeia = merchants;
+    return cadeia;
+  }
+
+  /** `splitMerchantId` por parceiro da última cadeia resolvida. */
+  private merchantsDaCadeia = new Map<string, string | null>();
+
+  /**
+   * Monta o plano de split da venda, da raiz até quem vendeu.
    *
    * O cupom identifica o parceiro, mas **não serve como destinatário**: a
    * adquirente exige o id de uma unidade cadastrada nela (`splitMerchantId`).
+   * Quem ainda não tem fica de fora da lista mandada à adquirente — a fatia
+   * dele permanece com a Genoa e o repasse vira trabalho manual do financeiro.
+   * Bloquear a compra porque falta cadastro do parceiro seria punir o cliente
+   * por uma pendência que não é dele.
    *
-   * Quando o parceiro ainda não está cadastrado lá, isto devolve `undefined` e a
-   * venda segue **sem** split. É deliberado: o `Payout` continua sendo criado em
-   * `ConfirmPaymentUseCase`, então a comissão não se perde — vira repasse manual do
-   * financeiro. Bloquear a compra porque falta cadastro do parceiro na Afinz
-   * seria punir o cliente por uma pendência que não é dele.
+   * O plano inteiro é devolvido, inclusive as fatias que não entraram no split:
+   * é dele que nascem os `Payout`, e é ele que fica gravado no pedido — a
+   * adquirente não devolve o split em consulta nenhuma.
    */
-  private async resolveSplit(
+  private async planejarSplit(
     couponCode: string | undefined,
-    commissionCents: number | null,
-  ): Promise<{ merchantRef: string; amountCents: number }[] | undefined> {
-    if (!couponCode || !commissionCents || commissionCents <= 0) return undefined;
-
-    const partner = await this.prisma.partner.findUnique({
-      where: { couponCode },
-      select: { splitMerchantId: true, displayName: true },
-    });
-
-    if (!partner?.splitMerchantId) {
-      this.logger.warn(
-        `Cupom ${couponCode}: parceiro sem splitMerchantId — venda sem split, ` +
-          'repasse ficará manual.',
-      );
-      return undefined;
+    baseCents: number,
+  ): Promise<{
+    plano: FatiaDoPlano[];
+    paraAdquirente: { merchantRef: string; amountCents: number }[] | undefined;
+    /** Fatia da raiz — o bolo da rede nesta venda. */
+    boloPercent: number | null;
+  }> {
+    if (!couponCode || baseCents <= 0) {
+      return { plano: [], paraAdquirente: undefined, boloPercent: null };
     }
 
-    return [{ merchantRef: partner.splitMerchantId, amountCents: commissionCents }];
+    const cadeia = await this.cadeiaDoCupom(couponCode);
+    if (cadeia.length === 0) return { plano: [], paraAdquirente: undefined, boloPercent: null };
+
+    const coerente = validarCadeia(cadeia);
+    if (coerente.isFail()) {
+      // Cadeia incoerente não produz erro de split — produz split errado, com
+      // dinheiro no lugar errado. A venda segue sem split e o financeiro
+      // resolve na mão, com o alarme no log.
+      this.logger.error(
+        `Cupom ${couponCode}: cadeia da rede incoerente (${coerente.error.message}). ` +
+          'Venda sem split; repasse manual.',
+      );
+      return { plano: [], paraAdquirente: undefined, boloPercent: null };
+    }
+
+    // A base é o valor dos produtos já com o desconto — a mesma de que o
+    // `order-pricing` tira a comissão. Cada percentual do plano é, portanto,
+    // percentual DO PEDIDO, e a soma das fatias é a fatia da raiz: o bolo.
+    const { plano, paraAdquirente } = montarPlano(cadeia, this.merchantsDaCadeia, baseCents);
+
+    const semCadastro = plano.filter((fatia) => !fatia.viaSplit);
+    if (semCadastro.length > 0) {
+      this.logger.warn(
+        `Cupom ${couponCode}: ${semCadastro.length} de ${plano.length} parceiros da cadeia ` +
+          'sem splitMerchantId — a fatia deles fica com a Genoa e o repasse será manual.',
+      );
+    }
+
+    return {
+      plano: [...plano],
+      paraAdquirente: paraAdquirente.length > 0 ? [...paraAdquirente] : undefined,
+      boloPercent: cadeia[0].fatiaPercent,
+    };
   }
 
   /** Valida o cupom: ativo, dentro da validade e do limite de usos. */

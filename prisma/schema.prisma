@@ -915,6 +915,18 @@ model Order {
   commissionRate  Decimal? @db.Decimal(5, 2)
   commissionCents Int?
 
+  /// Plano do split da rede, congelado no checkout.
+  ///
+  /// `[{ partnerId, level, sharePercent, amountCents, viaSplit }]`, da raiz até
+  /// quem vendeu. Existe porque a adquirente **não devolve o split em consulta
+  /// nenhuma** — provado no sandbox em 24–25/09: a lista é write-only. Sem este
+  /// registro não há como auditar o que foi mandado, nem conferir o repasse.
+  ///
+  /// Os `Payout` nascem daqui na confirmação do pagamento, e não de um novo
+  /// cálculo: recalcular abriria a janela de a rede ter mudado entre o checkout
+  /// e a confirmação, e o repasse divergir do que a adquirente já dividiu.
+  splitPlan Json?
+
   shippingMethod   String? @db.VarChar(40)
   /// Rastreio da ida: laboratório → casa do cliente.
   outboundTracking String? @db.VarChar(60)
@@ -1409,13 +1421,28 @@ model Payout {
   amountCents Int
   status      PayoutStatus @default(PENDING)
 
+  /// Nível deste parceiro na rede, congelado no momento da venda.
+  ///
+  /// Congelado de propósito: a rede muda, e um repasse de março não pode mudar
+  /// de valor porque alguém foi promovido em junho.
+  level        Int     @default(1)
+  sharePercent Decimal @default(20.00) @db.Decimal(5, 2)
+
+  /// A fatia entrou no split da adquirente?
+  ///
+  /// Falso quando o parceiro não tinha `splitMerchantId` na hora da venda: o
+  /// dinheiro ficou com a Genoa e o repasse é trabalho manual do financeiro.
+  /// É o que o admin precisa ver para fechar o mês.
+  viaSplit Boolean @default(false)
+
   /// Identificador da transferência na adquirente.
   externalId String?   @db.VarChar(120)
   settledAt  DateTime?
   createdAt  DateTime  @default(now())
 
-  @@unique([orderId])
+  @@unique([orderId, partnerId])
   @@index([partnerId, status])
+  @@index([orderId])
   @@map("payouts")
 }
 
