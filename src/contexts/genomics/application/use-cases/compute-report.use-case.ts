@@ -12,6 +12,26 @@ import { PANEL_REPOSITORY, type PanelRepository } from '../../domain/ports/panel
 import { ReportCalculator } from '../../domain/scoring/report-calculator';
 import { ScoreBand } from '../../domain/scoring/score-band';
 
+/** Compara códigos de kit pelo que eles têm de significativo: os algarismos. */
+export function somenteDigitos(valor: string): string {
+  return valor.replace(/\D+/g, '');
+}
+
+/**
+ * Acha, entre os kits ativados, o que o laboratório quis dizer.
+ *
+ * Separada do caso de uso porque é ela que carrega a regra: o traço do código
+ * é enfeite de leitura, e `998088-11` e `99808811` são o mesmo kit.
+ */
+export function kitDoCodigo<T extends { code: string; subjectId: string | null }>(
+  kits: readonly T[],
+  codigoDoCsv: string,
+): T | undefined {
+  const digitos = somenteDigitos(codigoDoCsv);
+  if (digitos.length === 0) return undefined;
+  return kits.find((kit) => somenteDigitos(kit.code) === digitos);
+}
+
 export interface ComputeReportInput {
   /** Código único do paciente — o mesmo impresso no kit. */
   readonly subjectCode: string;
@@ -80,7 +100,9 @@ export class ComputeReportUseCase {
       return fail(new ValidationError('Nenhum marcador do painel foi encontrado na linha.'));
     }
 
-    const subjectId = await this.resolveSubject(input.subjectCode);
+    const titular = await this.resolveSubject(input.subjectCode);
+    if (titular.isFail()) return fail(titular.error);
+    const subjectId = titular.value;
 
     const categoryIds = await this.mapSlugs('panelCategory', input.panelId);
     const modalityIds = await this.mapSlugs('modality', input.panelId);
@@ -184,27 +206,48 @@ export class ComputeReportUseCase {
   }
 
   /**
-   * Finds or creates the subject for a laboratory code.
+   * Acha o titular do código que veio no CSV. Nunca cria.
    *
-   * The code is the link between the physical kit and the genetic data. In this
-   * wave the subject is created on the fly; once the kit context exists (Wave 3)
-   * the code will already have been activated by the patient, and this becomes a
-   * lookup that fails when it finds nothing — which is the safer behaviour, and
-   * exactly the safeguard the client insisted on: a sample must never be
-   * attributed to the wrong person.
+   * O código é o elo entre o kit físico e o dado genético, e quem o ativa é a
+   * própria pessoa, na área dela. Enquanto o contexto de kit não existia, este
+   * método criava o titular na hora — e era isso que estava em pé até 04/10,
+   * quando a gravação da jornada mostrou o estrago: o CSV trouxe `99808811`, o
+   * kit da Beatriz está gravado `998088-11`, e a importação respondeu "1 laudo
+   * gerado" para um titular fantasma que ninguém jamais veria. O laudo certo
+   * não chegava, e nada na tela dizia por quê.
+   *
+   * Agora é só consulta, e a comparação ignora a pontuação do código: o
+   * laboratório pode digitar com ou sem o traço. Sem kit ativado, a linha falha
+   * com o motivo escrito — que é a salvaguarda que o cliente exigiu: uma
+   * amostra jamais pode ser atribuída à pessoa errada.
    */
-  private async resolveSubject(subjectCode: string): Promise<string> {
-    const existing = await this.prisma.subject.findFirst({
-      where: { externalCode: subjectCode },
-      select: { id: true },
-    });
-    if (existing) return existing.id;
+  private async resolveSubject(subjectCode: string): Promise<Result<string>> {
+    const digitos = somenteDigitos(subjectCode);
+    if (digitos.length === 0) {
+      return fail(new ValidationError(`Código de kit inválido: "${subjectCode}".`));
+    }
 
-    const created = await this.prisma.subject.create({
-      data: { externalCode: subjectCode },
+    // O kit ativado é a fonte: ele é que carrega o vínculo feito pela pessoa.
+    const kits = await this.prisma.kit.findMany({
+      where: { status: 'ACTIVATED', subjectId: { not: null } },
+      select: { code: true, subjectId: true },
+    });
+    const kit = kitDoCodigo(kits, subjectCode);
+    if (kit?.subjectId) return ok(kit.subjectId);
+
+    // Titular semeado direto, sem kit — é como a base de demonstração nasce.
+    const semeado = await this.prisma.subject.findFirst({
+      where: { externalCode: { in: [subjectCode, digitos] } },
       select: { id: true },
     });
-    return created.id;
+    if (semeado) return ok(semeado.id);
+
+    return fail(
+      new NotFoundError(
+        `Nenhum kit ativado com o código ${subjectCode}. ` +
+          'Confira o código no CSV, ou peça à pessoa para ativar o kit na área dela.',
+      ),
+    );
   }
 
   /** Mapeia slug → id para categorias ou modalidades de um painel. */
