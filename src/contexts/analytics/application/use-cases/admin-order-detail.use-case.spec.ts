@@ -43,7 +43,10 @@ describe('AdminOrderDetailUseCase', () => {
     };
   }
 
-  function buildPrisma(order: ReturnType<typeof orderRow> | null, partnerName: string | null = 'Marina Costa') {
+  function buildPrisma(
+    order: ReturnType<typeof orderRow> | null,
+    partnerName: string | null = 'Marina Costa',
+  ) {
     return {
       order: {
         findUnique: jest.fn(async ({ where }: { where: { number: string } }) =>
@@ -101,8 +104,18 @@ describe('AdminOrderDetailUseCase', () => {
     const prisma = buildPrisma(
       orderRow({
         events: [
-          { status: OrderStatus.SAMPLE_RECEIVED, note: null, actor: 'system', createdAt: SAMPLE_AT },
-          { status: OrderStatus.SAMPLE_IN_TRANSIT, note: null, actor: 'system', createdAt: new Date(SAMPLE_AT.getTime() + 2 * DAY_MS) },
+          {
+            status: OrderStatus.SAMPLE_RECEIVED,
+            note: null,
+            actor: 'system',
+            createdAt: SAMPLE_AT,
+          },
+          {
+            status: OrderStatus.SAMPLE_IN_TRANSIT,
+            note: null,
+            actor: 'system',
+            createdAt: new Date(SAMPLE_AT.getTime() + 2 * DAY_MS),
+          },
           { status: OrderStatus.SAMPLE_RECEIVED, note: null, actor: 'system', createdAt: resent },
         ],
       }),
@@ -130,7 +143,12 @@ describe('AdminOrderDetailUseCase', () => {
       orderRow({
         status: OrderStatus.KIT_SHIPPED,
         events: [
-          { status: OrderStatus.PAID, note: null, actor: 'system', createdAt: new Date(2026, 5, 15) },
+          {
+            status: OrderStatus.PAID,
+            note: null,
+            actor: 'system',
+            createdAt: new Date(2026, 5, 15),
+          },
         ],
       }),
     );
@@ -148,7 +166,12 @@ describe('AdminOrderDetailUseCase', () => {
 
     expect(result.isOk()).toBe(true);
     if (result.isOk()) {
-      expect(result.value.split).toEqual({ geneCodeCents: 28_664, partnerCents: 5_235 });
+      expect(result.value.split).toEqual({
+        geneCodeCents: 28_664,
+        partnerCents: 5_235,
+        // Pedido sem `splitPlan` — de antes da rede — não tem cascata a mostrar.
+        rede: [],
+      });
       expect(result.value.partnerName).toBe('Marina Costa');
     }
   });
@@ -160,7 +183,7 @@ describe('AdminOrderDetailUseCase', () => {
 
     expect(result.isOk()).toBe(true);
     if (result.isOk()) {
-      expect(result.value.split).toEqual({ geneCodeCents: 33_899, partnerCents: 0 });
+      expect(result.value.split).toEqual({ geneCodeCents: 33_899, partnerCents: 0, rede: [] });
       expect(result.value.partnerName).toBeNull();
     }
     expect(prisma.coupon.findUnique).not.toHaveBeenCalled();

@@ -69,7 +69,32 @@ export interface AdminOrderDetail {
   readonly split: {
     readonly geneCodeCents: number;
     readonly partnerCents: number;
+    /**
+     * A cascata da rede, da raiz até quem vendeu.
+     *
+     * Vem do `splitPlan` congelado no checkout, não de um cálculo novo: é o
+     * único registro do que foi mandado à adquirente, que não devolve o split
+     * em consulta nenhuma. Sem isto a tela mostrava uma linha só — "Parceiro
+     * Fulano, R$ 130" — para uma venda repartida entre cinco.
+     */
+    readonly rede: readonly {
+      readonly partnerName: string;
+      readonly level: number;
+      readonly sharePercent: number;
+      readonly amountCents: number;
+      /** Se saiu no próprio pagamento, ou se a Genoa transfere à mão. */
+      readonly viaSplit: boolean;
+    }[];
   };
+}
+
+/** Uma parcela do `splitPlan`, como ele foi gravado no checkout. */
+interface ParcelaDoPlano {
+  readonly partnerId: string;
+  readonly level: number;
+  readonly sharePercent: number;
+  readonly amountCents: number;
+  readonly viaSplit: boolean;
 }
 
 /**
@@ -125,6 +150,7 @@ export class AdminOrderDetailUseCase {
         : null;
 
     const partnerCents = order.commissionCents ?? 0;
+    const rede = await this.cascata(order.splitPlan);
 
     return ok({
       number: order.number,
@@ -182,7 +208,35 @@ export class AdminOrderDetailUseCase {
       commissionCents: order.commissionCents,
       estimatedReportAt,
       allowedTransitions: nextStatuses(status),
-      split: { geneCodeCents: order.totalCents - partnerCents, partnerCents },
+      split: { geneCodeCents: order.totalCents - partnerCents, partnerCents, rede },
     });
+  }
+
+  /**
+   * Traduz o `splitPlan` do pedido em linhas com nome de parceiro.
+   *
+   * Pedido antigo, de antes da rede, não tem plano: devolve vazio, e a tela
+   * cai na linha única de sempre.
+   */
+  private async cascata(plano: unknown): Promise<AdminOrderDetail['split']['rede']> {
+    if (!Array.isArray(plano) || plano.length === 0) return [];
+    const parcelas = plano as readonly ParcelaDoPlano[];
+    const parceiros = new Map(
+      (
+        await this.prisma.partner.findMany({
+          where: { id: { in: parcelas.map((parcela) => parcela.partnerId) } },
+          select: { id: true, displayName: true },
+        })
+      ).map((parceiro) => [parceiro.id, parceiro.displayName]),
+    );
+    return parcelas
+      .map((parcela) => ({
+        partnerName: parceiros.get(parcela.partnerId) ?? '—',
+        level: parcela.level,
+        sharePercent: parcela.sharePercent,
+        amountCents: parcela.amountCents,
+        viaSplit: parcela.viaSplit,
+      }))
+      .sort((a, b) => a.level - b.level);
   }
 }
