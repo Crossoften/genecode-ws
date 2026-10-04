@@ -12,6 +12,8 @@ export interface PartnerSalesList {
   readonly totalCount: number;
   readonly settledCents: number;
   readonly pendingCents: number;
+  /** Quanto do pendente depende de transferência manual da Genoa. */
+  readonly pendingManualCents: number;
 }
 
 /**
@@ -30,7 +32,10 @@ export class ListPartnerSalesUseCase {
     const partner = await this.prisma.partner.findUnique({ where: { userId } });
     if (!partner) return fail(new NotFoundError('Perfil de parceiro não encontrado.'));
 
-    const { sales, settledCents, pendingCents } = await fetchPartnerSales(this.prisma, partner);
+    const { sales, settledCents, pendingCents, pendingManualCents } = await fetchPartnerSales(
+      this.prisma,
+      partner,
+    );
 
     // Valores desconhecidos são descartados, como nos chips-filtro do admin.
     const statuses = payoutStatuses.filter((value) =>
@@ -46,6 +51,7 @@ export class ListPartnerSalesUseCase {
       totalCount: sales.length,
       settledCents,
       pendingCents,
+      pendingManualCents,
     });
   }
 }
