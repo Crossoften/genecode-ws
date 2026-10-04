@@ -38,6 +38,15 @@ export interface SaleRow {
   readonly origem: 'PROPRIA' | 'REDE';
   /** Quem vendeu, quando foi alguém da rede. Nunca o comprador. */
   readonly vendidoPor: string | null;
+  /**
+   * Se este repasse sai no próprio pagamento, ou cai na mão da Genoa.
+   *
+   * Só é `true` quando o parceiro tem unidade na adquirente. Hoje nenhum tem:
+   * o `POST /branches` da PagoLivre responde 500 no sandbox, então todo
+   * repasse é manual — e a tela precisa dizer isso, em vez de prometer
+   * "split automático" para dinheiro que alguém ainda vai transferir à mão.
+   */
+  readonly viaSplit: boolean;
 }
 
 export interface PartnerSales {
@@ -45,6 +54,8 @@ export interface PartnerSales {
   readonly sales: readonly SaleRow[];
   readonly settledCents: number;
   readonly pendingCents: number;
+  /** Quanto do pendente depende de transferência manual da Genoa. */
+  readonly pendingManualCents: number;
 }
 
 /**
@@ -102,8 +113,12 @@ export async function fetchPartnerSales(
   const settledCents = payouts
     .filter((payout) => payout.status === 'SETTLED')
     .reduce((sum, payout) => sum + payout.amountCents, 0);
-  const pendingCents = payouts
-    .filter((payout) => payout.status === 'PENDING' || payout.status === 'PROCESSING')
+  const pendentes = payouts.filter(
+    (payout) => payout.status === 'PENDING' || payout.status === 'PROCESSING',
+  );
+  const pendingCents = pendentes.reduce((sum, payout) => sum + payout.amountCents, 0);
+  const pendingManualCents = pendentes
+    .filter((payout) => !payout.viaSplit)
     .reduce((sum, payout) => sum + payout.amountCents, 0);
 
   return {
@@ -132,8 +147,10 @@ export async function fetchPartnerSales(
         order.couponCode === partner.couponCode
           ? null
           : (vendedores.get(order.couponCode ?? '') ?? null),
+      viaSplit: payoutByOrder.get(order.id)?.viaSplit ?? false,
     })),
     settledCents,
     pendingCents,
+    pendingManualCents,
   };
 }

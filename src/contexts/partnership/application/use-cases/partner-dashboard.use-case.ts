@@ -37,6 +37,8 @@ export interface PartnerDashboard {
   readonly totalSales: number;
   readonly commissionGeneratedCents: number;
   readonly commissionPendingCents: number;
+  /** Quanto do pendente depende de transferência manual da Genoa. */
+  readonly commissionPendingManualCents: number;
   readonly commissionSettledCents: number;
   /** Vendas por semana nas últimas 8, para o gráfico. */
   readonly weeklySales: readonly { readonly week: string; readonly count: number }[];
@@ -57,11 +59,12 @@ export class PartnerDashboardUseCase {
     const partner = await this.prisma.partner.findUnique({ where: { userId } });
     if (!partner) return fail(new NotFoundError('Perfil de parceiro não encontrado.'));
 
-    const [coupon, { sales, settledCents, pendingCents }, indicados] = await Promise.all([
-      this.prisma.coupon.findUnique({ where: { code: partner.couponCode } }),
-      fetchPartnerSales(this.prisma, partner),
-      this.prisma.partner.count({ where: { parentId: partner.id } }),
-    ]);
+    const [coupon, { sales, settledCents, pendingCents, pendingManualCents }, indicados] =
+      await Promise.all([
+        this.prisma.coupon.findUnique({ where: { code: partner.couponCode } }),
+        fetchPartnerSales(this.prisma, partner),
+        this.prisma.partner.count({ where: { parentId: partner.id } }),
+      ]);
 
     return ok({
       couponCode: partner.couponCode,
@@ -78,6 +81,7 @@ export class PartnerDashboardUseCase {
       totalSales: sales.length,
       commissionGeneratedCents: sales.reduce((sum, sale) => sum + sale.commissionCents, 0),
       commissionPendingCents: pendingCents,
+      commissionPendingManualCents: pendingManualCents,
       commissionSettledCents: settledCents,
       weeklySales: this.groupByWeek(sales.map((sale) => sale.date)),
       recentSales: sales.slice(0, 20),

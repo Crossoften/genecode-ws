@@ -132,7 +132,10 @@ describe('ListPartnerSalesUseCase', () => {
         'origem',
         'payoutStatus',
         'productName',
+        // Como o repasse chega: no split do pagamento, ou por transferência da
+        // Genoa. É dado do dinheiro dele, não do comprador.
         'vendidoPor',
+        'viaSplit',
       ]);
     }
   });
