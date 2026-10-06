@@ -1,7 +1,7 @@
-import { randomBytes } from 'node:crypto';
-
 import { PrismaClient } from '@prisma/client';
 import { hash } from 'bcrypt';
+
+import { queimarCodigo } from './queimar-codigo';
 
 /**
  * Contas de demonstração para o cliente testar tudo e dar feedback.
@@ -56,8 +56,18 @@ const CONTAS: readonly ContaDemo[] = [
 /** Pacientes com laudo, na ordem em que o CSV demo os traz. */
 const PACIENTES_COM_LAUDO = [
   { email: 'paciente1@email.com', code: 'DEMO-P1', order: 'GC-DEMO-0001', shareComTreinador: true },
-  { email: 'paciente2@email.com', code: 'DEMO-P2', order: 'GC-DEMO-0002', shareComTreinador: false },
-  { email: 'paciente3@email.com', code: 'DEMO-P3', order: 'GC-DEMO-0003', shareComTreinador: false },
+  {
+    email: 'paciente2@email.com',
+    code: 'DEMO-P2',
+    order: 'GC-DEMO-0002',
+    shareComTreinador: false,
+  },
+  {
+    email: 'paciente3@email.com',
+    code: 'DEMO-P3',
+    order: 'GC-DEMO-0003',
+    shareComTreinador: false,
+  },
 ] as const;
 
 const PRODUTO = { slug: 'performance', nome: 'gene.code Performance', cents: 46_800 } as const;
@@ -88,24 +98,8 @@ async function criarConta(conta: ContaDemo): Promise<string> {
   return user.id;
 }
 
-/** Código de kit válido no módulo 11 e inédito na base. */
-function gerarCodigoKit(): string {
-  const corpo = String(randomBytes(3).readUIntBE(0, 3) % 1_000_000).padStart(6, '0');
-  const dv = (digitos: string, peso: number): number => {
-    const soma = [...digitos].reduce((acc, d, i) => acc + Number(d) * (peso - i), 0);
-    const resto = (soma * 10) % 11;
-    return resto === 10 ? 0 : resto;
-  };
-  const d1 = dv(corpo, 7);
-  const d2 = dv(corpo + d1, 8);
-  return `${corpo}-${d1}${d2}`;
-}
-
-async function codigoKitUnico(): Promise<string> {
-  for (;;) {
-    const code = gerarCodigoKit();
-    if (!(await prisma.kit.findUnique({ where: { code } }))) return code;
-  }
+async function codigoKitUnico(batchId: string): Promise<string> {
+  return queimarCodigo(prisma, batchId);
 }
 
 /**
@@ -144,7 +138,11 @@ async function semearPacienteComLaudo(
         createdAt: diasAtras(45),
         paidAt: diasAtras(45),
         items: {
-          create: { productSlug: PRODUTO.slug, productName: PRODUTO.nome, unitCents: PRODUTO.cents },
+          create: {
+            productSlug: PRODUTO.slug,
+            productName: PRODUTO.nome,
+            unitCents: PRODUTO.cents,
+          },
         },
         events: {
           create: (
@@ -164,7 +162,7 @@ async function semearPacienteComLaudo(
 
     await prisma.kit.create({
       data: {
-        code: await codigoKitUnico(),
+        code: await codigoKitUnico(batchId),
         batchId,
         status: 'ACTIVATED',
         orderId: order.id,
@@ -245,7 +243,7 @@ async function main(): Promise<void> {
   const ativaveis = await prisma.kit.count({ where: { batchId: lote.id, status: 'ASSIGNED' } });
   const codigos: string[] = [];
   for (let i = ativaveis; i < 5; i += 1) {
-    const code = await codigoKitUnico();
+    const code = await codigoKitUnico(lote.id);
     await prisma.kit.create({ data: { code, batchId: lote.id, status: 'ASSIGNED' } });
     codigos.push(code);
   }
@@ -292,7 +290,9 @@ async function main(): Promise<void> {
   console.log(`\nSenha de todas as contas: ${SENHA}`);
   console.log('Laudos dos pacientes: suba prisma/seeds/data/demo-genotipos-performance.csv');
   console.log('no painel do laboratório (painel Performance) para publicá-los.');
-  console.log('\n⚠️  Ambiente de homologação — nenhuma destas contas deve existir em produção real.');
+  console.log(
+    '\n⚠️  Ambiente de homologação — nenhuma destas contas deve existir em produção real.',
+  );
 }
 
 main()

@@ -76,14 +76,11 @@ describe('Código de ativação do kit', () => {
   });
 
   describe('sequências triviais', () => {
-    it.each(['000000-00', '111111-60'])(
-      'recusa %s apesar de o módulo 11 aceitar',
-      (code) => {
-        const result = validateActivationCode(code);
-        expect(result.isFail()).toBe(true);
-        if (result.isFail()) expect(result.error.message).toBe(CodeValidation.WRONG_CODE);
-      },
-    );
+    it.each(['000000-00', '111111-60'])('recusa %s apesar de o módulo 11 aceitar', (code) => {
+      const result = validateActivationCode(code);
+      expect(result.isFail()).toBe(true);
+      if (result.isFail()) expect(result.error.message).toBe(CodeValidation.WRONG_CODE);
+    });
 
     it('expõe a mesma lista para quem gera, senão sai kit impresso que não ativa', () => {
       expect(isTrivialBase('000000')).toBe(true);
@@ -121,23 +118,19 @@ describe('Código de ativação do kit', () => {
       return resto === 10 ? 0 : resto;
     };
 
-    it(
-      'produz o mesmo DV nas 1.000.000 de bases possíveis',
-      () => {
-        // Sem `expect` dentro do laço de propósito: um milhão de asserções leva
-        // minutos. A divergência vira exceção com a base que a causou.
-        for (let n = 0; n < 1_000_000; n += 1) {
-          const base = String(n).padStart(6, '0');
-          const primeiro = dvAntigo(base, 7);
-          const antigo = `${primeiro}${dvAntigo(base + primeiro, 8)}`;
-          const atual = checkDigitsFor(base);
-          if (atual !== antigo) {
-            throw new Error(`base ${base}: domínio ${atual} ≠ checkout ${antigo}`);
-          }
+    it('produz o mesmo DV nas 1.000.000 de bases possíveis', () => {
+      // Sem `expect` dentro do laço de propósito: um milhão de asserções leva
+      // minutos. A divergência vira exceção com a base que a causou.
+      for (let n = 0; n < 1_000_000; n += 1) {
+        const base = String(n).padStart(6, '0');
+        const primeiro = dvAntigo(base, 7);
+        const antigo = `${primeiro}${dvAntigo(base + primeiro, 8)}`;
+        const atual = checkDigitsFor(base);
+        if (atual !== antigo) {
+          throw new Error(`base ${base}: domínio ${atual} ≠ checkout ${antigo}`);
         }
-      },
-      60_000,
-    );
+      }
+    }, 60_000);
   });
 
   describe('as quatro mensagens definidas pelo cliente', () => {

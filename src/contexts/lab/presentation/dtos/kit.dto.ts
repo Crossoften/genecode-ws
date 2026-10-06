@@ -19,12 +19,17 @@ export class ActivateKitDto {
   code!: string;
 }
 
-export class GenerateKitsDto {
+/** Emissão de um lote de etiquetas a partir da lista oficial. */
+export class EmitirKitsDto {
   @ApiProperty({ example: 500 })
-  @IsInt() @Min(1) @Max(5000)
+  @IsInt()
+  @Min(1)
+  @Max(5000)
   quantity!: number;
 
   @ApiProperty({ example: 'LOTE-2026-07' })
-  @IsString() @MinLength(3) @MaxLength(40)
+  @IsString()
+  @MinLength(3)
+  @MaxLength(40)
   reference!: string;
 }

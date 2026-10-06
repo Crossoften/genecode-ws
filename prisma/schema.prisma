@@ -1095,6 +1095,46 @@ model Coupon {
 // LABORATÓRIO — KITS E AMOSTRAS
 // ============================================================================
 
+/// A lista primitiva dos 500 mil códigos, entregue pela Genoa.
+///
+/// Existe porque o cliente **produz os números**, e nós consumimos. É o modelo
+/// que o Dr. Câmara escreveu em 02/10: *"cada envelope pequeno de coleta de
+/// swabs terá um adesivo com um desses números e, na emissão do adesivo, a
+/// plataforma 'queimará' um desses números fora da lista primitiva"*.
+///
+/// Até 06/10 o sistema **inventava** códigos com `randomInt`, e a lista nunca
+/// tinha sido importada. Os dois universos não se encontravam: um envelope
+/// impresso pela Genoa levava "Código Errado, Digite Novamente" para sempre —
+/// foi o que aconteceu com o `734233-00`, o 14º da lista. Pior: metade do
+/// espaço sorteado já estava impressa em papel, então nossos códigos colidiam
+/// com os envelopes deles (13 dos 29 kits sorteados em homolog).
+model ActivationCode {
+  /// A ordem da planilha do cliente. É por ela que se queima, porque é nela
+  /// que a Genoa imprime: o primeiro lote de etiquetas são os primeiros
+  /// sequenciais. A ordem da lista é aleatória no espaço de códigos — ter um
+  /// envelope em mãos não revela o código do seguinte.
+  sequencial Int @id
+
+  /// Formato XXXXXX-XX. Os 500 mil conferem com `activation-code.ts`.
+  code String @unique @db.VarChar(12)
+
+  /// Oito códigos da lista têm base de dígito repetido (`777777-94`,
+  /// `999999-00`, …). São válidos no módulo 11, mas o validador os recusa por
+  /// blacklist — imprimi-los daria uma caixa que nunca ativa. Ficam na lista,
+  /// marcados, e nunca são queimados.
+  usable Boolean @default(true)
+
+  /// Quando o adesivo foi emitido e o número saiu da lista primitiva.
+  burnedAt DateTime?
+  /// Lote de impressão que levou este número.
+  batchId  String?   @db.Char(36)
+
+  /// A fila de queima: os não queimados, em ordem de sequencial.
+  @@index([burnedAt, usable, sequencial])
+  @@index([batchId])
+  @@map("activation_codes")
+}
+
 /// Lote de kits, para impressão e rastreio de produção.
 model KitBatch {
   id        String   @id @default(uuid()) @db.Char(36)

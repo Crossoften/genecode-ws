@@ -1,7 +1,7 @@
-import { randomBytes } from 'node:crypto';
-
 import { PrismaClient } from '@prisma/client';
 import { hash } from 'bcrypt';
+
+import { queimarCodigo } from './queimar-codigo';
 
 /**
  * Fixtures for the QA environment.
@@ -42,18 +42,38 @@ interface ContaQa {
 }
 
 const CONTAS: readonly ContaQa[] = [
-  { email: 'qa.admin@genecode.test', nome: 'QA Administração', papeis: ['master'],
-    descricao: 'painel administrativo, BI, esteira de pedidos' },
+  {
+    email: 'qa.admin@genecode.test',
+    nome: 'QA Administração',
+    papeis: ['master'],
+    descricao: 'painel administrativo, BI, esteira de pedidos',
+  },
   // Dados protegidos preenchidos: a tela Meu perfil formata CPF, nascimento e
   // sexo biológico, e sem eles o QA só veria o fallback "Não informado".
-  { email: 'qa.paciente@genecode.test', nome: 'Camila Rocha', papeis: ['patient'],
-    descricao: 'área do paciente, laudo interativo, ativação de kit' },
-  { email: 'qa.profissional@genecode.test', nome: 'Marina Costa', papeis: ['professional', 'patient'],
-    descricao: 'área do profissional, laudo consolidado' },
-  { email: 'qa.parceiro@genecode.test', nome: 'Rafael Afiliado', papeis: ['affiliate', 'patient'],
-    descricao: 'painel do parceiro, comissões, cupom' },
-  { email: 'qa.lab@genecode.test', nome: 'QA Laboratório', papeis: ['lab'],
-    descricao: 'fila de amostras, upload do CSV, questionário ambiental' },
+  {
+    email: 'qa.paciente@genecode.test',
+    nome: 'Camila Rocha',
+    papeis: ['patient'],
+    descricao: 'área do paciente, laudo interativo, ativação de kit',
+  },
+  {
+    email: 'qa.profissional@genecode.test',
+    nome: 'Marina Costa',
+    papeis: ['professional', 'patient'],
+    descricao: 'área do profissional, laudo consolidado',
+  },
+  {
+    email: 'qa.parceiro@genecode.test',
+    nome: 'Rafael Afiliado',
+    papeis: ['affiliate', 'patient'],
+    descricao: 'painel do parceiro, comissões, cupom',
+  },
+  {
+    email: 'qa.lab@genecode.test',
+    nome: 'QA Laboratório',
+    papeis: ['lab'],
+    descricao: 'fila de amostras, upload do CSV, questionário ambiental',
+  },
 ];
 
 /** Dados protegidos da paciente de QA — CPF de gerador, válido no mod 11. */
@@ -64,8 +84,7 @@ const PROTEGIDOS_PACIENTE = {
 } as const;
 
 async function criarConta(conta: ContaQa): Promise<string> {
-  const protegidos =
-    conta.email === 'qa.paciente@genecode.test' ? PROTEGIDOS_PACIENTE : {};
+  const protegidos = conta.email === 'qa.paciente@genecode.test' ? PROTEGIDOS_PACIENTE : {};
 
   const user = await prisma.user.upsert({
     where: { email: conta.email },
@@ -91,30 +110,6 @@ async function criarConta(conta: ContaQa): Promise<string> {
   }
 
   return user.id;
-}
-
-/**
- * Gera um lote de kits ativáveis.
- *
- * Códigos aleatórios com dígito verificador de módulo 11, como o lote real —
- * sequencial permitiria deduzir códigos válidos a partir de um único kit.
- */
-function gerarCodigoKit(): string {
-  const base = randomBytes(3).readUIntBE(0, 3) % 1_000_000;
-  const corpo = String(base).padStart(6, '0');
-
-  const dv = (digitos: string, pesoInicial: number): number => {
-    const soma = [...digitos].reduce(
-      (acc, d, i) => acc + Number(d) * (pesoInicial - i),
-      0,
-    );
-    const resto = (soma * 10) % 11;
-    return resto === 10 ? 0 : resto;
-  };
-
-  const d1 = dv(corpo, 7);
-  const d2 = dv(corpo + d1, 8);
-  return `${corpo}-${d1}${d2}`;
 }
 
 async function main(): Promise<void> {
@@ -176,13 +171,14 @@ async function main(): Promise<void> {
 
   if (existentes < 10) {
     const lote = await prisma.kitBatch.create({
-      data: { reference: `QA-${new Date().toISOString().slice(0, 10)}`, notes: 'Lote para homologação' },
+      data: {
+        reference: `QA-${new Date().toISOString().slice(0, 10)}`,
+        notes: 'Lote para homologação',
+      },
     });
     const codigos: string[] = [];
     while (codigos.length < 10) {
-      const code = gerarCodigoKit();
-      const jaExiste = await prisma.kit.findUnique({ where: { code } });
-      if (jaExiste) continue;
+      const code = await queimarCodigo(prisma, lote.id);
       await prisma.kit.create({ data: { code, batchId: lote.id, status: 'ASSIGNED' } });
       codigos.push(code);
     }
@@ -218,7 +214,11 @@ async function main(): Promise<void> {
 async function semearJornadaPaciente(userId: string): Promise<void> {
   const diasAtras = (dias: number): Date => new Date(Date.now() - dias * 86_400_000);
 
-  const conta = { customerName: 'Camila Rocha', customerEmail: 'qa.paciente@genecode.test', customerDoc: '529.982.247-25' };
+  const conta = {
+    customerName: 'Camila Rocha',
+    customerEmail: 'qa.paciente@genecode.test',
+    customerDoc: '529.982.247-25',
+  };
 
   const PEDIDOS = [
     {
@@ -227,8 +227,13 @@ async function semearJornadaPaciente(userId: string): Promise<void> {
       status: 'REPORT_READY',
       criadoDiasAtras: 70,
       eventos: [
-        ['PAID', 70], ['KIT_SHIPPED', 68], ['KIT_DELIVERED', 64], ['SAMPLE_IN_TRANSIT', 60],
-        ['SAMPLE_RECEIVED', 55], ['PROCESSING', 50], ['REPORT_READY', 40],
+        ['PAID', 70],
+        ['KIT_SHIPPED', 68],
+        ['KIT_DELIVERED', 64],
+        ['SAMPLE_IN_TRANSIT', 60],
+        ['SAMPLE_RECEIVED', 55],
+        ['PROCESSING', 50],
+        ['REPORT_READY', 40],
       ],
       kit: 'vinculado-com-laudo',
     },
@@ -238,8 +243,12 @@ async function semearJornadaPaciente(userId: string): Promise<void> {
       status: 'PROCESSING',
       criadoDiasAtras: 20,
       eventos: [
-        ['PAID', 20], ['KIT_SHIPPED', 18], ['KIT_DELIVERED', 14], ['SAMPLE_IN_TRANSIT', 10],
-        ['SAMPLE_RECEIVED', 6], ['PROCESSING', 2],
+        ['PAID', 20],
+        ['KIT_SHIPPED', 18],
+        ['KIT_DELIVERED', 14],
+        ['SAMPLE_IN_TRANSIT', 10],
+        ['SAMPLE_RECEIVED', 6],
+        ['PROCESSING', 2],
       ],
       kit: 'vinculado-sem-laudo',
     },
@@ -248,7 +257,10 @@ async function semearJornadaPaciente(userId: string): Promise<void> {
       produto: { slug: 'nutrigenetics', nome: 'gene.code Nutrigenética', cents: 39_700 },
       status: 'KIT_SHIPPED',
       criadoDiasAtras: 3,
-      eventos: [['PAID', 3], ['KIT_SHIPPED', 1]],
+      eventos: [
+        ['PAID', 3],
+        ['KIT_SHIPPED', 1],
+      ],
       kit: 'aguardando-ativacao',
     },
   ] as const;
@@ -290,7 +302,12 @@ async function semearJornadaPaciente(userId: string): Promise<void> {
     if (pedido.kit === 'aguardando-ativacao') {
       // O kit despachado e não ativado é o que o banner do painel anuncia.
       await prisma.kit.create({
-        data: { code: await gerarCodigoUnico(), batchId: lote.id, status: 'ASSIGNED', orderId: order.id },
+        data: {
+          code: await gerarCodigoUnico(lote.id),
+          batchId: lote.id,
+          status: 'ASSIGNED',
+          orderId: order.id,
+        },
       });
       continue;
     }
@@ -316,7 +333,7 @@ async function semearJornadaPaciente(userId: string): Promise<void> {
 
     await prisma.kit.create({
       data: {
-        code: await gerarCodigoUnico(),
+        code: await gerarCodigoUnico(lote.id),
         batchId: lote.id,
         status: 'ACTIVATED',
         orderId: order.id,
@@ -369,13 +386,9 @@ async function semearCompartilhamento(pacienteId: string, profissionalId: string
   console.log('✓ compartilhamento: qa.paciente → qa.profissional (AUTHORIZED)');
 }
 
-/** Código válido no módulo 11 e inédito na base. */
-async function gerarCodigoUnico(): Promise<string> {
-  for (;;) {
-    const code = gerarCodigoKit();
-    const existe = await prisma.kit.findUnique({ where: { code } });
-    if (!existe) return code;
-  }
+/** O próximo código da lista oficial da Genoa. */
+async function gerarCodigoUnico(batchId: string): Promise<string> {
+  return queimarCodigo(prisma, batchId);
 }
 
 main()

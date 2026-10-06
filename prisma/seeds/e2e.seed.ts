@@ -53,18 +53,34 @@ const JORNADAS: readonly Jornada[] = [
     rotulo: 'DEMO · treinador',
     paciente: { email: 'e2e.aluno@genecode.test', nome: 'Rodrigo Salles', papeis: ['patient'] },
     codigoAmostra: 'E2E-TRE-001',
-    treinador: { email: 'e2e.treinador@genecode.test', nome: 'Patrícia Lemos', papeis: ['professional'] },
+    treinador: {
+      email: 'e2e.treinador@genecode.test',
+      nome: 'Patrícia Lemos',
+      papeis: ['professional'],
+    },
   },
   {
     rotulo: 'CLIENTE · laboratório',
-    paciente: { email: 'cliente.paciente@genecode.test', nome: 'Antônio Ferraz', papeis: ['patient'] },
+    paciente: {
+      email: 'cliente.paciente@genecode.test',
+      nome: 'Antônio Ferraz',
+      papeis: ['patient'],
+    },
     codigoAmostra: 'CLI-LAB-001',
   },
   {
     rotulo: 'CLIENTE · treinador',
-    paciente: { email: 'cliente.aluno@genecode.test', nome: 'Beatriz Monteiro', papeis: ['patient'] },
+    paciente: {
+      email: 'cliente.aluno@genecode.test',
+      nome: 'Beatriz Monteiro',
+      papeis: ['patient'],
+    },
     codigoAmostra: 'CLI-TRE-001',
-    treinador: { email: 'cliente.treinador@genecode.test', nome: 'Sérgio Amaral', papeis: ['professional'] },
+    treinador: {
+      email: 'cliente.treinador@genecode.test',
+      nome: 'Sérgio Amaral',
+      papeis: ['professional'],
+    },
   },
 ];
 

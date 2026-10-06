@@ -1,7 +1,11 @@
-import { PrismaClient, type Classification, type PanelKind, type ScoringModel } from '@prisma/client';
+import {
+  PrismaClient,
+  type Classification,
+  type PanelKind,
+  type ScoringModel,
+} from '@prisma/client';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
-
 
 const DATA_DIR = join(__dirname, 'data');
 
@@ -179,7 +183,10 @@ async function seedPanel(prisma: PrismaClient, json: PanelJson): Promise<void> {
 
   await seedSnps(prisma, json);
 
-  const snpIds = await mapSnpIds(prisma, json.snps.map((s) => s.rsId));
+  const snpIds = await mapSnpIds(
+    prisma,
+    json.snps.map((s) => s.rsId),
+  );
   const categoryIds = new Map<string, string>();
 
   for (const category of json.categories) {

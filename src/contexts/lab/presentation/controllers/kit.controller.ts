@@ -7,15 +7,15 @@ import { CurrentUser, RequirePermissions } from '@contexts/identity/presentation
 import type { AuthenticatedPrincipal } from '@contexts/identity/presentation/guards/jwt-auth.guard';
 
 import { ActivateKitUseCase } from '../../application/use-cases/activate-kit.use-case';
-import { GenerateKitsUseCase } from '../../application/use-cases/generate-kits.use-case';
-import { ActivateKitDto, GenerateKitsDto } from '../dtos/kit.dto';
+import { EmitirKitsUseCase } from '../../application/use-cases/emitir-kits.use-case';
+import { ActivateKitDto, EmitirKitsDto } from '../dtos/kit.dto';
 
 @ApiTags('Kits')
 @Controller('kits')
 export class KitController {
   constructor(
     private readonly activate: ActivateKitUseCase,
-    private readonly generate: GenerateKitsUseCase,
+    private readonly emitir: EmitirKitsUseCase,
   ) {}
 
   /**
@@ -43,13 +43,18 @@ export class KitController {
     return result.value;
   }
 
-  /** Gera um lote de kits para impressão. */
+  /**
+   * Emite um lote de etiquetas, queimando códigos da lista primitiva da Genoa.
+   *
+   * Não inventa código: tira os próximos da lista do cliente, em ordem de
+   * sequencial, que é a ordem em que ele imprime.
+   */
   @Post('lotes')
   @RequirePermissions('kits.write')
   @HttpCode(HttpStatus.CREATED)
-  @ApiOperation({ summary: 'Gera um lote de kits com códigos únicos' })
-  async generateBatch(@Body() dto: GenerateKitsDto) {
-    const result = await this.generate.execute(dto.quantity, dto.reference);
+  @ApiOperation({ summary: 'Emite um lote de kits a partir da lista oficial' })
+  async emitirLote(@Body() dto: EmitirKitsDto) {
+    const result = await this.emitir.execute(dto.quantity, dto.reference);
     if (result.isFail()) throw result.error;
     return result.value;
   }

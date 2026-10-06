@@ -24,7 +24,8 @@
     "seed": "ts-node -r tsconfig-paths/register ./prisma/seeds/index.ts",
     "seed:qa": "ts-node -r tsconfig-paths/register ./prisma/seeds/qa.seed.ts",
     "seed:demo": "ts-node -r tsconfig-paths/register ./prisma/seeds/demo.seed.ts",
-    "seed:lab50": "ts-node -r tsconfig-paths/register ./prisma/seeds/lab50.seed.ts"
+    "seed:lab50": "ts-node -r tsconfig-paths/register ./prisma/seeds/lab50.seed.ts",
+    "seed:codigos": "ts-node -r tsconfig-paths/register ./prisma/seeds/codigos-oficiais.seed.ts"
   },
   "prisma": {
     "seed": "ts-node -r tsconfig-paths/register ./prisma/seeds/index.ts"

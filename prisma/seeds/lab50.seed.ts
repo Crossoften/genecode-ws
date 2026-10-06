@@ -85,11 +85,7 @@ function trilha(indice: number): { status: OrderStatusLiteral; dias: number }[] 
 }
 
 type OrderStatusLiteral =
-  | 'PAID'
-  | 'KIT_SHIPPED'
-  | 'KIT_DELIVERED'
-  | 'SAMPLE_IN_TRANSIT'
-  | 'SAMPLE_RECEIVED';
+  'PAID' | 'KIT_SHIPPED' | 'KIT_DELIVERED' | 'SAMPLE_IN_TRANSIT' | 'SAMPLE_RECEIVED';
 
 const diasAtras = (d: number): Date => new Date(Date.now() - d * 86_400_000);
 
@@ -215,7 +211,9 @@ async function main(): Promise<void> {
 
   const fila = await prisma.order.count({ where: { status: 'SAMPLE_RECEIVED' } });
 
-  console.log(`\n${CONTAS.length} contas conferidas · ${pedidosNovos} pedidos criados nesta rodada`);
+  console.log(
+    `\n${CONTAS.length} contas conferidas · ${pedidosNovos} pedidos criados nesta rodada`,
+  );
   console.log(`Senha de todas: ${CONTAS[0]!.senha}`);
   console.log(`Fila do laboratório agora: ${fila} amostras aguardando CSV`);
   console.log('Arquivos para subir: docs/13-csv-laboratorio/arquivos/');
