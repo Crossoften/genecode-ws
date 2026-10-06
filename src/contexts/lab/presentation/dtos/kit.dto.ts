@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsInt, IsString, Max, MaxLength, Min, MinLength } from 'class-validator';
+import { IsString, MaxLength } from 'class-validator';
 
 export class ActivateKitDto {
   /**
@@ -17,19 +17,4 @@ export class ActivateKitDto {
   @IsString()
   @MaxLength(20)
   code!: string;
-}
-
-/** Emissão de um lote de etiquetas a partir da lista oficial. */
-export class EmitirKitsDto {
-  @ApiProperty({ example: 500 })
-  @IsInt()
-  @Min(1)
-  @Max(5000)
-  quantity!: number;
-
-  @ApiProperty({ example: 'LOTE-2026-07' })
-  @IsString()
-  @MinLength(3)
-  @MaxLength(40)
-  reference!: string;
 }

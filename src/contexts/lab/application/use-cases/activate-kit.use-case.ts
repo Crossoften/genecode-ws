@@ -1,5 +1,4 @@
 import { Injectable, Logger } from '@nestjs/common';
-import type { KitStatus } from '@prisma/client';
 
 import { PrismaService } from '@infra/database/prisma.service';
 import { ConflictError, NotFoundError } from '@shared/domain/domain-error';
@@ -8,17 +7,14 @@ import { fail, ok, type Result } from '@shared/domain/result';
 import { CodeValidation, validateActivationCode } from '../../domain/activation-code';
 
 /**
- * Status em que o kit pode ser ativado.
+ * Situações do pedido que ainda esperam um kit ser registrado.
  *
- * Só o kit que já saiu do estoque — `ASSIGNED` é exatamente "atribuído a um
- * pedido e despachado", e é o status que o painel do paciente procura para
- * anunciar "você tem um kit aguardando ativação".
- *
- * A lista tem um item só porque os status posteriores (`ACTIVATED`, `SAMPLE_*`)
- * já têm titular e são resolvidos antes, no ramo de reativação. `GENERATED`
- * fica fora de propósito: ver a camada 3 do `execute`.
+ * Serve só para **amarrar o registro ao pedido de quem comprou**, quando essa
+ * pessoa é a mesma que registra. Não é condição para registrar: o kit pode ser
+ * presente, e a esposa ou o filho registram o deles sem ter pedido nenhum —
+ * caso que o cliente descreveu em 02/10.
  */
-const ACTIVATABLE_STATUSES: ReadonlySet<KitStatus> = new Set<KitStatus>(['ASSIGNED']);
+const PEDIDOS_ESPERANDO_KIT = ['PAID', 'KIT_SHIPPED', 'KIT_DELIVERED'] as const;
 
 export interface ActivateKitInput {
   readonly code: string;
@@ -57,9 +53,18 @@ export interface ActivateKitOutput {
  *
  * O dígito verificador pega erro de digitação — o código é lido de uma etiqueta
  * de papel. Mas passar no módulo 11 não prova nada sobre existência: cerca de 1
- * em cada 100 sequências aleatórias passa. Por isso a checagem no banco é
- * obrigatória e vem depois. E existir no banco também não basta: o kit precisa
- * ter saído do estoque (camada 3).
+ * em cada 100 sequências aleatórias passa. Por isso a conferência contra a
+ * **lista oficial da Genoa** é obrigatória e vem depois.
+ *
+ * ### É aqui que o número é queimado
+ *
+ * As etiquetas já estão impressas em papel antes de o sistema ver qualquer
+ * uma: quem monta o kit pega um adesivo qualquer do monte, e o despacho não
+ * registra qual foi. O sistema só descobre o número **quando a pessoa abre a
+ * caixa e o digita** — e é nesse instante que ele sai da lista primitiva.
+ * Achou, queimou.
+ *
+ * Por isso não existe kit esperando no banco: o kit **nasce** deste registro.
  */
 @Injectable()
 export class ActivateKitUseCase {
@@ -74,23 +79,33 @@ export class ActivateKitUseCase {
 
     const code = validated.value;
 
-    // Camada 2: o código existe e está disponível?
-    const kit = await this.prisma.kit.findUnique({ where: { code } });
-    if (!kit) {
+    // Camada 2: o número está na lista oficial da Genoa?
+    const daLista = await this.prisma.activationCode.findUnique({ where: { code } });
+    if (!daLista || !daLista.usable) {
       // Mensagem deliberadamente igual à de código malformado. Distinguir
-      // "não existe" de "formato errado" permitiria varrer o espaço de códigos
-      // para descobrir quais foram emitidos.
+      // "não está na lista" de "formato errado" entregaria, a quem varre, o
+      // mapa de quais números existem.
+      //
+      // `usable: false` são os oito de base trivial: estão na lista do cliente,
+      // passam no módulo 11, e o validador os recusa. Se um deles foi parar
+      // numa caixa, o adesivo está errado e o suporte precisa saber.
+      if (daLista && !daLista.usable) {
+        this.logger.warn(
+          `Registro recusado: ${code} é de base trivial e não deveria ter sido impresso`,
+        );
+      }
       return fail(new NotFoundError(CodeValidation.WRONG_CODE, { code: input.code }));
     }
 
-    if (kit.status === 'DISCARDED') {
-      return fail(new ConflictError('Este kit foi descartado. Fale com o suporte.'));
-    }
-
-    if (kit.subjectId) {
-      // Reativação pelo mesmo titular é idempotente — o cliente pode ter perdido
-      // a tela ou clicado duas vezes.
-      if (kit.activatedByUserId === input.userId) {
+    // Camada 3: este número já foi registrado por alguém?
+    const kit = await this.prisma.kit.findUnique({ where: { code } });
+    if (kit) {
+      if (kit.status === 'DISCARDED') {
+        return fail(new ConflictError('Este kit foi descartado. Fale com o suporte.'));
+      }
+      // Repetir o registro é idempotente — a pessoa pode ter perdido a tela ou
+      // clicado duas vezes.
+      if (kit.subjectId && kit.activatedByUserId === input.userId) {
         return ok({
           code,
           subjectId: kit.subjectId,
@@ -98,32 +113,37 @@ export class ActivateKitUseCase {
           activatedAt: kit.activatedAt ?? new Date(),
         });
       }
-      // Por outra pessoa, não. Aqui está justamente o risco que o cliente
-      // levantou: um kit já vinculado a um DNA não pode mudar de dono.
+      // Por outra pessoa, não. É exatamente o risco que o cliente levantou: um
+      // kit já vinculado a um DNA não pode mudar de dono.
       return fail(
         new ConflictError(
-          'Este kit já foi ativado por outra pessoa. Se acredita que houve um engano, fale com o suporte.',
+          'Este kit já foi registrado por outra pessoa. Se acredita que houve um engano, fale com o suporte.',
         ),
       );
     }
 
-    // Camada 3: o kit chegou às mãos de alguém?
+    // O pedido de quem está registrando, quando é a mesma pessoa que comprou.
     //
-    // Um kit `GENERATED` nunca saiu do estoque do laboratório — não existe
-    // pessoa legítima com esse código em mãos. Aceitá-lo transformava o pool
-    // inteiro em alvo: como ~1 em cada 100 sequências passa no módulo 11, quem
-    // varresse códigos acabaria acertando um kit não vendido e viraria titular
-    // do DNA dele. Foi o achado mais grave da revisão de 09/09.
-    //
-    // A recusa reusa a mensagem de código inexistente pelo mesmo motivo da
-    // camada 2: dizer "existe, mas ainda não foi despachado" já seria meia
-    // resposta a quem está varrendo.
-    if (!ACTIVATABLE_STATUSES.has(kit.status)) {
-      // Contrapeso da mensagem vaga: o suporte precisa conseguir explicar ao
-      // cliente o que aconteceu com o kit dele sem adivinhar.
-      this.logger.warn(`Ativação recusada: kit ${code} está em ${kit.status}`);
-      return fail(new NotFoundError(CodeValidation.WRONG_CODE, { code: input.code }));
-    }
+    // Serve para o acompanhamento do pedido andar junto. Não é exigência: o kit
+    // pode ser presente, e a esposa ou o filho registram o deles sem ter pedido
+    // — caso que o cliente descreveu em 02/10. Sem pedido, o registro acontece
+    // do mesmo jeito e `orderId` fica nulo.
+    const candidatos = await this.prisma.order.findMany({
+      where: { userId: input.userId, status: { in: [...PEDIDOS_ESPERANDO_KIT] } },
+      orderBy: { createdAt: 'asc' },
+      select: { id: true },
+    });
+    // `Kit.orderId` é coluna solta, sem relação no Prisma: os pedidos que já
+    // têm kit saem numa consulta à parte.
+    const jaComKit = new Set(
+      (
+        await this.prisma.kit.findMany({
+          where: { orderId: { in: candidatos.map((c) => c.id) } },
+          select: { orderId: true },
+        })
+      ).map((k) => k.orderId),
+    );
+    const pedido = candidatos.find((c) => !jaComKit.has(c.id)) ?? null;
 
     const activatedAt = new Date();
     const result = await this.prisma.$transaction(async (tx) => {
@@ -133,14 +153,24 @@ export class ActivateKitUseCase {
         data: { userId: input.userId, subjectId: subject.id, relation: 'SELF' },
       });
 
-      await tx.kit.update({
-        where: { id: kit.id },
+      // O kit nasce aqui: antes deste registro ele só existia em papel.
+      const criado = await tx.kit.create({
         data: {
+          code,
           status: 'ACTIVATED',
           subjectId: subject.id,
           activatedByUserId: input.userId,
           activatedAt,
+          orderId: pedido?.id ?? null,
         },
+        select: { id: true },
+      });
+
+      // E o número sai da lista primitiva, no mesmo instante e na mesma
+      // transação — senão sobra um kit sem baixa, ou uma baixa sem kit.
+      await tx.activationCode.update({
+        where: { code },
+        data: { burnedAt: activatedAt, orderId: pedido?.id ?? null },
       });
 
       // Ativação de kit é acesso a dado genético: entra na trilha de auditoria.
@@ -149,8 +179,8 @@ export class ActivateKitUseCase {
           userId: input.userId,
           action: 'kit.activated',
           resource: 'kit',
-          resourceId: kit.id,
-          metadata: { code },
+          resourceId: criado.id,
+          metadata: { code, sequencial: daLista.sequencial, orderId: pedido?.id ?? null },
           ipAddress: input.ipAddress,
           userAgent: input.userAgent,
         },
@@ -159,7 +189,7 @@ export class ActivateKitUseCase {
       return subject.id;
     });
 
-    this.logger.log(`Kit ${code} ativado`);
+    this.logger.log(`Kit ${code} registrado (sequencial ${daLista.sequencial} queimado)`);
 
     return ok({ code, subjectId: result, alreadyActivated: false, activatedAt });
   }
