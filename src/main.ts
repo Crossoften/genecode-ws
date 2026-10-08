@@ -62,7 +62,21 @@ async function bootstrap(): Promise<void> {
   // nunca listar seu conteúdo.
   const uploads = resolve(config.get('UPLOADS_DIR', { infer: true }));
   mkdirSync(uploads, { recursive: true });
-  app.useStaticAssets(uploads, { prefix: '/uploads/', index: false });
+  app.useStaticAssets(uploads, {
+    prefix: '/uploads/',
+    index: false,
+    setHeaders: (res) => {
+      // O helmet põe `Cross-Origin-Resource-Policy: same-origin` em tudo, e a
+      // foto do kit É servida para outra origem: a vitrine mora na 443 do
+      // Apache e a API na 3041. Com same-origin o fetch devolve 200 e o <img>
+      // fica com naturalWidth 0 — carrega e não desenha, sem erro na tela.
+      //
+      // `cross-origin` vale só para este diretório, que tem imagem pública e
+      // mais nada; as rotas da API seguem com o padrão do helmet.
+      res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
+      res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+    },
+  });
 
   app.useGlobalPipes(
     new ValidationPipe({
