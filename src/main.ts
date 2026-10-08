@@ -1,8 +1,10 @@
-import { readFileSync } from 'node:fs';
+import { mkdirSync, readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
+import type { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import compression from 'compression';
 import helmet from 'helmet';
@@ -32,7 +34,10 @@ function httpsOptions(): { key: Buffer; cert: Buffer; ca: Buffer } | undefined {
 
 async function bootstrap(): Promise<void> {
   const https = httpsOptions();
-  const app = await NestFactory.create(AppModule, https ? { httpsOptions: https } : {});
+  const app = await NestFactory.create<NestExpressApplication>(
+    AppModule,
+    https ? { httpsOptions: https } : {},
+  );
   const config = app.get(ConfigService<Env, true>);
   const logger = new Logger('Bootstrap');
 
@@ -48,6 +53,16 @@ async function bootstrap(): Promise<void> {
   });
 
   app.setGlobalPrefix('v1');
+
+  // Fotos enviadas pelo admin, servidas pelo próprio processo.
+  //
+  // Fora do prefixo /v1 de propósito: a URL vai gravada no banco e aparece na
+  // vitrine, onde versionar com a API não faz sentido — a foto não muda de
+  // formato quando o contrato da API muda. `index: false` para o diretório
+  // nunca listar seu conteúdo.
+  const uploads = resolve(config.get('UPLOADS_DIR', { infer: true }));
+  mkdirSync(uploads, { recursive: true });
+  app.useStaticAssets(uploads, { prefix: '/uploads/', index: false });
 
   app.useGlobalPipes(
     new ValidationPipe({

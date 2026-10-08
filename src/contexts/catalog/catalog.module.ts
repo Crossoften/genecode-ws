@@ -9,10 +9,11 @@ import { ListProductsUseCase } from './application/use-cases/list-products.use-c
 import { RecommendProductUseCase } from './application/use-cases/recommend-product.use-case';
 import { AdminProductsController } from './presentation/controllers/admin-products.controller';
 import { CatalogController } from './presentation/controllers/catalog.controller';
+import { MediaController } from './presentation/controllers/media.controller';
 
 /** Contexto de catálogo: produtos da vitrine, quiz e gestão admin do catálogo. */
 @Module({
-  controllers: [CatalogController, AdminProductsController],
+  controllers: [CatalogController, AdminProductsController, MediaController],
   providers: [
     ListProductsUseCase,
     RecommendProductUseCase,

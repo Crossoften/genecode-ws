@@ -114,6 +114,22 @@ export const envSchema = z.object({
   SMTP_PASSWORD: z.string().optional(),
   /** Remetente, no formato que o provedor aceita como verificado. */
   SMTP_FROM: z.string().optional(),
+
+  // --- Mídia enviada pelo admin ----------------------------------------------
+  //
+  // A foto do kit era uma moldura desabilitada no formulário de produto, com o
+  // aviso "Envio de imagem entra com o provedor de mídia" — e os três produtos
+  // em homolog ficavam com imageUrl null, mostrando a mesma caixa genérica na
+  // vitrine. O provedor é o disco da própria VPS: não há CDN contratada, e um
+  // punhado de fotos de kit não justifica uma.
+  UPLOADS_DIR: z.string().default('./uploads'),
+  /**
+   * Prefixo público dos arquivos enviados, SEM barra no fim.
+   *
+   * Precisa ser absoluto porque a URL é gravada no banco e devolvida para a
+   * vitrine, que roda em outra origem (Apache na 443, API na 3041).
+   */
+  UPLOADS_PUBLIC_URL: z.string().url().default('http://localhost:3000/uploads'),
 });
 
 export type Env = z.infer<typeof envSchema>;
