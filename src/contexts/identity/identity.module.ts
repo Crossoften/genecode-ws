@@ -6,6 +6,8 @@ import { HashService } from '@shared/crypto/hash.service';
 
 import { TokenIssuer } from './application/services/token-issuer.service';
 import { AuthenticateUseCase } from './application/use-cases/authenticate.use-case';
+import { TwoFactorUseCase } from './application/use-cases/two-factor.use-case';
+import { VerificationChallengeService } from './application/services/verification-challenge.service';
 import { AccountSecurityUseCase } from './application/use-cases/account-security.use-case';
 import { ChangePasswordUseCase } from './application/use-cases/change-password.use-case';
 import { ManageProfileUseCase } from './application/use-cases/manage-profile.use-case';
@@ -48,6 +50,8 @@ import { ProfileController } from './presentation/controllers/profile.controller
     HashService,
     TokenIssuer,
     AuthenticateUseCase,
+    TwoFactorUseCase,
+    VerificationChallengeService,
     ManageProfileUseCase,
     ChangePasswordUseCase,
     AccountSecurityUseCase,
@@ -72,6 +76,15 @@ import { ProfileController } from './presentation/controllers/profile.controller
   // JwtModule é reexportado porque os guards globais são registrados no
   // AppModule (para que a ordem de execução fique explícita num só lugar) e
   // precisam resolver o JwtService a partir de lá.
-  exports: [JwtModule, USER_REPOSITORY, REFRESH_TOKEN_REPOSITORY, HashService, TokenIssuer],
+  // VerificationChallengeService é exportado porque a troca de dados de
+  // repasse, no contexto de parceria, usa o mesmo código de uso único.
+  exports: [
+    JwtModule,
+    USER_REPOSITORY,
+    REFRESH_TOKEN_REPOSITORY,
+    HashService,
+    TokenIssuer,
+    VerificationChallengeService,
+  ],
 })
 export class IdentityModule {}

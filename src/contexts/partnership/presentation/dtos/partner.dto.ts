@@ -1,9 +1,11 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
   IsIn,
+  IsNotEmpty,
   IsNumber,
   IsOptional,
   IsString,
+  Matches,
   Max,
   MaxLength,
   Min,
@@ -51,6 +53,16 @@ export class CriarConviteDto {
 }
 
 export class BankDetailsDto {
+  @ApiProperty({ description: 'challengeId de POST /parceiro/dados-bancarios/confirmacao' })
+  @IsString()
+  @IsNotEmpty()
+  challengeId!: string;
+
+  @ApiProperty({ example: '123456', description: 'Código de 6 dígitos recebido por e-mail' })
+  @IsString()
+  @Matches(/^\d{6}$/, { message: 'O código tem 6 dígitos.' })
+  code!: string;
+
   @ApiPropertyOptional({ enum: ['CPF_CNPJ', 'EMAIL', 'PHONE', 'RANDOM'] })
   @IsOptional() @IsIn(['CPF_CNPJ', 'EMAIL', 'PHONE', 'RANDOM'])
   pixKeyType?: string;

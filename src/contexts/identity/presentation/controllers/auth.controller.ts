@@ -4,14 +4,23 @@ import { Throttle } from '@nestjs/throttler';
 import type { Request } from 'express';
 
 import { AuthenticateUseCase } from '../../application/use-cases/authenticate.use-case';
+import { TwoFactorUseCase } from '../../application/use-cases/two-factor.use-case';
 import { CurrentUser, IsPublic } from '../decorators';
-import { AuthResponseDto, LoginDto } from '../dtos/auth.dto';
+import {
+  AuthResponseDto,
+  LoginDto,
+  TwoFactorChallengeDto,
+  VerifyTwoFactorDto,
+} from '../dtos/auth.dto';
 import type { AuthenticatedPrincipal } from '../guards/jwt-auth.guard';
 
 @ApiTags('Autenticação')
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authenticate: AuthenticateUseCase) {}
+  constructor(
+    private readonly authenticate: AuthenticateUseCase,
+    private readonly twoFactor: TwoFactorUseCase,
+  ) {}
 
   /**
    * Authenticates a user and opens a session.
@@ -25,8 +34,12 @@ export class AuthController {
   @Throttle({ default: { limit: 5, ttl: 60_000 } })
   @ApiOperation({ summary: 'Autentica com e-mail e senha' })
   @ApiResponse({ status: 200, type: AuthResponseDto })
+  @ApiResponse({ status: 200, type: TwoFactorChallengeDto, description: 'Conta com duas etapas' })
   @ApiResponse({ status: 401, description: 'E-mail ou senha inválidos' })
-  async login(@Body() dto: LoginDto, @Req() request: Request): Promise<AuthResponseDto> {
+  async login(
+    @Body() dto: LoginDto,
+    @Req() request: Request,
+  ): Promise<AuthResponseDto | TwoFactorChallengeDto> {
     const result = await this.authenticate.execute({
       email: dto.email,
       password: dto.password,
@@ -37,7 +50,55 @@ export class AuthController {
     // The filter turns the domain error into the right status and envelope.
     if (result.isFail()) throw result.error;
 
+    // Conta com segunda etapa: a senha conferiu, mas nenhuma sessão foi aberta.
+    // Quem emite token é /auth/login/verificacao, depois do código.
+    if (result.value.twoFactorRequired) return result.value;
+
     const { user, tokens } = result.value;
+    return {
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        roles: [...user.roles],
+        permissions: [...user.permissions],
+      },
+      accessToken: tokens.accessToken,
+      refreshToken: tokens.refreshToken,
+      expiresIn: tokens.expiresIn,
+    };
+  }
+
+  /**
+   * Segunda etapa: confere o código e abre a sessão.
+   *
+   * Este é o único lugar onde o token nasce para uma conta com duas etapas.
+   * O limite é mais apertado que o do login porque aqui o atacante já tem a
+   * senha e está adivinhando seis dígitos; o teto de 5 tentativas por código,
+   * no caso de uso, fecha o resto.
+   */
+  @Post('login/verificacao')
+  @IsPublic()
+  @HttpCode(HttpStatus.OK)
+  @Throttle({ default: { limit: 10, ttl: 60_000 } })
+  @ApiOperation({ summary: 'Confere o código de 6 dígitos e abre a sessão' })
+  @ApiResponse({ status: 200, type: AuthResponseDto })
+  @ApiResponse({ status: 422, description: 'Código inválido ou expirado' })
+  async verificarSegundaEtapa(
+    @Body() dto: VerifyTwoFactorDto,
+    @Req() request: Request,
+  ): Promise<AuthResponseDto> {
+    const result = await this.twoFactor.verify({
+      challengeId: dto.challengeId,
+      code: dto.code,
+      userAgent: request.headers['user-agent'],
+      ipAddress: request.ip,
+    });
+
+    if (result.isFail()) throw result.error;
+
+    const { tokens, user } = result.value;
+
     return {
       user: {
         id: user.id,

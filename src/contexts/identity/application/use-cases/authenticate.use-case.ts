@@ -7,6 +7,7 @@ import { HashService } from '@shared/crypto/hash.service';
 import { Email } from '../../domain/value-objects/email';
 import { USER_REPOSITORY, type UserRepository } from '../../domain/ports/user.repository';
 import { TokenIssuer, type IssuedTokens } from '../services/token-issuer.service';
+import { TwoFactorUseCase } from './two-factor.use-case';
 
 export interface AuthenticateInput {
   readonly email: string;
@@ -23,9 +24,31 @@ export interface AuthenticatedUser {
   readonly permissions: readonly string[];
 }
 
+/**
+ * Senha conferiu e a sessão está aberta.
+ *
+ * `twoFactorRequired` fica ausente ou `false` — o cliente distingue os dois
+ * casos por este campo, não pela presença do token.
+ */
 export interface AuthenticateOutput {
+  readonly twoFactorRequired?: false;
   readonly user: AuthenticatedUser;
   readonly tokens: IssuedTokens;
+}
+
+/**
+ * Senha conferiu, mas **nenhuma sessão foi aberta**: falta a segunda etapa.
+ *
+ * Não há token aqui de propósito. Até 07/10 o login devolvia o par de tokens
+ * para todo mundo e a tela do código era encenação — bastava não digitar e
+ * navegar direto para o painel.
+ */
+export interface TwoFactorRequiredOutput {
+  readonly twoFactorRequired: true;
+  readonly challengeId: string;
+  readonly maskedEmail: string;
+  readonly expiresInSeconds: number;
+  readonly codigoDeTeste?: string;
 }
 
 /**
@@ -42,6 +65,7 @@ export class AuthenticateUseCase {
     @Inject(USER_REPOSITORY) private readonly users: UserRepository,
     private readonly hash: HashService,
     private readonly tokens: TokenIssuer,
+    private readonly twoFactor: TwoFactorUseCase,
   ) {}
 
   /**
@@ -49,7 +73,9 @@ export class AuthenticateUseCase {
    * @returns The authenticated user and a fresh token pair, or an
    *   `UnauthenticatedError` that is intentionally identical for every cause.
    */
-  async execute(input: AuthenticateInput): Promise<Result<AuthenticateOutput>> {
+  async execute(
+    input: AuthenticateInput,
+  ): Promise<Result<AuthenticateOutput | TwoFactorRequiredOutput>> {
     const email = Email.create(input.email);
     if (email.isFail()) return fail(this.genericFailure());
 
@@ -81,6 +107,14 @@ export class AuthenticateUseCase {
       );
     }
     if (user.status !== 'ACTIVE') return fail(this.genericFailure());
+
+    // A senha conferiu, mas a conta pode exigir a segunda etapa. Daqui não sai
+    // token: sai um desafio, e o par de tokens só nasce em TwoFactorUseCase.
+    // .verify(). É o que impede pular a tela do código.
+    if (this.twoFactor.requiresSecondStep(user)) {
+      const desafio = await this.twoFactor.startChallenge(user);
+      return ok({ twoFactorRequired: true, ...desafio });
+    }
 
     const tokens = await this.tokens.issueFor(user, {
       userAgent: input.userAgent,

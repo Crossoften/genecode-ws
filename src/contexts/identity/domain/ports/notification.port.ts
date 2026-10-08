@@ -4,7 +4,11 @@ export const NOTIFICATION_SENDER = Symbol('NOTIFICATION_SENDER');
 export type IdentityNotification =
   | { readonly kind: 'email-verification'; readonly code: string; readonly name: string }
   | { readonly kind: 'password-reset'; readonly token: string; readonly name: string }
-  | { readonly kind: 'password-changed'; readonly name: string };
+  | { readonly kind: 'password-changed'; readonly name: string }
+  /** Código da verificação em duas etapas, pedido depois de a senha conferir. */
+  | { readonly kind: 'two-factor'; readonly code: string; readonly name: string }
+  /** Código que autoriza a troca dos dados de repasse do parceiro. */
+  | { readonly kind: 'bank-details-change'; readonly code: string; readonly name: string };
 
 /**
  * Envio de notificação transacional.

@@ -11,6 +11,9 @@ import {
   Query,
 } from '@nestjs/common';
 import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { Throttle } from '@nestjs/throttler';
+
+import { VerificationChallengeService } from '@contexts/identity/application/services/verification-challenge.service';
 
 import { CurrentUser, IsPublic, RequireRoles } from '@contexts/identity/presentation/decorators';
 import type { AuthenticatedPrincipal } from '@contexts/identity/presentation/guards/jwt-auth.guard';
@@ -52,6 +55,7 @@ export class PartnerController {
     private readonly bankDetailsQuery: GetPartnerBankDetailsUseCase,
     private readonly prisma: PrismaService,
     private readonly convites: ConvidarParceiroUseCase,
+    private readonly desafios: VerificationChallengeService,
   ) {}
 
   /**
@@ -273,11 +277,39 @@ export class PartnerController {
   }
 
   /**
+   * Abre a confirmação por código para trocar os dados de repasse.
+   *
+   * A tela avisava desde o protótipo que alterar exigiria código, com a
+   * ressalva "o fluxo de verificação está em preparação". Entrou em 07/10,
+   * junto com a segunda etapa da entrada e usando o mesmo serviço de código de
+   * uso único — mudar para onde vai o dinheiro é exatamente o ato que não pode
+   * depender só de uma sessão aberta.
+   */
+  @Post('dados-bancarios/confirmacao')
+  @RequireRoles('affiliate')
+  @HttpCode(HttpStatus.OK)
+  @Throttle({ default: { limit: 5, ttl: 60_000 } })
+  @ApiOperation({ summary: 'Envia o código que autoriza a troca dos dados de repasse' })
+  async pedirConfirmacaoBancaria(@CurrentUser() user: AuthenticatedPrincipal) {
+    const partner = await this.prisma.partner.findUnique({ where: { userId: user.id } });
+    if (!partner) throw new NotFoundError('Perfil de parceiro não encontrado.');
+
+    return this.desafios.abrir({
+      userId: user.id,
+      purpose: 'BANK_DETAILS_CHANGE',
+      email: user.email,
+      name: user.name,
+      ttlMinutes: 10,
+      notificacao: (code) => ({ kind: 'bank-details-change', code, name: user.name }),
+    });
+  }
+
+  /**
    * Dados bancários para repasse.
    *
-   * O protótipo avisa que alterar exige confirmação por código. O
-   * `VerificationPurpose.BANK_DETAILS_CHANGE` já existe no schema desde a Onda 0;
-   * a exigência entra junto com o 2FA.
+   * Exige `challengeId` + `code` de `POST dados-bancarios/confirmacao`. O
+   * código é queimado ANTES da crítica dos campos: um código que conferiu não
+   * pode ser reusado só porque a agência veio errada.
    */
   @Put('dados-bancarios')
   @RequireRoles('affiliate')
@@ -286,6 +318,18 @@ export class PartnerController {
     // Mesmo 404 do GET: affiliate sem registro de parceiro não pode virar 500.
     const partner = await this.prisma.partner.findUnique({ where: { userId: user.id } });
     if (!partner) throw new NotFoundError('Perfil de parceiro não encontrado.');
+
+    const conferido = await this.desafios.consumir(
+      dto.challengeId,
+      'BANK_DETAILS_CHANGE',
+      dto.code,
+    );
+    if (conferido.isFail()) throw conferido.error;
+
+    // O desafio é de quem está logado, e não de outra conta cujo id vazou.
+    if (conferido.value.userId !== user.id) {
+      throw new ValidationError('Código inválido ou expirado. Peça um novo.');
+    }
 
     // Crítica dos dados de repasse.
     //

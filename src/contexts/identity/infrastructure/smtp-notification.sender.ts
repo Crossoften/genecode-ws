@@ -110,6 +110,30 @@ export class SmtpNotificationSender implements NotificationSender {
             'gene.code',
         };
 
+      case 'two-factor':
+        return {
+          assunto: `Seu código de acesso: ${notification.code}`,
+          texto:
+            `Olá, ${notification.name}.\n\n` +
+            `Seu código para entrar no painel é ${notification.code}.\n` +
+            'Ele vale por 10 minutos e serve para uma entrada só.\n\n' +
+            'Se não foi você que tentou entrar, troque a sua senha: alguém ' +
+            'acertou ela.\n\n' +
+            'gene.code',
+        };
+
+      case 'bank-details-change':
+        return {
+          assunto: `Código para alterar seus dados de repasse: ${notification.code}`,
+          texto:
+            `Olá, ${notification.name}.\n\n` +
+            `Use o código ${notification.code} para confirmar a alteração dos seus ` +
+            'dados bancários de repasse. Ele vale por 10 minutos.\n\n' +
+            'Se não foi você que pediu esta alteração, NÃO use o código e fale ' +
+            'com a gente: é para onde o seu dinheiro vai.\n\n' +
+            'gene.code',
+        };
+
       case 'password-changed':
         return {
           assunto: 'Sua senha foi alterada · gene.code',
