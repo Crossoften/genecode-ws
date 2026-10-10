@@ -18,6 +18,16 @@ export interface LabHistoryEntry {
   readonly publishedAt: Date | null;
   /** Quantas categorias o laudo tem — dá a dimensão da linha antes de abrir. */
   readonly categories: number;
+  /** Quando o CSV virou laudo. É a data que o laboratório reconhece como "o meu trabalho". */
+  readonly computedAt: Date;
+  /**
+   * Rascunho esperando a conferência da Genoa.
+   *
+   * O laboratório precisa distinguir "o laudo saiu e está na fila da
+   * conferência" de "o laudo está no ar": a primeira situação é o normal nos
+   * minutos seguintes ao upload, e a tela dizia que não havia nada.
+   */
+  readonly aguardandoLiberacao: boolean;
 }
 
 /**
@@ -29,6 +39,19 @@ export interface LabHistoryEntry {
  * vê — é conferência de trabalho, não acesso a dado de paciente.
  *
  * Os laudos abertos daqui usam `GET /reports/:id`, que já aceita o papel `lab`.
+ *
+ * ### Por que o rascunho entra na lista
+ *
+ * A listagem pedia `status: 'PUBLISHED'`. Fazia sentido no dia em que foi
+ * escrita e deixou de fazer em 02/10, quando a conferência humana passou a
+ * existir: desde então o laudo nasce em `DRAFT` e só vira `PUBLISHED` quando
+ * um admin libera. O efeito apareceu na call de 09/10 — o Flávio importou um
+ * CSV de cinco titulares, os cinco laudos foram calculados e gravados, e o
+ * histórico continuou mostrando um laudo antigo. Pareceu perda de dado; era a
+ * tela escondendo exatamente o trabalho que ela existe para mostrar.
+ *
+ * `SUPERSEDED` fica de fora: é a versão aposentada por uma reemissão, e quem
+ * confere quer a vigente.
  */
 @Injectable()
 export class LabHistoryUseCase {
@@ -39,15 +62,18 @@ export class LabHistoryUseCase {
 
   async execute(): Promise<LabHistoryEntry[]> {
     const reports = await this.prisma.report.findMany({
-      where: { status: 'PUBLISHED' },
-      // `publishedAt` primeiro e `computedAt` como desempate: laudo republicado
-      // mantém a data de cálculo, e ordenar só por uma das duas embaralha a lista.
-      orderBy: [{ publishedAt: 'desc' }, { computedAt: 'desc' }],
+      where: { status: { in: ['DRAFT', 'PUBLISHED'] } },
+      // `computedAt` manda, e não `publishedAt`: o rascunho não tem data de
+      // publicação, e quem acabou de subir o CSV procura o que ele mandou
+      // agora — que é o mais recente por data de cálculo.
+      orderBy: [{ computedAt: 'desc' }, { publishedAt: 'desc' }],
       take: LabHistoryUseCase.LIMITE,
       select: {
         id: true,
         subjectId: true,
+        status: true,
         publishedAt: true,
+        computedAt: true,
         panel: { select: { name: true, version: true } },
         _count: { select: { categoryScores: true } },
       },
@@ -82,6 +108,8 @@ export class LabHistoryUseCase {
         panelVersion: report.panel.version,
         publishedAt: report.publishedAt,
         categories: report._count.categoryScores,
+        computedAt: report.computedAt,
+        aguardandoLiberacao: report.status === 'DRAFT',
       };
     });
   }

@@ -33,7 +33,11 @@ export class ReportsController {
   }
 
   /**
-   * Laudos já publicados, para o laboratório conferir o que saiu do CSV.
+   * Laudos que o laboratório produziu, para conferir o que saiu do CSV.
+   *
+   * Inclui o rascunho que espera a conferência da Genoa — ver a nota no
+   * `LabHistoryUseCase`: desde 02/10 o laudo nasce em rascunho, e listar só o
+   * publicado escondia justamente o CSV que acabou de ser importado.
    *
    * Mesma permissão da fila: é o mesmo operador, na mesma tela, terminando o
    * mesmo trabalho. Abrir um laudo daqui cai em `GET /reports/:id`, que já
@@ -41,7 +45,7 @@ export class ReportsController {
    */
   @Get('lab/historico')
   @RequirePermissions('samples.read')
-  @ApiOperation({ summary: 'Laudos publicados, por pedido e kit' })
+  @ApiOperation({ summary: 'Laudos do laboratório, por pedido e kit' })
   async labHistoryList() {
     return this.labHistory.execute();
   }
