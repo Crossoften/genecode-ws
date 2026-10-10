@@ -85,6 +85,18 @@ export interface PartnersMetrics {
     /** Produto que mais vendeu, que o cliente pediu explicitamente no painel. */
     readonly topProduct: string;
   }[];
+  /**
+   * Produtos mais vendidos pela rede, por unidade.
+   *
+   * Pergunta diferente da do `topProduct` de cada parceiro: ali é o campeão de
+   * quem vendeu, aqui é o campeão do conjunto. Pedido na call de 09/10, junto
+   * com os gráficos de barra do módulo de engajamento.
+   */
+  readonly topProducts: readonly {
+    readonly name: string;
+    readonly units: number;
+    readonly revenueCents: number;
+  }[];
   readonly pendingPayoutCents: number;
   readonly settledPayoutCents: number;
 }
@@ -354,6 +366,29 @@ export class BusinessIntelligenceUseCase {
     const sumOf = (status: string): number =>
       payouts.find((row) => row.status === status)?._sum.amountCents ?? 0;
 
+    // Produtos mais vendidos PELA REDE.
+    //
+    // O ranking já dizia o produto campeão de cada parceiro; o cliente pediu a
+    // outra pergunta em 09/10 — *"qual produto tá sendo mais vendido"* — e ela
+    // não sai somando campeões, porque um parceiro grande e um pequeno pesam
+    // igual nessa conta. Aqui é unidade vendida, sobre os mesmos pedidos pagos
+    // com cupom que alimentam o ranking.
+    const porProduto = new Map<string, { units: number; revenueCents: number }>();
+    for (const order of orders) {
+      const unidades = order.items.reduce((soma, item) => soma + item.quantity, 0) || 1;
+      for (const item of order.items) {
+        const atual = porProduto.get(item.productName) ?? { units: 0, revenueCents: 0 };
+        atual.units += item.quantity;
+        // O pedido tem um total só (com frete e desconto); rateia pelo número
+        // de unidades para não atribuir o pedido inteiro a cada item.
+        atual.revenueCents += Math.round((order.totalCents * item.quantity) / unidades);
+        porProduto.set(item.productName, atual);
+      }
+    }
+    const topProducts = [...porProduto.entries()]
+      .map(([name, dados]) => ({ name, ...dados }))
+      .sort((a, b) => b.units - a.units);
+
     const ranking = partners
       .map((partner) => {
         const data = byCode.get(partner.couponCode);
@@ -377,6 +412,7 @@ export class BusinessIntelligenceUseCase {
       activePartners: partners.length,
       partnersWithoutSales: ranking.filter((entry) => entry.orders === 0).length,
       ranking,
+      topProducts,
       pendingPayoutCents: sumOf('PENDING'),
       settledPayoutCents: sumOf('SETTLED'),
     };

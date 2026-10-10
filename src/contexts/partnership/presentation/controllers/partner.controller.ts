@@ -30,6 +30,7 @@ import {
   validarConta,
 } from '@shared/validation/chave-pix';
 import { ConvidarParceiroUseCase } from '../../application/use-cases/convidar-parceiro.use-case';
+import { vendasPorUnidade } from '../../application/rede-vendas.query';
 import { BOLO_PADRAO_PERCENT } from '../../domain/rede';
 import { BankDetailsDto, CriarConviteDto, RegisterPartnerDto } from '../dtos/partner.dto';
 
@@ -217,6 +218,14 @@ export class PartnerController {
       orderBy: { createdAt: 'desc' },
     });
 
+    // Quanto cada unidade vendeu — ver `rede-vendas.query.ts`.
+    //
+    // O cliente, na call de 09/10, no papel de franqueador: *"eu quero ver
+    // quanto tá vendendo por unidade, qual o exame que tá vendendo mais"*. A
+    // tela listava quem está na rede e o quanto cada um cede, mas não dizia se
+    // alguém ali vende.
+    const vendas = await vendasPorUnidade(this.prisma, filhos.map((f) => f.id));
+
     return {
       eu: {
         displayName: eu.displayName,
@@ -230,6 +239,12 @@ export class PartnerController {
         sharePercent: Number(f.sharePercent),
         // O que sobra para mim quando este indicado vende.
         minhaParteQuandoEleVende: Number(eu.sharePercent) - Number(f.sharePercent),
+        vendas: vendas.get(f.id) ?? {
+          orders: 0,
+          revenueCents: 0,
+          topProduct: null,
+          subRede: 0,
+        },
       })),
     };
   }
