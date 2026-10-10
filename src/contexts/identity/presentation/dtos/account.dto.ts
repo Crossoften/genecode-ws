@@ -111,6 +111,28 @@ export class ResetPasswordDto {
   password!: string;
 }
 
+/**
+ * Conclusão do convite de pré-cadastro.
+ *
+ * Mesma forma do `ResetPasswordDto` — token do e-mail e senha nova — porque é
+ * a mesma operação por baixo: um token de uso único autorizando definir senha.
+ * Fica como classe própria para o Swagger descrever a rota pelo que ela é, e
+ * para a documentação de uma não mudar quando a outra mudar.
+ */
+export class ConcluirConviteDto {
+  @ApiProperty({ description: 'Token recebido no e-mail de convite.' })
+  @IsString()
+  @IsNotEmpty()
+  @MaxLength(128)
+  token!: string;
+
+  @ApiProperty({ description: 'Senha escolhida pela pessoa.' })
+  @IsString()
+  @MinLength(8)
+  @MaxLength(128)
+  password!: string;
+}
+
 export class RefreshDto {
   @ApiProperty()
   @IsString()

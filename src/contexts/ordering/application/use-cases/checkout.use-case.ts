@@ -3,6 +3,7 @@ import type { PaymentStatus as PaymentStatusDb, Prisma } from '@prisma/client';
 import { randomInt } from 'node:crypto';
 
 import { buildActivationCode } from '@contexts/lab/domain/activation-code';
+import { PreCadastroUseCase } from '@contexts/identity/application/use-cases/pre-cadastro.use-case';
 import { PrismaService } from '@infra/database/prisma.service';
 import {
   ConflictError,
@@ -119,11 +120,17 @@ const KIT_BASE_SPACE = 1_000_000;
  * Criando o pedido primeiro em `PENDING_PAYMENT`, o pior caso é um pedido órfão
  * sem pagamento, que a operação vê, entende e cancela.
  *
- * ### Checkout anônimo
+ * ### Checkout anônimo, com pré-cadastro
  *
  * `userId` é opcional porque o cliente definiu em 28/05 que a conta é oferecida
  * **depois** da confirmação do pedido. Os dados do comprador ficam congelados no
- * pedido, e a conta é vinculada quando for criada.
+ * pedido.
+ *
+ * Desde 09/10 o pedido não fica órfão: quando não há conta logada, o checkout
+ * cria um **pré-cadastro** com os dados que o comprador acabou de preencher e
+ * vincula a compra a ele (ver `PreCadastroUseCase`). A pessoa não vê etapa
+ * nenhuma a mais — recebe um e-mail convidando a criar a senha, e o histórico
+ * da compra já está lá quando ela aceitar.
  */
 @Injectable()
 export class CheckoutUseCase {
@@ -133,6 +140,7 @@ export class CheckoutUseCase {
     @Inject(PAYMENT_GATEWAY) private readonly gateway: PaymentGateway,
     @Inject(SHIPPING_PROVIDER) private readonly shipping: ShippingProvider,
     private readonly confirmPayment: ConfirmPaymentUseCase,
+    private readonly preCadastro: PreCadastroUseCase,
     private readonly prisma: PrismaService,
   ) {}
 
@@ -167,13 +175,32 @@ export class CheckoutUseCase {
         ? split.plano.reduce((soma, fatia) => soma + fatia.amountCents, 0)
         : totals.commissionCents;
 
+    // A conta do comprador, antes de o pedido nascer.
+    //
+    // Com sessão, é a dela. Sem sessão, o pré-cadastro devolve a conta
+    // existente daquele e-mail/CPF ou cria uma nova e manda o convite. Nunca
+    // lança: compra paga vale mais do que o vínculo, e o vínculo é refazível.
+    const userId =
+      input.userId ??
+      (await this.preCadastro.garantirConta({
+        name: input.customer.name,
+        email: input.customer.email,
+        document: input.customer.document,
+        phone: input.customer.phone,
+        addressLine: `${input.address.street}, ${input.address.number}` +
+          `${input.address.complement ? ` - ${input.address.complement}` : ''}` +
+          ` - ${input.address.neighborhood}, ${input.address.city}/${input.address.state}`,
+        addressZip: input.address.zipCode,
+      })) ??
+      undefined;
+
     const order = await this.prisma.$transaction(async (tx) => {
       const number = await this.nextOrderNumber(tx);
 
       const created = await tx.order.create({
         data: {
           number,
-          userId: input.userId,
+          userId,
           customerName: input.customer.name,
           customerEmail: input.customer.email.toLowerCase(),
           customerDoc: input.customer.document,
@@ -286,7 +313,7 @@ export class CheckoutUseCase {
       // a fila do laboratório para demonstrar o fluxo completo. Desaparece
       // sozinho quando o gateway real (sem a flag) assumir.
       if (simulated) {
-        await this.simulateFulfillment(order.id, input.userId);
+        await this.simulateFulfillment(order.id, userId);
         finalStatus = OrderStatus.SAMPLE_RECEIVED;
       }
     }

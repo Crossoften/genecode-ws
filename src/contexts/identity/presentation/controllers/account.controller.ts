@@ -1,10 +1,11 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Post, Req } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, Req } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Throttle } from '@nestjs/throttler';
 import type { Request } from 'express';
 
 import { PrismaService } from '@infra/database/prisma.service';
 
+import { PreCadastroUseCase } from '../../application/use-cases/pre-cadastro.use-case';
 import { RefreshSessionUseCase } from '../../application/use-cases/refresh-session.use-case';
 import { ResendVerificationUseCase } from '../../application/use-cases/resend-verification.use-case';
 import { RegisterUserUseCase } from '../../application/use-cases/register-user.use-case';
@@ -12,6 +13,7 @@ import { ResetPasswordUseCase } from '../../application/use-cases/reset-password
 import { VerifyEmailUseCase } from '../../application/use-cases/verify-email.use-case';
 import { IsPublic } from '../decorators';
 import {
+  ConcluirConviteDto,
   ForgotPasswordDto,
   RefreshDto,
   RegisterDto,
@@ -47,6 +49,7 @@ export class AccountController {
     private readonly resend: ResendVerificationUseCase,
     private readonly resetPassword: ResetPasswordUseCase,
     private readonly refreshSession: RefreshSessionUseCase,
+    private readonly preCadastro: PreCadastroUseCase,
     private readonly prisma: PrismaService,
   ) {}
 
@@ -174,6 +177,43 @@ export class AccountController {
   async reset(@Body() dto: ResetPasswordDto): Promise<void> {
     const result = await this.resetPassword.confirm(dto.token, dto.password);
     if (result.isFail()) throw result.error;
+  }
+
+  // ── Convite de pré-cadastro (09/10) ──────────────────────────────────────
+  //
+  // Quem compra sem conta recebe um e-mail convidando a criar a senha. Estas
+  // duas rotas são a tela desse convite: a primeira diz para quem ele é, a
+  // segunda conclui e já entrega a sessão.
+
+  /** O que a tela do convite mostra antes de pedir a senha. */
+  @Get('convite/:token')
+  @IsPublic()
+  @Throttle({ default: { limit: 10, ttl: 60_000 } })
+  @ApiOperation({ summary: 'Dados do convite de pré-cadastro' })
+  async convite(@Param('token') token: string) {
+    const result = await this.preCadastro.consultar(token);
+    if (result.isFail()) throw result.error;
+    return result.value;
+  }
+
+  /**
+   * Conclui o convite: define a senha, ativa a conta e abre a sessão.
+   *
+   * Abrir a sessão segue a mesma decisão da confirmação de e-mail: a pessoa
+   * acabou de provar que controla o endereço, porque o link chegou nele.
+   */
+  @Post('convite/concluir')
+  @IsPublic()
+  @HttpCode(HttpStatus.OK)
+  @Throttle({ default: { limit: 5, ttl: 60_000 } })
+  @ApiOperation({ summary: 'Cria a senha do pré-cadastro e entra' })
+  async concluirConvite(@Body() dto: ConcluirConviteDto, @Req() request: Request) {
+    const result = await this.preCadastro.concluir(dto.token, dto.password, {
+      ipAddress: request.ip,
+      userAgent: request.headers['user-agent'],
+    });
+    if (result.isFail()) throw result.error;
+    return result.value.tokens;
   }
 
   /** Renova a sessão, rotacionando o refresh token. */

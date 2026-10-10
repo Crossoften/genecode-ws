@@ -134,6 +134,22 @@ export class SmtpNotificationSender implements NotificationSender {
             'gene.code',
         };
 
+      case 'account-invite':
+        return {
+          assunto: 'Crie sua senha e acompanhe seu exame · gene.code',
+          texto:
+            `Olá, ${notification.name}.\n\n` +
+            'Obrigado pela sua compra! Já guardamos seus dados para você não ' +
+            'precisar digitar tudo de novo — falta só criar uma senha para ' +
+            'acompanhar o pedido, ativar o kit quando ele chegar e ver o laudo.\n\n' +
+            'Use o código abaixo na tela de convite:\n\n' +
+            `${notification.token}\n\n` +
+            'O convite vale por 7 dias. Se você preferir não criar conta agora, ' +
+            'é só ignorar: seu pedido segue normalmente e chega no endereço que ' +
+            'você informou.\n\n' +
+            'gene.code',
+        };
+
       case 'password-changed':
         return {
           assunto: 'Sua senha foi alterada · gene.code',

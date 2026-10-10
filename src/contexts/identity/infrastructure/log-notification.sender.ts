@@ -34,6 +34,9 @@ export class LogNotificationSender implements NotificationSender {
       case 'password-reset':
         this.logger.log(`[recuperação] ${to} → token ${notification.token}`);
         break;
+      case 'account-invite':
+        this.logger.log(`[convite de cadastro] ${to} → token ${notification.token}`);
+        break;
       case 'two-factor':
         this.logger.log(`[duas etapas] ${to} → código ${notification.code}`);
         break;

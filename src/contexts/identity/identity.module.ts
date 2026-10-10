@@ -13,6 +13,7 @@ import { ChangePasswordUseCase } from './application/use-cases/change-password.u
 import { ManageProfileUseCase } from './application/use-cases/manage-profile.use-case';
 import { RefreshSessionUseCase } from './application/use-cases/refresh-session.use-case';
 import { ResendVerificationUseCase } from './application/use-cases/resend-verification.use-case';
+import { PreCadastroUseCase } from './application/use-cases/pre-cadastro.use-case';
 import { RegisterUserUseCase } from './application/use-cases/register-user.use-case';
 import { ResetPasswordUseCase } from './application/use-cases/reset-password.use-case';
 import { VerifyEmailUseCase } from './application/use-cases/verify-email.use-case';
@@ -55,6 +56,7 @@ import { ProfileController } from './presentation/controllers/profile.controller
     ManageProfileUseCase,
     ChangePasswordUseCase,
     AccountSecurityUseCase,
+    PreCadastroUseCase,
     RegisterUserUseCase,
     ResendVerificationUseCase,
     VerifyEmailUseCase,
@@ -78,6 +80,8 @@ import { ProfileController } from './presentation/controllers/profile.controller
   // precisam resolver o JwtService a partir de lá.
   // VerificationChallengeService é exportado porque a troca de dados de
   // repasse, no contexto de parceria, usa o mesmo código de uso único.
+  // PreCadastroUseCase é exportado porque quem o aciona é o checkout, no
+  // contexto de comércio: é lá que a compra sem conta acontece.
   exports: [
     JwtModule,
     USER_REPOSITORY,
@@ -85,6 +89,7 @@ import { ProfileController } from './presentation/controllers/profile.controller
     HashService,
     TokenIssuer,
     VerificationChallengeService,
+    PreCadastroUseCase,
   ],
 })
 export class IdentityModule {}
