@@ -41,6 +41,8 @@ const PERMISSIONS = [
   ['audit.read', 'Consultar trilha de auditoria'],
   ['questionnaire.read', 'Visualizar questionário ambiental'],
   ['questionnaire.write', 'Editar perguntas e pesos do questionário ambiental'],
+  ['team.read', 'Visualizar a equipe interna'],
+  ['team.write', 'Convidar colaboradores e definir o acesso de cada um'],
 ] as const;
 
 /**
@@ -93,6 +95,29 @@ const ROLES: ReadonlyArray<{
       'questionnaire.read',
       'questionnaire.write',
     ],
+  },
+  /**
+   * Os dois papéis parciais, pedidos na call de 09/10.
+   *
+   * O Augusto levantou o caso: *"você não vai dar pro cara de laboratório
+   * acesso ao financeiro. Esse cara não precisa ter; ele vai ter um acesso
+   * parcial com o que diz respeito a laboratório"*. O André nomeou os outros
+   * dois: *"colocar lá um gestor financeiro… ou colocar o gestor de pedidos"*.
+   *
+   * Cada um carrega só o que a sua aba precisa — e, por tabela, o menu do
+   * admin mostra só as abas que a permissão abre.
+   */
+  {
+    slug: 'finance',
+    name: 'Gestor financeiro',
+    description: 'Vê receita, comissões e repasses. Não mexe na esteira nem no catálogo.',
+    permissions: ['finance.read', 'analytics.read', 'orders.read', 'partners.read'],
+  },
+  {
+    slug: 'orders',
+    name: 'Gestor de pedidos',
+    description: 'Toca a esteira do pedido até a entrega. Não vê financeiro.',
+    permissions: ['orders.read', 'orders.write', 'samples.read', 'analytics.read'],
   },
   {
     slug: 'admin',

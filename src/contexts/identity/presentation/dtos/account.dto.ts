@@ -3,6 +3,7 @@ import { Type } from 'class-transformer';
 import {
   ArrayMaxSize,
   IsArray,
+  IsBoolean,
   IsEmail,
   IsNotEmpty,
   IsOptional,
@@ -131,6 +132,41 @@ export class ConcluirConviteDto {
   @MinLength(8)
   @MaxLength(128)
   password!: string;
+}
+
+/** Convite de colaborador, da tela de equipe do admin. */
+export class ConvidarColaboradorDto {
+  @ApiProperty({ description: 'Nome de quem será convidado.' })
+  @IsString()
+  @IsNotEmpty()
+  @MaxLength(160)
+  name!: string;
+
+  @ApiProperty({ description: 'E-mail para onde o convite vai.' })
+  @IsString()
+  @IsNotEmpty()
+  @MaxLength(255)
+  email!: string;
+
+  @ApiProperty({ description: 'Papel interno: master, admin, finance, orders ou lab.' })
+  @IsString()
+  @IsNotEmpty()
+  @MaxLength(32)
+  papel!: string;
+}
+
+export class TrocarPapelDto {
+  @ApiProperty({ description: 'Novo papel interno.' })
+  @IsString()
+  @IsNotEmpty()
+  @MaxLength(32)
+  papel!: string;
+}
+
+export class DefinirAtivoDto {
+  @ApiProperty({ description: 'Ligar ou desligar o acesso.' })
+  @IsBoolean()
+  ativo!: boolean;
 }
 
 export class RefreshDto {

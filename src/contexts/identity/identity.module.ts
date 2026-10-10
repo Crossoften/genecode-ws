@@ -13,6 +13,7 @@ import { ChangePasswordUseCase } from './application/use-cases/change-password.u
 import { ManageProfileUseCase } from './application/use-cases/manage-profile.use-case';
 import { RefreshSessionUseCase } from './application/use-cases/refresh-session.use-case';
 import { ResendVerificationUseCase } from './application/use-cases/resend-verification.use-case';
+import { EquipeUseCase } from './application/use-cases/equipe.use-case';
 import { PreCadastroUseCase } from './application/use-cases/pre-cadastro.use-case';
 import { RegisterUserUseCase } from './application/use-cases/register-user.use-case';
 import { ResetPasswordUseCase } from './application/use-cases/reset-password.use-case';
@@ -26,6 +27,7 @@ import { USER_REPOSITORY } from './domain/ports/user.repository';
 import { PrismaRefreshTokenRepository } from './infrastructure/repositories/prisma-refresh-token.repository';
 import { PrismaUserRepository } from './infrastructure/repositories/prisma-user.repository';
 import { AccountController } from './presentation/controllers/account.controller';
+import { EquipeController } from './presentation/controllers/equipe.controller';
 import { AuthController } from './presentation/controllers/auth.controller';
 import { ProfileController } from './presentation/controllers/profile.controller';
 
@@ -46,7 +48,7 @@ import { ProfileController } from './presentation/controllers/profile.controller
     // here, because access and refresh tokens use different keys.
     JwtModule.register({}),
   ],
-  controllers: [AuthController, AccountController, ProfileController],
+  controllers: [AuthController, AccountController, EquipeController, ProfileController],
   providers: [
     HashService,
     TokenIssuer,
@@ -56,6 +58,7 @@ import { ProfileController } from './presentation/controllers/profile.controller
     ManageProfileUseCase,
     ChangePasswordUseCase,
     AccountSecurityUseCase,
+    EquipeUseCase,
     PreCadastroUseCase,
     RegisterUserUseCase,
     ResendVerificationUseCase,
