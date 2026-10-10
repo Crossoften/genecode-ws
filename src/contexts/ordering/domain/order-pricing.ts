@@ -82,11 +82,14 @@ export function calculateTotals(
  * Gera o número do pedido no formato que o protótipo aprovado usa.
  *
  * @param year - Ano do pedido.
- * @param sequence - Sequencial do ano.
+ * @param sequence - Sufixo de cinco dígitos.
  */
 export function formatOrderNumber(year: number, sequence: number): string {
   return `GC-${year}-${String(sequence).padStart(5, '0')}`;
 }
+
+/** Teto do sufixo: cinco dígitos, de 00000 a 99999. */
+export const ORDER_NUMBER_SPACE = 100_000;
 
 /**
  * Valor da parcela sem juros, arredondado para cima.

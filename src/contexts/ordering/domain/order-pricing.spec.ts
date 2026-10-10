@@ -1,5 +1,6 @@
 import {
   calculateTotals,
+  ORDER_NUMBER_SPACE,
   formatOrderNumber,
   installmentCents,
   type PricedItem,
@@ -78,6 +79,14 @@ describe('Precificação do pedido', () => {
   it('formata o número do pedido como o protótipo aprovado', () => {
     expect(formatOrderNumber(2026, 1)).toBe('GC-2026-00001');
     expect(formatOrderNumber(2026, 12_345)).toBe('GC-2026-12345');
+  });
+
+  // O sufixo passou a ser sorteado em 09/10 (ver `nextOrderNumber`): o teto
+  // precisa caber nos cinco dígitos, senão o número sai com seis e estoura a
+  // coluna que o cliente lê.
+  it('mantém o sufixo em cinco dígitos em toda a faixa sorteável', () => {
+    expect(formatOrderNumber(2026, 0)).toBe('GC-2026-00000');
+    expect(formatOrderNumber(2026, ORDER_NUMBER_SPACE - 1)).toBe('GC-2026-99999');
   });
 
   it('arredonda a parcela para cima, para a soma nunca ficar abaixo do total', () => {

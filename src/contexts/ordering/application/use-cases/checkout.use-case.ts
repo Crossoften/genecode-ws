@@ -11,7 +11,12 @@ import {
 } from '@shared/domain/domain-error';
 import { fail, ok, type Result } from '@shared/domain/result';
 
-import { calculateTotals, formatOrderNumber, type PricedItem } from '../../domain/order-pricing';
+import {
+  ORDER_NUMBER_SPACE,
+  calculateTotals,
+  formatOrderNumber,
+  type PricedItem,
+} from '../../domain/order-pricing';
 import { ConfirmPaymentUseCase } from './confirm-payment.use-case';
 import {
   NIVEL_MAXIMO,
@@ -581,16 +586,36 @@ export class CheckoutUseCase {
   }
 
   /**
-   * Próximo número sequencial do ano.
+   * Número do pedido: ano + sufixo **aleatório** de cinco dígitos.
    *
-   * Conta os pedidos do ano dentro da transação. Suficiente para o volume
-   * previsto; se a concorrência crescer, vira uma tabela de sequência dedicada.
+   * Era sequencial — o primeiro pedido do ano saía `GC-2026-00001`, o
+   * trigésimo `GC-2026-00030`. O Camara viu isso no painel do parceiro em
+   * 09/10 e disse o que o número entregava: *"aí o cara chega e fala: p***,
+   * os caras fizeram 31, como tá escrito aí, ó, 28, 29"* — pediu *"um
+   * negócio meio mais aleatório"*, *"para ninguém saber o que que a gente
+   * fez"*.
+   *
+   * Não é vaidade: o número do pedido aparece para **todo parceiro da rede**
+   * no painel de vendas dele. Sequencial, ele é um contador público do volume
+   * da Genoa, e dois pedidos do mesmo parceiro em semanas diferentes revelam
+   * quantas vendas a casa inteira fez no intervalo.
+   *
+   * Sorteia e confere a colisão. Em cinco dígitos por ano o espaço é pequeno
+   * o bastante para colidir de verdade (aniversário bate perto dos 400
+   * pedidos), por isso o laço, e grande o bastante para o laço nunca ficar
+   * caro no volume previsto. Se um dia o ano passar de alguns milhares de
+   * pedidos, o sufixo ganha um dígito — e não volta a ser sequencial.
+   *
+   * `randomInt` do `crypto`, e não `Math.random`, pelo mesmo motivo do código
+   * do kit: número de pedido adivinhável é pedido rastreável por quem não é
+   * dono dele — a tela pública de acompanhamento abre pelo número.
    */
   private async nextOrderNumber(tx: Prisma.TransactionClient): Promise<string> {
     const year = new Date().getFullYear();
-    const count = await tx.order.count({
-      where: { createdAt: { gte: new Date(`${year}-01-01T00:00:00Z`) } },
-    });
-    return formatOrderNumber(year, count + 1);
+    for (;;) {
+      const number = formatOrderNumber(year, randomInt(ORDER_NUMBER_SPACE));
+      const existe = await tx.order.findUnique({ where: { number }, select: { id: true } });
+      if (!existe) return number;
+    }
   }
 }
