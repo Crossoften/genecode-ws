@@ -8,6 +8,28 @@ export interface PatientKit {
   readonly activatedAt: Date | null;
   /** Pedido a que o kit foi atribuído no despacho — casa kit ↔ pedido na UI. */
   readonly orderId: string | null;
+  /**
+   * Número do pedido, **só quando o pedido é desta conta**.
+   *
+   * O kit pode ser presente: quem registra não é necessariamente quem comprou.
+   * Nesse caso o `orderId` do kit aponta para o pedido de outra pessoa, e o
+   * número dele abre a tela pública de acompanhamento — que mostra o endereço
+   * de entrega de quem comprou. Null, então, para kit de presente.
+   */
+  readonly orderNumber: string | null;
+  /**
+   * Que exame é este kit.
+   *
+   * Vem do produto do pedido; quando o kit foi presente e o pedido é de outra
+   * conta, o produto ainda vale (é o exame que a pessoa tem na mão). Null
+   * enquanto não houver nem pedido nem laudo — aí a tela diz "a definir" em
+   * vez de inventar.
+   */
+  readonly examName: string | null;
+  /** Situação do exame deste kit, no vocabulário dos pedidos. */
+  readonly orderStatus: string | null;
+  /** Laudo publicado do titular deste kit, quando já existe. */
+  readonly reportId: string | null;
 }
 
 export interface PatientReport {
@@ -78,7 +100,13 @@ export class PatientAreaUseCase {
       this.prisma.kit.findMany({
         where: { activatedByUserId: userId },
         orderBy: { activatedAt: 'desc' },
-        select: { code: true, status: true, activatedAt: true, orderId: true },
+        select: {
+          code: true,
+          status: true,
+          activatedAt: true,
+          orderId: true,
+          subjectId: true,
+        },
       }),
 
       subjectIds.length === 0
@@ -126,6 +154,34 @@ export class PatientAreaUseCase {
         .filter((report) => report.subjectId !== null)
         .map((report) => [report.subjectId, report.id]),
     );
+    const panelBySubject = new Map(
+      reports
+        .filter((report) => report.subjectId !== null)
+        .map((report) => [report.subjectId, report.panel.name]),
+    );
+
+    // Os pedidos dos kits desta pessoa, inclusive os de outra conta.
+    //
+    // Kit de presente tem `orderId` do pedido de quem comprou, e esse pedido
+    // não está em `orders` (que é filtrado por `userId`). Sem esta consulta o
+    // cartão do kit presenteado não saberia dizer que exame é.
+    const kitOrderIds = [
+      ...new Set(kits.map((kit) => kit.orderId).filter((id): id is string => id !== null)),
+    ];
+    const kitOrders =
+      kitOrderIds.length === 0
+        ? []
+        : await this.prisma.order.findMany({
+            where: { id: { in: kitOrderIds } },
+            select: {
+              id: true,
+              number: true,
+              status: true,
+              userId: true,
+              items: { select: { productName: true }, take: 1 },
+            },
+          });
+    const orderByKit = new Map(kitOrders.map((order) => [order.id, order]));
 
     const pending = orderKits.find((kit) => kit.status === 'ASSIGNED');
     const pendingOrder = pending
@@ -133,7 +189,22 @@ export class PatientAreaUseCase {
       : undefined;
 
     return {
-      kits,
+      kits: kits.map((kit) => {
+        const order = kit.orderId ? orderByKit.get(kit.orderId) : undefined;
+        return {
+          code: kit.code,
+          status: kit.status,
+          activatedAt: kit.activatedAt,
+          orderId: kit.orderId,
+          // Ver a nota no modelo: número do pedido só para o dono do pedido.
+          orderNumber: order && order.userId === userId ? order.number : null,
+          examName:
+            order?.items[0]?.productName ??
+            (kit.subjectId ? (panelBySubject.get(kit.subjectId) ?? null) : null),
+          orderStatus: order?.status ?? null,
+          reportId: kit.subjectId ? (publishedBySubject.get(kit.subjectId) ?? null) : null,
+        };
+      }),
       orders: orders.map((order) => {
         const kit = orderKits.find((entry) => entry.orderId === order.id);
         return {
