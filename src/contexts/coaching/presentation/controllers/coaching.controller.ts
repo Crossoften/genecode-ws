@@ -38,10 +38,22 @@ export class CoachingController {
     @Body() dto: CreateProfessionalDto,
     @CurrentUser() user: AuthenticatedPrincipal,
   ) {
+    // Perfil curado (card #526): nasce APPROVED — aprovação automática, decisão
+    // do André — com approvedAt carimbado no cadastro e approvedByUserId nulo
+    // (aprovado pelo sistema). O status fica pronto para a moderação futura do
+    // admin/master, que ligaria a fila de PENDING. A reedição do perfil não
+    // mexe no status: quem já foi aprovado continua aprovado.
     const profile = await this.prisma.professionalProfile.upsert({
       where: { userId: user.id },
       update: { specialty: dto.specialty, councilId: dto.councilId, bio: dto.bio },
-      create: { userId: user.id, specialty: dto.specialty, councilId: dto.councilId, bio: dto.bio },
+      create: {
+        userId: user.id,
+        specialty: dto.specialty,
+        councilId: dto.councilId,
+        bio: dto.bio,
+        status: 'APPROVED',
+        approvedAt: new Date(),
+      },
     });
 
     const role = await this.prisma.role.findUnique({ where: { slug: 'professional' } });

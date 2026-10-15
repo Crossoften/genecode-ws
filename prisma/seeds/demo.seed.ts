@@ -45,7 +45,10 @@ const CONTAS: readonly ContaDemo[] = [
   { email: 'master@email.com', nome: 'Master Demo', papeis: ['master'] },
   { email: 'admin@email.com', nome: 'Admin Demo', papeis: ['admin'] },
   { email: 'lab@email.com', nome: 'Laboratório Demo', papeis: ['lab'] },
-  { email: 'treinador@email.com', nome: 'Treinador Demo', papeis: ['professional'] },
+  // Treinador Demo carrega os DOIS papéis de propósito (card #526): é a conta que
+  // mostra o alternador Afiliado/Profissional e alimenta a tela de gestão. Ele é,
+  // ao mesmo tempo, treinador (perfil profissional) e parceiro cabeça de rede.
+  { email: 'treinador@email.com', nome: 'Treinador Demo', papeis: ['professional', 'affiliate'] },
   { email: 'parceiro@email.com', nome: 'Parceiro Demo', papeis: ['affiliate'] },
   { email: 'paciente@email.com', nome: 'Paciente Demo', papeis: ['patient'] },
   { email: 'paciente1@email.com', nome: 'Paciente Um', papeis: ['patient'] },
@@ -199,9 +202,46 @@ async function main(): Promise<void> {
   const perfil = await prisma.professionalProfile.upsert({
     where: { userId: treinadorUserId },
     update: { specialty: 'Personal Trainer' },
-    create: { userId: treinadorUserId, specialty: 'Personal Trainer' },
+    // Perfil curado (card #526): nasce aprovado, com approvedAt carimbado.
+    create: {
+      userId: treinadorUserId,
+      specialty: 'Personal Trainer',
+      councilId: 'CREF 012345-G/SP',
+      status: 'APPROVED',
+      approvedAt: new Date(),
+    },
   });
   console.log('\n✓ perfil profissional: Treinador Demo (Personal Trainer)');
+
+  // Treinador também é parceiro cabeça de rede (card #526): sem convite, nasce
+  // raiz (parentId nulo, nível 1, bolo inteiro). É o "mesmo que cabeça" do André,
+  // e é o que faz o alternador Afiliado/Profissional aparecer para esta conta.
+  const cupomTreinador = 'TREINADOR10';
+  const parceiroTreinador = await prisma.partner.upsert({
+    where: { userId: treinadorUserId },
+    update: { active: true },
+    create: {
+      userId: treinadorUserId,
+      type: 'INDIVIDUAL',
+      displayName: 'Treinador Demo',
+      document: '153.509.460-56',
+      channel: 'Instagram @treinadordemo',
+      couponCode: cupomTreinador,
+      active: true,
+    },
+  });
+  await prisma.coupon.upsert({
+    where: { code: cupomTreinador },
+    update: { active: true },
+    create: {
+      code: cupomTreinador,
+      discountPercent: 0,
+      commissionPercent: 20,
+      partnerName: parceiroTreinador.displayName,
+      active: true,
+    },
+  });
+  console.log('✓ treinador também é parceiro cabeça de rede · cupom TREINADOR10');
 
   // --- Parceiro afiliado, com cupom próprio ---------------------------------
   const parceiroUserId = ids.get('parceiro@email.com')!;

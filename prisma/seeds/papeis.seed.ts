@@ -24,6 +24,7 @@ const PERMISSIONS = [
   ['reports.publish', 'Publicar laudos'],
   ['partners.read', 'Visualizar parceiros'],
   ['partners.write', 'Gerenciar parceiros e comissões'],
+  ['professionals.read', 'Visualizar treinadores'],
   ['notifications.read', 'Visualizar gatilhos de notificação'],
   ['notifications.write', 'Gerenciar gatilhos de notificação'],
   ['finance.read', 'Visualizar financeiro'],

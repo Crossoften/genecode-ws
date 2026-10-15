@@ -1226,11 +1226,22 @@ model ProfessionalProfile {
   id     String @id @default(uuid()) @db.Char(36)
   userId String @unique @db.Char(36)
 
-  /// Autodeclarada, de uma lista fechada.
+  /// Autodeclarada, de uma lista fechada. É a ocupação / área de atuação.
   specialty String  @db.VarChar(60)
   /// Registro de conselho, se a pessoa tiver. Não é validado nem obrigatório.
   councilId String? @db.VarChar(40)
   bio       String? @db.VarChar(500)
+
+  /// Curadoria do perfil de treinador (card #526).
+  ///
+  /// O cadastro do treinador deixou de ser autoatribuição silenciosa e passou a
+  /// ser **perfil curado**: nasce `APPROVED` — aprovação automática, decisão do
+  /// André — mas o campo existe para a moderação futura ligar uma fila de
+  /// `PENDING` sem nova migração. `approvedByUserId` nulo = aprovado
+  /// automaticamente pelo sistema; preenchido = um admin/master aprovou à mão.
+  status           ProfessionalStatus @default(APPROVED)
+  approvedAt       DateTime?
+  approvedByUserId String?            @db.Char(36)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -1238,7 +1249,19 @@ model ProfessionalProfile {
   shares      DataSharing[]
   assessments Assessment[]
 
+  @@index([status])
   @@map("professional_profiles")
+}
+
+/// Situação da curadoria do perfil de treinador.
+///
+/// Hoje todo perfil nasce `APPROVED` (aprovação automática). `PENDING` e
+/// `REJECTED` existem desde já para a moderação do admin/master prometida como
+/// próximo passo — a tela de gestão lê este campo.
+enum ProfessionalStatus {
+  PENDING
+  APPROVED
+  REJECTED
 }
 
 /// Autorização de acesso ao laudo consolidado.
