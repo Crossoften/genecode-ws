@@ -1,5 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 
+import { PreCadastroUseCase } from '@contexts/identity/application/use-cases/pre-cadastro.use-case';
 import { PrismaService } from '@infra/database/prisma.service';
 
 /**
@@ -25,7 +26,10 @@ import { PrismaService } from '@infra/database/prisma.service';
 export class ConfirmPaymentUseCase {
   private readonly logger = new Logger(ConfirmPaymentUseCase.name);
 
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly preCadastro: PreCadastroUseCase,
+  ) {}
 
   /**
    * @param orderId - Id interno do pedido.
@@ -41,6 +45,23 @@ export class ConfirmPaymentUseCase {
         couponCode: true,
         commissionCents: true,
         splitPlan: true,
+        // Dados do comprador, para garantir a conta na confirmação (card #526).
+        userId: true,
+        customerName: true,
+        customerEmail: true,
+        customerDoc: true,
+        customerPhone: true,
+        address: {
+          select: {
+            zipCode: true,
+            street: true,
+            number: true,
+            complement: true,
+            neighborhood: true,
+            city: true,
+            state: true,
+          },
+        },
       },
     });
 
@@ -90,8 +111,69 @@ export class ConfirmPaymentUseCase {
       ),
     ]);
 
+    // Garante a conta do comprador na confirmação do pagamento (card #526).
+    //
+    // No checkout feito pela gene.code o pré-cadastro já rodou e o pedido nasceu
+    // vinculado. Este laço cobre o pedido que chegou aqui **anônimo** — sem
+    // conta vinculada — que é o caso do fluxo novo em que a identificação vem
+    // pelo iframe/retorno da Afinz: na volta do pagamento, recuperamos os dados
+    // da compra, gravamos a conta e disparamos o e-mail de cadastro.
+    //
+    // `garantirConta` é idempotente e silencioso: e-mail que já tem conta não
+    // recebe nada, e a falha nunca derruba a confirmação de um pagamento real.
+    if (!order.userId) {
+      await this.garantirContaDoComprador(orderId, order);
+    }
+
     this.logger.log(`Pedido ${order.number} confirmado como pago.`);
     return true;
+  }
+
+  /**
+   * Cria (ou reaproveita) a conta do comprador a partir dos dados do pedido e
+   * vincula a compra a ela. Só roda para pedido sem conta. Ver a nota em
+   * `PreCadastroUseCase`: a conta nasce PENDING e o e-mail de cadastro é o único
+   * caminho para ativá-la.
+   */
+  private async garantirContaDoComprador(
+    orderId: string,
+    order: {
+      readonly number: string;
+      readonly customerName: string;
+      readonly customerEmail: string;
+      readonly customerDoc: string;
+      readonly customerPhone: string | null;
+      readonly address: {
+        readonly zipCode: string;
+        readonly street: string;
+        readonly number: string;
+        readonly complement: string | null;
+        readonly neighborhood: string;
+        readonly city: string;
+        readonly state: string;
+      } | null;
+    },
+  ): Promise<void> {
+    const endereco = order.address;
+    const addressLine = endereco
+      ? `${endereco.street}, ${endereco.number}` +
+        `${endereco.complement ? ` - ${endereco.complement}` : ''}` +
+        ` - ${endereco.neighborhood}, ${endereco.city}/${endereco.state}`
+      : undefined;
+
+    const userId = await this.preCadastro.garantirConta({
+      name: order.customerName,
+      email: order.customerEmail,
+      document: order.customerDoc,
+      phone: order.customerPhone ?? undefined,
+      addressLine,
+      addressZip: endereco?.zipCode,
+    });
+
+    if (userId) {
+      await this.prisma.order.update({ where: { id: orderId }, data: { userId } });
+      this.logger.log(`Pedido ${order.number} vinculado à conta do comprador na confirmação.`);
+    }
   }
 }
 
