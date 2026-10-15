@@ -24,8 +24,15 @@ const TRIGGER_BY_STATUS: Partial<Record<OrderStatus, NotificationTriggerKey>> = 
   [OrderStatus.PAID]: 'ORDER_CONFIRMED',
   [OrderStatus.KIT_SHIPPED]: 'KIT_SHIPPED',
   [OrderStatus.SAMPLE_RECEIVED]: 'SAMPLE_RECEIVED',
+  // "Análise iniciada" dispara quando a amostra entra em processamento (card #526).
+  [OrderStatus.PROCESSING]: 'ANALYSIS_STARTED',
   [OrderStatus.REPORT_READY]: 'REPORT_READY',
 };
+
+// ANALYSIS_IN_PROGRESS ("Análise em andamento") não entra aqui de propósito: não
+// há um estado próprio entre PROCESSING e REPORT_READY, e um segundo gatilho
+// automático no mesmo PROCESSING dispararia dois avisos juntos. É um aviso
+// intermediário, enviado pela tela de Notificações do admin quando fizer sentido.
 
 /**
  * Records the patient notifications owed by an order status change.

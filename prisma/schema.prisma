@@ -1559,6 +1559,11 @@ enum NotificationTriggerKey {
   SAMPLE_RECEIVED
   REMINDER
   REPORT_READY
+  // Fase laboratorial, texto definitivo do cliente (card #526). Acrescentados no
+  // fim de propósito: o MySQL guarda enum por índice, e reordenar remapearia as
+  // linhas existentes. A ordem de exibição mora em TRIGGER_FUNNEL_ORDER.
+  ANALYSIS_STARTED
+  ANALYSIS_IN_PROGRESS
 }
 
 /// Registro de cada envio (ou tentativa) — alimenta os KPIs de mensageria.

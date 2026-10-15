@@ -25,6 +25,8 @@ export const TRIGGER_FUNNEL_ORDER: readonly NotificationTriggerKey[] = [
   NotificationTriggerKey.ORDER_CONFIRMED,
   NotificationTriggerKey.KIT_SHIPPED,
   NotificationTriggerKey.SAMPLE_RECEIVED,
+  NotificationTriggerKey.ANALYSIS_STARTED,
+  NotificationTriggerKey.ANALYSIS_IN_PROGRESS,
   NotificationTriggerKey.REMINDER,
   NotificationTriggerKey.REPORT_READY,
 ];
