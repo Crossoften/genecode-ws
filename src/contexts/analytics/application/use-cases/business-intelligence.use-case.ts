@@ -144,7 +144,7 @@ export class BusinessIntelligenceUseCase {
     // é sempre semestral — por isso ignora a janela escolhida no painel.
     const monthsStart = new Date(now.getFullYear(), now.getMonth() - 5, 1);
 
-    const [orders, previousPaid, monthlyPaid, funnelStages] = await Promise.all([
+    const [orders, previousPaid, monthlyPaid, funnelStages, firstFunnelEvent] = await Promise.all([
       this.prisma.order.findMany({
         where: { createdAt: { gte: since } },
         include: { address: { select: { state: true } } },
@@ -162,11 +162,22 @@ export class BusinessIntelligenceUseCase {
         where: { createdAt: { gte: since } },
         _count: { _all: true },
       }),
+      this.prisma.checkoutFunnelEvent.findFirst({
+        orderBy: { createdAt: 'asc' },
+        select: { createdAt: true },
+      }),
     ]);
     const stageCount = (stage: string) =>
       funnelStages.find((entry) => entry.stage === stage)?._count._all ?? 0;
 
     const paid = orders.filter((order) => order.paidAt !== null);
+    // No funil só entram pedidos feitos depois que as etapas passaram a ser
+    // medidas: um pedido anterior não passou pelas etapas contadas e dava
+    // "Pagaram 11 · 220%" sobre 5 carrinhos.
+    const trackedSince = firstFunnelEvent?.createdAt;
+    const funnelPaid = trackedSince
+      ? paid.filter((order) => order.createdAt >= trackedSince).length
+      : 0;
     const previousGross = previousPaid.reduce((sum, order) => sum + order.totalCents, 0);
     const previousCommissions = previousPaid.reduce(
       (sum, order) => sum + (order.commissionCents ?? 0),
@@ -211,7 +222,7 @@ export class BusinessIntelligenceUseCase {
         cart: stageCount('CART'),
         data: stageCount('DATA'),
         payment: stageCount('PAYMENT'),
-        paid: paid.length,
+        paid: funnelPaid,
       },
       previousPeriod: {
         ordersPaid: previousPaid.length,

@@ -13,6 +13,7 @@ describe('BusinessIntelligenceUseCase — sales', () => {
   const NOW = new Date(2026, 7, 10, 12, 0, 0);
 
   interface CurrentRow {
+    createdAt: Date;
     paidAt: Date | null;
     totalCents: number;
     commissionCents: number | null;
@@ -26,14 +27,20 @@ describe('BusinessIntelligenceUseCase — sales', () => {
     commissionCents: number | null;
   }
 
-  function currentRow(paidAt: Date | null, totalCents = 10_000): CurrentRow {
-    return { paidAt, totalCents, commissionCents: 0, couponCode: null, address: null };
+  function currentRow(
+    paidAt: Date | null,
+    totalCents = 10_000,
+    createdAt: Date = paidAt ?? NOW,
+  ): CurrentRow {
+    return { createdAt, paidAt, totalCents, commissionCents: 0, couponCode: null, address: null };
   }
 
   function buildPrisma(rows: {
     current?: CurrentRow[];
     previous?: MoneyRow[];
     monthly?: MoneyRow[];
+    /** Primeira etapa registrada do funil; `null` = funil nunca medido. */
+    funnelSince?: Date | null;
   }) {
     const findMany = jest.fn(
       async (args: {
@@ -54,7 +61,9 @@ describe('BusinessIntelligenceUseCase — sales', () => {
       { stage: 'DATA', _count: { _all: 6 } },
       { stage: 'PAYMENT', _count: { _all: 4 } },
     ]);
-    return { order: { findMany }, checkoutFunnelEvent: { groupBy } };
+    const since = rows.funnelSince === undefined ? new Date(2026, 6, 1) : rows.funnelSince;
+    const findFirst = jest.fn(async () => (since ? { createdAt: since } : null));
+    return { order: { findMany }, checkoutFunnelEvent: { groupBy, findFirst } };
   }
 
   const useCase = (prisma: ReturnType<typeof buildPrisma>) =>
@@ -159,5 +168,30 @@ describe('BusinessIntelligenceUseCase — sales', () => {
     const metrics = await useCase(prisma).sales(30, NOW);
 
     expect(metrics.funnel).toEqual({ cart: 10, data: 6, payment: 4, paid: 2 });
+  });
+
+  it('não conta no funil o pedido feito antes de o funil ser medido', async () => {
+    const inicio = new Date(2026, 7, 4);
+    const prisma = buildPrisma({
+      funnelSince: inicio,
+      current: [
+        currentRow(new Date(2026, 7, 2), 10_000, new Date(2026, 7, 1)),
+        currentRow(new Date(2026, 7, 6), 10_000, new Date(2026, 7, 5)),
+      ],
+    });
+
+    const metrics = await useCase(prisma).sales(30, NOW);
+
+    // O pedido de 01/08 continua nas vendas; só sai do funil.
+    expect(metrics.ordersPaid).toBe(2);
+    expect(metrics.funnel.paid).toBe(1);
+  });
+
+  it('sem nenhuma etapa registrada, o funil não tem pagos', async () => {
+    const prisma = buildPrisma({ funnelSince: null, current: [currentRow(new Date(2026, 7, 6))] });
+
+    const metrics = await useCase(prisma).sales(30, NOW);
+
+    expect(metrics.funnel.paid).toBe(0);
   });
 });
