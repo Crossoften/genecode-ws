@@ -88,9 +88,15 @@ export class AccountFeedUseCase {
       const key = TRIGGER_BY_STATUS[status];
       const template = key ? templateOf.get(key) : undefined;
       if (!template) return null;
-      return template
-        .replaceAll('{nome}', firstName || 'tudo bem')
-        .replaceAll('{pedido}', orderNumber);
+      return (
+        template
+          .replaceAll('{nome}', firstName || 'tudo bem')
+          .replaceAll('{pedido}', orderNumber)
+          // Placeholder que o feed não sabe preencher ({link_laudo} de um
+          // texto antigo) sai, em vez de aparecer cru para a pessoa.
+          .replace(/\s*[^.!?]*\{[a-z_]+\}[^.!?]*[.!?]?/g, '')
+          .trim()
+      );
     };
 
     const entries: FeedEntry[] = events.map((event) => {

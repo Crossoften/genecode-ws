@@ -83,13 +83,26 @@ const TRIGGERS = [
 ];
 
 /**
- * Revisões de texto do cliente sobre o padrão anterior (GC-AJ-025, doc de
- * 21/10/2026): "amostra **de DNA**" e "resulta **no** escore combinado".
+ * Revisões de texto do cliente sobre os padrões anteriores (GC-AJ-025, doc de
+ * 21/10/2026): "amostra **de DNA**", "resulta **no** escore combinado" e, onde
+ * o banco ainda guarda o texto do protótipo (adm-10), o texto definitivo de
+ * "Amostra recebida" e "Resultado disponível" — o card #526 deixou essa troca
+ * para a tela do admin, e em homolog ninguém a fez.
  *
- * Só troca o texto que ainda está **igual ao padrão anterior** — se o admin já
- * editou o gatilho pela tela, a edição dele vale e nada é sobrescrito.
+ * Só troca o texto que ainda está **igual a um padrão anterior** — se o admin
+ * já editou o gatilho pela tela, a edição dele vale e nada é sobrescrito.
  */
 const REVISIONS: ReadonlyArray<{ key: NotificationTriggerKey; from: string; to: string }> = [
+  {
+    key: NotificationTriggerKey.SAMPLE_RECEIVED,
+    from: 'Recebemos sua amostra, {nome}! A análise genética já começou. 🧬',
+    to: TRIGGERS.find((t) => t.key === NotificationTriggerKey.SAMPLE_RECEIVED)!.template,
+  },
+  {
+    key: NotificationTriggerKey.REPORT_READY,
+    from: 'Chegou, {nome}! Seu laudo genético está pronto. Acesse em {link_laudo}. ✨',
+    to: TRIGGERS.find((t) => t.key === NotificationTriggerKey.REPORT_READY)!.template,
+  },
   {
     key: NotificationTriggerKey.ANALYSIS_STARTED,
     from:
