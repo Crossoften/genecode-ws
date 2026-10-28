@@ -60,23 +60,30 @@ async function bootstrap(): Promise<void> {
   // vitrine, onde versionar com a API não faz sentido — a foto não muda de
   // formato quando o contrato da API muda. `index: false` para o diretório
   // nunca listar seu conteúdo.
+  //
+  // Também em /v1/uploads: em produção o nginx só encaminha /api/v1 para a API,
+  // e /uploads cairia no index.html do front. Com o segundo prefixo, a produção
+  // usa UPLOADS_PUBLIC_URL=https://genecode.com.br/api/v1/uploads sem mexer no
+  // nginx; homolog segue gravando /uploads, e as URLs já gravadas continuam valendo.
   const uploads = resolve(config.get('UPLOADS_DIR', { infer: true }));
   mkdirSync(uploads, { recursive: true });
-  app.useStaticAssets(uploads, {
-    prefix: '/uploads/',
-    index: false,
-    setHeaders: (res) => {
-      // O helmet põe `Cross-Origin-Resource-Policy: same-origin` em tudo, e a
-      // foto do kit É servida para outra origem: a vitrine mora na 443 do
-      // Apache e a API na 3041. Com same-origin o fetch devolve 200 e o <img>
-      // fica com naturalWidth 0 — carrega e não desenha, sem erro na tela.
-      //
-      // `cross-origin` vale só para este diretório, que tem imagem pública e
-      // mais nada; as rotas da API seguem com o padrão do helmet.
-      res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
-      res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
-    },
-  });
+  for (const prefix of ['/uploads/', '/v1/uploads/']) {
+    app.useStaticAssets(uploads, {
+      prefix,
+      index: false,
+      setHeaders: (res) => {
+        // O helmet põe `Cross-Origin-Resource-Policy: same-origin` em tudo, e a
+        // foto do kit É servida para outra origem: a vitrine mora na 443 do
+        // Apache e a API na 3041. Com same-origin o fetch devolve 200 e o <img>
+        // fica com naturalWidth 0 — carrega e não desenha, sem erro na tela.
+        //
+        // `cross-origin` vale só para este diretório, que tem imagem pública e
+        // mais nada; as rotas da API seguem com o padrão do helmet.
+        res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
+        res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+      },
+    });
+  }
 
   app.useGlobalPipes(
     new ValidationPipe({
@@ -111,6 +118,17 @@ async function bootstrap(): Promise<void> {
   await app.listen(port, '0.0.0.0');
   logger.log(`API no ar em ${https ? 'https' : 'http'}://0.0.0.0:${port}/v1`);
   logger.log(`API ouvindo na porta ${port} (${config.get('NODE_ENV', { infer: true })})`);
+
+  // Onde esta API cobra, em toda subida. A produção chegou a subir apontando
+  // para o sandbox sem nenhum sinal: o checkout é igual nos dois, e a
+  // diferença só aparece no dinheiro que não entra.
+  if (config.get('PAYMENT_PROVIDER', { infer: true }) === 'pagolivre') {
+    const host = new URL(config.get('PAGOLIVRE_BASE_URL', { infer: true })!).host;
+    const sandbox = host.includes('.sbx.') ? ' — SANDBOX, não cobra' : '';
+    logger.log(`Pagamento: PagoLivre em ${host}${sandbox}`);
+  } else {
+    logger.warn('Pagamento: SIMULADO (PAYMENT_PROVIDER=sandbox) — cartão aprovado sem cobrança');
+  }
 }
 
 void bootstrap();
