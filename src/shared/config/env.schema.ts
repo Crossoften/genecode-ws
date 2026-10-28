@@ -56,7 +56,11 @@ export const envSchema = z.object({
   // O host de sandbox NÃO está na documentação da PagoLivre (ela só declara o de
   // produção). Foi descoberto e confirmado em 24/09/2026 — ver
   // docs/11-pagamento/pagolivre/README.md.
-  PAGOLIVRE_BASE_URL: z.string().url().default('https://api.sbx.pagolivre.com.br/api/v2'),
+  //
+  // Sem padrão de propósito: até 28/10/2026 o padrão era o sandbox, e uma
+  // produção sem a variável cobraria no sandbox sem nenhum sinal. Produção:
+  // https://api.pagolivre.com.br/api/v2 · sandbox: https://api.sbx.pagolivre.com.br/api/v2
+  PAGOLIVRE_BASE_URL: z.string().url().optional(),
   /** Token Basic já em base64, como a PagoLivre entrega. */
   PAGOLIVRE_TOKEN: z.string().optional(),
   PAGOLIVRE_MERCHANT_ID: z.string().uuid().optional(),
@@ -267,9 +271,9 @@ function assertNotificationIsComplete(env: Env): void {
 function assertAcquirerIsComplete(env: Env): void {
   if (env.PAYMENT_PROVIDER !== 'pagolivre') return;
 
-  const missing = (['PAGOLIVRE_TOKEN', 'PAGOLIVRE_CALLBACK_URL'] as const).filter(
-    (name) => !env[name],
-  );
+  const missing = (
+    ['PAGOLIVRE_BASE_URL', 'PAGOLIVRE_TOKEN', 'PAGOLIVRE_CALLBACK_URL'] as const
+  ).filter((name) => !env[name]);
 
   if (missing.length > 0) {
     throw new Error(`PAYMENT_PROVIDER=pagolivre requires ${missing.join(', ')}.`);
