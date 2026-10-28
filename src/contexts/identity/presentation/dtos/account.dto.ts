@@ -4,7 +4,9 @@ import {
   ArrayMaxSize,
   IsArray,
   IsBoolean,
+  IsDateString,
   IsEmail,
+  IsIn,
   IsNotEmpty,
   IsOptional,
   IsString,
@@ -56,6 +58,21 @@ export class RegisterDto {
   @IsString()
   @MaxLength(20)
   phone?: string;
+
+  /**
+   * Data de nascimento (GC-AJ-012, roteiro do QR 1). Opcional no contrato para
+   * não quebrar o cadastro da compra sem conta; a tela do QR a exige.
+   */
+  @ApiPropertyOptional({ example: '1990-05-21' })
+  @IsOptional()
+  @IsDateString({ strict: true }, { message: 'Data de nascimento inválida.' })
+  birthDate?: string;
+
+  /** Sexo biológico (GC-AJ-012). Opcional pelo mesmo motivo. */
+  @ApiPropertyOptional({ enum: ['FEMALE', 'MALE'] })
+  @IsOptional()
+  @IsIn(['FEMALE', 'MALE'], { message: 'Sexo biológico inválido.' })
+  biologicalSex?: 'FEMALE' | 'MALE';
 
   @ApiProperty({ type: [AcceptedConsentDto] })
   @IsArray()

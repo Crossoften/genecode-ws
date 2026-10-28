@@ -84,6 +84,8 @@ export class PrismaUserRepository implements UserRepository {
         name: input.name,
         document: input.document,
         phone: input.phone,
+        birthDate: input.birthDate,
+        biologicalSex: input.biologicalSex,
         status: 'PENDING',
       },
       select: USER_SELECT,

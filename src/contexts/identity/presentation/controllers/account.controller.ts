@@ -4,6 +4,7 @@ import { Throttle } from '@nestjs/throttler';
 import type { Request } from 'express';
 
 import { PrismaService } from '@infra/database/prisma.service';
+import { NotFoundError } from '@shared/domain/domain-error';
 
 import { PreCadastroUseCase } from '../../application/use-cases/pre-cadastro.use-case';
 import { RefreshSessionUseCase } from '../../application/use-cases/refresh-session.use-case';
@@ -90,6 +91,29 @@ export class AccountController {
     }));
   }
 
+  /**
+   * Texto integral do documento legal vigente de um tipo (GC-AJ-008).
+   *
+   * É o que a página pública "Política de Privacidade" mostra: o mesmo texto,
+   * da mesma versão, que o cadastro registra como aceito.
+   */
+  @Get('documentos/:tipo')
+  @IsPublic()
+  @ApiOperation({ summary: 'Texto integral da versão vigente de um documento legal' })
+  async legalDocument(@Param('tipo') tipo: string) {
+    const type = tipo.trim().toUpperCase().replaceAll('-', '_');
+    if (!(type in CONSENT_LABELS)) throw new NotFoundError('Documento não encontrado.');
+
+    const document = await this.prisma.consentDocument.findFirst({
+      where: { type: type as never },
+      orderBy: { publishedAt: 'desc' },
+      select: { type: true, version: true, content: true, publishedAt: true },
+    });
+    if (!document) throw new NotFoundError('Documento não encontrado.');
+
+    return { ...document, label: CONSENT_LABELS[document.type] ?? document.type };
+  }
+
   /** Cria a conta em estado pendente e envia o código de verificação. */
   @Post('cadastro')
   @IsPublic()
@@ -104,6 +128,8 @@ export class AccountController {
       password: dto.password,
       document: dto.document,
       phone: dto.phone,
+      birthDate: dto.birthDate,
+      biologicalSex: dto.biologicalSex,
       acceptedConsents: dto.acceptedConsents,
       ipAddress: request.ip,
       userAgent: request.headers['user-agent'],

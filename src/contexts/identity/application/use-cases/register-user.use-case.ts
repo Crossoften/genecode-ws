@@ -21,6 +21,9 @@ export interface RegisterUserInput {
   readonly password: string;
   readonly document?: string;
   readonly phone?: string;
+  /** `AAAA-MM-DD` (GC-AJ-012). */
+  readonly birthDate?: string;
+  readonly biologicalSex?: 'FEMALE' | 'MALE';
   /** Versões dos documentos legais que a pessoa aceitou na tela. */
   readonly acceptedConsents: readonly { type: string; version: string }[];
   readonly ipAddress?: string;
@@ -154,6 +157,8 @@ export class RegisterUserUseCase {
         name,
         document: input.document,
         phone: input.phone,
+        birthDate: input.birthDate ? new Date(`${input.birthDate}T00:00:00Z`) : undefined,
+        biologicalSex: input.biologicalSex,
       });
     } catch (erro) {
       // Rede de segurança para a corrida entre a consulta acima e o insert:
@@ -237,6 +242,10 @@ export class RegisterUserUseCase {
           name: dados.name,
           password: dados.passwordHash,
           phone: dados.input.phone,
+          ...(dados.input.birthDate
+            ? { birthDate: new Date(`${dados.input.birthDate}T00:00:00Z`) }
+            : {}),
+          ...(dados.input.biologicalSex ? { biologicalSex: dados.input.biologicalSex } : {}),
           status: 'PENDING',
         },
       });

@@ -172,6 +172,27 @@ Departamento de Atendimento — E-mail: atendimento@genoabiotec.com.br · Telefo
 
 Esta política poderá ser atualizada para refletir mudanças nos serviços ou nos requisitos aplicáveis. Alterações relevantes serão comunicadas pelos canais de atendimento do laboratório.`;
 
+/** Publicação da v2.1, com os contatos novos do doc de 21/10/2026. */
+const DATA_DE_PUBLICACAO_V2_1 = new Date('2026-10-28T00:00:00Z');
+
+/**
+ * v2.1 (GC-AJ-008): o mesmo texto da v2.0 com o que o doc novo do cliente
+ * mudou — o canal de contato passa a ser contato@genecode.com.br e
+ * (11) 9 3767-2072. A v2.0 não é editada: já foi aceita por quem se cadastrou.
+ *
+ * O CNPJ sai completo (07.671.920/0001-80, o que a conta da Afinz devolve): os
+ * dois docs do cliente o trazem truncado, e documento legal com CNPJ inválido
+ * não identifica ninguém. Os prazos do termo continuam preenchidos (o doc novo
+ * voltou com "[prazo]" no lugar deles).
+ */
+function versao21(texto: string): string {
+  return texto
+    .replaceAll('07.671.920/80', '07.671.920/0001-80')
+    .replaceAll('atendimento@genoabiotec.com.br', 'contato@genecode.com.br')
+    .replaceAll('atendimento@genecode.com.br', 'contato@genecode.com.br')
+    .replaceAll('(11) 3135-6880', '(11) 9 3767-2072');
+}
+
 const DOCUMENTS = [
   // --- Minutas preliminares (histórico) -------------------------------------
   {
@@ -216,6 +237,19 @@ const DOCUMENTS = [
     publishedAt: DATA_DE_PUBLICACAO_V2,
     content: TERMO_SEGURANCA_V2,
   },
+  // --- Contatos novos do doc de 21/10 (GC-AJ-008) ----------------------------
+  {
+    type: 'PRIVACY_POLICY' as const,
+    version: '2.1',
+    publishedAt: DATA_DE_PUBLICACAO_V2_1,
+    content: versao21(POLITICA_PRIVACIDADE_V2),
+  },
+  {
+    type: 'GENETIC_DATA_PROCESSING' as const,
+    version: '2.1',
+    publishedAt: DATA_DE_PUBLICACAO_V2_1,
+    content: versao21(TERMO_SEGURANCA_V2),
+  },
 ];
 
 /** Semeia os documentos legais. Idempotente por tipo + versão. */
@@ -232,5 +266,5 @@ export async function seedConsentDocuments(prisma: PrismaClient): Promise<void> 
       },
     });
   }
-  console.log(`✓ ${DOCUMENTS.length} documentos legais (2 definitivos + 3 minutas)`);
+  console.log(`✓ ${DOCUMENTS.length} documentos legais (v2.1 vigente + histórico)`);
 }

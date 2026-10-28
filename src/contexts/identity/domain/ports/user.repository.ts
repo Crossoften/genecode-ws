@@ -24,6 +24,8 @@ export interface CreateUserInput {
   readonly name: string;
   readonly document?: string;
   readonly phone?: string;
+  readonly birthDate?: Date;
+  readonly biologicalSex?: 'FEMALE' | 'MALE';
 }
 
 /**
