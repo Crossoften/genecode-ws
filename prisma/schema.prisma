@@ -735,16 +735,15 @@ model ReportModalityIndex {
   @@map("report_modality_indexes")
 }
 
-/// Faixa de classificação, ancorada nos quartis da normalização populacional.
+/// Faixa de classificação (GC-AJ-014, 20/10/2026): três faixas sobre o número
+/// que o paciente vê, como no guia da matriz do cliente — ≤33 / >33 a 66 / >66.
 ///
-/// Como score = 20 + percentil × 0,70, os quartis caem exatamente em
-/// 37,5 / 55 / 72,5. As faixas antigas (0–34 e 80–100) tinham trechos
-/// inalcançáveis, já que nenhum escore sai da faixa 20–90.
+/// Substituiu as quatro faixas de quartil (73/55/38). A migration
+/// `20261028120000_tres_faixas` recalculou a faixa de todo escore gravado.
 enum ScoreBand {
-  FAVORAVEL // 73–90 · quartil superior
-  MODERADO // 55–72 · acima da mediana
-  ATENCAO // 38–54 · abaixo da mediana
-  PRIORIDADE // 20–37 · quartil inferior
+  FAVORAVEL // > 66
+  INTERMEDIARIO // > 33 a 66
+  DESFAVORAVEL // ≤ 33
 }
 
 // ============================================================================

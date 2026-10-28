@@ -1,45 +1,43 @@
 /**
  * Classification band of a normalised score.
  *
- * The bands are anchored on the quartiles of the population normalisation, not
- * chosen arbitrarily. Since the pipeline computes
+ * Three bands, as the client set them on 20/10/2026 (GC-AJ-014) and wrote in
+ * the result-matrix guide: *"baixa ≤ 33; intermediária > 33 a 66; alta > 66"*.
  *
- *     score = MIN + percentile × (MAX - MIN)   →   20 + percentile × 0.70
+ * The cuts apply to the **number the patient sees** (the 20–90 scale), not to
+ * the population percentile behind it. The guide's own worked example settles
+ * it: a 42 is called "intermediária", which only holds on the displayed number
+ * (on the percentile, 42 would sit in the lowest third).
  *
- * the quartiles land exactly on 37.5, 55 and 72.5. A patient in FAVORAVEL is, by
- * construction, in the top quarter of the population.
- *
- * The client's original bands (0–34 / 35–54 / 55–79 / 80–100) had two
- * unreachable stretches: no score ever leaves the 20–90 range, so nobody could
- * be "critical" and nobody could reach 100.
+ * The previous four quartile bands (73/55/38) were replaced, and the migration
+ * `20261028_tres_faixas` re-derived the band of every stored score from its
+ * number, so no report keeps a label from the old scale.
  */
 export enum ScoreBand {
   FAVORAVEL = 'FAVORAVEL',
-  MODERADO = 'MODERADO',
-  ATENCAO = 'ATENCAO',
-  PRIORIDADE = 'PRIORIDADE',
+  INTERMEDIARIO = 'INTERMEDIARIO',
+  DESFAVORAVEL = 'DESFAVORAVEL',
 }
 
 /** Bounds of the normalised scale produced by the population percentile step. */
 export const SCORE_MIN = 20;
 export const SCORE_MAX = 90;
 
-/** Lower bound of each band, in descending order. */
-const BAND_FLOORS: ReadonlyArray<readonly [ScoreBand, number]> = [
-  [ScoreBand.FAVORAVEL, 73],
-  [ScoreBand.MODERADO, 55],
-  [ScoreBand.ATENCAO, 38],
-  [ScoreBand.PRIORIDADE, Number.NEGATIVE_INFINITY],
-];
+/** Above this number the score is FAVORAVEL. */
+export const UPPER_CUT = 66;
+/** Above this number (and up to UPPER_CUT) the score is INTERMEDIARIO. */
+export const LOWER_CUT = 33;
 
 /**
  * Resolves the band a normalised score falls into.
  *
+ * Both cuts are exclusive on the way up, exactly as the guide writes them:
+ * 33 is still DESFAVORAVEL and 66 is still INTERMEDIARIO.
+ *
  * @param normalisedScore - A value on the 20–90 scale.
  */
 export function bandFor(normalisedScore: number): ScoreBand {
-  const match = BAND_FLOORS.find(([, floor]) => normalisedScore >= floor);
-  // The last entry has a floor of -Infinity, so this is always defined. The
-  // fallback exists only to satisfy the compiler under noUncheckedIndexedAccess.
-  return match?.[0] ?? ScoreBand.PRIORIDADE;
+  if (normalisedScore > UPPER_CUT) return ScoreBand.FAVORAVEL;
+  if (normalisedScore > LOWER_CUT) return ScoreBand.INTERMEDIARIO;
+  return ScoreBand.DESFAVORAVEL;
 }

@@ -86,13 +86,14 @@ describe('ReportCalculator — contraprova contra o algoritmo original', () => {
   describe('faixas de classificação', () => {
     it.each([
       [90, ScoreBand.FAVORAVEL],
-      [73, ScoreBand.FAVORAVEL],
-      [72.9, ScoreBand.MODERADO],
-      [55, ScoreBand.MODERADO],
-      [54.9, ScoreBand.ATENCAO],
-      [38, ScoreBand.ATENCAO],
-      [37.9, ScoreBand.PRIORIDADE],
-      [20, ScoreBand.PRIORIDADE],
+      [66.1, ScoreBand.FAVORAVEL],
+      [66, ScoreBand.INTERMEDIARIO],
+      [53, ScoreBand.INTERMEDIARIO],
+      [42, ScoreBand.INTERMEDIARIO],
+      [33.1, ScoreBand.INTERMEDIARIO],
+      [33, ScoreBand.DESFAVORAVEL],
+      [28, ScoreBand.DESFAVORAVEL],
+      [20, ScoreBand.DESFAVORAVEL],
     ])('escore %s cai em %s', (score, band) => {
       expect(bandFor(score)).toBe(band);
     });
