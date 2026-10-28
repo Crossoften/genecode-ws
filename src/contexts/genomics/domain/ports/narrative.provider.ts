@@ -28,6 +28,11 @@
 
 /** Categoria como ela é apresentada ao gerador — sem marcador, sem genótipo. */
 export interface NarrativeCategory {
+  /**
+   * Chave estável da categoria (`forca_potencia`…). A matriz do cliente
+   * (GC-AJ-018) escolhe o texto pela categoria, e o nome de exibição pode mudar.
+   */
+  readonly slug: string;
   readonly name: string;
   /** Escore normalizado na escala 20–90. */
   readonly score: number;
@@ -52,18 +57,29 @@ export interface NarrativeInput {
 /** Texto aprovado, com a procedência necessária para auditoria. */
 export interface NarrativeResult {
   readonly text: string;
-  /** Identificador do provedor que gerou: `table` ou `ai`. */
+  /** Identificador do provedor que gerou: `matrix` ou `table`. */
   readonly provider: string;
   /** Modelo usado, quando houve um. */
   readonly model: string | null;
   /** Versão do prompt, para reproduzir o texto no futuro. */
   readonly promptVersion: string;
   /**
-   * Preenchido quando a IA foi tentada e recusada pelo guardrail, e a tabela
-   * assumiu. É o registro de que houve uma tentativa barrada — um campo vazio
-   * aqui e um `provider: 'table'` significam "IA desligada", que é diferente.
+   * Preenchido quando o provedor preferido não pôde montar o texto e outro
+   * assumiu — por exemplo, a matriz sem as categorias de Força e Resistência,
+   * que cai na tabela.
    */
   readonly fallbackReason: string | null;
+  /**
+   * Referências científicas citadas no texto, pelo número da matriz do
+   * cliente. Vazio quando o provedor não cita nenhuma.
+   */
+  readonly references?: readonly NarrativeReference[];
+}
+
+/** Uma referência citada: o número da matriz e a citação completa. */
+export interface NarrativeReference {
+  readonly number: number;
+  readonly citation: string;
 }
 
 export const NARRATIVE_PROVIDER = Symbol('NarrativeProvider');

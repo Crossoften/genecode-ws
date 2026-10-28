@@ -7,25 +7,20 @@ import type {
 } from '@contexts/genomics/domain/ports/narrative.provider';
 
 /** Versão do texto-base. Muda quando a redação muda, para rastrear laudos antigos. */
-const PROMPT_VERSION = 'table-v1';
+const PROMPT_VERSION = 'table-v2';
 
 const BAND_LABEL: Readonly<Record<string, string>> = {
   FAVORAVEL: 'favorável',
-  MODERADO: 'moderado',
-  ATENCAO: 'de atenção',
-  PRIORIDADE: 'prioritário',
+  INTERMEDIARIO: 'intermediária',
+  DESFAVORAVEL: 'desfavorável',
 };
 
 /**
  * Gerador determinístico, montado a partir das faixas.
  *
- * É o **padrão da plataforma**, não um plano B degradado. A decisão L4 previu a
- * IA como opção configurável justamente porque um texto montado por regra é
- * auditável, reproduzível e não custa nada por laudo — e porque o cliente ainda
- * não ratificou a redação da IA.
- *
- * Também é o destino da IA quando o guardrail recusa a saída. Nesse caso o laudo
- * sai com texto conservador em vez de não sair.
+ * Atende o painel que não tem matriz de resultados do cliente — hoje, a
+ * Nutrigenética. O de Performance é montado pela matriz
+ * (`MatrixNarrativeProvider`, GC-AJ-018).
  */
 @Injectable()
 export class TableNarrativeProvider implements NarrativeProvider {
@@ -44,7 +39,7 @@ export class TableNarrativeProvider implements NarrativeProvider {
     const ordered = [...input.categories].sort((a, b) => b.score - a.score);
     const strengths = ordered.filter((category) => category.band === 'FAVORAVEL').slice(0, 3);
     const priorities = ordered
-      .filter((category) => category.band === 'PRIORIDADE' || category.band === 'ATENCAO')
+      .filter((category) => category.band === 'DESFAVORAVEL')
       .slice(-3)
       .reverse();
 
@@ -53,7 +48,7 @@ export class TableNarrativeProvider implements NarrativeProvider {
     parts.push(
       input.globalIndex === null
         ? `Este é o resumo do seu painel de ${input.panelName}.`
-        : `Seu índice global no painel de ${input.panelName} é ${format(input.globalIndex)}, ` +
+        : `Seu escore genético global no painel de ${input.panelName} é ${format(input.globalIndex)}, ` +
           `numa escala de 20 a 90 comparada à população de referência.`,
     );
 
@@ -72,10 +67,10 @@ export class TableNarrativeProvider implements NarrativeProvider {
       );
     }
 
-    const balanced = ordered.filter((category) => category.band === 'MODERADO');
+    const balanced = ordered.filter((category) => category.band === 'INTERMEDIARIO');
     if (balanced.length > 0 && strengths.length === 0 && priorities.length === 0) {
       parts.push(
-        `Seus resultados ficaram concentrados na faixa ${BAND_LABEL.MODERADO}, sem extremos ` +
+        `Seus resultados ficaram concentrados na faixa ${BAND_LABEL.INTERMEDIARIO}, sem extremos ` +
           `marcantes — um perfil equilibrado entre as categorias avaliadas.`,
       );
     }

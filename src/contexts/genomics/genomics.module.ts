@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 
 import { AnalyticsModule } from '@contexts/analytics/analytics.module';
 import { IdentityModule } from '@contexts/identity/identity.module';
@@ -15,7 +14,7 @@ import { NARRATIVE_PROVIDER } from './domain/ports/narrative.provider';
 import { ORDER_PROGRESS } from './domain/ports/order-progress.port';
 import { PANEL_REPOSITORY } from './domain/ports/panel.repository';
 import { PrismaOrderProgressGateway } from './infrastructure/gateways/prisma-order-progress.gateway';
-import { AiNarrativeProvider } from './infrastructure/narrative/ai-narrative.provider';
+import { MatrixNarrativeProvider } from './infrastructure/narrative/matrix-narrative.provider';
 import { TableNarrativeProvider } from './infrastructure/narrative/table-narrative.provider';
 import { PrismaPanelRepository } from './infrastructure/repositories/prisma-panel.repository';
 import { ReportsController } from './presentation/controllers/reports.controller';
@@ -41,20 +40,11 @@ import { ReportsController } from './presentation/controllers/reports.controller
     { provide: PANEL_REPOSITORY, useClass: PrismaPanelRepository },
     { provide: ORDER_PROGRESS, useClass: PrismaOrderProgressGateway },
 
-    // Ambos são instanciáveis, porque a IA cai para a tabela quando o guardrail
-    // recusa a saída. Qual deles atende a porta é decisão de configuração — é
-    // isso que "agnóstica de modelo, trocável sem reescrita" quer dizer.
+    // A matriz do cliente é o gerador (GC-AJ-018); a IA foi descartada em
+    // 20/10. A tabela fica para o painel que não tem matriz — a Nutrigenética.
     TableNarrativeProvider,
-    AiNarrativeProvider,
-    {
-      provide: NARRATIVE_PROVIDER,
-      inject: [ConfigService, TableNarrativeProvider, AiNarrativeProvider],
-      useFactory: (
-        config: ConfigService,
-        table: TableNarrativeProvider,
-        ai: AiNarrativeProvider,
-      ) => (config.get<string>('AI_NARRATIVE_PROVIDER') === 'ai' ? ai : table),
-    },
+    MatrixNarrativeProvider,
+    { provide: NARRATIVE_PROVIDER, useExisting: MatrixNarrativeProvider },
   ],
   exports: [PANEL_REPOSITORY, NARRATIVE_PROVIDER, ComputeReportUseCase, GetReportUseCase],
 })

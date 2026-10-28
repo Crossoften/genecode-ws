@@ -25,6 +25,7 @@
     "seed:papeis": "ts-node -r tsconfig-paths/register ./prisma/seeds/papeis.runner.ts",
     "seed:consent": "ts-node -r tsconfig-paths/register ./prisma/seeds/consent.runner.ts",
     "seed:notificacoes": "ts-node -r tsconfig-paths/register ./prisma/seeds/notification.runner.ts",
+    "seed:narrativas": "ts-node -r tsconfig-paths/register ./prisma/seeds/narrativa.runner.ts",
     "seed:qa": "ts-node -r tsconfig-paths/register ./prisma/seeds/qa.seed.ts",
     "seed:demo": "ts-node -r tsconfig-paths/register ./prisma/seeds/demo.seed.ts",
     "seed:lab50": "ts-node -r tsconfig-paths/register ./prisma/seeds/lab50.seed.ts",

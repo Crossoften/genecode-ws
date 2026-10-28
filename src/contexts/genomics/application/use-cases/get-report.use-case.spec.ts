@@ -32,7 +32,7 @@ describe('GetReportUseCase — escopo de dono', () => {
     categoryScores: [
       {
         normalizedScore: 72,
-        band: 'MODERADO',
+        band: 'INTERMEDIARIO',
         category: { slug: 'forca-potencia', name: 'Força e Potência', position: 1 },
       },
     ],
@@ -52,6 +52,14 @@ describe('GetReportUseCase — escopo de dono', () => {
     return {
       assessment: {
         findFirst: jest.fn(async () => assessment),
+      },
+      // Modalidade Global sem curva: o ajustado global sai da média ponderada
+      // crua, o que deixa a conta do teste legível.
+      modality: {
+        findFirst: jest.fn(async () => ({
+          weights: [{ weight: 1, category: { slug: 'forca-potencia' } }],
+          percentiles: [],
+        })),
       },
       report: {
         findUnique: jest.fn(async ({ where }: { where: { id: string } }) =>
@@ -99,6 +107,8 @@ describe('GetReportUseCase — escopo de dono', () => {
       expect(result.value.categories[0].score).toBe(72);
       expect(result.value.categories[0].adjustedScore).toBe(81.4);
       expect(result.value.lastAssessedCheckpoint).toBe('Q1');
+      // GC-AJ-017: o ajustado global é o global montado com os ajustados.
+      expect(result.value.adjustedGlobal).toEqual({ value: 81.4, band: 'FAVORAVEL' });
     }
   });
 
@@ -114,6 +124,7 @@ describe('GetReportUseCase — escopo de dono', () => {
     if (result.isOk()) {
       expect(result.value.categories[0].adjustedScore).toBeNull();
       expect(result.value.lastAssessedCheckpoint).toBeNull();
+      expect(result.value.adjustedGlobal).toBeNull();
     }
   });
 

@@ -115,6 +115,7 @@ export class ComputeReportUseCase {
     const narrative = await this.narratives.generate({
       panelName: panel.ref.name,
       categories: result.categories.map((category) => ({
+        slug: category.slug,
         name: panel.categoryNames.get(category.slug) ?? category.slug,
         score: category.normalizedScore,
         band: category.band,
@@ -170,7 +171,11 @@ export class ComputeReportUseCase {
           publishedAt: null,
           missingMarkers:
             result.missingMarkers.length > 0 ? [...result.missingMarkers] : undefined,
-          narrative: { ...narrative, generatedAt: new Date().toISOString() },
+          narrative: {
+            ...narrative,
+            references: (narrative.references ?? []).map((reference) => ({ ...reference })),
+            generatedAt: new Date().toISOString(),
+          },
           categoryScores: {
             create: result.categories
               .filter((category) => categoryIds.has(category.slug))

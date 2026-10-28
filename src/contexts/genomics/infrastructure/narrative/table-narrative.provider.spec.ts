@@ -3,12 +3,9 @@ import type { NarrativeInput } from '@contexts/genomics/domain/ports/narrative.p
 import { TableNarrativeProvider } from '@contexts/genomics/infrastructure/narrative/table-narrative.provider';
 
 /**
- * O gerador de tabela é o **padrão** da plataforma, não um plano B degradado.
- *
- * Ele também é o destino da IA quando o guardrail recusa a saída — o que
- * significa que ele carrega uma obrigação incomum: precisa passar no próprio
- * guardrail, sempre. Um fallback que fosse barrado pelo mesmo filtro deixaria o
- * laudo sem texto nenhum.
+ * O gerador de tabela atende o painel sem matriz do cliente (a Nutrigenética)
+ * e é o destino da matriz quando faltam as categorias principais. Precisa
+ * passar no guardrail clínico, sempre.
  */
 describe('TableNarrativeProvider', () => {
   const provider = new TableNarrativeProvider();
@@ -19,9 +16,9 @@ describe('TableNarrativeProvider', () => {
     globalIndex,
   });
 
-  it('cita o índice global e a escala', async () => {
+  it('cita o escore genético global e a escala', async () => {
     const result = await provider.generate(
-      input([{ name: 'Força e Potência', score: 78.2, band: 'FAVORAVEL' }]),
+      input([{ slug: 'categoria', name: 'Força e Potência', score: 78.2, band: 'FAVORAVEL' }]),
     );
 
     expect(result.text).toContain('62,4');
@@ -30,13 +27,13 @@ describe('TableNarrativeProvider', () => {
     expect(result.model).toBeNull();
   });
 
-  it('omite o índice global quando o painel não tem um', async () => {
+  it('omite o escore global quando o painel não tem um', async () => {
     const result = await provider.generate(
-      input([{ name: 'Metabolismo de Lipídios', score: 41.0, band: 'ATENCAO' }], null),
+      input([{ slug: 'categoria', name: 'Metabolismo de Lipídios', score: 41.0, band: 'DESFAVORAVEL' }], null),
     );
 
     expect(result.text).toContain('resumo do seu painel');
-    expect(result.text).not.toContain('índice global');
+    expect(result.text).not.toContain('escore genético global');
   });
 
   /**
@@ -47,7 +44,7 @@ describe('TableNarrativeProvider', () => {
    */
   it('enquadra escore baixo como onde o hábito rende mais, nunca como problema', async () => {
     const result = await provider.generate(
-      input([{ name: 'Recuperação Muscular', score: 28.0, band: 'PRIORIDADE' }]),
+      input([{ slug: 'categoria', name: 'Recuperação Muscular', score: 28.0, band: 'DESFAVORAVEL' }]),
     );
 
     expect(result.text).toContain('não indicam problema de saúde');
@@ -56,7 +53,7 @@ describe('TableNarrativeProvider', () => {
 
   it('sempre encerra apontando para um profissional', async () => {
     const result = await provider.generate(
-      input([{ name: 'Força e Potência', score: 78.2, band: 'FAVORAVEL' }]),
+      input([{ slug: 'categoria', name: 'Força e Potência', score: 78.2, band: 'FAVORAVEL' }]),
     );
     expect(result.text).toMatch(/profissional de saúde ou de educação física/);
   });
@@ -64,8 +61,8 @@ describe('TableNarrativeProvider', () => {
   it('descreve perfil equilibrado quando não há extremos', async () => {
     const result = await provider.generate(
       input([
-        { name: 'Força e Potência', score: 60.0, band: 'MODERADO' },
-        { name: 'Resistência Aeróbica', score: 58.0, band: 'MODERADO' },
+        { slug: 'categoria', name: 'Força e Potência', score: 60.0, band: 'INTERMEDIARIO' },
+        { slug: 'categoria', name: 'Resistência Aeróbica', score: 58.0, band: 'INTERMEDIARIO' },
       ]),
     );
     expect(result.text).toContain('perfil equilibrado');
@@ -73,6 +70,7 @@ describe('TableNarrativeProvider', () => {
 
   it('lista no máximo três categorias por lado, para o texto não virar tabela', async () => {
     const many = Array.from({ length: 8 }, (_, index) => ({
+      slug: `categoria_${index}`,
       name: `Categoria ${index}`,
       score: 80 - index,
       band: 'FAVORAVEL',
@@ -87,15 +85,15 @@ describe('TableNarrativeProvider', () => {
    * A invariante que sustenta o fallback inteiro.
    */
   it('passa no guardrail clínico em qualquer combinação de faixas', async () => {
-    const bands = ['FAVORAVEL', 'MODERADO', 'ATENCAO', 'PRIORIDADE'] as const;
+    const bands = ['FAVORAVEL', 'INTERMEDIARIO', 'DESFAVORAVEL'] as const;
 
     for (const band of bands) {
       for (const globalIndex of [null, 20, 55, 90]) {
         const result = await provider.generate(
           input(
             [
-              { name: 'Força e Potência', score: 78.2, band },
-              { name: 'Recuperação Muscular', score: 31.5, band },
+              { slug: 'categoria', name: 'Força e Potência', score: 78.2, band },
+              { slug: 'categoria', name: 'Recuperação Muscular', score: 31.5, band },
             ],
             globalIndex,
           ),
@@ -117,8 +115,8 @@ describe('TableNarrativeProvider', () => {
    */
   it('é determinístico: mesma entrada, mesmo texto', async () => {
     const argument = input([
-      { name: 'Força e Potência', score: 78.2, band: 'FAVORAVEL' },
-      { name: 'Recuperação Muscular', score: 31.5, band: 'PRIORIDADE' },
+      { slug: 'categoria', name: 'Força e Potência', score: 78.2, band: 'FAVORAVEL' },
+      { slug: 'categoria', name: 'Recuperação Muscular', score: 31.5, band: 'DESFAVORAVEL' },
     ]);
 
     const first = await provider.generate(argument);

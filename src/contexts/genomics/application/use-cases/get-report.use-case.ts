@@ -4,6 +4,8 @@ import { PrismaService } from '@infra/database/prisma.service';
 import { NotFoundError } from '@shared/domain/domain-error';
 import { fail, ok, type Result } from '@shared/domain/result';
 
+import { adjustedGlobalScore } from '../services/adjusted-global';
+
 /**
  * Who is asking for the report.
  *
@@ -24,6 +26,12 @@ export interface ReportSummary {
   readonly panel: { readonly name: string; readonly version: string };
   readonly publishedAt: Date | null;
   readonly globalIndex: { readonly value: number; readonly band: string } | null;
+  /**
+   * Escore ajustado global (GC-AJ-017): o global montado com os ajustados por
+   * categoria, quando já houve avaliação ambiental. `null` antes disso — a
+   * tela mostra só o genético. O cliente pediu que ele venha **primeiro**.
+   */
+  readonly adjustedGlobal: { readonly value: number; readonly band: string } | null;
   readonly categories: readonly {
     readonly slug: string;
     readonly name: string;
@@ -68,6 +76,8 @@ export interface ReportSummary {
     readonly provider: string;
     readonly model: string | null;
     readonly promptVersion: string;
+    /** Referências citadas pela matriz (GC-AJ-018), pelo número. */
+    readonly references: readonly { readonly number: number; readonly citation: string }[];
   } | null;
 }
 
@@ -154,6 +164,7 @@ export class GetReportUseCase {
     const adjusted = (latest?.adjustedScores ?? null) as Record<string, number> | null;
 
     const global = report.modalityIndexes.find((entry) => entry.modality.isGlobal);
+    const adjustedGlobal = await adjustedGlobalScore(this.prisma, report.panelId, adjusted);
 
     return ok({
       id: report.id,
@@ -162,6 +173,7 @@ export class GetReportUseCase {
       globalIndex: global
         ? { value: Number(global.normalizedIndex), band: global.band }
         : null,
+      adjustedGlobal,
       categories: report.categoryScores
         .sort((a, b) => a.category.position - b.category.position)
         .map((entry) => ({
@@ -362,5 +374,14 @@ function readNarrative(raw: unknown): ReportSummary['narrative'] {
     provider: typeof value.provider === 'string' ? value.provider : 'desconhecido',
     model: typeof value.model === 'string' ? value.model : null,
     promptVersion: typeof value.promptVersion === 'string' ? value.promptVersion : '—',
+    references: Array.isArray(value.references)
+      ? value.references.filter(
+          (entry): entry is { number: number; citation: string } =>
+            typeof entry === 'object' &&
+            entry !== null &&
+            typeof (entry as Record<string, unknown>).number === 'number' &&
+            typeof (entry as Record<string, unknown>).citation === 'string',
+        )
+      : [],
   };
 }

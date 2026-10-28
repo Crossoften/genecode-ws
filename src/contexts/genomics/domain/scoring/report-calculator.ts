@@ -234,45 +234,64 @@ export class ReportCalculator {
     };
   }
 
-  /**
-   * Computes one composite index from the already normalised category scores.
-   *
-   * Categories weighted zero are skipped, not counted as absent — E-Sports
-   * legitimately assigns 0% to strength, and including it would drag the
-   * denominator down for no reason.
-   */
+  /** Computes one composite index from the already normalised category scores. */
   private calculateModality(
     modality: ModalityDefinition,
     normalisedByCategory: ReadonlyMap<string, number>,
   ): ModalityResult | null {
-    const contributions: WeightedMarker[] = [];
-
-    for (const [categorySlug, weight] of modality.categoryWeights) {
-      if (weight <= 0) continue;
-      const score = normalisedByCategory.get(categorySlug);
-      if (score === undefined) continue;
-      contributions.push({ rsId: categorySlug, score, weight });
-    }
-
-    const rawIndex = weightedAverage(contributions);
-    if (rawIndex === null) return null;
-
-    const normalizer = new PercentileNormalizer(modality.percentileCurve);
-    // Sem curva simulada, o índice bruto é usado como está. Ele já está na
-    // escala 20–90 por ser média de categorias normalizadas — só não está
-    // reancorado na distribuição populacional, o que significa que fica
-    // comprimido perto da mediana. É uma aproximação declarada, não um valor
-    // inventado.
-    const normalizedIndex = normalizer.normalize(rawIndex) ?? Math.round(rawIndex * 10) / 10;
+    const composite = compositeIndex(modality, normalisedByCategory);
+    if (composite === null) return null;
 
     return {
       slug: modality.slug,
       isGlobal: modality.isGlobal,
-      rawIndex: round4(rawIndex),
-      normalizedIndex,
-      band: bandFor(normalizedIndex),
+      rawIndex: composite.rawIndex,
+      normalizedIndex: composite.normalizedIndex,
+      band: bandFor(composite.normalizedIndex),
     };
   }
+}
+
+/**
+ * Composite index of a modality: weighted average of category scores, then the
+ * modality's own percentile curve.
+ *
+ * Exported because the **adjusted global score** (GC-AJ-017) is this same step
+ * applied to the adjusted category scores instead of the genetic ones. The
+ * client put it as *"junta tudo, força, resistência… vira o score genético
+ * global e score ajustado global"* — same weights, same curve. That is also
+ * what keeps the two numbers comparable: when every adjusted score equals its
+ * genetic one, the adjusted global equals the genetic global.
+ *
+ * Categories weighted zero are skipped, not counted as absent — E-Sports
+ * legitimately assigns 0% to strength, and including it would drag the
+ * denominator down for no reason.
+ */
+export function compositeIndex(
+  modality: Pick<ModalityDefinition, 'categoryWeights' | 'percentileCurve'>,
+  scoresByCategory: ReadonlyMap<string, number>,
+): { rawIndex: number; normalizedIndex: number } | null {
+  const contributions: WeightedMarker[] = [];
+
+  for (const [categorySlug, weight] of modality.categoryWeights) {
+    if (weight <= 0) continue;
+    const score = scoresByCategory.get(categorySlug);
+    if (score === undefined) continue;
+    contributions.push({ rsId: categorySlug, score, weight });
+  }
+
+  const rawIndex = weightedAverage(contributions);
+  if (rawIndex === null) return null;
+
+  const normalizer = new PercentileNormalizer(modality.percentileCurve);
+  // Sem curva simulada, o índice bruto é usado como está. Ele já está na
+  // escala 20–90 por ser média de categorias normalizadas — só não está
+  // reancorado na distribuição populacional, o que significa que fica
+  // comprimido perto da mediana. É uma aproximação declarada, não um valor
+  // inventado.
+  const normalizedIndex = normalizer.normalize(rawIndex) ?? Math.round(rawIndex * 10) / 10;
+
+  return { rawIndex: round4(rawIndex), normalizedIndex };
 }
 
 function round4(value: number): number {

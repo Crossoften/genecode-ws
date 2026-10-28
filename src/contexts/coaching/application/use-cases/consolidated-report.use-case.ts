@@ -4,6 +4,8 @@ import { PrismaService } from '@infra/database/prisma.service';
 import { ForbiddenError, NotFoundError } from '@shared/domain/domain-error';
 import { fail, ok, type Result } from '@shared/domain/result';
 
+import { adjustedGlobalScore } from '@contexts/genomics/application/services/adjusted-global';
+
 export interface ConsolidatedCategory {
   readonly slug: string;
   readonly name: string;
@@ -45,6 +47,11 @@ export interface ConsolidatedReport {
   readonly subjectId: string;
   readonly panelName: string;
   readonly globalIndex: number | null;
+  /**
+   * Escore ajustado global (GC-AJ-017), com os pesos e a curva do global
+   * genético aplicados aos ajustados. `null` enquanto não houver entrevista.
+   */
+  readonly adjustedGlobalIndex: number | null;
   readonly categories: readonly ConsolidatedCategory[];
   readonly assessmentsCompleted: number;
   /** Checkpoint da entrevista que produziu o ambiental e o ajustado exibidos. */
@@ -141,11 +148,13 @@ export class ConsolidatedReportUseCase {
     const adjusted = (latest?.adjustedScores ?? null) as Record<string, number> | null;
 
     const global = report.modalityIndexes[0];
+    const adjustedGlobal = await adjustedGlobalScore(this.prisma, report.panelId, adjusted);
 
     return ok({
       subjectId,
       panelName: report.panel.name,
       globalIndex: global ? Number(global.normalizedIndex) : null,
+      adjustedGlobalIndex: adjustedGlobal?.value ?? null,
       categories: report.categoryScores
         .sort((a, b) => a.category.position - b.category.position)
         .map((entry) => ({
