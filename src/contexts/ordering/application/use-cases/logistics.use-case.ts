@@ -250,12 +250,19 @@ export class LogisticsUseCase {
         pickupAddress: input.address ? { ...input.address } : undefined,
       },
     });
-    await this.prisma.orderEvent.create({
+    // Auditoria, e não evento de pedido: a situação não mudou, e um evento
+    // repetido apareceria como "Kit enviado" de novo no feed do cliente.
+    await this.prisma.auditLog.create({
       data: {
-        orderId: order.id,
-        status: order.status,
-        note: `Retirada agendada para ${input.date} (${window.ready}–${window.close}), protocolo ${result.confirmationNumber}.`,
-        actor: userId,
+        userId,
+        action: 'shipment.pickup_scheduled',
+        resource: 'order',
+        resourceId: order.id,
+        metadata: {
+          date: input.date,
+          window: `${window.ready}–${window.close}`,
+          confirmation: result.confirmationNumber,
+        },
       },
     });
 
