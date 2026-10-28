@@ -63,8 +63,8 @@ export class CheckoutController {
   @Get('frete/cotacao')
   @IsPublic()
   @ApiOperation({ summary: 'Cota o frete para um CEP' })
-  async quote(@Query('cep') cep: string) {
-    const result = await this.quoteShipping.execute(cep ?? '');
+  async quote(@Query('cep') cep: string, @Query('cidade') cidade?: string) {
+    const result = await this.quoteShipping.execute(cep ?? '', cidade);
     if (result.isFail()) throw result.error;
     return { options: result.value };
   }

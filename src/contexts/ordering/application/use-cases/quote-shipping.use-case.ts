@@ -23,7 +23,7 @@ const KIT_WEIGHT_GRAMS = 180;
 export class QuoteShippingUseCase {
   constructor(@Inject(SHIPPING_PROVIDER) private readonly shipping: ShippingProvider) {}
 
-  async execute(zipCode: string): Promise<Result<ShippingOption[]>> {
+  async execute(zipCode: string, city?: string): Promise<Result<ShippingOption[]>> {
     const digits = zipCode.replace(/\D/g, '');
     if (digits.length !== 8) {
       return fail(new ValidationError('CEP inválido.', { field: 'zipCode' }));
@@ -31,6 +31,8 @@ export class QuoteShippingUseCase {
 
     const options = await this.shipping.quote({
       destinationZipCode: digits,
+      // A DHL cota por CEP **e** cidade (GC-AJ-038); o sandbox ignora.
+      destinationCity: city?.trim() || undefined,
       weightGrams: KIT_WEIGHT_GRAMS,
     });
 

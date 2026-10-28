@@ -997,10 +997,11 @@ model Order {
   updatedAt DateTime  @updatedAt
   paidAt    DateTime?
 
-  address  OrderAddress?
-  items    OrderItem[]
-  payments Payment[]
-  events   OrderEvent[]
+  address   OrderAddress?
+  items     OrderItem[]
+  payments  Payment[]
+  events    OrderEvent[]
+  shipments Shipment[]
 
   @@index([status])
   @@index([userId])
@@ -1064,6 +1065,53 @@ enum CheckoutStage {
   CART
   DATA
   PAYMENT
+}
+
+/// Um envio do pedido na transportadora (GC-AJ-038 a 041): a ida do kit ou a
+/// volta da amostra.
+///
+/// Guarda a **etiqueta** porque a DHL só a devolve na criação — não há como
+/// buscá-la depois. E guarda os eventos de rastreio já lidos, que alimentam as
+/// etapas expansíveis do acompanhamento sem consultar a DHL a cada abertura.
+model Shipment {
+  id      String @id @default(uuid()) @db.Char(36)
+  orderId String @db.Char(36)
+  order   Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  direction    ShipmentDirection
+  /// `dhl` ou `sandbox` — quem emitiu.
+  carrier      String @db.VarChar(20)
+  trackingCode String @db.VarChar(60)
+  trackingUrl  String? @db.VarChar(500)
+
+  labelFormat String? @db.VarChar(8)
+  /// Etiqueta em base64 (PDF ou ZPL), como veio da transportadora.
+  labelBase64 String? @db.LongText
+
+  /// Coleta agendada na casa do cliente (só na volta).
+  pickupConfirmation String?   @db.VarChar(60)
+  pickupAt           DateTime?
+  pickupCloseTime    String?   @db.VarChar(5)
+  pickupLocation     String?   @db.VarChar(80)
+  /// Endereço da coleta, quando difere do endereço de entrega do pedido.
+  pickupAddress      Json?
+
+  /// Eventos de rastreio lidos na última sincronização, do mais antigo ao mais novo.
+  events        Json?
+  lastEventCode String?   @db.VarChar(8)
+  lastSyncedAt  DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([orderId, direction])
+  @@index([trackingCode])
+  @@map("shipments")
+}
+
+enum ShipmentDirection {
+  OUTBOUND
+  INBOUND
 }
 
 /// Endereço de entrega, congelado no pedido.

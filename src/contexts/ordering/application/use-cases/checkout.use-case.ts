@@ -152,7 +152,11 @@ export class CheckoutUseCase {
     const items = await this.priceItems(input.items, input.payment.installments);
     if (items.isFail()) return fail(items.error);
 
-    const shippingOption = await this.resolveShipping(input.address.zipCode, input.shippingCode);
+    const shippingOption = await this.resolveShipping(
+      input.address.zipCode,
+      input.shippingCode,
+      input.address.city,
+    );
     if (shippingOption.isFail()) return fail(shippingOption.error);
 
     const coupon = await this.resolveCoupon(input.couponCode);
@@ -464,9 +468,11 @@ export class CheckoutUseCase {
   private async resolveShipping(
     zipCode: string,
     code: string,
+    city: string,
   ): Promise<Result<{ code: string; priceCents: number }>> {
     const options = await this.shipping.quote({
       destinationZipCode: zipCode,
+      destinationCity: city,
       weightGrams: KIT_WEIGHT_GRAMS,
     });
 

@@ -77,6 +77,43 @@ export const envSchema = z.object({
    */
   PAGOLIVRE_WEBHOOK_TOKEN: z.string().min(16).optional(),
 
+  // --- Logística: DHL Express (GC-AJ-038 a 042) -----------------------------
+  //
+  // `sandbox` simula cotação, etiqueta, rastreio e coleta; `dhl` liga a MyDHL
+  // API. A chave é a do portal de desenvolvedor da DHL (developer.dhl.com),
+  // não o login do site MyDHL.
+  SHIPPING_PROVIDER: z.enum(['sandbox', 'dhl']).default('sandbox'),
+  /** `.../mydhlapi/test` em teste; `.../mydhlapi` em produção. */
+  DHL_BASE_URL: z.string().url().default('https://express.api.dhl.com/mydhlapi/test'),
+  DHL_API_KEY: z.string().optional(),
+  DHL_API_SECRET: z.string().optional(),
+  /** Conta DHL Express da Genoa, que paga a ida e a volta. */
+  DHL_ACCOUNT_NUMBER: z.string().optional(),
+  /** Produto doméstico: `N` = Express Domestic. */
+  DHL_PRODUCT_CODE: z.string().default('N'),
+  DHL_LABEL_FORMAT: z.enum(['pdf', 'zpl']).default('pdf'),
+  /** A4 para imprimir em casa; `ECOM26_64_001` é o térmico 6x4 da Zebra. */
+  DHL_LABEL_TEMPLATE: z.string().default('ECOM26_84_A4_001'),
+  /** Minutos por etapa no rastreio simulado (sandbox e ambiente de teste da DHL). */
+  SHIPPING_SIMULATION_MINUTES: z.coerce.number().int().min(1).default(5),
+  /** De quanto em quanto tempo o rastreio é sincronizado; 0 desliga. */
+  SHIPPING_SYNC_MINUTES: z.coerce.number().int().min(0).default(30),
+
+  /** O laboratório: origem da ida e destino da volta. */
+  SHIPPING_ORIGIN_NAME: z.string().default('Recebimento de Amostras gene.code'),
+  SHIPPING_ORIGIN_COMPANY: z.string().default('Genoa Biotecnologia S.A.'),
+  SHIPPING_ORIGIN_DOCUMENT: z.string().default('07671920000180'),
+  SHIPPING_ORIGIN_PHONE: z.string().default('11937672072'),
+  SHIPPING_ORIGIN_EMAIL: z.string().email().default('contato@genecode.com.br'),
+  SHIPPING_ORIGIN_ZIP: z.string().default('01228904'),
+  SHIPPING_ORIGIN_STREET: z.string().default('Avenida Angélica'),
+  SHIPPING_ORIGIN_NUMBER: z.string().default('2318'),
+  SHIPPING_ORIGIN_DISTRICT: z.string().default('Consolação'),
+  SHIPPING_ORIGIN_CITY: z.string().default('São Paulo'),
+  SHIPPING_ORIGIN_STATE: z.string().length(2).default('SP'),
+  /** Envelope da volta (a caixa da ida usa o peso do produto). */
+  SHIPPING_RETURN_WEIGHT_GRAMS: z.coerce.number().int().positive().default(150),
+
   // --- Cadastro em ambiente sem e-mail ---------------------------------------
   //
   // Homologação não tem servidor de e-mail: o código de verificação é escrito no
@@ -161,6 +198,7 @@ export function validateEnv(raw: Record<string, unknown>): Env {
   assertTlsIsComplete(parsed.data);
   assertAcquirerIsComplete(parsed.data);
   assertNotificationIsComplete(parsed.data);
+  assertCarrierIsComplete(parsed.data);
 
   return parsed.data;
 }
@@ -183,6 +221,20 @@ function assertTlsIsComplete(env: Env): void {
       `ACTIVATE_SSL_CERTIFICATE=YES requires ${missing.join(', ')}. ` +
         'On the homolog VPS these point at /etc/letsencrypt/live/homolog.crosoften.com/.',
     );
+  }
+}
+
+/**
+ * Recusa subir com a DHL ligada e sem credencial (GC-AJ-038): a cotação do
+ * checkout quebraria só na hora da compra, que é o pior momento para saber.
+ */
+function assertCarrierIsComplete(env: Env): void {
+  if (env.SHIPPING_PROVIDER !== 'dhl') return;
+  const missing = (['DHL_API_KEY', 'DHL_API_SECRET', 'DHL_ACCOUNT_NUMBER'] as const).filter(
+    (name) => !env[name],
+  );
+  if (missing.length > 0) {
+    throw new Error(`SHIPPING_PROVIDER=dhl requires ${missing.join(', ')}.`);
   }
 }
 
