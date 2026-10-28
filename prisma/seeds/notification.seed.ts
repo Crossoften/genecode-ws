@@ -37,7 +37,7 @@ const TRIGGERS = [
     key: NotificationTriggerKey.ANALYSIS_STARTED,
     enabled: true,
     template:
-      'Olá, {nome}! Iniciamos o processamento da sua amostra. Nossa equipe seguirá as ' +
+      'Olá, {nome}! Iniciamos o processamento da sua amostra de DNA. Nossa equipe seguirá as ' +
       'etapas técnicas e os controles de qualidade do seu exame genético.',
     channelWhatsapp: true,
     channelEmail: true,
@@ -71,7 +71,7 @@ const TRIGGERS = [
       'Olá, {nome}! Seu exame foi concluído e o resultado já está disponível! A partir de ' +
       'agora, você poderá realizar avaliações trimestrais para acompanhar seus hábitos, sua ' +
       'rotina de atividade física e suas metas. Essas informações compõem seu escore ' +
-      'ambiental, que, quando integrado ao escore genético, resulta em seu escore combinado. ' +
+      'ambiental, que, quando integrado ao escore genético, resulta no escore combinado. ' +
       'Seu perfil genético permanece o mesmo, mas mudanças nos fatores ambientais podem ' +
       'melhorar seu escore combinado e ajudar você a acompanhar sua evolução. O resultado é ' +
       'uma estimativa que apoia suas escolhas e seu planejamento — suas possibilidades vão ' +
@@ -79,6 +79,31 @@ const TRIGGERS = [
     channelWhatsapp: true,
     channelEmail: true,
     channelSms: false,
+  },
+];
+
+/**
+ * Revisões de texto do cliente sobre o padrão anterior (GC-AJ-025, doc de
+ * 21/10/2026): "amostra **de DNA**" e "resulta **no** escore combinado".
+ *
+ * Só troca o texto que ainda está **igual ao padrão anterior** — se o admin já
+ * editou o gatilho pela tela, a edição dele vale e nada é sobrescrito.
+ */
+const REVISIONS: ReadonlyArray<{ key: NotificationTriggerKey; from: string; to: string }> = [
+  {
+    key: NotificationTriggerKey.ANALYSIS_STARTED,
+    from:
+      'Olá, {nome}! Iniciamos o processamento da sua amostra. Nossa equipe seguirá as ' +
+      'etapas técnicas e os controles de qualidade do seu exame genético.',
+    to: TRIGGERS.find((t) => t.key === NotificationTriggerKey.ANALYSIS_STARTED)!.template,
+  },
+  {
+    key: NotificationTriggerKey.REPORT_READY,
+    from: TRIGGERS.find((t) => t.key === NotificationTriggerKey.REPORT_READY)!.template.replace(
+      'resulta no escore combinado',
+      'resulta em seu escore combinado',
+    ),
+    to: TRIGGERS.find((t) => t.key === NotificationTriggerKey.REPORT_READY)!.template,
   },
 ];
 
@@ -97,5 +122,13 @@ export async function seedNotificationTriggers(prisma: PrismaClient): Promise<vo
       create: trigger,
     });
   }
-  console.log(`✓ ${TRIGGERS.length} gatilhos de notificação`);
+  let revised = 0;
+  for (const revision of REVISIONS) {
+    const result = await prisma.notificationTrigger.updateMany({
+      where: { key: revision.key, template: revision.from },
+      data: { template: revision.to },
+    });
+    revised += result.count;
+  }
+  console.log(`✓ ${TRIGGERS.length} gatilhos de notificação (${revised} com texto revisado)`);
 }

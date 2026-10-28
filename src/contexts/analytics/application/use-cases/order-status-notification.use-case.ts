@@ -62,7 +62,30 @@ export class OrderStatusNotificationUseCase {
   ): Promise<readonly DispatchedNotification[]> {
     const triggerKey = TRIGGER_BY_STATUS[status];
     if (!triggerKey) return [];
+    return this.dispatch(order, triggerKey, channels);
+  }
 
+  /**
+   * Registra um aviso avulso, fora de uma troca de situação.
+   *
+   * É o caminho do "Análise em andamento" (GC-AJ-024): não há estado de pedido
+   * entre PROCESSING e REPORT_READY, então o laboratório o envia pela ficha do
+   * pedido quando fizer sentido — e o registro é o que acende a 3ª etapa do
+   * "Status do laboratório" na área do paciente.
+   */
+  async sendTrigger(
+    order: NotifiableOrder,
+    triggerKey: NotificationTriggerKey,
+    channels?: readonly NotificationChannel[],
+  ): Promise<readonly DispatchedNotification[]> {
+    return this.dispatch(order, triggerKey, channels);
+  }
+
+  private async dispatch(
+    order: NotifiableOrder,
+    triggerKey: NotificationTriggerKey,
+    channels?: readonly NotificationChannel[],
+  ): Promise<readonly DispatchedNotification[]> {
     const trigger = await this.prisma.notificationTrigger.findUnique({
       where: { key: triggerKey },
     });

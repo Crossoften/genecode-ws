@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 
 import { PrismaService } from '@infra/database/prisma.service';
 
+import { adjustedGlobalScore } from '../services/adjusted-global';
+
 export interface PatientKit {
   readonly code: string;
   readonly status: string;
@@ -30,6 +32,16 @@ export interface PatientKit {
   readonly orderStatus: string | null;
   /** Laudo publicado do titular deste kit, quando já existe. */
   readonly reportId: string | null;
+  /**
+   * Foto do produto do exame (GC-AJ-023): "o que é a mulher é a mulher, o que
+   * é o homem é o homem". Null sem pedido ou sem foto — a tela usa a caixa.
+   */
+  readonly productImageUrl: string | null;
+  /**
+   * O laboratório já avisou "Análise em andamento" (GC-AJ-024). Não há estado
+   * de pedido para essa etapa: ela acende pelo registro do aviso.
+   */
+  readonly analysisInProgress: boolean;
 }
 
 export interface PatientReport {
@@ -38,6 +50,8 @@ export interface PatientReport {
   readonly publishedAt: Date | null;
   readonly globalIndex: number | null;
   readonly band: string | null;
+  /** Escore ajustado global (GC-AJ-017), quando já houve avaliação ambiental. */
+  readonly adjustedGlobal: { readonly value: number; readonly band: string } | null;
 }
 
 export interface PatientArea {
@@ -50,6 +64,8 @@ export interface PatientArea {
     readonly status: string;
     readonly createdAt: Date;
     readonly productName: string | null;
+    /** Foto do produto, como no kit. */
+    readonly productImageUrl: string | null;
     /** Laudo publicado do titular do kit deste pedido, quando houver. */
     readonly reportId: string | null;
   }[];
@@ -132,7 +148,7 @@ export class PatientAreaUseCase {
           number: true,
           status: true,
           createdAt: true,
-          items: { select: { productName: true }, take: 1 },
+          items: { select: { productName: true, productSlug: true }, take: 1 },
         },
       }),
     ]);
@@ -178,10 +194,66 @@ export class PatientAreaUseCase {
               number: true,
               status: true,
               userId: true,
-              items: { select: { productName: true }, take: 1 },
+              items: { select: { productName: true, productSlug: true }, take: 1 },
             },
           });
     const orderByKit = new Map(kitOrders.map((order) => [order.id, order]));
+
+    // Foto do produto por slug — o item do pedido congela nome e slug, não a foto.
+    const slugs = [
+      ...new Set(
+        [...orders, ...kitOrders]
+          .map((order) => order.items[0]?.productSlug)
+          .filter((slug): slug is string => slug !== undefined),
+      ),
+    ];
+    const products =
+      slugs.length === 0
+        ? []
+        : await this.prisma.product.findMany({
+            where: { slug: { in: slugs } },
+            select: { slug: true, imageUrl: true },
+          });
+    const imageBySlug = new Map(products.map((product) => [product.slug, product.imageUrl]));
+    const imageOf = (order: { items: { productSlug: string }[] } | undefined) =>
+      (order?.items[0] ? imageBySlug.get(order.items[0].productSlug) : null) ?? null;
+
+    // Pedidos com o aviso "Análise em andamento" já registrado (GC-AJ-024).
+    const allOrderIds = [...new Set([...orderIds, ...kitOrderIds])];
+    const inProgressLogs =
+      allOrderIds.length === 0
+        ? []
+        : await this.prisma.notificationLog.findMany({
+            where: { orderId: { in: allOrderIds }, triggerKey: 'ANALYSIS_IN_PROGRESS' },
+            select: { orderId: true },
+            distinct: ['orderId'],
+          });
+    const inProgress = new Set(inProgressLogs.map((log) => log.orderId));
+
+    // Ajustado global de cada laudo, da última entrevista do titular.
+    const assessments =
+      subjectIds.length === 0
+        ? []
+        : await this.prisma.assessment.findMany({
+            where: { subjectId: { in: subjectIds } },
+            orderBy: { completedAt: 'desc' },
+            select: { subjectId: true, adjustedScores: true },
+          });
+    const adjustedBySubject = new Map<string, Record<string, number>>();
+    for (const assessment of assessments) {
+      if (adjustedBySubject.has(assessment.subjectId)) continue;
+      const scores = assessment.adjustedScores as Record<string, number> | null;
+      if (scores) adjustedBySubject.set(assessment.subjectId, scores);
+    }
+    const adjustedGlobals = await Promise.all(
+      reports.map((report) =>
+        adjustedGlobalScore(
+          this.prisma,
+          report.panelId,
+          adjustedBySubject.get(report.subjectId) ?? null,
+        ),
+      ),
+    );
 
     const pending = orderKits.find((kit) => kit.status === 'ASSIGNED');
     const pendingOrder = pending
@@ -203,6 +275,8 @@ export class PatientAreaUseCase {
             (kit.subjectId ? (panelBySubject.get(kit.subjectId) ?? null) : null),
           orderStatus: order?.status ?? null,
           reportId: kit.subjectId ? (publishedBySubject.get(kit.subjectId) ?? null) : null,
+          productImageUrl: imageOf(order),
+          analysisInProgress: kit.orderId !== null && inProgress.has(kit.orderId),
         };
       }),
       orders: orders.map((order) => {
@@ -213,6 +287,7 @@ export class PatientAreaUseCase {
           status: order.status,
           createdAt: order.createdAt,
           productName: order.items[0]?.productName ?? null,
+          productImageUrl: imageOf(order),
           reportId: kit?.subjectId ? (publishedBySubject.get(kit.subjectId) ?? null) : null,
         };
       }),
@@ -222,7 +297,7 @@ export class PatientAreaUseCase {
             productName: pendingOrder.items[0]?.productName ?? null,
           }
         : null,
-      reports: reports.map((report) => {
+      reports: reports.map((report, index) => {
         const global = report.modalityIndexes[0];
         return {
           id: report.id,
@@ -230,6 +305,7 @@ export class PatientAreaUseCase {
           publishedAt: report.publishedAt,
           globalIndex: global ? Number(global.normalizedIndex) : null,
           band: global?.band ?? null,
+          adjustedGlobal: adjustedGlobals[index] ?? null,
         };
       }),
     };

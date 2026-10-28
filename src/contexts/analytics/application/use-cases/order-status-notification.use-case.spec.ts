@@ -57,6 +57,8 @@ describe('OrderStatusNotificationUseCase', () => {
     [OrderStatus.PAID, 'ORDER_CONFIRMED'],
     [OrderStatus.KIT_SHIPPED, 'KIT_SHIPPED'],
     [OrderStatus.SAMPLE_RECEIVED, 'SAMPLE_RECEIVED'],
+    // "Análise iniciada" (card #526) — o teste ainda dizia que PROCESSING calava.
+    [OrderStatus.PROCESSING, 'ANALYSIS_STARTED'],
     [OrderStatus.REPORT_READY, 'REPORT_READY'],
   ])('mapeia %s para o gatilho %s', async (status, triggerKey) => {
     const prisma = buildPrisma();
@@ -72,7 +74,6 @@ describe('OrderStatusNotificationUseCase', () => {
     OrderStatus.PENDING_PAYMENT,
     OrderStatus.KIT_DELIVERED,
     OrderStatus.SAMPLE_IN_TRANSIT,
-    OrderStatus.PROCESSING,
     OrderStatus.CANCELLED,
     OrderStatus.REFUNDED,
   ])('%s não notifica nem consulta gatilho', async (status) => {

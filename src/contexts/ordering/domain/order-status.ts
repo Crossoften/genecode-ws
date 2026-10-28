@@ -62,8 +62,9 @@ export const STATUS_LABEL: Readonly<Record<OrderStatus, string>> = {
   [OrderStatus.KIT_DELIVERED]: 'Kit entregue',
   [OrderStatus.SAMPLE_IN_TRANSIT]: 'Amostra a caminho',
   [OrderStatus.SAMPLE_RECEIVED]: 'Amostra recebida',
-  [OrderStatus.PROCESSING]: 'Em análise',
-  [OrderStatus.REPORT_READY]: 'Laudo disponível',
+  // Nomes do doc "Status do laboratório" do cliente (GC-AJ-024).
+  [OrderStatus.PROCESSING]: 'Análise iniciada',
+  [OrderStatus.REPORT_READY]: 'Resultado disponível',
   [OrderStatus.CANCELLED]: 'Cancelado',
   [OrderStatus.REFUNDED]: 'Reembolsado',
 };

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Patch, Query } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, Param, Patch, Post, Query } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsArray, IsIn, IsOptional, IsString, MaxLength } from 'class-validator';
@@ -245,5 +245,39 @@ export class AdminController {
         (await this.prisma.kit.findFirst({ where: { orderId: order.id }, select: { code: true } }))
           ?.code ?? null,
     };
+  }
+
+  /**
+   * Avisa o titular de que a análise está em andamento (GC-AJ-024).
+   *
+   * Só com o pedido em processamento: antes disso a amostra não chegou, e
+   * depois o resultado já está disponível — o aviso seria mentira nos dois
+   * casos. Repetir não duplica: se o aviso já saiu, devolve o que foi enviado.
+   */
+  @Post('pedidos/:number/aviso-andamento')
+  @HttpCode(200)
+  @RequirePermissions('orders.write')
+  @ApiOperation({ summary: 'Envia o aviso "Análise em andamento" do pedido' })
+  async notifyAnalysisInProgress(@Param('number') rawNumber: string) {
+    const number = rawNumber.trim().toUpperCase();
+    const order = await this.prisma.order.findUnique({ where: { number } });
+    if (!order) throw new NotFoundError('Pedido não encontrado.');
+    if (order.status !== OrderStatus.PROCESSING) {
+      throw new ConflictError('O aviso de análise em andamento só vale com o pedido em processamento.', {
+        status: order.status,
+      });
+    }
+
+    const already = await this.prisma.notificationLog.findMany({
+      where: { orderId: order.id, triggerKey: 'ANALYSIS_IN_PROGRESS' },
+      select: { channel: true, recipient: true },
+    });
+    if (already.length > 0) return { number, notifications: already, alreadySent: true };
+
+    const notifications = await this.notifyStatusChange.sendTrigger(
+      { id: order.id, customerEmail: order.customerEmail, customerPhone: order.customerPhone },
+      'ANALYSIS_IN_PROGRESS',
+    );
+    return { number, notifications, alreadySent: false };
   }
 }
