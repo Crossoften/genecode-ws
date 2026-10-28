@@ -124,6 +124,17 @@ const PRODUCTS: readonly ProductSeed[] = [
  * Idempotente por slug. Features e traits são reescritos a cada execução para
  * que remover um item deste arquivo realmente o remova do banco.
  */
+/** As quatro fotos da caixa, que moram no front (`public/`). */
+const FOTOS_DA_CAIXA = [
+  { url: 'kit-caixa-dinamica.webp', alt: 'Caixa do kit de coleta de DNA gene.code' },
+  { url: 'kit-caixa-lateral.webp', alt: 'Caixa do kit gene.code vista de lado' },
+  { url: 'kit-aberto.webp', alt: 'Kit gene.code aberto, com o conteúdo à mostra' },
+  {
+    url: 'kit-elementos.webp',
+    alt: 'Envelope de remessa, declaração e os dois swabs de coleta que vêm no kit',
+  },
+] as const;
+
 export async function seedCatalog(prisma: PrismaClient): Promise<void> {
   for (const product of PRODUCTS) {
     const record = await prisma.product.upsert({
@@ -166,6 +177,25 @@ export async function seedCatalog(prisma: PrismaClient): Promise<void> {
         position,
       })),
     });
+
+    // Galeria (GC-AJ-032): produto novo nasce com as quatro fotos da caixa. A
+    // galeria que já existe é do admin — o seed não toca.
+    if ((await prisma.productImage.count({ where: { productId: record.id } })) === 0) {
+      await prisma.productImage.createMany({
+        data: FOTOS_DA_CAIXA.map((foto, position) => ({
+          productId: record.id,
+          url: foto.url,
+          alt: foto.alt,
+          position,
+        })),
+      });
+      if (!record.imageUrl) {
+        await prisma.product.update({
+          where: { id: record.id },
+          data: { imageUrl: FOTOS_DA_CAIXA[0]!.url },
+        });
+      }
+    }
 
     await prisma.productTrait.deleteMany({ where: { productId: record.id } });
     await prisma.productTrait.createMany({

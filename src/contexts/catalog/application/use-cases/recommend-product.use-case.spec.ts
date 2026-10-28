@@ -14,6 +14,7 @@ function product(slug: string): ProductView {
     maxInstallments: 5,
     highlight: null,
     imageUrl: null,
+    images: [],
     features: [],
   };
 }

@@ -4,7 +4,11 @@ import { PrismaService } from '@infra/database/prisma.service';
 import { NotFoundError } from '@shared/domain/domain-error';
 import { fail, ok, type Result } from '@shared/domain/result';
 
-import { toAdminProductView, type AdminProductView } from '../admin-product.view';
+import {
+  ADMIN_PRODUCT_INCLUDE,
+  toAdminProductView,
+  type AdminProductView,
+} from '../admin-product.view';
 import type { CreateProductInput } from './admin-create-product.use-case';
 
 export type UpdateProductInput = Omit<CreateProductInput, 'slug'>;
@@ -28,6 +32,23 @@ export class AdminUpdateProductUseCase {
 
     const updated = await this.prisma.$transaction(async (tx) => {
       await tx.productFeature.deleteMany({ where: { productId: product.id } });
+
+      // Galeria (GC-AJ-032): a lista que veio é a galeria inteira, na ordem.
+      // O texto alternativo de uma foto que continua é preservado.
+      if (input.images !== undefined) {
+        const before = await tx.productImage.findMany({ where: { productId: product.id } });
+        const altByUrl = new Map(before.map((image) => [image.url, image.alt]));
+        await tx.productImage.deleteMany({ where: { productId: product.id } });
+        await tx.productImage.createMany({
+          data: input.images.map((url, position) => ({
+            productId: product.id,
+            url,
+            alt: altByUrl.get(url) ?? null,
+            position,
+          })),
+        });
+      }
+
       return tx.product.update({
         where: { id: product.id },
         data: {
@@ -41,9 +62,13 @@ export class AdminUpdateProductUseCase {
             ? { maxInstallments: input.maxInstallments }
             : {}),
           highlight: input.highlight ?? null,
-          // Sem provedor de mídia o form ainda não envia imagem; um PUT sem o
-          // campo não pode apagar a imagem que já existe.
-          ...(input.imageUrl !== undefined ? { imageUrl: input.imageUrl } : {}),
+          // A foto principal acompanha a galeria; sem galeria no corpo, vale o
+          // campo antigo. Um PUT sem nenhum dos dois não apaga a foto.
+          ...(input.images !== undefined
+            ? { imageUrl: input.images[0] ?? null }
+            : input.imageUrl !== undefined
+              ? { imageUrl: input.imageUrl }
+              : {}),
           weightGrams: input.weightGrams ?? null,
           dimensionsCm: input.dimensionsCm ?? null,
           category: input.category ?? null,
@@ -51,7 +76,7 @@ export class AdminUpdateProductUseCase {
             create: (input.features ?? []).map((label, index) => ({ label, position: index })),
           },
         },
-        include: { features: { orderBy: { position: 'asc' } } },
+        include: ADMIN_PRODUCT_INCLUDE,
       });
     });
 

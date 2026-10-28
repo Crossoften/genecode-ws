@@ -2,7 +2,11 @@ import { Injectable } from '@nestjs/common';
 
 import { PrismaService } from '@infra/database/prisma.service';
 
-import { toAdminProductView, type AdminProductView } from '../admin-product.view';
+import {
+  ADMIN_PRODUCT_INCLUDE,
+  toAdminProductView,
+  type AdminProductView,
+} from '../admin-product.view';
 
 export interface AdminProductListItem extends AdminProductView {
   readonly salesThisMonth: number;
@@ -24,7 +28,7 @@ export class AdminListProductsUseCase {
     const [products, sales] = await Promise.all([
       this.prisma.product.findMany({
         orderBy: { position: 'asc' },
-        include: { features: { orderBy: { position: 'asc' } } },
+        include: ADMIN_PRODUCT_INCLUDE,
       }),
       this.prisma.orderItem.groupBy({
         by: ['productSlug'],

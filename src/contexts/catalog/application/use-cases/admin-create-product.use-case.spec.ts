@@ -27,6 +27,9 @@ describe('AdminCreateProductUseCase — nasce despublicado, slug derivado do nom
           features: (data.features as { create: { label: string; position: number }[] }).create.map(
             (feature, index) => ({ id: `f${index}`, productId: 'novo', ...feature }),
           ),
+          images: (data.images as { create: { url: string; position: number }[] }).create.map(
+            (image, index) => ({ id: `i${index}`, productId: 'novo', alt: null, ...image }),
+          ),
         })),
       },
     };

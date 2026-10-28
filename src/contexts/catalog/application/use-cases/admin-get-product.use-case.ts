@@ -4,7 +4,11 @@ import { PrismaService } from '@infra/database/prisma.service';
 import { NotFoundError } from '@shared/domain/domain-error';
 import { fail, ok, type Result } from '@shared/domain/result';
 
-import { toAdminProductView, type AdminProductView } from '../admin-product.view';
+import {
+  ADMIN_PRODUCT_INCLUDE,
+  toAdminProductView,
+  type AdminProductView,
+} from '../admin-product.view';
 
 /** Loads the full product for the admin edit form (tela adm-8). */
 @Injectable()
@@ -19,7 +23,7 @@ export class AdminGetProductUseCase {
   async execute(slug: string): Promise<Result<AdminProductView>> {
     const product = await this.prisma.product.findUnique({
       where: { slug },
-      include: { features: { orderBy: { position: 'asc' } } },
+      include: ADMIN_PRODUCT_INCLUDE,
     });
     if (!product) return fail(new NotFoundError('Produto não encontrado.'));
 

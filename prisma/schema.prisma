@@ -793,7 +793,12 @@ model Product {
   highlight String? @db.VarChar(40)
   position  Int     @default(0)
 
+  /// Foto principal — é sempre a primeira da galeria (`images`), mantida aqui
+  /// porque a vitrine, o carrinho e a área do paciente leem só ela.
   imageUrl String? @db.VarChar(500)
+
+  /// Galeria da página do produto, na ordem (GC-AJ-032).
+  images ProductImage[]
 
   /// Dados físicos do kit, exibidos e editados no admin (tela adm-8).
   weightGrams  Int?
@@ -825,6 +830,31 @@ model ProductFeature {
 
   @@index([productId])
   @@map("product_features")
+}
+
+/// Foto da galeria de um produto (GC-AJ-032).
+///
+/// Antes havia uma foto por produto e as quatro da caixa eram arquivos fixos
+/// do front — o admin não as via ("Sem foto") nem podia tirá-las. Agora todas
+/// são dado: a migration trouxe as quatro da caixa como linhas, e o admin
+/// ordena, inclui e exclui pela tela.
+///
+/// `url` é absoluta para foto enviada pelo admin e relativa (`kit-aberto.webp`)
+/// para as fotos que moram no próprio front.
+model ProductImage {
+  id        String  @id @default(uuid()) @db.Char(36)
+  productId String  @db.Char(36)
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  url      String  @db.VarChar(500)
+  /// Texto alternativo; nulo usa "Kit <nome do produto>".
+  alt      String? @db.VarChar(200)
+  position Int     @default(0)
+
+  createdAt DateTime @default(now())
+
+  @@index([productId, position])
+  @@map("product_images")
 }
 
 /// Aderência de um produto a um eixo do quiz.

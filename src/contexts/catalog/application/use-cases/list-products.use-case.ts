@@ -13,6 +13,8 @@ export interface ProductView {
   readonly maxInstallments: number;
   readonly highlight: string | null;
   readonly imageUrl: string | null;
+  /** Galeria da página do produto, na ordem (GC-AJ-032). */
+  readonly images: readonly { readonly url: string; readonly alt: string | null }[];
   readonly features: readonly string[];
 }
 
@@ -32,7 +34,10 @@ export class ListProductsUseCase {
     const products = await this.prisma.product.findMany({
       where: { published: true, archived: false },
       orderBy: { position: 'asc' },
-      include: { features: { orderBy: { position: 'asc' } } },
+      include: {
+        features: { orderBy: { position: 'asc' } },
+        images: { orderBy: { position: 'asc' } },
+      },
     });
 
     return products.map((product) => ({
@@ -46,6 +51,7 @@ export class ListProductsUseCase {
       maxInstallments: product.maxInstallments,
       highlight: product.highlight,
       imageUrl: product.imageUrl,
+      images: product.images.map((image) => ({ url: image.url, alt: image.alt })),
       features: product.features.map((feature) => feature.label),
     }));
   }

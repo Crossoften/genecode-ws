@@ -1,5 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
+  ArrayMaxSize,
   IsArray,
   IsBoolean,
   IsInt,
@@ -56,6 +57,14 @@ export class UpdateProductDto {
   @ApiPropertyOptional({ maxLength: 500, description: 'URL de imagem já hospedada.' })
   @IsOptional() @IsString() @MaxLength(500)
   imageUrl?: string;
+
+  /**
+   * Galeria inteira, na ordem (GC-AJ-032). Substitui a anterior; a primeira
+   * vira a foto principal. Ausente mantém a galeria como está.
+   */
+  @ApiPropertyOptional({ type: [String], description: 'URLs da galeria, na ordem.' })
+  @IsOptional() @IsArray() @ArrayMaxSize(12) @IsString({ each: true }) @MaxLength(500, { each: true })
+  images?: string[];
 
   @ApiPropertyOptional({ description: 'Peso do kit em gramas.' })
   @IsOptional() @IsInt() @IsPositive()

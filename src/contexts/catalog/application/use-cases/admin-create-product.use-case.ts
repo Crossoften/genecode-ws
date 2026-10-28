@@ -5,7 +5,11 @@ import { ConflictError, ValidationError } from '@shared/domain/domain-error';
 import { fail, ok, type Result } from '@shared/domain/result';
 
 import { slugFromName } from '../../domain/product-slug';
-import { toAdminProductView, type AdminProductView } from '../admin-product.view';
+import {
+  ADMIN_PRODUCT_INCLUDE,
+  toAdminProductView,
+  type AdminProductView,
+} from '../admin-product.view';
 
 export interface CreateProductInput {
   readonly name: string;
@@ -19,6 +23,8 @@ export interface CreateProductInput {
   readonly maxInstallments?: number;
   readonly highlight?: string;
   readonly imageUrl?: string;
+  /** Galeria na ordem (GC-AJ-032); a primeira vira a foto principal. */
+  readonly images?: readonly string[];
   readonly weightGrams?: number;
   readonly dimensionsCm?: string;
   readonly category?: string;
@@ -62,15 +68,20 @@ export class AdminCreateProductUseCase {
         archived: false,
         highlight: input.highlight ?? null,
         position: (last._max.position ?? -1) + 1,
-        imageUrl: input.imageUrl ?? null,
+        imageUrl: input.images?.[0] ?? input.imageUrl ?? null,
         weightGrams: input.weightGrams ?? null,
         dimensionsCm: input.dimensionsCm ?? null,
         category: input.category ?? null,
         features: {
           create: (input.features ?? []).map((label, index) => ({ label, position: index })),
         },
+        images: {
+          create: (input.images ?? (input.imageUrl ? [input.imageUrl] : [])).map(
+            (url, position) => ({ url, position }),
+          ),
+        },
       },
-      include: { features: { orderBy: { position: 'asc' } } },
+      include: ADMIN_PRODUCT_INCLUDE,
     });
 
     return ok(toAdminProductView(product));
