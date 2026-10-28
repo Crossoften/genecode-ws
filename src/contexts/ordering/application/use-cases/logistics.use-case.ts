@@ -244,6 +244,7 @@ export class LogisticsUseCase {
       data: {
         pickupConfirmation: result.confirmationNumber,
         pickupAt: new Date(`${input.date}T${window.ready}:00-03:00`),
+        pickupRequestedAt: now,
         pickupCloseTime: window.close,
         pickupLocation: input.location?.slice(0, 80) ?? null,
         pickupAddress: input.address ? { ...input.address } : undefined,
@@ -286,6 +287,7 @@ export class LogisticsUseCase {
             reverse: shipment.direction === 'INBOUND',
             createdAt: shipment.createdAt,
             pickupAt: shipment.pickupAt,
+            pickupRequestedAt: shipment.pickupRequestedAt,
           })
         ).events;
       } catch (erro) {

@@ -81,6 +81,8 @@ export interface TrackRequest {
   readonly reverse: boolean;
   readonly createdAt: Date;
   readonly pickupAt: Date | null;
+  /** Quando a retirada foi pedida — a simulação da volta parte daqui. */
+  readonly pickupRequestedAt?: Date | null;
 }
 
 export interface TrackingResult {

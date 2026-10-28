@@ -1091,6 +1091,9 @@ model Shipment {
   /// Coleta agendada na casa do cliente (só na volta).
   pickupConfirmation String?   @db.VarChar(60)
   pickupAt           DateTime?
+  /// Quando a retirada foi pedida. A simulação (sandbox e teste da DHL) faz a
+  /// volta andar a partir daqui, para o teste não esperar o dia agendado.
+  pickupRequestedAt  DateTime?
   pickupCloseTime    String?   @db.VarChar(5)
   pickupLocation     String?   @db.VarChar(80)
   /// Endereço da coleta, quando difere do endereço de entrega do pedido.

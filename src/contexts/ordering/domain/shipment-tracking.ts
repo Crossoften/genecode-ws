@@ -85,15 +85,24 @@ export const EVENT_LABEL: Readonly<Record<string, string>> = {
  * O ambiente de teste da DHL **não rastreia** os conhecimentos que ele mesmo
  * emite — só 15 números fixos. Para testar a jornada inteira, ida e volta, os
  * eventos são derivados do tempo: a ida começa na emissão da etiqueta; a volta,
- * na coleta agendada (sem coleta, a volta não anda). Cada etapa leva
+ * no pedido de retirada (sem retirada, a volta não anda). Cada etapa leva
  * `minutesPerStep` minutos.
  */
 export function simulatedEvents(
-  request: { reverse: boolean; createdAt: Date; pickupAt: Date | null },
+  request: {
+    reverse: boolean;
+    createdAt: Date;
+    pickupAt: Date | null;
+    pickupRequestedAt?: Date | null;
+  },
   now: Date,
   minutesPerStep: number,
 ): TrackingEvent[] {
-  const start = request.reverse ? request.pickupAt : request.createdAt;
+  // A volta parte do pedido de retirada (não do dia agendado): é teste, e
+  // ninguém espera até amanhã para ver a amostra chegar.
+  const start = request.reverse
+    ? (request.pickupRequestedAt ?? request.pickupAt)
+    : request.createdAt;
   if (!start || now < start) return [];
 
   const steps: Array<[string, string]> = request.reverse

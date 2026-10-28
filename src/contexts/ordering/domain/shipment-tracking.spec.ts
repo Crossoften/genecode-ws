@@ -49,6 +49,19 @@ describe('rastreio simulado', () => {
     expect(events.map((e) => e.code)).toEqual(['PU', 'AF', 'WC', 'OK']);
   });
 
+  it('a volta parte do pedido de retirada, não do dia agendado', () => {
+    const now = new Date(created.getTime() + 60 * 60_000);
+    const pedida = new Date(now.getTime() - 11 * 60_000);
+    const amanha = new Date(now.getTime() + 24 * 60 * 60_000);
+    expect(
+      simulatedEvents(
+        { reverse: true, createdAt: created, pickupAt: amanha, pickupRequestedAt: pedida },
+        now,
+        5,
+      ).map((e) => e.code),
+    ).toEqual(['PU', 'AF', 'WC']);
+  });
+
   it('a volta só anda depois da coleta agendada', () => {
     const now = new Date(created.getTime() + 60 * 60_000);
     expect(simulatedEvents({ reverse: true, createdAt: created, pickupAt: null }, now, 5)).toEqual([]);
