@@ -29,6 +29,17 @@ export interface SalesMetrics {
     readonly revenueCents: number;
     readonly commissionCents: number;
   }[];
+  /**
+   * Funil do checkout na janela (GC-AJ-037): sessões que chegaram a cada
+   * etapa e pedidos pagos. É o que responde "quantos abriram o pagamento e
+   * quantos desistiram".
+   */
+  readonly funnel: {
+    readonly cart: number;
+    readonly data: number;
+    readonly payment: number;
+    readonly paid: number;
+  };
   /** Same window shifted back once, for the comparison deltas. */
   readonly previousPeriod: {
     readonly ordersPaid: number;
@@ -133,7 +144,7 @@ export class BusinessIntelligenceUseCase {
     // é sempre semestral — por isso ignora a janela escolhida no painel.
     const monthsStart = new Date(now.getFullYear(), now.getMonth() - 5, 1);
 
-    const [orders, previousPaid, monthlyPaid] = await Promise.all([
+    const [orders, previousPaid, monthlyPaid, funnelStages] = await Promise.all([
       this.prisma.order.findMany({
         where: { createdAt: { gte: since } },
         include: { address: { select: { state: true } } },
@@ -146,7 +157,14 @@ export class BusinessIntelligenceUseCase {
         where: { paidAt: { gte: monthsStart } },
         select: { paidAt: true, totalCents: true, commissionCents: true },
       }),
+      this.prisma.checkoutFunnelEvent.groupBy({
+        by: ['stage'],
+        where: { createdAt: { gte: since } },
+        _count: { _all: true },
+      }),
     ]);
+    const stageCount = (stage: string) =>
+      funnelStages.find((entry) => entry.stage === stage)?._count._all ?? 0;
 
     const paid = orders.filter((order) => order.paidAt !== null);
     const previousGross = previousPaid.reduce((sum, order) => sum + order.totalCents, 0);
@@ -189,6 +207,12 @@ export class BusinessIntelligenceUseCase {
         .sort((a, b) => b.count - a.count),
       weeklySales: this.groupByWeek(paid, since, windowDays),
       monthlySeries: this.groupByMonth(monthlyPaid, now),
+      funnel: {
+        cart: stageCount('CART'),
+        data: stageCount('DATA'),
+        payment: stageCount('PAYMENT'),
+        paid: paid.length,
+      },
       previousPeriod: {
         ordersPaid: previousPaid.length,
         grossRevenueCents: previousGross,

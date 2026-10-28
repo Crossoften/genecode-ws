@@ -104,3 +104,15 @@ export class ShippingQuoteDto {
   @Matches(/^\d{5}-?\d{3}$/, { message: 'CEP inválido.' })
   zipCode!: string;
 }
+
+/** Passagem por uma etapa do checkout (GC-AJ-037). */
+export class FunnelStepDto {
+  @ApiProperty({ description: 'Identificador aleatório da sessão de compra.' })
+  @IsString()
+  @Matches(/^[A-Za-z0-9-]{8,64}$/)
+  sessao!: string;
+
+  @ApiProperty({ enum: ['CARRINHO', 'DADOS', 'PAGAMENTO'] })
+  @IsIn(['CARRINHO', 'DADOS', 'PAGAMENTO'])
+  etapa!: 'CARRINHO' | 'DADOS' | 'PAGAMENTO';
+}

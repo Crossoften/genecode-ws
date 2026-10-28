@@ -6,13 +6,16 @@ import { Throttle } from '@nestjs/throttler';
 import type { Request } from 'express';
 
 import { IsPublic } from '@contexts/identity/presentation/decorators';
+import { PrismaService } from '@infra/database/prisma.service';
 import type { Env } from '@shared/config/env.schema';
 
 import { CheckoutUseCase } from '../../application/use-cases/checkout.use-case';
 import { TrackOrderUseCase } from '../../application/use-cases/track-order.use-case';
 import { QuoteShippingUseCase } from '../../application/use-cases/quote-shipping.use-case';
 import { PAYMENT_GATEWAY, type PaymentGateway } from '../../domain/ports/payment-gateway.port';
-import { CheckoutDto } from '../dtos/checkout.dto';
+import { CheckoutDto, FunnelStepDto } from '../dtos/checkout.dto';
+
+const FUNNEL_STAGE = { CARRINHO: 'CART', DADOS: 'DATA', PAGAMENTO: 'PAYMENT' } as const;
 
 @ApiTags('Checkout')
 @Controller()
@@ -24,7 +27,29 @@ export class CheckoutController {
     private readonly jwt: JwtService,
     private readonly config: ConfigService<Env, true>,
     @Inject(PAYMENT_GATEWAY) private readonly gateway: PaymentGateway,
+    private readonly prisma: PrismaService,
   ) {}
+
+  /**
+   * Registra que uma sessão de compra chegou a uma etapa (GC-AJ-037).
+   *
+   * Pública e sem dado pessoal: a sessão é um identificador aleatório do
+   * navegador. Repetir a etapa não conta de novo — o índice único descarta.
+   */
+  @Post('checkout/funil')
+  @IsPublic()
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @Throttle({ default: { limit: 30, ttl: 60_000 } })
+  @ApiOperation({ summary: 'Marca a passagem da sessão por uma etapa do checkout' })
+  async funnelStep(@Body() dto: FunnelStepDto): Promise<void> {
+    const stage = FUNNEL_STAGE[dto.etapa];
+    await this.prisma.checkoutFunnelEvent
+      .create({ data: { session: dto.sessao, stage } })
+      .catch((erro: { code?: string }) => {
+        // P2002: a sessão já passou por esta etapa — é o esperado ao voltar.
+        if (erro.code !== 'P2002') throw erro;
+      });
+  }
 
   /** Diz à vitrine se o pagamento está simulado, para o checkout se rotular. */
   @Get('checkout/config')

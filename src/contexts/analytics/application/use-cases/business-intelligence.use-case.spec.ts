@@ -47,7 +47,14 @@ describe('BusinessIntelligenceUseCase — sales', () => {
         return rows.current ?? [];
       },
     );
-    return { order: { findMany } };
+    // Funil do checkout (GC-AJ-037): 10 sessões no carrinho, 6 nos dados, 4
+    // abriram o pagamento.
+    const groupBy = jest.fn(async () => [
+      { stage: 'CART', _count: { _all: 10 } },
+      { stage: 'DATA', _count: { _all: 6 } },
+      { stage: 'PAYMENT', _count: { _all: 4 } },
+    ]);
+    return { order: { findMany }, checkoutFunnelEvent: { groupBy } };
   }
 
   const useCase = (prisma: ReturnType<typeof buildPrisma>) =>
@@ -142,5 +149,15 @@ describe('BusinessIntelligenceUseCase — sales', () => {
       .map(([args]) => args)
       .find((args) => args.where.paidAt?.gte !== undefined);
     expect(monthlyCall!.where.paidAt!.gte).toEqual(new Date(2026, 2, 1));
+  });
+
+  it('monta o funil do checkout: sessões por etapa e pedidos pagos (GC-AJ-037)', async () => {
+    const prisma = buildPrisma({
+      current: [currentRow(new Date(2026, 7, 5)), currentRow(null), currentRow(new Date(2026, 7, 6))],
+    });
+
+    const metrics = await useCase(prisma).sales(30, NOW);
+
+    expect(metrics.funnel).toEqual({ cart: 10, data: 6, payment: 4, paid: 2 });
   });
 });

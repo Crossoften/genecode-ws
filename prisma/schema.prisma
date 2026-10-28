@@ -1043,6 +1043,29 @@ model OrderItem {
   @@map("order_items")
 }
 
+/// Passagem de uma sessão de compra por uma etapa do checkout (GC-AJ-037).
+///
+/// O cliente quer saber "quantas vezes a pessoa começou a etapa de pagamento e
+/// quantas desistiu" antes de decidir trocar o checkout da Afinz. Uma linha por
+/// sessão e etapa — voltar e entrar de novo não conta duas vezes. A sessão é um
+/// identificador aleatório do navegador, sem dado pessoal.
+model CheckoutFunnelEvent {
+  id        String        @id @default(uuid()) @db.Char(36)
+  session   String        @db.VarChar(64)
+  stage     CheckoutStage
+  createdAt DateTime      @default(now())
+
+  @@unique([session, stage])
+  @@index([stage, createdAt])
+  @@map("checkout_funnel_events")
+}
+
+enum CheckoutStage {
+  CART
+  DATA
+  PAYMENT
+}
+
 /// Endereço de entrega, congelado no pedido.
 model OrderAddress {
   id      String @id @default(uuid()) @db.Char(36)
