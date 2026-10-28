@@ -20,7 +20,7 @@ import { Email } from '../../domain/value-objects/email';
  * no cadastro. Conceder um deles por aqui não faria sentido nenhum, e aceitar
  * um slug qualquer transformaria esta tela numa escada de privilégio.
  */
-export const PAPEIS_INTERNOS = ['master', 'admin', 'finance', 'orders', 'lab'] as const;
+export const PAPEIS_INTERNOS = ['master', 'admin', 'finance', 'orders', 'lab', 'analytics'] as const;
 export type PapelInterno = (typeof PAPEIS_INTERNOS)[number];
 
 export interface MembroDaEquipe {

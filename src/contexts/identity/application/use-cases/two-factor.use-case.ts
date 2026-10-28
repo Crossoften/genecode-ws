@@ -12,16 +12,26 @@ import type { AuthenticatedUser } from './authenticate.use-case';
 const TWO_FACTOR_TTL_MINUTES = 10;
 
 /**
- * Papéis que entram pelo painel do parceiro e, por isso, exigem a segunda
- * etapa.
+ * Papéis que exigem a segunda etapa para entrar.
  *
- * O painel mostra receita, rede e **dados bancários de repasse**. Era
- * exatamente essa tela que, até 07/10, ficava atrás de uma verificação de
- * mentira: a sessão abria antes do código, nada era conferido e nenhum e-mail
- * saía. A conta que não é de parceiro continua entrando direto, a menos que
- * tenha `twoFactorEnabled` ligado.
+ * Começou só com os do painel do parceiro (receita, rede e **dados bancários
+ * de repasse**), que até 07/10 ficavam atrás de uma verificação de mentira.
+ *
+ * Em 20/10 o teste assistido mostrou o admin entrando sem código e o Augusto
+ * cobrou o mesmo do laboratório (GC-AJ-030). A equipe interna vê mais do que o
+ * parceiro — pedidos, laudos, financeiro — então todo papel interno entra aqui.
+ * Só o titular (`patient`) segue direto, a menos que ligue `twoFactorEnabled`.
  */
-const ROLES_COM_SEGUNDA_ETAPA: readonly string[] = ['affiliate', 'professional'];
+const ROLES_COM_SEGUNDA_ETAPA: readonly string[] = [
+  'affiliate',
+  'professional',
+  'lab',
+  'finance',
+  'orders',
+  'analytics',
+  'admin',
+  'master',
+];
 
 export interface TwoFactorChallenge {
   readonly challengeId: string;

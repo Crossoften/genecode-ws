@@ -110,6 +110,16 @@ const ROLES: ReadonlyArray<{
     description: 'Toca a esteira do pedido até a entrega. Não vê financeiro.',
     permissions: ['orders.read', 'orders.write', 'samples.read', 'analytics.read'],
   },
+  /**
+   * Só leitura dos indicadores (GC-AJ-031, teste assistido de 20/10): para
+   * quem acompanha o negócio pelos painéis de BI sem operar nada.
+   */
+  {
+    slug: 'analytics',
+    name: 'Indicadores',
+    description: 'Só leitura dos painéis de BI. Não opera pedidos, laudos nem cadastros.',
+    permissions: ['analytics.read'],
+  },
   {
     slug: 'admin',
     name: 'Administrador',
