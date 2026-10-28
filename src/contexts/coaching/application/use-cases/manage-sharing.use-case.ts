@@ -1,6 +1,12 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 
+import {
+  NOTIFICATION_SENDER,
+  type NotificationSender,
+} from '@contexts/identity/domain/ports/notification.port';
 import { PrismaService } from '@infra/database/prisma.service';
+import type { Env } from '@shared/config/env.schema';
 import { ConflictError, ForbiddenError, NotFoundError } from '@shared/domain/domain-error';
 import { fail, ok, okVoid, type Result } from '@shared/domain/result';
 
@@ -52,20 +58,46 @@ export interface ProfessionalPatient extends ShareRecord {
  * reconheceu o limite disso: *"se o cara tirou print da tela, aí já não é mais
  * responsabilidade nossa. A gente tira o acesso."*
  */
+/** Compartilhamento com quem ainda não tem conta: só o convite existe. */
+export interface InviteRecord {
+  readonly id: string;
+  readonly subjectId: string;
+  readonly professionalId: '';
+  /** O e-mail convidado, no lugar do nome que ainda não existe. */
+  readonly professionalName: string;
+  readonly specialty: '';
+  readonly status: 'INVITED';
+  readonly initiatedBy: 'PATIENT';
+  readonly requestedAt: Date;
+  readonly authorizedAt: null;
+}
+
 @Injectable()
 export class ManageSharingUseCase {
-  constructor(private readonly prisma: PrismaService) {}
+  private readonly logger = new Logger(ManageSharingUseCase.name);
 
-  /** O titular autoriza um profissional. Efeito imediato. */
+  constructor(
+    private readonly prisma: PrismaService,
+    @Inject(NOTIFICATION_SENDER) private readonly notifications: NotificationSender,
+    private readonly config: ConfigService<Env, true>,
+  ) {}
+
+  /**
+   * O titular autoriza um profissional. Efeito imediato.
+   *
+   * Profissional sem conta recebe um **convite** (GC-AJ-027), em vez da recusa
+   * de antes: o acesso abre sozinho quando ele criar o perfil com esse e-mail.
+   * O que já tem conta recebe um aviso por e-mail, além do laudo na lista.
+   */
   async grantByPatient(
     subjectId: string,
     professionalEmail: string,
     actorUserId?: string,
     ipAddress?: string,
-  ): Promise<Result<ShareRecord>> {
+  ): Promise<Result<ShareRecord | InviteRecord>> {
     const professional = await this.findProfessionalByEmail(professionalEmail);
     if (!professional) {
-      return fail(new NotFoundError('Nenhum profissional cadastrado com este e-mail.'));
+      return this.invite(subjectId, professionalEmail, actorUserId ?? null, ipAddress);
     }
 
     const existing = await this.prisma.dataSharing.findUnique({
@@ -90,8 +122,132 @@ export class ManageSharingUseCase {
     });
 
     await this.audit(actorUserId ?? null, 'sharing.granted', record.id, ipAddress);
+    await this.notifyGranted(professional, actorUserId ?? null);
 
     return ok(this.toRecord(record, professional));
+  }
+
+  /**
+   * Abre o acesso dos convites pendentes deste e-mail — chamado quando o
+   * perfil profissional nasce. O consentimento é o do titular ao convidar.
+   *
+   * @returns Quantos compartilhamentos foram abertos.
+   */
+  async acceptInvitesFor(userId: string): Promise<number> {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+      select: { email: true },
+    });
+    const profile = await this.prisma.professionalProfile.findUnique({ where: { userId } });
+    if (!user || !profile) return 0;
+
+    const invites = await this.prisma.sharingInvite.findMany({
+      where: { email: user.email.trim().toLowerCase(), acceptedAt: null },
+    });
+
+    for (const invite of invites) {
+      const sharing = await this.prisma.dataSharing.upsert({
+        where: {
+          subjectId_professionalId: { subjectId: invite.subjectId, professionalId: profile.id },
+        },
+        update: { status: 'AUTHORIZED', authorizedAt: new Date(), revokedAt: null },
+        create: {
+          subjectId: invite.subjectId,
+          professionalId: profile.id,
+          status: 'AUTHORIZED',
+          initiatedBy: 'PATIENT',
+          authorizedAt: new Date(),
+        },
+      });
+      await this.prisma.sharingInvite.update({
+        where: { id: invite.id },
+        data: { acceptedAt: new Date(), sharingId: sharing.id },
+      });
+      await this.audit(invite.invitedByUserId, 'sharing.invite_accepted', sharing.id);
+    }
+    return invites.length;
+  }
+
+  /** Registra (ou renova) o convite e manda o e-mail de cadastro. */
+  private async invite(
+    subjectId: string,
+    rawEmail: string,
+    actorUserId: string | null,
+    ipAddress?: string,
+  ): Promise<Result<InviteRecord>> {
+    const email = rawEmail.trim().toLowerCase();
+    const invite = await this.prisma.sharingInvite.upsert({
+      where: { subjectId_email: { subjectId, email } },
+      update: { createdAt: new Date(), invitedByUserId: actorUserId },
+      create: { subjectId, email, invitedByUserId: actorUserId },
+    });
+    await this.prisma.auditLog.create({
+      data: {
+        userId: actorUserId,
+        action: 'sharing.invited',
+        resource: 'sharing_invite',
+        resourceId: invite.id,
+        ipAddress,
+      },
+    });
+
+    const patientName = await this.firstNameOf(actorUserId);
+    await this.notifications.send(email, {
+      kind: 'sharing-invite',
+      name: patientName,
+      link: `${this.appUrl()}/#/profissional/cadastro`,
+    });
+
+    return ok(this.toInviteRecord(invite));
+  }
+
+  private async notifyGranted(
+    professional: { name: string; email: string },
+    actorUserId: string | null,
+  ): Promise<void> {
+    try {
+      await this.notifications.send(professional.email, {
+        kind: 'sharing-granted',
+        name: professional.name.split(/\s+/)[0] ?? professional.name,
+        patientName: await this.firstNameOf(actorUserId),
+        link: `${this.appUrl()}/#/parceiro/alunos`,
+      });
+    } catch (erro) {
+      // O acesso já abriu; o aviso é cortesia e não desfaz a autorização.
+      this.logger.warn(`Aviso de compartilhamento não saiu: ${String(erro)}`);
+    }
+  }
+
+  private async firstNameOf(userId: string | null): Promise<string> {
+    if (!userId) return 'Uma pessoa';
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+      select: { name: true },
+    });
+    return user?.name.trim().split(/\s+/)[0] || 'Uma pessoa';
+  }
+
+  private appUrl(): string {
+    return this.config.get('APP_PUBLIC_URL', { infer: true }).replace(/\/+$/, '');
+  }
+
+  private toInviteRecord(invite: {
+    id: string;
+    subjectId: string;
+    email: string;
+    createdAt: Date;
+  }): InviteRecord {
+    return {
+      id: invite.id,
+      subjectId: invite.subjectId,
+      professionalId: '',
+      professionalName: invite.email,
+      specialty: '',
+      status: 'INVITED',
+      initiatedBy: 'PATIENT',
+      requestedAt: invite.createdAt,
+      authorizedAt: null,
+    };
   }
 
   /** O profissional solicita acesso. Nasce pendente e espera o titular. */
@@ -135,7 +291,27 @@ export class ManageSharingUseCase {
   ): Promise<Result<void>> {
     const sharing = await this.prisma.dataSharing.findUnique({ where: { id: sharingId } });
 
-    if (!sharing) return fail(new NotFoundError('Compartilhamento não encontrado.'));
+    // Convite ainda não aceito (GC-AJ-027): revogar é cancelar o convite.
+    if (!sharing) {
+      const invite = await this.prisma.sharingInvite.findUnique({ where: { id: sharingId } });
+      if (!invite || invite.acceptedAt) {
+        return fail(new NotFoundError('Compartilhamento não encontrado.'));
+      }
+      if (!subjectIds.includes(invite.subjectId)) {
+        return fail(new ForbiddenError('Você só pode revogar os seus próprios compartilhamentos.'));
+      }
+      await this.prisma.sharingInvite.delete({ where: { id: invite.id } });
+      await this.prisma.auditLog.create({
+        data: {
+          userId: actorUserId ?? null,
+          action: 'sharing.invite_cancelled',
+          resource: 'sharing_invite',
+          resourceId: invite.id,
+          ipAddress,
+        },
+      });
+      return okVoid();
+    }
     // Valida contra TODOS os titulares da conta: quem tem dois kits precisa
     // conseguir revogar o compartilhamento do titular mais antigo — direito de
     // revogação não pode depender de qual kit foi ativado por último.
@@ -162,15 +338,25 @@ export class ManageSharingUseCase {
    * Revoked records stay out: the screen derives "inactive" from the absence
    * of an AUTHORIZED record, and history belongs to the audit trail.
    */
-  async listForSubjects(subjectIds: readonly string[]): Promise<ShareRecord[]> {
+  async listForSubjects(
+    subjectIds: readonly string[],
+  ): Promise<Array<ShareRecord | InviteRecord>> {
     if (subjectIds.length === 0) return [];
+
+    // Convites ainda não aceitos aparecem como "convite enviado" (GC-AJ-027).
+    const invites = (
+      await this.prisma.sharingInvite.findMany({
+        where: { subjectId: { in: [...subjectIds] }, acceptedAt: null },
+        orderBy: { createdAt: 'desc' },
+      })
+    ).map((invite) => this.toInviteRecord(invite));
 
     const records = await this.prisma.dataSharing.findMany({
       where: { subjectId: { in: [...subjectIds] }, status: { not: 'REVOKED' } },
       include: { professional: true },
       orderBy: { requestedAt: 'desc' },
     });
-    if (records.length === 0) return [];
+    if (records.length === 0) return invites;
 
     const users = await this.prisma.user.findMany({
       where: { id: { in: records.map((record) => record.professional.userId) } },
@@ -178,12 +364,15 @@ export class ManageSharingUseCase {
     });
     const names = new Map(users.map((user) => [user.id, user.name]));
 
-    return records.map((record) =>
-      this.toRecord(record, {
-        ...record.professional,
-        name: names.get(record.professional.userId) ?? '',
-      }),
-    );
+    return [
+      ...invites,
+      ...records.map((record) =>
+        this.toRecord(record, {
+          ...record.professional,
+          name: names.get(record.professional.userId) ?? '',
+        }),
+      ),
+    ];
   }
 
   /**

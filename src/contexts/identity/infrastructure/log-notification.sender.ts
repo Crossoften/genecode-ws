@@ -46,6 +46,12 @@ export class LogNotificationSender implements NotificationSender {
       case 'password-changed':
         this.logger.log(`[senha alterada] ${to}`);
         break;
+      case 'sharing-invite':
+        this.logger.log(`[convite de compartilhamento] ${to} → ${notification.link}`);
+        break;
+      case 'sharing-granted':
+        this.logger.log(`[laudo compartilhado] ${to} ← ${notification.patientName}`);
+        break;
     }
   }
 }

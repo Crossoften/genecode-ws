@@ -18,7 +18,19 @@ export type IdentityNotification =
   /** Código da verificação em duas etapas, pedido depois de a senha conferir. */
   | { readonly kind: 'two-factor'; readonly code: string; readonly name: string }
   /** Código que autoriza a troca dos dados de repasse do parceiro. */
-  | { readonly kind: 'bank-details-change'; readonly code: string; readonly name: string };
+  | { readonly kind: 'bank-details-change'; readonly code: string; readonly name: string }
+  /**
+   * Convite a um profissional sem conta para ver o laudo de quem o indicou
+   * (GC-AJ-027). `name` é o titular que convidou; `link` leva ao cadastro.
+   */
+  | { readonly kind: 'sharing-invite'; readonly name: string; readonly link: string }
+  /** Aviso ao profissional já cadastrado de que um laudo foi compartilhado. */
+  | {
+      readonly kind: 'sharing-granted';
+      readonly name: string;
+      readonly patientName: string;
+      readonly link: string;
+    };
 
 /**
  * Envio de notificação transacional.

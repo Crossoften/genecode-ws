@@ -93,6 +93,8 @@ import { ProfileController } from './presentation/controllers/profile.controller
     TokenIssuer,
     VerificationChallengeService,
     PreCadastroUseCase,
+    // O convite de compartilhamento (GC-AJ-027) sai pelo mesmo envio.
+    NOTIFICATION_SENDER,
   ],
 })
 export class IdentityModule {}

@@ -150,6 +150,33 @@ export class SmtpNotificationSender implements NotificationSender {
             'gene.code',
         };
 
+      case 'sharing-invite':
+        return {
+          assunto: `${notification.name} quer compartilhar o laudo gene.code com você`,
+          texto:
+            'Olá!\n\n' +
+            `${notification.name} fez o teste genético gene.code e quer compartilhar o ` +
+            'resultado com você, como profissional que acompanha o treino ou a saúde ' +
+            'dela.\n\n' +
+            'Para ver o laudo consolidado, crie sua conta de profissional pelo link ' +
+            'abaixo, com este mesmo e-mail. O acesso abre assim que o cadastro for ' +
+            'concluído:\n\n' +
+            `${notification.link}\n\n` +
+            'Se você não conhece essa pessoa, ignore esta mensagem.\n\n' +
+            'gene.code',
+        };
+
+      case 'sharing-granted':
+        return {
+          assunto: `${notification.patientName} compartilhou o laudo com você · gene.code`,
+          texto:
+            `Olá, ${notification.name}.\n\n` +
+            `${notification.patientName} autorizou você a ver o laudo consolidado dela ` +
+            'na gene.code. Ele já está na sua lista de participantes:\n\n' +
+            `${notification.link}\n\n` +
+            'gene.code',
+        };
+
       case 'password-changed':
         return {
           assunto: 'Sua senha foi alterada · gene.code',

@@ -1326,6 +1326,31 @@ enum SharingStatus {
   REVOKED
 }
 
+/// Compartilhamento com um profissional que ainda não tem conta (GC-AJ-027).
+///
+/// `DataSharing` precisa de um perfil profissional, que esta pessoa ainda não
+/// tem. O titular informa o e-mail, sai um convite para o cadastro, e o
+/// compartilhamento nasce AUTORIZADO quando o perfil profissional desse e-mail
+/// é criado — o titular já tinha consentido ao convidar.
+model SharingInvite {
+  id        String @id @default(uuid()) @db.Char(36)
+  subjectId String @db.Char(36)
+  /// E-mail convidado, sempre em minúsculas.
+  email     String @db.VarChar(255)
+  /// Conta do titular que convidou.
+  invitedByUserId String? @db.Char(36)
+
+  createdAt  DateTime  @default(now())
+  /// Quando o perfil profissional foi criado e o acesso abriu.
+  acceptedAt DateTime?
+  /// O compartilhamento que nasceu do aceite.
+  sharingId  String?   @db.Char(36)
+
+  @@unique([subjectId, email])
+  @@index([email, acceptedAt])
+  @@map("sharing_invites")
+}
+
 enum SharingInitiator {
   PATIENT
   PROFESSIONAL

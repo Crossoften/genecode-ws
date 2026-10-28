@@ -65,7 +65,11 @@ export class CoachingController {
       });
     }
 
-    return { id: profile.id, specialty: profile.specialty };
+    // Convites de compartilhamento pendentes para este e-mail viram acesso
+    // agora (GC-AJ-027): era o que o titular pediu ao convidar.
+    const sharedWithMe = await this.sharing.acceptInvitesFor(user.id);
+
+    return { id: profile.id, specialty: profile.specialty, sharedWithMe };
   }
 
   /** Estado do compartilhamento da conta logada — a tela de privacidade lê daqui. */

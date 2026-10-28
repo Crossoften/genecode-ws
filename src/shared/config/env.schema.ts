@@ -119,6 +119,13 @@ export const envSchema = z.object({
    * vitrine, que roda em outra origem (Apache na 443, API na 3041).
    */
   UPLOADS_PUBLIC_URL: z.string().url().default('http://localhost:3000/uploads'),
+
+  /**
+   * Endereço público do front, para os links que saem por e-mail (o convite
+   * de compartilhamento do GC-AJ-027). Sem barra no fim; o link usa a rota com
+   * `#/`, como o resto do app.
+   */
+  APP_PUBLIC_URL: z.string().url().default('http://localhost:4200'),
 });
 
 export type Env = z.infer<typeof envSchema>;
