@@ -46,6 +46,12 @@ export class LogNotificationSender implements NotificationSender {
       case 'password-changed':
         this.logger.log(`[senha alterada] ${to}`);
         break;
+      case 'deletion-requested':
+        this.logger.log(`[exclusão pedida] ${to}`);
+        break;
+      case 'deletion-request-received':
+        this.logger.log(`[exclusão para avaliar] ${to} ← ${notification.email}`);
+        break;
       case 'sharing-invite':
         this.logger.log(`[convite de compartilhamento] ${to} → ${notification.link}`);
         break;

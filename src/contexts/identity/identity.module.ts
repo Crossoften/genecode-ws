@@ -8,6 +8,7 @@ import { TokenIssuer } from './application/services/token-issuer.service';
 import { AuthenticateUseCase } from './application/use-cases/authenticate.use-case';
 import { TwoFactorUseCase } from './application/use-cases/two-factor.use-case';
 import { VerificationChallengeService } from './application/services/verification-challenge.service';
+import { AccountDeletionUseCase } from './application/use-cases/account-deletion.use-case';
 import { AccountSecurityUseCase } from './application/use-cases/account-security.use-case';
 import { ChangePasswordUseCase } from './application/use-cases/change-password.use-case';
 import { ManageProfileUseCase } from './application/use-cases/manage-profile.use-case';
@@ -58,6 +59,7 @@ import { ProfileController } from './presentation/controllers/profile.controller
     ManageProfileUseCase,
     ChangePasswordUseCase,
     AccountSecurityUseCase,
+    AccountDeletionUseCase,
     EquipeUseCase,
     PreCadastroUseCase,
     RegisterUserUseCase,

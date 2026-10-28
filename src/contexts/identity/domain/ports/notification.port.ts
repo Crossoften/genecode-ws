@@ -24,6 +24,16 @@ export type IdentityNotification =
    * (GC-AJ-027). `name` é o titular que convidou; `link` leva ao cadastro.
    */
   | { readonly kind: 'sharing-invite'; readonly name: string; readonly link: string }
+  /** Confirmação ao titular de que o pedido de exclusão foi recebido (GC-AJ-006). */
+  | { readonly kind: 'deletion-requested'; readonly name: string }
+  /** O pedido de exclusão, para o canal de privacidade da Genoa avaliar. */
+  | {
+      readonly kind: 'deletion-request-received';
+      readonly name: string;
+      readonly email: string;
+      readonly reason: string | null;
+      readonly requestId: string;
+    }
   /** Aviso ao profissional já cadastrado de que um laudo foi compartilhado. */
   | {
       readonly kind: 'sharing-granted';

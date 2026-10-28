@@ -177,6 +177,32 @@ export class SmtpNotificationSender implements NotificationSender {
             'gene.code',
         };
 
+      case 'deletion-requested':
+        return {
+          assunto: 'Recebemos seu pedido de exclusão de conta · gene.code',
+          texto:
+            `Olá, ${notification.name}.\n\n` +
+            'Recebemos o seu pedido de exclusão da conta e dos dados pessoais. A equipe ' +
+            'de privacidade da Genoa vai avaliá-lo e responder por este e-mail, dentro do ' +
+            'prazo da Lei Geral de Proteção de Dados.\n\n' +
+            'Alguns registros do exame têm guarda obrigatória por lei; nesse caso, ' +
+            'explicaremos o que pode e o que não pode ser eliminado.\n\n' +
+            'Se não foi você que pediu, responda esta mensagem.\n\n' +
+            'gene.code',
+        };
+
+      case 'deletion-request-received':
+        return {
+          assunto: `Pedido de exclusão de conta — ${notification.name}`,
+          texto:
+            'Um titular pediu a exclusão da conta pela plataforma gene.code.\n\n' +
+            `Nome: ${notification.name}\n` +
+            `E-mail: ${notification.email}\n` +
+            `Motivo: ${notification.reason ?? '(não informado)'}\n` +
+            `Protocolo: ${notification.requestId}\n\n` +
+            'O pedido está registrado na plataforma e aguarda avaliação.',
+        };
+
       case 'password-changed':
         return {
           assunto: 'Sua senha foi alterada · gene.code',

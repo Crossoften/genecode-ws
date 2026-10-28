@@ -80,6 +80,37 @@ model User {
   @@map("users")
 }
 
+/// Pedido de exclusão de conta feito pelo titular (GC-AJ-006).
+///
+/// É um **pedido**, não a exclusão: a política de privacidade diz que os
+/// pedidos de eliminação "serão avaliados" e que há guarda legal de 5 anos dos
+/// registros do exame. A Genoa avalia e responde; o pedido fica registrado com
+/// data, para a resposta dentro do prazo da LGPD.
+model AccountDeletionRequest {
+  id     String @id @default(uuid()) @db.Char(36)
+  userId String @db.Char(36)
+
+  reason String?                   @db.VarChar(1000)
+  status AccountDeletionStatus     @default(OPEN)
+
+  createdAt DateTime  @default(now())
+  handledAt DateTime?
+  /// Admin que respondeu, quando houver.
+  handledByUserId String? @db.Char(36)
+  /// Resposta registrada pela Genoa.
+  resolution      String? @db.VarChar(1000)
+
+  @@index([status, createdAt])
+  @@index([userId])
+  @@map("account_deletion_requests")
+}
+
+enum AccountDeletionStatus {
+  OPEN
+  DONE
+  DECLINED
+}
+
 enum UserStatus {
   PENDING
   ACTIVE

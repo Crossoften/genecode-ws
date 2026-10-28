@@ -44,3 +44,12 @@ export class NotificationPrefsDto {
   @ApiPropertyOptional() @IsOptional() @IsBoolean() whatsapp?: boolean;
   @ApiPropertyOptional() @IsOptional() @IsBoolean() sms?: boolean;
 }
+
+/** Pedido de exclusão de conta (GC-AJ-006). O motivo é opcional. */
+export class DeletionRequestDto {
+  @ApiPropertyOptional({ maxLength: 1000 })
+  @IsOptional()
+  @IsString()
+  @MaxLength(1000)
+  reason?: string;
+}

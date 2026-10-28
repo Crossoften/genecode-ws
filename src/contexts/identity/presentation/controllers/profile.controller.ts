@@ -1,6 +1,8 @@
-import { Body, Controller, Delete, Get, Param, Patch } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, Param, Patch, Post, Req } from '@nestjs/common';
+import type { Request } from 'express';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
+import { AccountDeletionUseCase } from '../../application/use-cases/account-deletion.use-case';
 import { AccountSecurityUseCase } from '../../application/use-cases/account-security.use-case';
 import { ChangePasswordUseCase } from '../../application/use-cases/change-password.use-case';
 import { ManageProfileUseCase } from '../../application/use-cases/manage-profile.use-case';
@@ -8,6 +10,7 @@ import { CurrentUser } from '../decorators';
 import type { AuthenticatedPrincipal } from '../guards/jwt-auth.guard';
 import {
   ChangePasswordDto,
+  DeletionRequestDto,
   NotificationPrefsDto,
   UpdateProfileDto,
 } from '../dtos/profile.dto';
@@ -23,7 +26,28 @@ export class ProfileController {
     private readonly profile: ManageProfileUseCase,
     private readonly changePassword: ChangePasswordUseCase,
     private readonly security: AccountSecurityUseCase,
+    private readonly deletion: AccountDeletionUseCase,
   ) {}
+
+  /** Pedido de exclusão da conta (GC-AJ-006). Registra e avisa; não apaga. */
+  @Post('me/exclusao')
+  @HttpCode(200)
+  @ApiOperation({ summary: 'Registra o pedido de exclusão da conta logada' })
+  async pedirExclusao(
+    @Body() dto: DeletionRequestDto,
+    @CurrentUser() user: AuthenticatedPrincipal,
+    @Req() request: Request,
+  ) {
+    const result = await this.deletion.request(user.id, dto.reason, request.ip);
+    if (result.isFail()) throw result.error;
+    return result.value;
+  }
+
+  @Get('me/exclusao')
+  @ApiOperation({ summary: 'Último pedido de exclusão da conta logada, se houver' })
+  async exclusao(@CurrentUser() user: AuthenticatedPrincipal) {
+    return { request: await this.deletion.current(user.id) };
+  }
 
   @Get('me/perfil')
   @ApiOperation({ summary: 'Perfil da conta logada, com dados protegidos' })

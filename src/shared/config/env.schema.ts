@@ -126,6 +126,13 @@ export const envSchema = z.object({
    * `#/`, como o resto do app.
    */
   APP_PUBLIC_URL: z.string().url().default('http://localhost:4200'),
+
+  /**
+   * Canal de privacidade que recebe os pedidos de exclusão de conta
+   * (GC-AJ-006). Em produção, contato@genecode.com.br; vazio não envia nada —
+   * o pedido continua registrado no banco.
+   */
+  PRIVACY_CONTACT_EMAIL: z.string().email().optional(),
 });
 
 export type Env = z.infer<typeof envSchema>;
