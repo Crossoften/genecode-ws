@@ -1589,6 +1589,59 @@ enum PartnerType {
   COMPANY
 }
 
+/// Pedido de uma conta que já existe para virar parceira (GC-N05-14).
+///
+/// Na reunião de 05/11 o cliente pediu o "Seja parceiro" para o treinador e
+/// para o usuário comum: hoje o único caminho é um cadastro novo, que duplica
+/// conta e CPF. Aqui a pessoa pede com a conta que já tem, e o parceiro só
+/// nasce quando um admin aprova — aprovação humana é obrigatória porque o
+/// parceiro fala em nome da Genoa com academias e tem contrato.
+///
+/// É uma tabela à parte, e não um `Partner` inativo, de propósito: o parceiro
+/// nasce com cupom, e cupom de quem ainda não foi aprovado não pode existir
+/// nem desativado.
+model PartnerApplication {
+  id     String @id @default(uuid()) @db.Char(36)
+  userId String @db.Char(36)
+
+  /// Igual a `userId` enquanto o pedido está em análise; nulo depois de
+  /// decidido. O índice único é o que garante, no banco, UM pedido aberto por
+  /// conta — o MySQL não tem índice parcial, e NULL não colide com NULL.
+  pendingUserId String? @unique @db.Char(36)
+
+  type        PartnerType
+  displayName String      @db.VarChar(160)
+  /// CPF (o da conta) ou CNPJ, quando a pessoa atua como empresa. Só dígitos.
+  document    String      @db.VarChar(18)
+  /// Onde atua: academia, Instagram, consultório.
+  channel     String      @db.VarChar(200)
+  pixKeyType  String?     @db.VarChar(20)
+  pixKey      String?     @db.VarChar(140)
+  /// Observação livre para quem aprova.
+  note        String?     @db.VarChar(500)
+
+  status          PartnerApplicationStatus @default(PENDING)
+  decidedAt       DateTime?
+  decidedByUserId String?                  @db.Char(36)
+  /// Motivo da recusa, quando houver. Aparece para quem pediu.
+  decisionNote    String?                  @db.VarChar(500)
+  /// Parceiro que nasceu da aprovação.
+  partnerId       String?                  @db.Char(36)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId, createdAt])
+  @@index([status, createdAt])
+  @@map("partner_applications")
+}
+
+enum PartnerApplicationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
 /// Repasse de comissão ao parceiro.
 ///
 /// O split acontece na adquirente no ato da venda, mas o registro aqui é o que

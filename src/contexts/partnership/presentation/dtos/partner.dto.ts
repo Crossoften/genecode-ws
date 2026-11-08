@@ -83,3 +83,40 @@ export class BankDetailsDto {
   @IsOptional() @IsString() @MaxLength(30)
   bankAccount?: string;
 }
+
+/**
+ * "Quero ser parceiro" de quem já tem conta (GC-N05-14).
+ *
+ * Nome, CPF, e-mail e telefone vêm da conta — o formulário só pede o que é de
+ * parceiro. `document` só é lido para empresa (CNPJ) ou para conta que ainda
+ * não tem CPF.
+ */
+export class SolicitarParceriaDto {
+  @ApiProperty({ enum: ['INDIVIDUAL', 'COMPANY'], default: 'INDIVIDUAL' })
+  @IsIn(['INDIVIDUAL', 'COMPANY'])
+  type!: 'INDIVIDUAL' | 'COMPANY';
+
+  @ApiProperty({ example: 'Academia Corpo em Forma, Zona Norte', description: 'Onde atua.' })
+  @IsString() @MinLength(2) @MaxLength(200)
+  channel!: string;
+
+  @ApiPropertyOptional({ description: 'CNPJ (empresa) ou CPF, se a conta ainda não tiver.' })
+  @IsOptional() @IsString() @MaxLength(18)
+  document?: string;
+
+  @ApiPropertyOptional({ description: 'Nome da empresa. Pessoa física usa o nome da conta.' })
+  @IsOptional() @IsString() @MaxLength(160)
+  displayName?: string;
+
+  @ApiPropertyOptional({ enum: ['CPF_CNPJ', 'EMAIL', 'PHONE', 'RANDOM'] })
+  @IsOptional() @IsIn(['CPF_CNPJ', 'EMAIL', 'PHONE', 'RANDOM'])
+  pixKeyType?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional() @IsString() @MaxLength(140)
+  pixKey?: string;
+
+  @ApiPropertyOptional({ description: 'Observação para quem aprova.' })
+  @IsOptional() @IsString() @MaxLength(500)
+  note?: string;
+}
