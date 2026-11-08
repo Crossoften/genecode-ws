@@ -8,6 +8,10 @@ import {
 import { IsCpfOrCnpj } from '@shared/validation/is-cpf-or-cnpj.decorator';
 import { IsTelefoneBr } from '@shared/validation/telefone-br';
 
+import { FLAT_RATE_CODE } from '../../infrastructure/gateways/flat-rate.shipping.provider';
+
+const SHIPPING_CODES = ['STANDARD', 'EXPRESS', FLAT_RATE_CODE];
+
 export class CustomerDto {
   @ApiProperty({ example: 'Ana Martins' })
   @IsString() @MinLength(2) @MaxLength(160)
@@ -85,8 +89,12 @@ export class CheckoutDto {
   @ValidateNested({ each: true }) @Type(() => CartItemDto)
   items!: CartItemDto[];
 
-  @ApiProperty({ enum: ['STANDARD', 'EXPRESS'] })
-  @IsIn(['STANDARD', 'EXPRESS'])
+  /**
+   * A modalidade escolhida. `FIXO` é a única com o frete único (GC-N05-09); a
+   * lista só barra lixo — o servidor recota e confere se a modalidade existe.
+   */
+  @ApiProperty({ enum: SHIPPING_CODES })
+  @IsIn(SHIPPING_CODES)
   shippingCode!: string;
 
   @ApiPropertyOptional({ example: 'PARCEIRO10' })
