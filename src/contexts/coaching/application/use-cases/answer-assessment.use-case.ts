@@ -1,7 +1,17 @@
 import { Injectable } from '@nestjs/common';
 
+import {
+  escalaDa,
+  valorExibido,
+  valorExibidoOuNulo,
+} from '@contexts/genomics/domain/scoring/escala-de-exibicao';
 import { PrismaService } from '@infra/database/prisma.service';
-import { ConflictError, type DomainError, ForbiddenError, NotFoundError } from '@shared/domain/domain-error';
+import {
+  ConflictError,
+  type DomainError,
+  ForbiddenError,
+  NotFoundError,
+} from '@shared/domain/domain-error';
 import { fail, ok, type Result } from '@shared/domain/result';
 
 import { Checkpoint, resolveNextCheckpoint } from '../../domain/checkpoint';
@@ -78,7 +88,9 @@ function questionsOfCheckpoint(panelSlug: string, checkpoint: Checkpoint | null)
   return {
     panelSlug,
     active: true,
-    ...(checkpoint === null ? { checkpoint: null } : { OR: [{ checkpoint: null }, { checkpoint }] }),
+    ...(checkpoint === null
+      ? { checkpoint: null }
+      : { OR: [{ checkpoint: null }, { checkpoint }] }),
   };
 }
 
@@ -117,7 +129,10 @@ export class AnswerAssessmentUseCase {
     ]);
 
     const availability = resolveNextCheckpoint(
-      assessments.map((a) => ({ checkpoint: a.checkpoint as Checkpoint, completedAt: a.completedAt })),
+      assessments.map((a) => ({
+        checkpoint: a.checkpoint as Checkpoint,
+        completedAt: a.completedAt,
+      })),
       now,
     );
 
@@ -135,7 +150,10 @@ export class AnswerAssessmentUseCase {
       : undefined;
     const previousAnswers = (current?.answers as Record<string, string> | null) ?? {};
     const latest = assessments[0];
-    const latestEnvironmental = (latest?.environmentalScores ?? null) as Record<string, number> | null;
+    const latestEnvironmental = (latest?.environmentalScores ?? null) as Record<
+      string,
+      number
+    > | null;
     const latestAdjusted = (latest?.adjustedScores ?? null) as Record<string, number> | null;
 
     const byCategory = new Map<string, typeof questions>();
@@ -158,9 +176,11 @@ export class AnswerAssessmentUseCase {
       categories: categories.map((category) => ({
         slug: category.slug,
         name: category.name,
-        geneticScore: geneticByCategory.get(category.slug) ?? 0,
-        environmentalScore: latestEnvironmental?.[category.slug] ?? null,
-        adjustedScore: latestAdjusted?.[category.slug] ?? null,
+        // GC-N05-04: a categoria de risco sai como risco (100 − escore).
+        scale: escalaDa(category.slug),
+        geneticScore: valorExibido(category.slug, geneticByCategory.get(category.slug) ?? 0),
+        environmentalScore: valorExibidoOuNulo(category.slug, latestEnvironmental?.[category.slug]),
+        adjustedScore: valorExibidoOuNulo(category.slug, latestAdjusted?.[category.slug]),
         questions: (byCategory.get(category.slug) ?? []).map((question) => ({
           id: question.id,
           text: question.text,
@@ -191,7 +211,10 @@ export class AnswerAssessmentUseCase {
       select: { checkpoint: true, completedAt: true },
     });
     const availability = resolveNextCheckpoint(
-      assessments.map((a) => ({ checkpoint: a.checkpoint as Checkpoint, completedAt: a.completedAt })),
+      assessments.map((a) => ({
+        checkpoint: a.checkpoint as Checkpoint,
+        completedAt: a.completedAt,
+      })),
       now,
     );
 
@@ -262,11 +285,25 @@ export class AnswerAssessmentUseCase {
       },
     });
 
-    return ok({ checkpoint, categories: resultCategories });
+    // Os dicionários acima são os gravados; só a resposta para a tela vira
+    // risco na categoria de risco (GC-N05-04).
+    return ok({
+      checkpoint,
+      categories: resultCategories.map((categoria) => ({
+        ...categoria,
+        scale: escalaDa(categoria.slug),
+        geneticScore: valorExibido(categoria.slug, categoria.geneticScore),
+        environmentalScore: valorExibido(categoria.slug, categoria.environmentalScore),
+        adjustedScore: valorExibido(categoria.slug, categoria.adjustedScore),
+      })),
+    });
   }
 
   /** Autorização por titular, além do papel — como no laudo consolidado. */
-  private async assertAuthorized(subjectId: string, professionalId: string): Promise<DomainError | null> {
+  private async assertAuthorized(
+    subjectId: string,
+    professionalId: string,
+  ): Promise<DomainError | null> {
     const sharing = await this.prisma.dataSharing.findUnique({
       where: { subjectId_professionalId: { subjectId, professionalId } },
     });

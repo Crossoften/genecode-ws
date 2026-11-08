@@ -1,5 +1,10 @@
 import { Injectable } from '@nestjs/common';
 
+import {
+  escalaDa,
+  valorExibido,
+  valorExibidoOuNulo,
+} from '@contexts/genomics/domain/scoring/escala-de-exibicao';
 import { PrismaService } from '@infra/database/prisma.service';
 import { ForbiddenError, NotFoundError } from '@shared/domain/domain-error';
 import { fail, ok, type Result } from '@shared/domain/result';
@@ -108,10 +113,7 @@ export class ConsolidatedReportUseCase {
    * @param subjectId - Titular do dado genético.
    * @param professionalId - Perfil profissional que está consultando.
    */
-  async execute(
-    subjectId: string,
-    professionalId: string,
-  ): Promise<Result<ConsolidatedReport>> {
+  async execute(subjectId: string, professionalId: string): Promise<Result<ConsolidatedReport>> {
     const sharing = await this.prisma.dataSharing.findUnique({
       where: { subjectId_professionalId: { subjectId, professionalId } },
     });
@@ -165,13 +167,18 @@ export class ConsolidatedReportUseCase {
         .map((entry) => ({
           slug: entry.category.slug,
           name: entry.category.name,
-          geneticScore: Number(entry.normalizedScore),
+          // GC-N05-04: a categoria de risco sai como risco (100 − escore).
+          scale: escalaDa(entry.category.slug),
+          geneticScore: valorExibido(entry.category.slug, Number(entry.normalizedScore)),
           band: entry.band,
-          environmentalScore: environmental?.[entry.category.slug] ?? null,
+          environmentalScore: valorExibidoOuNulo(
+            entry.category.slug,
+            environmental?.[entry.category.slug],
+          ),
           // Null quando não houve entrevista. O card do ajustado some na tela,
           // em vez de repetir o genético — foi o que o cliente aprovou em 16/07:
           // sem entrevista, não existe ajustado.
-          adjustedScore: adjusted?.[entry.category.slug] ?? null,
+          adjustedScore: valorExibidoOuNulo(entry.category.slug, adjusted?.[entry.category.slug]),
         })),
       assessmentsCompleted: assessments.length,
       lastAssessedCheckpoint: latest?.checkpoint ?? null,
@@ -179,26 +186,27 @@ export class ConsolidatedReportUseCase {
       // profissional, combinado ao genético pela estratégia validada do painel.
       // Deixa de ser preliminar assim que existe uma avaliação de verdade.
       adjustedIsPreliminary: latest === undefined,
-      evolution: [...assessments]
-        .reverse()
-        .map((assessment) => {
-          const amb = (assessment.environmentalScores ?? null) as Record<string, number> | null;
-          const aju = (assessment.adjustedScores ?? null) as Record<string, number> | null;
-          return {
-            checkpoint: assessment.checkpoint,
-            completedAt: assessment.completedAt,
-            // As categorias do laudo, não as chaves do JSON: assim a série tem
-            // sempre a mesma forma, e uma categoria que faltou numa entrevista
-            // vira um furo explícito na linha em vez de deslocar o eixo.
-            categories: report.categoryScores
-              .sort((a, b) => a.category.position - b.category.position)
-              .map((entry) => ({
-                slug: entry.category.slug,
-                environmentalScore: amb?.[entry.category.slug] ?? null,
-                adjustedScore: aju?.[entry.category.slug] ?? null,
-              })),
-          };
-        }),
+      evolution: [...assessments].reverse().map((assessment) => {
+        const amb = (assessment.environmentalScores ?? null) as Record<string, number> | null;
+        const aju = (assessment.adjustedScores ?? null) as Record<string, number> | null;
+        return {
+          checkpoint: assessment.checkpoint,
+          completedAt: assessment.completedAt,
+          // As categorias do laudo, não as chaves do JSON: assim a série tem
+          // sempre a mesma forma, e uma categoria que faltou numa entrevista
+          // vira um furo explícito na linha em vez de deslocar o eixo.
+          categories: report.categoryScores
+            .sort((a, b) => a.category.position - b.category.position)
+            .map((entry) => ({
+              slug: entry.category.slug,
+              environmentalScore: valorExibidoOuNulo(
+                entry.category.slug,
+                amb?.[entry.category.slug],
+              ),
+              adjustedScore: valorExibidoOuNulo(entry.category.slug, aju?.[entry.category.slug]),
+            })),
+        };
+      }),
     });
   }
 }

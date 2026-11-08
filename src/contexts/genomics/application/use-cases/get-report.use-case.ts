@@ -4,6 +4,12 @@ import { PrismaService } from '@infra/database/prisma.service';
 import { NotFoundError } from '@shared/domain/domain-error';
 import { fail, ok, type Result } from '@shared/domain/result';
 
+import {
+  escalaDa,
+  valorExibido,
+  valorExibidoOuNulo,
+  type EscalaExibicao,
+} from '../../domain/scoring/escala-de-exibicao';
 import { adjustedGlobalScore } from '../services/adjusted-global';
 
 /**
@@ -35,6 +41,8 @@ export interface ReportSummary {
   readonly categories: readonly {
     readonly slug: string;
     readonly name: string;
+    /** `RISCO`: o número é 100 − escore e a faixa se lê como risco (GC-N05-04). */
+    readonly scale: EscalaExibicao;
     readonly score: number;
     readonly band: string;
     /**
@@ -84,6 +92,7 @@ export interface ReportSummary {
 export interface CategoryDetail {
   readonly slug: string;
   readonly name: string;
+  readonly scale: EscalaExibicao;
   readonly score: number;
   readonly band: string;
   readonly markers: readonly MarkerDetail[];
@@ -144,7 +153,9 @@ export class GetReportUseCase {
           include: { category: { select: { slug: true, name: true, position: true } } },
         },
         modalityIndexes: {
-          include: { modality: { select: { slug: true, name: true, isGlobal: true, position: true } } },
+          include: {
+            modality: { select: { slug: true, name: true, isGlobal: true, position: true } },
+          },
         },
       },
     });
@@ -172,18 +183,18 @@ export class GetReportUseCase {
       id: report.id,
       panel: report.panel,
       publishedAt: report.publishedAt,
-      globalIndex: global
-        ? { value: Number(global.normalizedIndex), band: global.band }
-        : null,
+      globalIndex: global ? { value: Number(global.normalizedIndex), band: global.band } : null,
       adjustedGlobal,
       categories: report.categoryScores
         .sort((a, b) => a.category.position - b.category.position)
         .map((entry) => ({
           slug: entry.category.slug,
           name: entry.category.name,
-          score: Number(entry.normalizedScore),
+          // GC-N05-04: a categoria de risco sai como risco (100 − escore).
+          scale: escalaDa(entry.category.slug),
+          score: valorExibido(entry.category.slug, Number(entry.normalizedScore)),
           band: entry.band,
-          adjustedScore: adjusted?.[entry.category.slug] ?? null,
+          adjustedScore: valorExibidoOuNulo(entry.category.slug, adjusted?.[entry.category.slug]),
         })),
       lastAssessedCheckpoint: latest?.checkpoint ?? null,
       modalities: report.modalityIndexes
@@ -255,7 +266,8 @@ export class GetReportUseCase {
     return ok({
       slug: score.category.slug,
       name: score.category.name,
-      score: Number(score.normalizedScore),
+      scale: escalaDa(score.category.slug),
+      score: valorExibido(score.category.slug, Number(score.normalizedScore)),
       band: score.band,
       markers,
     });

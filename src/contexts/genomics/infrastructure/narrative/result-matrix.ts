@@ -69,15 +69,18 @@ export const MODULATORS: readonly Modulator[] = [
         'Os marcadores de Recuperação & Resposta Inflamatória ficaram na faixa baixa, com maior presença de variantes que alguns estudos associam a respostas inflamatórias mais intensas ou a maiores elevações dos marcadores de dano muscular após exercícios exigentes. Essas associações são modestas e inconsistentes, portanto, o resultado não indica inflamação nem prevê uma recuperação lenta. Ainda assim, pode servir como lembrete para acompanhar a resposta a sessões intensas ou com ênfase excêntrica e para respeitar a progressão da carga.',
     },
   },
+  // GC-N05-04: a tela mostra esta categoria como risco (100 − escore). A faixa
+  // "alta" do escore é risco baixo; o texto fala em risco para não contradizer
+  // o número ao lado. O resto é o texto da matriz do cliente, literal.
   {
     slug: 'risco_lesao',
     references: [16, 17, 26],
     texts: {
-      alta: 'Os marcadores de Risco de Lesão & Estrutura, relacionados à estrutura e ao remodelamento de tendões, ligamentos e outros tecidos conjuntivos, ficaram na faixa alta. Isso indica uma menor presença de variantes que alguns estudos associaram a lesões nesses tecidos. A evidência, porém, é limitada e os estudos genômicos abrangentes não confirmaram a maioria dessas associações. Portanto, o resultado não significa proteção contra lesões e a progressão de carga, o fortalecimento e a técnica continuam sendo essenciais.',
+      alta: 'Os marcadores de Risco de Lesão & Estrutura, relacionados à estrutura e ao remodelamento de tendões, ligamentos e outros tecidos conjuntivos, indicaram risco genético baixo. Isso indica uma menor presença de variantes que alguns estudos associaram a lesões nesses tecidos. A evidência, porém, é limitada e os estudos genômicos abrangentes não confirmaram a maioria dessas associações. Portanto, o resultado não significa proteção contra lesões e a progressão de carga, o fortalecimento e a técnica continuam sendo essenciais.',
       intermediaria:
-        'Os marcadores de Risco de Lesão & Estrutura ficaram na faixa intermediária. O risco de lesões musculoesqueléticas depende principalmente de fatores conhecidos e, em grande parte, modificáveis — como histórico de lesões, carga e progressão do treino, força, mobilidade, técnica e recuperação —, que devem orientar as medidas de prevenção.',
+        'Os marcadores de Risco de Lesão & Estrutura indicaram risco genético moderado. O risco de lesões musculoesqueléticas depende principalmente de fatores conhecidos e, em grande parte, modificáveis — como histórico de lesões, carga e progressão do treino, força, mobilidade, técnica e recuperação —, que devem orientar as medidas de prevenção.',
       baixa:
-        'Os marcadores de Risco de Lesão & Estrutura situaram-se na faixa baixa, com maior presença de variantes que alguns estudos associaram a lesões em tendões e ligamentos. Essas associações apresentam efeitos reduzidos e não foram confirmadas de forma consistente, portanto, os resultados não permitem prever a ocorrência de lesões. Eles podem reforçar boas práticas recomendadas a qualquer atleta, como a progressão gradual das cargas, o fortalecimento, a atenção às queixas iniciais nos tendões e nas articulações e a consideração do histórico clínico.',
+        'Os marcadores de Risco de Lesão & Estrutura indicaram risco genético mais alto, com maior presença de variantes que alguns estudos associaram a lesões em tendões e ligamentos. Essas associações apresentam efeitos reduzidos e não foram confirmadas de forma consistente, portanto, os resultados não permitem prever a ocorrência de lesões. Eles podem reforçar boas práticas recomendadas a qualquer atleta, como a progressão gradual das cargas, o fortalecimento, a atenção às queixas iniciais nos tendões e nas articulações e a consideração do histórico clínico.',
     },
   },
   {

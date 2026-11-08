@@ -45,7 +45,7 @@ describe('MatrixNarrativeProvider', () => {
 
     expect(paragraphs[0]).toBe(PROFILES['intermediaria|alta']);
     expect(paragraphs[1]).toMatch(/^Os marcadores de Recuperação .* faixa intermediária/);
-    expect(paragraphs[2]).toMatch(/^Os marcadores de Risco de Lesão .* faixa baixa/);
+    expect(paragraphs[2]).toMatch(/^Os marcadores de Risco de Lesão .* risco genético mais alto/);
     expect(paragraphs[3]).toMatch(/^Os marcadores de Metabolismo .* faixa alta/);
     expect(paragraphs[4]).toMatch(/^Os marcadores de Neuroperformance .* faixa intermediária/);
     expect(paragraphs[5]).toBe('Referências: 1, 3, 5, 7–22, 26.');
