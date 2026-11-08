@@ -1753,6 +1753,27 @@ enum NotificationLogStatus {
   FAILED
 }
 
+/// Inscrição na newsletter do rodapé — "Fique por dentro" (GC-N05-17).
+///
+/// Um e-mail, uma linha: inscrever de novo não duplica nem avisa que já
+/// existia (a resposta é a mesma, para o formulário público não virar
+/// consulta de quem é cliente). O texto do consentimento é gravado como a
+/// pessoa o viu, que é a prova que a LGPD pede para marketing.
+model NewsletterSubscription {
+  id          String   @id @default(uuid()) @db.Char(36)
+  /// Normalizado: sem espaços e em minúsculas.
+  email       String   @unique @db.VarChar(254)
+  /// De onde veio a inscrição: `rodape` por ora.
+  source      String   @db.VarChar(40)
+  /// Texto do aceite exibido ao lado do campo, no momento da inscrição.
+  consentText String   @db.VarChar(300)
+  consentedAt DateTime
+  createdAt   DateTime @default(now())
+
+  @@index([createdAt])
+  @@map("newsletter_subscriptions")
+}
+
 // ============================================================================
 // QUESTIONÁRIO AMBIENTAL (score ambientado — decisões B4/B5)
 // ============================================================================
