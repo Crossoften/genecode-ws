@@ -91,9 +91,14 @@ export interface ConsolidatedReport {
  * ### Sobre "ver como paciente"
  *
  * O usuário pediu que o profissional pudesse ver a tela como o paciente vê.
- * Isso contraria diretamente a regra acima, então não foi implementado — está
- * registrado no item L7 das decisões, com a sugestão de virar uma autorização
- * separada e explícita do titular, e não um espelho da tela.
+ * Isso contrariava a regra acima e ficou registrado no item L7 das decisões.
+ *
+ * **Revisto em 05/11 (GC-N05-15):** o cliente decidiu que o treinador vê o
+ * laudo inteiro — *"um espelho exato, copy paste do que o paciente vê"* —
+ * enquanto o compartilhamento estiver ativo. Esse espelho é o
+ * `SharedReportUseCase`, que devolve o próprio laudo do titular. Este
+ * consolidado continua existindo como prévia (anéis, barras e a evolução das
+ * entrevistas) e para a tela de avaliação.
  */
 @Injectable()
 export class ConsolidatedReportUseCase {

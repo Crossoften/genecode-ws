@@ -5,11 +5,12 @@ import type { Request } from 'express';
 import { CurrentUser, RequireRoles } from '@contexts/identity/presentation/decorators';
 import type { AuthenticatedPrincipal } from '@contexts/identity/presentation/guards/jwt-auth.guard';
 import { PrismaService } from '@infra/database/prisma.service';
-import { NotFoundError } from '@shared/domain/domain-error';
+import { NotFoundError, ValidationError } from '@shared/domain/domain-error';
 
 import { AnswerAssessmentUseCase } from '../../application/use-cases/answer-assessment.use-case';
 import { ConsolidatedReportUseCase } from '../../application/use-cases/consolidated-report.use-case';
 import { ManageSharingUseCase } from '../../application/use-cases/manage-sharing.use-case';
+import { SharedReportUseCase } from '../../application/use-cases/shared-report.use-case';
 import { CreateProfessionalDto, GrantSharingDto } from '../dtos/coaching.dto';
 import { SubmitAssessmentDto } from '../dtos/questionnaire.dto';
 import { Checkpoint } from '../../domain/checkpoint';
@@ -21,6 +22,7 @@ export class CoachingController {
     private readonly sharing: ManageSharingUseCase,
     private readonly consolidated: ConsolidatedReportUseCase,
     private readonly assessments: AnswerAssessmentUseCase,
+    private readonly sharedReport: SharedReportUseCase,
     private readonly prisma: PrismaService,
   ) {}
 
@@ -93,7 +95,11 @@ export class CoachingController {
     @Req() request: Request,
   ) {
     const subjectId = await this.resolveSubject(user.id);
-    if (!subjectId) throw new Error('Nenhum kit ativado nesta conta.');
+    // Era `new Error` e virava 500 (achado da E2E): conta sem kit ativado é um
+    // pedido que não cabe, não uma falha do servidor.
+    if (!subjectId) {
+      throw new ValidationError('Ative o seu kit antes de compartilhar o laudo com um profissional.');
+    }
 
     const result = await this.sharing.grantByPatient(
       subjectId,
@@ -164,9 +170,58 @@ export class CoachingController {
     const profile = await this.prisma.professionalProfile.findUnique({
       where: { userId: user.id },
     });
-    if (!profile) throw new Error('Perfil profissional não encontrado.');
+    if (!profile) throw new NotFoundError('Perfil profissional não encontrado.');
 
     const result = await this.consolidated.execute(subjectId, profile.id);
+    if (result.isFail()) throw result.error;
+    return result.value;
+  }
+
+  // ── Laudo espelho (GC-N05-15) ─────────────────────────────────────────────
+  //
+  // O mesmo laudo do titular, nos três níveis, para o treinador com
+  // compartilhamento ATIVO. A rota é por titular (é o que o treinador conhece);
+  // o caso de uso resolve o laudo vigente e devolve o DTO de `GET /reports/:id`
+  // sem tirar nem pôr. Sem compartilhamento ativo: 403 com a frase de "acesso
+  // encerrado"; sem laudo publicado: 404.
+
+  /** Nível 1 do laudo do titular: o resumo, idêntico ao que ele abre. */
+  @Get('profissional/pacientes/:subjectId/laudo-completo')
+  @RequireRoles('professional')
+  @ApiOperation({ summary: 'Laudo completo do titular (espelho), com compartilhamento ativo' })
+  async fullReport(
+    @Param('subjectId') subjectId: string,
+    @CurrentUser() user: AuthenticatedPrincipal,
+  ) {
+    const result = await this.sharedReport.summary(subjectId, user);
+    if (result.isFail()) throw result.error;
+    return result.value;
+  }
+
+  /** Nível 2: os marcadores de uma categoria, com o genótipo — como o titular vê. */
+  @Get('profissional/pacientes/:subjectId/laudo-completo/categorias/:slug')
+  @RequireRoles('professional')
+  @ApiOperation({ summary: 'Categoria do laudo completo do titular (espelho)' })
+  async fullReportCategory(
+    @Param('subjectId') subjectId: string,
+    @Param('slug') slug: string,
+    @CurrentUser() user: AuthenticatedPrincipal,
+  ) {
+    const result = await this.sharedReport.category(subjectId, slug, user);
+    if (result.isFail()) throw result.error;
+    return result.value;
+  }
+
+  /** Nível 3: um marcador completo, com referências. */
+  @Get('profissional/pacientes/:subjectId/laudo-completo/marcadores/:rsId')
+  @RequireRoles('professional')
+  @ApiOperation({ summary: 'Marcador do laudo completo do titular (espelho)' })
+  async fullReportMarker(
+    @Param('subjectId') subjectId: string,
+    @Param('rsId') rsId: string,
+    @CurrentUser() user: AuthenticatedPrincipal,
+  ) {
+    const result = await this.sharedReport.marker(subjectId, rsId, user);
     if (result.isFail()) throw result.error;
     return result.value;
   }
