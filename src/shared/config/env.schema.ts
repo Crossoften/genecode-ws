@@ -66,7 +66,13 @@ export const envSchema = z.object({
   PAGOLIVRE_MERCHANT_ID: z.string().uuid().optional(),
   /** Para onde a PagoLivre posta os eventos. */
   PAGOLIVRE_CALLBACK_URL: z.string().url().optional(),
-  /** Para onde o comprador volta depois de pagar na página da Afinz. */
+  /**
+   * **Não é mais lido** (GC-N05-01). O retorno agora é por pedido e sai de
+   * `APP_PUBLIC_URL` (`/#/pagamento/retorno?pedido=…`). Com o endereço fixo, a
+   * Afinz abria a home **dentro do iframe** do checkout depois do "Confirmar
+   * pedido" — a imagem 1 do relatório de 08/11. Fica aceito para não quebrar
+   * um .env antigo.
+   */
   PAGOLIVRE_RETURN_URL: z.string().url().optional(),
   /**
    * Token esperado na query do webhook.
@@ -81,12 +87,23 @@ export const envSchema = z.object({
    */
   PAGOLIVRE_WEBHOOK_TOKEN: z.string().min(16).optional(),
 
-  // --- Logística: DHL Express (GC-AJ-038 a 042) -----------------------------
+  // --- Logística (GC-AJ-038 a 042; GC-N05-09/10) ----------------------------
   //
+  // `manual` (padrão desde 05/11): a DHL fica desligada no lançamento. O
+  // sistema não emite etiqueta nem agenda retirada; a operação despacha por
+  // correio local ou pela DHL à mão e digita o rastreio no despacho.
   // `sandbox` simula cotação, etiqueta, rastreio e coleta; `dhl` liga a MyDHL
   // API. A chave é a do portal de desenvolvedor da DHL (developer.dhl.com),
   // não o login do site MyDHL.
-  SHIPPING_PROVIDER: z.enum(['sandbox', 'dhl']).default('sandbox'),
+  SHIPPING_PROVIDER: z.enum(['manual', 'sandbox', 'dhl']).default('manual'),
+  /**
+   * Frete único cobrado do comprador, em centavos (GC-N05-09). Decidido em
+   * 05/11: R$ 29,90 para o Brasil inteiro, a Genoa absorve a diferença. `0`
+   * volta à cotação da transportadora por CEP.
+   */
+  FRETE_FIXO_CENTS: z.coerce.number().int().min(0).default(2990),
+  /** Prazo informado junto com o frete único, em dias úteis. */
+  FRETE_FIXO_PRAZO_DIAS: z.coerce.number().int().min(1).default(10),
   /** `.../mydhlapi/test` em teste; `.../mydhlapi` em produção. */
   DHL_BASE_URL: z.string().url().default('https://express.api.dhl.com/mydhlapi/test'),
   DHL_API_KEY: z.string().optional(),

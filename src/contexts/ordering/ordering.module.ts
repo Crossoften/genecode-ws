@@ -18,6 +18,8 @@ import { SHIPPING_PROVIDER, type ShippingProvider } from './domain/ports/shippin
 import { DhlExpressShippingProvider } from './infrastructure/gateways/dhl-express.shipping.provider';
 import { PagoLivrePaymentGateway } from './infrastructure/gateways/pagolivre-payment.gateway';
 import { SandboxPaymentGateway } from './infrastructure/gateways/sandbox-payment.gateway';
+import { FlatRateShippingProvider } from './infrastructure/gateways/flat-rate.shipping.provider';
+import { ManualShippingProvider } from './infrastructure/gateways/manual-shipping.provider';
 import { SandboxShippingProvider } from './infrastructure/gateways/sandbox-shipping.provider';
 import { AccountFeedController } from './presentation/controllers/account-feed.controller';
 import { CheckoutController } from './presentation/controllers/checkout.controller';
@@ -70,35 +72,48 @@ import { PaymentWebhookController } from './presentation/controllers/payment-web
       inject: [ConfigService],
       useFactory: (config: ConfigService<Env, true>): ShippingProvider => {
         const get = <K extends keyof Env>(key: K) => config.get(key, { infer: true });
-        const minutes = get('SHIPPING_SIMULATION_MINUTES');
-        if (get('SHIPPING_PROVIDER') !== 'dhl') return new SandboxShippingProvider(minutes);
-        return new DhlExpressShippingProvider({
-          baseUrl: get('DHL_BASE_URL'),
-          apiKey: get('DHL_API_KEY')!,
-          apiSecret: get('DHL_API_SECRET')!,
-          accountNumber: get('DHL_ACCOUNT_NUMBER')!,
-          productCode: get('DHL_PRODUCT_CODE'),
-          labelFormat: get('DHL_LABEL_FORMAT'),
-          labelTemplate: get('DHL_LABEL_TEMPLATE'),
-          simulationMinutesPerStep: minutes,
-          origin: {
-            name: get('SHIPPING_ORIGIN_NAME'),
-            company: get('SHIPPING_ORIGIN_COMPANY'),
-            phone: get('SHIPPING_ORIGIN_PHONE'),
-            email: get('SHIPPING_ORIGIN_EMAIL'),
-            document: get('SHIPPING_ORIGIN_DOCUMENT'),
-            zipCode: get('SHIPPING_ORIGIN_ZIP'),
-            street: get('SHIPPING_ORIGIN_STREET'),
-            number: get('SHIPPING_ORIGIN_NUMBER'),
-            district: get('SHIPPING_ORIGIN_DISTRICT'),
-            city: get('SHIPPING_ORIGIN_CITY'),
-            state: get('SHIPPING_ORIGIN_STATE'),
-            kind: 'business',
-          },
-        });
+        const carrier = carrierFor(get);
+        // Frete único (GC-N05-09): só a cotação muda; o resto fica com a
+        // transportadora de baixo. `FRETE_FIXO_CENTS=0` volta à cotação por CEP.
+        const flat = get('FRETE_FIXO_CENTS');
+        return flat > 0
+          ? new FlatRateShippingProvider(carrier, flat, get('FRETE_FIXO_PRAZO_DIAS'))
+          : carrier;
       },
     },
   ],
   exports: [PAYMENT_GATEWAY, SHIPPING_PROVIDER],
 })
 export class OrderingModule {}
+
+/** A transportadora de verdade (ou a falta dela), pela `SHIPPING_PROVIDER`. */
+function carrierFor(get: <K extends keyof Env>(key: K) => Env[K]): ShippingProvider {
+  const minutes = get('SHIPPING_SIMULATION_MINUTES');
+  const provider = get('SHIPPING_PROVIDER');
+  if (provider === 'manual') return new ManualShippingProvider();
+  if (provider !== 'dhl') return new SandboxShippingProvider(minutes);
+  return new DhlExpressShippingProvider({
+    baseUrl: get('DHL_BASE_URL'),
+    apiKey: get('DHL_API_KEY')!,
+    apiSecret: get('DHL_API_SECRET')!,
+    accountNumber: get('DHL_ACCOUNT_NUMBER')!,
+    productCode: get('DHL_PRODUCT_CODE'),
+    labelFormat: get('DHL_LABEL_FORMAT'),
+    labelTemplate: get('DHL_LABEL_TEMPLATE'),
+    simulationMinutesPerStep: minutes,
+    origin: {
+      name: get('SHIPPING_ORIGIN_NAME'),
+      company: get('SHIPPING_ORIGIN_COMPANY'),
+      phone: get('SHIPPING_ORIGIN_PHONE'),
+      email: get('SHIPPING_ORIGIN_EMAIL'),
+      document: get('SHIPPING_ORIGIN_DOCUMENT'),
+      zipCode: get('SHIPPING_ORIGIN_ZIP'),
+      street: get('SHIPPING_ORIGIN_STREET'),
+      number: get('SHIPPING_ORIGIN_NUMBER'),
+      district: get('SHIPPING_ORIGIN_DISTRICT'),
+      city: get('SHIPPING_ORIGIN_CITY'),
+      state: get('SHIPPING_ORIGIN_STATE'),
+      kind: 'business',
+    },
+  });
+}

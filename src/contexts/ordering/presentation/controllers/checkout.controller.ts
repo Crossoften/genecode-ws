@@ -51,12 +51,26 @@ export class CheckoutController {
       });
   }
 
-  /** Diz à vitrine se o pagamento está simulado, para o checkout se rotular. */
+  /**
+   * Configuração pública do checkout.
+   *
+   * - `paymentSimulated`: o pagamento está simulado, para o checkout se rotular.
+   * - `shippingFlatCents`: frete único (GC-N05-09). Com ele o resumo mostra o
+   *   frete desde o carrinho, sem esperar o CEP; `null` = cotação por CEP.
+   * - `shippingManual`: DHL desligada (GC-N05-10). A área do cliente esconde a
+   *   etiqueta de volta e o agendamento de retirada, e aponta para a página de
+   *   devolução.
+   */
   @Get('checkout/config')
   @IsPublic()
   @ApiOperation({ summary: 'Configuração pública do checkout' })
   checkoutConfig() {
-    return { paymentSimulated: this.gateway.simulatesFulfillment === true };
+    const flat = this.config.get('FRETE_FIXO_CENTS', { infer: true });
+    return {
+      paymentSimulated: this.gateway.simulatesFulfillment === true,
+      shippingFlatCents: flat > 0 ? flat : null,
+      shippingManual: this.config.get('SHIPPING_PROVIDER', { infer: true }) === 'manual',
+    };
   }
 
   /** Cotação de frete para um CEP. Pública: acontece antes de haver conta. */
