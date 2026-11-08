@@ -125,8 +125,10 @@ export interface MarkerFullDetail extends MarkerDetail {
  *    patient. Dr. Câmara called it *"o pulo do gato"* — it is the laboratory's
  *    methodology. So `weight`, the per-marker score and the raw score never
  *    leave this layer.
- * 2. **The professional sees a consolidated view, never the genotype.** That is
- *    a separate query and lands with the professional area.
+ * 2. ~~The professional sees a consolidated view, never the genotype.~~ Revisto
+ *    na reunião de 05/11 (GC-N05-15): com o compartilhamento ativo, o treinador
+ *    lê **o mesmo laudo** do titular, nos três níveis — ver `isSharedWith`. A
+ *    regra 1 continua valendo para ele também.
  */
 @Injectable()
 export class GetReportUseCase {
@@ -311,7 +313,8 @@ export class GetReportUseCase {
    * check answers WHICH ones. Every account carries the `patient` role (it is
    * granted on sign-up), so the permission is effectively universal — this is
    * the load-bearing barrier, not the grant. Non-staff viewers only reach
-   * subjects they hold a `SubjectLink` to, and only `PUBLISHED` reports — the
+   * subjects they hold a `SubjectLink` to (or, since GC-N05-15, a subject that
+   * actively shared with them as a professional), and only `PUBLISHED` reports — the
    * same two criteria the patient area applies; a draft or superseded version
    * is not a current document. Staff keeps the platform-wide, any-status read
    * it needs to operate (`STAFF_ROLES` mirrors the roles the seed marks as
@@ -329,7 +332,33 @@ export class GetReportUseCase {
       where: { userId_subjectId: { userId: viewer.id, subjectId: report.subjectId } },
       select: { id: true },
     });
-    return link !== null;
+    if (link !== null) return true;
+
+    return this.isSharedWith(report.subjectId, viewer);
+  }
+
+  /**
+   * Treinador com compartilhamento ATIVO do titular (GC-N05-15).
+   *
+   * Reunião de 05/11: *"o treinador precisa ter um espelho exato, copy paste do
+   * que o paciente vê"* — o laudo inteiro, nos três níveis, e não mais o
+   * resumão de 22/06. O titular é quem decide: só o registro `AUTHORIZED` abre;
+   * `PENDING` e `REVOKED` recusam na hora, sem cache — revogar fecha o laudo já
+   * na próxima chamada.
+   *
+   * Fica aqui, e não só no endpoint do treinador, para que exista uma barreira
+   * só para o laudo: quem chega por `/reports/:id` passa pela mesma regra.
+   * A consulta só acontece para quem tem o papel `professional` — paciente
+   * comum não paga uma ida ao banco a mais por isso.
+   */
+  private async isSharedWith(subjectId: string, viewer: ReportViewer): Promise<boolean> {
+    if (!viewer.roles.includes('professional')) return false;
+
+    const sharing = await this.prisma.dataSharing.findFirst({
+      where: { subjectId, status: 'AUTHORIZED', professional: { userId: viewer.id } },
+      select: { id: true },
+    });
+    return sharing !== null;
   }
 
   /** rsId → genótipo canônico observado para o titular. */
