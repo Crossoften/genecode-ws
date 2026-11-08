@@ -49,7 +49,30 @@ export class ChangeOrderStatusDto {
   @IsString()
   @MaxLength(12)
   kitCode?: string;
+
+  @ApiProperty({
+    required: false,
+    description:
+      'Rastreio digitado no despacho manual (GC-N05-10). Ao mover para KIT_SHIPPED é o da ida; ' +
+      'para SAMPLE_IN_TRANSIT, o da volta. O cliente vê o código e a transportadora.',
+  })
+  @IsOptional()
+  @IsString()
+  @MaxLength(60)
+  trackingCode?: string;
+
+  @ApiProperty({ required: false, description: 'Quem leva: Correios, DHL, o courier local…' })
+  @IsOptional()
+  @IsString()
+  @MaxLength(20)
+  carrier?: string;
 }
+
+/** Em que situações o rastreio digitado faz sentido, e de qual sentido ele é. */
+const MANUAL_TRACKING_DIRECTION: Partial<Record<OrderStatus, 'OUTBOUND' | 'INBOUND'>> = {
+  [OrderStatus.KIT_SHIPPED]: 'OUTBOUND',
+  [OrderStatus.SAMPLE_IN_TRANSIT]: 'INBOUND',
+};
 
 @ApiTags('Admin')
 @Controller('admin')
@@ -213,10 +236,33 @@ export class AdminController {
     // `ActivateKitUseCase`, que o número sai da lista primitiva e o kit nasce —
     // já amarrado ao pedido dela, quando ela é a mesma pessoa que comprou.
 
+    // Rastreio do despacho manual (GC-N05-10): com a DHL desligada, quem sabe
+    // o código é quem despachou. Vira um envio, e não só um campo do pedido,
+    // para aparecer onde o da DHL aparecia — acompanhamento, área do cliente e
+    // admin. Um envio por sentido: repetir troca o código.
+    const direction = MANUAL_TRACKING_DIRECTION[dto.status];
+    const trackingCode = dto.trackingCode?.trim().toUpperCase();
+    const carrier = dto.carrier?.trim() || 'manual';
+    const tracking =
+      direction && trackingCode
+        ? [
+            this.prisma.shipment.upsert({
+              where: { orderId_direction: { orderId: order.id, direction } },
+              create: { orderId: order.id, direction, carrier, trackingCode },
+              update: { carrier, trackingCode },
+            }),
+          ]
+        : [];
+
     await this.prisma.$transaction([
+      ...tracking,
       this.prisma.order.update({
         where: { id: order.id },
-        data: { status: dto.status },
+        data: {
+          status: dto.status,
+          ...(direction === 'OUTBOUND' && trackingCode ? { outboundTracking: trackingCode } : {}),
+          ...(direction === 'INBOUND' && trackingCode ? { inboundTracking: trackingCode } : {}),
+        },
       }),
       this.prisma.orderEvent.create({
         data: {

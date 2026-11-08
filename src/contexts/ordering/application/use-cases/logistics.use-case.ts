@@ -69,6 +69,11 @@ export interface PickupInput {
   };
 }
 
+const MANUAL_LABEL_MESSAGE =
+  'Envio manual: o sistema não emite etiqueta. Despache pela transportadora e informe o rastreio na troca de situação.';
+const MANUAL_PICKUP_MESSAGE =
+  'A retirada não é agendada pelo site. Veja as formas de devolver a amostra na página de devolução.';
+
 type OrderWithAddress = Prisma.OrderGetPayload<{
   include: { address: true; items: true; shipments: true };
 }>;
@@ -97,6 +102,7 @@ export class LogisticsUseCase {
 
   /** Emite as etiquetas que faltam (ida e volta). Repetir não reemite. */
   async generateLabels(orderNumber: string): Promise<Result<ShipmentView[]>> {
+    if (this.isManual()) return fail(new ConflictError(MANUAL_LABEL_MESSAGE));
     const order = await this.loadOrder(orderNumber);
     if (!order) return fail(new NotFoundError('Pedido não encontrado.'));
     if (!order.address) return fail(new ValidationError('Pedido sem endereço de entrega.'));
@@ -185,6 +191,7 @@ export class LogisticsUseCase {
     input: PickupInput,
     now: Date = new Date(),
   ): Promise<Result<ShipmentView[]>> {
+    if (this.isManual()) return fail(new ConflictError(MANUAL_PICKUP_MESSAGE));
     const order = await this.loadOrder(orderNumber);
     if (!order || order.userId !== userId) return fail(new NotFoundError('Pedido não encontrado.'));
     if (!order.address) return fail(new ValidationError('Pedido sem endereço de entrega.'));
@@ -454,6 +461,11 @@ export class LogisticsUseCase {
 
   private carrier(): string {
     return this.config.get('SHIPPING_PROVIDER', { infer: true });
+  }
+
+  /** DHL desligada (GC-N05-10): nada é emitido nem agendado pelo sistema. */
+  private isManual(): boolean {
+    return this.carrier() === 'manual';
   }
 }
 
