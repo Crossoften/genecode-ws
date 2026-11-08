@@ -16,6 +16,8 @@ import {
   ValidateNested,
 } from 'class-validator';
 
+import { IsTelefoneBr } from '@shared/validation/telefone-br';
+
 import { IsCpfOrCnpj } from '@shared/validation/is-cpf-or-cnpj.decorator';
 
 export class AcceptedConsentDto {
@@ -55,8 +57,7 @@ export class RegisterDto {
 
   @ApiPropertyOptional({ example: '+5511999998888' })
   @IsOptional()
-  @IsString()
-  @MaxLength(20)
+  @IsTelefoneBr()
   phone?: string;
 
   /**

@@ -6,6 +6,7 @@ import {
 } from 'class-validator';
 
 import { IsCpfOrCnpj } from '@shared/validation/is-cpf-or-cnpj.decorator';
+import { IsTelefoneBr } from '@shared/validation/telefone-br';
 
 export class CustomerDto {
   @ApiProperty({ example: 'Ana Martins' })
@@ -25,9 +26,7 @@ export class CustomerDto {
    * PagoLivre trava na etapa de contato e o comprador não consegue pagar.
    */
   @ApiProperty({ example: '(11) 98765-4321' })
-  @Matches(/^\(?\d{2}\)?\s?9?\d{4}-?\d{4}$/, {
-    message: 'Telefone inválido. Informe DDD + número.',
-  })
+  @IsTelefoneBr()
   phone!: string;
 }
 

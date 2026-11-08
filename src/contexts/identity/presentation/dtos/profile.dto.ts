@@ -1,6 +1,8 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsBoolean, IsOptional, IsString, Matches, MaxLength, MinLength } from 'class-validator';
 
+import { IsTelefoneBr } from '@shared/validation/telefone-br';
+
 export class UpdateProfileDto {
   @ApiPropertyOptional({ example: 'Ana Martins' })
   @IsOptional()
@@ -11,8 +13,7 @@ export class UpdateProfileDto {
 
   @ApiPropertyOptional({ example: '(11) 99876-5432' })
   @IsOptional()
-  @IsString()
-  @MaxLength(20)
+  @IsTelefoneBr()
   phone?: string;
 
   @ApiPropertyOptional({ example: 'Rua das Acácias, 220 — São Paulo/SP' })
