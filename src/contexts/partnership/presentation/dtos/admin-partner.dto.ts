@@ -1,5 +1,5 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean, IsNumber, Max, Min } from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsBoolean, IsNumber, IsOptional, IsString, Max, MaxLength, Min } from 'class-validator';
 
 export class SetPartnerActiveDto {
   @ApiProperty({ description: 'true ativa o parceiro, false desativa.' })
@@ -13,4 +13,12 @@ export class SetPartnerShareDto {
   @Min(0.01)
   @Max(100)
   sharePercent!: number;
+}
+
+export class RecusarSolicitacaoDto {
+  @ApiPropertyOptional({ description: 'Motivo, que aparece para quem pediu.' })
+  @IsOptional()
+  @IsString()
+  @MaxLength(500)
+  motivo?: string;
 }

@@ -9,6 +9,7 @@ import { ListPartnerSalesUseCase } from './application/use-cases/list-partner-sa
 import { PartnerDashboardUseCase } from './application/use-cases/partner-dashboard.use-case';
 import { SetPartnerActiveUseCase } from './application/use-cases/set-partner-active.use-case';
 import { SetPartnerShareUseCase } from './application/use-cases/set-partner-share.use-case';
+import { SolicitacaoParceiroUseCase } from './application/use-cases/solicitacao-parceiro.use-case';
 import { AdminPartnersController } from './presentation/controllers/admin-partners.controller';
 import { PartnerController } from './presentation/controllers/partner.controller';
 
@@ -24,6 +25,7 @@ import { PartnerController } from './presentation/controllers/partner.controller
     ListAdminPartnersUseCase,
     SetPartnerActiveUseCase,
     SetPartnerShareUseCase,
+    SolicitacaoParceiroUseCase,
   ],
 })
 export class PartnershipModule {}
