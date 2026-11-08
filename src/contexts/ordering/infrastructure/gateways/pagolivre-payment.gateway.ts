@@ -127,7 +127,7 @@ export class PagoLivrePaymentGateway implements PaymentGateway {
       receivingOptionType: RECEIVING_OPTION[request.method],
       message: `Pedido ${request.orderNumber} - GeneCode`,
       callbackUrl: this.config.get('PAGOLIVRE_CALLBACK_URL', { infer: true }),
-      returnUrl: this.config.get('PAGOLIVRE_RETURN_URL', { infer: true }),
+      returnUrl: this.returnUrl(request.orderNumber),
       ...(split.length > 0 ? { splitOrderPayment: split } : {}),
     };
 
@@ -192,6 +192,23 @@ export class PagoLivrePaymentGateway implements PaymentGateway {
    * HTTP, não 404. Quem chamar precisa distinguir isso de uma ordem de verdade,
    * e é por isso que este helper existe em vez de cada ponto tratar na mão.
    */
+  /**
+   * Para onde a Afinz manda o comprador depois do "Confirmar pedido" (GC-N05-01).
+   *
+   * O checkout abre a página da Afinz **dentro de um iframe**, e é dentro dele
+   * que a Afinz carrega este endereço. Com o retorno fixo na home, o comprador
+   * via a vitrine inteira encolhida no lugar do pagamento e nenhuma
+   * confirmação. A página de retorno é feita para morar no iframe: avisa a
+   * tela de fora qual pedido voltou, e a tela de fora mostra a confirmação.
+   *
+   * Com `/#/`: o homolog roteia por hash e a produção converte o hash em
+   * caminho no `main.ts` (GC-AJ-027), então o mesmo formato vale nos dois.
+   */
+  private returnUrl(orderNumber: string): string {
+    const app = this.config.get('APP_PUBLIC_URL', { infer: true }).replace(/\/+$/, '');
+    return `${app}/#/pagamento/retorno?pedido=${encodeURIComponent(orderNumber)}`;
+  }
+
   private async findByOrderKey(orderNumber: string): Promise<PagoLivreOrder | undefined> {
     const order = await this.call<PagoLivreOrder | undefined>(
       'GET',
