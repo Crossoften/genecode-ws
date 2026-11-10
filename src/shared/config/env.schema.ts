@@ -146,7 +146,9 @@ export const envSchema = z.object({
   // para ambiente de teste: o padrão é `NO`, e cada uso deixa aviso no log.
   //
   // ⚠️ Nunca ligar em produção. O conserto de verdade é configurar o envio de
-  // e-mail; esta chave existe só enquanto ele não existe.
+  // e-mail; esta chave existe só enquanto ele não existe. Desde o card #749 a
+  // chave é ignorada quando `APP_PUBLIC_URL` é o domínio de produção — ver
+  // `codigoDeTesteLiberado`.
   MOSTRAR_CODIGO_VERIFICACAO: z.enum(['YES', 'NO']).default('NO'),
 
   // --- Envio de notificação transacional -------------------------------------
@@ -221,7 +223,33 @@ export function validateEnv(raw: Record<string, unknown>): Env {
   assertNotificationIsComplete(parsed.data);
   assertCarrierIsComplete(parsed.data);
 
+  if (parsed.data.MOSTRAR_CODIGO_VERIFICACAO === 'YES' && !codigoDeTesteLiberado(parsed.data)) {
+    console.error(
+      'MOSTRAR_CODIGO_VERIFICACAO=YES ignorado: APP_PUBLIC_URL é o domínio de produção. ' +
+        'O código de verificação só sai por e-mail.',
+    );
+  }
+
   return parsed.data;
+}
+
+/** Domínio público da gene.code em produção. */
+const DOMINIO_DE_PRODUCAO = 'genecode.com.br';
+
+/**
+ * O código de verificação pode voltar na resposta? (card #749, PDF 04 e 08)
+ *
+ * Só com a chave ligada **e** fora do domínio de produção. O homolog e a
+ * produção sobem com `NODE_ENV=production`, então o ambiente é lido do endereço
+ * público do front: se um `.env` de homolog for copiado para a produção com a
+ * chave ligada, o código continua saindo só por e-mail.
+ */
+export function codigoDeTesteLiberado(
+  env: Pick<Env, 'MOSTRAR_CODIGO_VERIFICACAO' | 'APP_PUBLIC_URL'>,
+): boolean {
+  if (env.MOSTRAR_CODIGO_VERIFICACAO !== 'YES') return false;
+  const host = new URL(env.APP_PUBLIC_URL).hostname.toLowerCase();
+  return host !== DOMINIO_DE_PRODUCAO && !host.endsWith(`.${DOMINIO_DE_PRODUCAO}`);
 }
 
 /**

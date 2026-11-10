@@ -2,7 +2,7 @@ import { Inject, Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
 import { PrismaService } from '@infra/database/prisma.service';
-import type { Env } from '@shared/config/env.schema';
+import { codigoDeTesteLiberado, type Env } from '@shared/config/env.schema';
 import { ConflictError } from '@shared/domain/domain-error';
 import { HashService } from '@shared/crypto/hash.service';
 import { fail, ok, type Result } from '@shared/domain/result';
@@ -76,9 +76,12 @@ export class RegisterUserUseCase {
 
   private readonly logger = new Logger(RegisterUserUseCase.name);
 
-  /** Liga só com a chave explícita — ver a nota no schema de ambiente. */
+  /** Liga só com a chave explícita e fora da produção — ver `codigoDeTesteLiberado`. */
   private exporCodigo(): boolean {
-    return this.config.get('MOSTRAR_CODIGO_VERIFICACAO', { infer: true }) === 'YES';
+    return codigoDeTesteLiberado({
+      MOSTRAR_CODIGO_VERIFICACAO: this.config.get('MOSTRAR_CODIGO_VERIFICACAO', { infer: true }),
+      APP_PUBLIC_URL: this.config.get('APP_PUBLIC_URL', { infer: true }),
+    });
   }
 
   async execute(input: RegisterUserInput): Promise<Result<RegisterUserOutput>> {
