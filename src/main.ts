@@ -10,6 +10,7 @@ import compression from 'compression';
 import helmet from 'helmet';
 
 import type { Env } from '@shared/config/env.schema';
+import { TRUST_PROXY } from '@shared/http/trust-proxy';
 
 import { AppModule } from './app.module';
 import { validateEnv } from '@shared/config/env.schema';
@@ -40,6 +41,12 @@ async function bootstrap(): Promise<void> {
   );
   const config = app.get(ConfigService<Env, true>);
   const logger = new Logger('Bootstrap');
+
+  // Quem é quem para o limite de tentativas (card #749, PDF 05): sem isto, atrás
+  // do Apache da produção o "5 entradas por minuto" do login era um só balde
+  // para TODOS os usuários — cinco pessoas entrando no mesmo minuto e a sexta
+  // tomava "Muitas tentativas". Ver `TRUST_PROXY`.
+  app.set('trust proxy', TRUST_PROXY);
 
   // Applied unconditionally. The previous backend only enabled helmet inside the
   // SSL branch, so every HTTP deployment ran without security headers.
