@@ -3,7 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import type { VerificationPurpose } from '@prisma/client';
 
 import { PrismaService } from '@infra/database/prisma.service';
-import type { Env } from '@shared/config/env.schema';
+import { codigoDeTesteLiberado, type Env } from '@shared/config/env.schema';
 import { HashService } from '@shared/crypto/hash.service';
 import { ValidationError } from '@shared/domain/domain-error';
 import { fail, ok, type Result } from '@shared/domain/result';
@@ -139,9 +139,12 @@ export class VerificationChallengeService {
     return new ValidationError('Código inválido ou expirado. Peça um novo.');
   }
 
-  /** Mesma chave e mesmo valor que o cadastro usa — 'YES', não booleano. */
+  /** Mesma regra que o cadastro usa: chave ligada e fora do domínio de produção. */
   private exporCodigo(): boolean {
-    return this.config.get('MOSTRAR_CODIGO_VERIFICACAO', { infer: true }) === 'YES';
+    return codigoDeTesteLiberado({
+      MOSTRAR_CODIGO_VERIFICACAO: this.config.get('MOSTRAR_CODIGO_VERIFICACAO', { infer: true }),
+      APP_PUBLIC_URL: this.config.get('APP_PUBLIC_URL', { infer: true }),
+    });
   }
 }
 

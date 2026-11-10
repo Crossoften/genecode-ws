@@ -8,6 +8,7 @@ import type { Request } from 'express';
 import { IsPublic } from '@contexts/identity/presentation/decorators';
 import { PrismaService } from '@infra/database/prisma.service';
 import type { Env } from '@shared/config/env.schema';
+import { ValidationError } from '@shared/domain/domain-error';
 
 import { CheckoutUseCase } from '../../application/use-cases/checkout.use-case';
 import { TrackOrderUseCase } from '../../application/use-cases/track-order.use-case';
@@ -60,6 +61,9 @@ export class CheckoutController {
    * - `shippingManual`: DHL desligada (GC-N05-10). A área do cliente esconde a
    *   etiqueta de volta e o agendamento de retirada, e aponta para a página de
    *   devolução.
+   * - `paymentEmbedded`: a Afinz abre dentro da página (card #749, PDF 02).
+   * - `paymentMethods`: os meios que de fato funcionam — checkout, rodapé e
+   *   "Pagamento seguro" mostram só estes (card #749, PDF 07).
    */
   @Get('checkout/config')
   @IsPublic()
@@ -70,7 +74,14 @@ export class CheckoutController {
       paymentSimulated: this.gateway.simulatesFulfillment === true,
       shippingFlatCents: flat > 0 ? flat : null,
       shippingManual: this.config.get('SHIPPING_PROVIDER', { infer: true }) === 'manual',
+      paymentEmbedded: this.config.get('PAGAMENTO_EMBUTIDO', { infer: true }) === 'YES',
+      paymentMethods: this.meiosAtivos(),
     };
+  }
+
+  private meiosAtivos(): string[] {
+    const boleto = this.config.get('PAGAMENTO_BOLETO', { infer: true }) === 'YES';
+    return ['CREDIT_CARD', 'PIX', ...(boleto ? ['BOLETO'] : [])];
   }
 
   /** Cotação de frete para um CEP. Pública: acontece antes de haver conta. */
@@ -96,6 +107,11 @@ export class CheckoutController {
   @Throttle({ default: { limit: 10, ttl: 60_000 } })
   @ApiOperation({ summary: 'Finaliza a compra' })
   async create(@Body() dto: CheckoutDto, @Req() request: Request) {
+    // Antes de criar o pedido: com o boleto desligado, a Afinz recusaria a
+    // ordem e o comprador veria só "algo deu errado" (card #749, PDF 07).
+    if (!this.meiosAtivos().includes(dto.payment.method)) {
+      throw new ValidationError('Boleto indisponível no momento. Escolha cartão de crédito ou Pix.');
+    }
     const result = await this.checkout.execute({
       customer: dto.customer,
       address: dto.address,

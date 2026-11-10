@@ -75,6 +75,24 @@ export const envSchema = z.object({
    */
   PAGOLIVRE_RETURN_URL: z.string().url().optional(),
   /**
+   * O checkout da Afinz abre dentro da página (iframe)? (card #749, PDF 02)
+   *
+   * A Afinz só deixa embutir nos domínios liberados no `frame-ancestors` dela.
+   * O homolog não está na lista do sandbox (o navegador recusa e o iframe fica
+   * cinza), então lá vai `NO`: o checkout mostra o botão que abre a página da
+   * Afinz em outra aba e continua acompanhando o pedido. Produção: `YES`.
+   */
+  PAGAMENTO_EMBUTIDO: z.enum(['YES', 'NO']).default('YES'),
+  /**
+   * Boleto oferecido no checkout e no rodapé? (card #749, PDF 07)
+   *
+   * A conta da Genoa no sandbox da Afinz recusa boleto ("A opção de recebimento
+   * selecionada não existe"). Com `NO`, o boleto some da tela e a API recusa o
+   * pedido com boleto antes de criar a ordem. Padrão `YES`, o comportamento de
+   * antes: desligar é decisão de quem confirma a conta com a Afinz.
+   */
+  PAGAMENTO_BOLETO: z.enum(['YES', 'NO']).default('YES'),
+  /**
    * Token esperado na query do webhook.
    *
    * **Opcional de propósito.** A PagoLivre não emite segredo de webhook: ela
@@ -146,7 +164,9 @@ export const envSchema = z.object({
   // para ambiente de teste: o padrão é `NO`, e cada uso deixa aviso no log.
   //
   // ⚠️ Nunca ligar em produção. O conserto de verdade é configurar o envio de
-  // e-mail; esta chave existe só enquanto ele não existe.
+  // e-mail; esta chave existe só enquanto ele não existe. Desde o card #749 a
+  // chave é ignorada quando `APP_PUBLIC_URL` é o domínio de produção — ver
+  // `codigoDeTesteLiberado`.
   MOSTRAR_CODIGO_VERIFICACAO: z.enum(['YES', 'NO']).default('NO'),
 
   // --- Envio de notificação transacional -------------------------------------
@@ -221,7 +241,33 @@ export function validateEnv(raw: Record<string, unknown>): Env {
   assertNotificationIsComplete(parsed.data);
   assertCarrierIsComplete(parsed.data);
 
+  if (parsed.data.MOSTRAR_CODIGO_VERIFICACAO === 'YES' && !codigoDeTesteLiberado(parsed.data)) {
+    console.error(
+      'MOSTRAR_CODIGO_VERIFICACAO=YES ignorado: APP_PUBLIC_URL é o domínio de produção. ' +
+        'O código de verificação só sai por e-mail.',
+    );
+  }
+
   return parsed.data;
+}
+
+/** Domínio público da gene.code em produção. */
+const DOMINIO_DE_PRODUCAO = 'genecode.com.br';
+
+/**
+ * O código de verificação pode voltar na resposta? (card #749, PDF 04 e 08)
+ *
+ * Só com a chave ligada **e** fora do domínio de produção. O homolog e a
+ * produção sobem com `NODE_ENV=production`, então o ambiente é lido do endereço
+ * público do front: se um `.env` de homolog for copiado para a produção com a
+ * chave ligada, o código continua saindo só por e-mail.
+ */
+export function codigoDeTesteLiberado(
+  env: Pick<Env, 'MOSTRAR_CODIGO_VERIFICACAO' | 'APP_PUBLIC_URL'>,
+): boolean {
+  if (env.MOSTRAR_CODIGO_VERIFICACAO !== 'YES') return false;
+  const host = new URL(env.APP_PUBLIC_URL).hostname.toLowerCase();
+  return host !== DOMINIO_DE_PRODUCAO && !host.endsWith(`.${DOMINIO_DE_PRODUCAO}`);
 }
 
 /**
