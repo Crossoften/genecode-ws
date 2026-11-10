@@ -75,6 +75,24 @@ export const envSchema = z.object({
    */
   PAGOLIVRE_RETURN_URL: z.string().url().optional(),
   /**
+   * O checkout da Afinz abre dentro da página (iframe)? (card #749, PDF 02)
+   *
+   * A Afinz só deixa embutir nos domínios liberados no `frame-ancestors` dela.
+   * O homolog não está na lista do sandbox (o navegador recusa e o iframe fica
+   * cinza), então lá vai `NO`: o checkout mostra o botão que abre a página da
+   * Afinz em outra aba e continua acompanhando o pedido. Produção: `YES`.
+   */
+  PAGAMENTO_EMBUTIDO: z.enum(['YES', 'NO']).default('YES'),
+  /**
+   * Boleto oferecido no checkout e no rodapé? (card #749, PDF 07)
+   *
+   * A conta da Genoa no sandbox da Afinz recusa boleto ("A opção de recebimento
+   * selecionada não existe"). Com `NO`, o boleto some da tela e a API recusa o
+   * pedido com boleto antes de criar a ordem. Padrão `YES`, o comportamento de
+   * antes: desligar é decisão de quem confirma a conta com a Afinz.
+   */
+  PAGAMENTO_BOLETO: z.enum(['YES', 'NO']).default('YES'),
+  /**
    * Token esperado na query do webhook.
    *
    * **Opcional de propósito.** A PagoLivre não emite segredo de webhook: ela
