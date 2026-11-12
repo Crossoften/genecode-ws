@@ -63,6 +63,16 @@ export const VERIFICATION_TTL_MINUTES = 30;
  * Então a resposta é idêntica nos dois casos, e quem já tem conta recebe um
  * e-mail avisando que houve uma tentativa de cadastro — que é a informação útil
  * para quem é dono do endereço, e inútil para quem está sondando.
+ *
+ * ### E-mail de conta que nunca foi confirmada
+ *
+ * Aí o aviso não serve: a pessoa está presa justamente por não ter confirmado.
+ * Era o caso do cliente de 12/11/2026 — o código venceu, ele cadastrou de novo
+ * com o mesmo e-mail, a tela pediu o código e o que chegou foi o aviso de
+ * "tentativa de cadastro", sem código nenhum. Conta pendente segue o mesmo
+ * caminho do recadastro por CPF (ver `recadastrar`): dados de agora, código
+ * novo para o próprio endereço. A resposta continua idêntica à de um cadastro
+ * novo, e só quem lê aquela caixa consegue concluir.
  */
 @Injectable()
 export class RegisterUserUseCase {
@@ -97,6 +107,15 @@ export class RegisterUserUseCase {
     }
 
     const existing = await this.users.findByEmail(email.value);
+    if (existing && !existing.emailVerifiedAt && existing.status === 'PENDING') {
+      // Nunca confirmada: código novo, não aviso. Ver nota acima.
+      return this.recadastrar(existing.id, {
+        email: email.value.value,
+        passwordHash: await this.hash.hashPassword(password.value.value),
+        name,
+        input,
+      });
+    }
     if (existing) {
       // Resposta indistinguível da de um cadastro novo. Ver nota acima.
       await this.notifications.send(email.value.value, {

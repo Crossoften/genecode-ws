@@ -50,6 +50,19 @@ export class UnauthenticatedError extends DomainError {
   readonly kind = DomainErrorKind.UNAUTHENTICATED;
 }
 
+/**
+ * The password matched, but the account never confirmed its e-mail. → 401
+ *
+ * Its own code so the login screen can offer the confirmation step right there
+ * (send a code, type it) instead of a dead end — the client of 12/11/2026 was
+ * stuck exactly there. Only raised after the password check, so it reveals
+ * nothing to someone probing addresses.
+ */
+export class EmailNotVerifiedError extends DomainError {
+  readonly code = 'EMAIL_NOT_VERIFIED';
+  readonly kind = DomainErrorKind.UNAUTHENTICATED;
+}
+
 export class ForbiddenError extends DomainError {
   readonly code = 'FORBIDDEN';
   readonly kind = DomainErrorKind.FORBIDDEN;

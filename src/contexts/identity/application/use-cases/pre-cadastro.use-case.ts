@@ -14,6 +14,7 @@ import { USER_REPOSITORY, type UserRepository } from '../../domain/ports/user.re
 import { Email } from '../../domain/value-objects/email';
 import { Password } from '../../domain/value-objects/password';
 import { TokenIssuer, type IssuedTokens } from '../services/token-issuer.service';
+import { PAPEIS_INTERNOS } from './equipe.use-case';
 
 export interface PreCadastroInput {
   readonly name: string;
@@ -151,17 +152,31 @@ export class PreCadastroUseCase {
    * ativada: quem tem o link não precisa saber em qual dos casos caiu, e a
    * diferença viraria um oráculo de e-mails cadastrados.
    */
-  async consultar(token: string): Promise<Result<{ name: string; email: string }>> {
+  async consultar(
+    token: string,
+  ): Promise<Result<{ name: string; email: string; equipe: boolean }>> {
     const registro = await this.registroValido(token);
     if (!registro) return fail(this.conviteInvalido());
 
     const user = await this.prisma.user.findUnique({
       where: { id: registro.userId },
-      select: { name: true, email: true, status: true },
+      select: {
+        name: true,
+        email: true,
+        status: true,
+        roles: { select: { role: { select: { slug: true } } } },
+      },
     });
     if (!user || user.status !== 'PENDING') return fail(this.conviteInvalido());
 
-    return ok({ name: user.name, email: user.email });
+    // O mesmo token serve ao convite de compra e ao de equipe (tela Equipe).
+    // A tela precisa saber qual é: o texto de quem comprou ("guardamos os seus
+    // dados da compra") não faz sentido para um colaborador.
+    const equipe = user.roles.some((vinculo) =>
+      (PAPEIS_INTERNOS as readonly string[]).includes(vinculo.role.slug),
+    );
+
+    return ok({ name: user.name, email: user.email, equipe });
   }
 
   /**

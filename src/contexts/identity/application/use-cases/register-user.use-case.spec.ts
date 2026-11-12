@@ -155,3 +155,126 @@ describe('RegisterUserUseCase · CPF já cadastrado', () => {
     expect(users.create).toHaveBeenCalledTimes(1);
   });
 });
+
+/**
+ * E-mail que já tem conta. Conta confirmada recebe só o aviso de tentativa de
+ * cadastro; conta que nunca foi confirmada recebe um código novo — senão quem
+ * deixou o primeiro código vencer não tem como sair (cliente de 12/11/2026: a
+ * tela pedia o código, e o que chegava era o aviso, sem código).
+ */
+describe('RegisterUserUseCase · e-mail já cadastrado', () => {
+  const ENTRADA = {
+    name: 'Flavio Teste',
+    email: 'flavio@email.com',
+    password: 'Genecode2026',
+    document: '529.982.247-25',
+    acceptedConsents: [],
+  };
+
+  function montar(existente: {
+    id: string;
+    name: string;
+    status: 'PENDING' | 'ACTIVE' | 'INACTIVE' | 'BLOCKED';
+    emailVerifiedAt: Date | null;
+  }) {
+    const atualizacoes: unknown[] = [];
+    const invalidacoes: unknown[] = [];
+
+    const prisma = {
+      user: {
+        findFirst: jest.fn(async () => null),
+        update: jest.fn(async (args: unknown) => {
+          atualizacoes.push(args);
+          return {};
+        }),
+      },
+      verificationCode: {
+        create: jest.fn(async () => ({})),
+        updateMany: jest.fn(async (args: unknown) => {
+          invalidacoes.push(args);
+          return { count: 1 };
+        }),
+      },
+      role: { findUnique: jest.fn(async () => ({ id: 'papel-paciente' })) },
+      userRole: { upsert: jest.fn(async () => ({})) },
+      consentDocument: { findFirst: jest.fn(async () => null) },
+      consent: { create: jest.fn(async () => ({})) },
+    } as unknown as PrismaService;
+
+    const users = {
+      findByEmail: jest.fn(async () => existente),
+      create: jest.fn(async () => ({ id: 'conta-nova' })),
+    } as unknown as UserRepository;
+
+    const enviadas: { para: string; code: string }[] = [];
+    const notifications = {
+      send: jest.fn(async (para: string, msg: { code: string }) => {
+        enviadas.push({ para, code: msg.code });
+      }),
+    } as unknown as NotificationSender;
+
+    const hash = {
+      hashPassword: jest.fn(async () => 'hash-da-senha'),
+      generateNumericCode: jest.fn(() => ({ code: '515151', codeHash: 'hash-do-codigo' })),
+    } as unknown as HashService;
+
+    const config = { get: jest.fn(() => 'NO') } as unknown as ConfigService<never, true>;
+
+    return {
+      caso: new RegisterUserUseCase(users, notifications, hash, prisma, config),
+      users,
+      enviadas,
+      atualizacoes,
+      invalidacoes,
+    };
+  }
+
+  it('conta pendente: manda código novo, invalida o vencido e grava a senha de agora', async () => {
+    const { caso, users, enviadas, atualizacoes, invalidacoes } = montar({
+      id: 'conta-pendente',
+      name: 'Flavio',
+      status: 'PENDING',
+      emailVerifiedAt: null,
+    });
+
+    const resultado = await caso.execute(ENTRADA);
+
+    expect(resultado.isOk()).toBe(true);
+    expect(users.create).not.toHaveBeenCalled();
+    const dados = atualizacoes[0] as { where: { id: string }; data: Record<string, unknown> };
+    expect(dados.where.id).toBe('conta-pendente');
+    expect(dados.data.password).toBe('hash-da-senha');
+    expect(invalidacoes).toHaveLength(1);
+    expect(enviadas).toEqual([{ para: 'flavio@email.com', code: '515151' }]);
+  });
+
+  it('conta confirmada: só o aviso, sem código e sem tocar na conta', async () => {
+    const { caso, users, enviadas, atualizacoes } = montar({
+      id: 'conta-ativa',
+      name: 'Flavio',
+      status: 'ACTIVE',
+      emailVerifiedAt: new Date(2026, 9, 1),
+    });
+
+    const resultado = await caso.execute(ENTRADA);
+
+    expect(resultado.isOk()).toBe(true);
+    expect(users.create).not.toHaveBeenCalled();
+    expect(atualizacoes).toHaveLength(0);
+    expect(enviadas).toEqual([{ para: 'flavio@email.com', code: '' }]);
+  });
+
+  it('conta bloqueada nunca confirmada: também só o aviso', async () => {
+    const { caso, enviadas, atualizacoes } = montar({
+      id: 'conta-bloqueada',
+      name: 'Flavio',
+      status: 'BLOCKED',
+      emailVerifiedAt: null,
+    });
+
+    await caso.execute(ENTRADA);
+
+    expect(atualizacoes).toHaveLength(0);
+    expect(enviadas).toEqual([{ para: 'flavio@email.com', code: '' }]);
+  });
+});
