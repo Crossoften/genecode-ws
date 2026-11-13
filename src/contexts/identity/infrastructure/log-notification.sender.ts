@@ -37,6 +37,11 @@ export class LogNotificationSender implements NotificationSender {
       case 'account-invite':
         this.logger.log(`[convite de cadastro] ${to} → token ${notification.token}`);
         break;
+      case 'team-invite':
+        this.logger.log(
+          `[convite de equipe] ${to} (${notification.papel}) → token ${notification.token}`,
+        );
+        break;
       case 'two-factor':
         this.logger.log(`[duas etapas] ${to} → código ${notification.code}`);
         break;

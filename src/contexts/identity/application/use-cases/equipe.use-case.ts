@@ -153,12 +153,23 @@ export class EquipeUseCase {
 
     const existente = await this.prisma.user.findFirst({
       where: { email: email.value.value, deletedAt: null },
-      select: { id: true, roles: { select: { role: { select: { slug: true } } } } },
+      select: {
+        id: true,
+        name: true,
+        status: true,
+        roles: { select: { role: { select: { slug: true } } } },
+      },
     });
 
     // Conta que já existe (um paciente, por exemplo) ganha o papel novo em vez
     // de virar uma segunda conta com o mesmo e-mail. Quem já é master só é
     // tocado por outro master.
+    //
+    // Se essa conta nunca foi ativada, ganhar o papel não basta: ela continua
+    // sem entrar e ninguém avisa a pessoa. Foi o que aconteceu em 12/11/2026 —
+    // o cliente deu acesso a quem tinha um cadastro pendente e o acesso não
+    // servia para nada. Conta pendente recebe o convite, que é o que define a
+    // senha e ativa.
     if (existente) {
       const jaEhMaster = existente.roles.some((vinculo) => vinculo.role.slug === 'master');
       if (jaEhMaster && !this.ehMaster(ator)) {
@@ -170,6 +181,10 @@ export class EquipeUseCase {
         create: { userId: existente.id, roleId: registro.id },
       });
       this.logger.log(`Papel ${papel.value} concedido à conta existente ${email.value.value}.`);
+      if (existente.status === 'PENDING') {
+        await this.enviarConvite(existente.id, email.value.value, existente.name, registro.name);
+        this.logger.log(`Conta pendente ${email.value.value} convidada para ativar o acesso.`);
+      }
       return ok({ id: existente.id });
     }
 
@@ -183,7 +198,7 @@ export class EquipeUseCase {
       },
     });
 
-    await this.enviarConvite(user.id, user.email, user.name);
+    await this.enviarConvite(user.id, user.email, user.name, registro.name);
     this.logger.log(`Colaborador ${user.email} convidado como ${papel.value}.`);
     return ok({ id: user.id });
   }
@@ -300,7 +315,12 @@ export class EquipeUseCase {
       : fail(new ValidationError('Este não é um papel da equipe interna.', { field: 'papel' }));
   }
 
-  private async enviarConvite(userId: string, email: string, name: string): Promise<void> {
+  private async enviarConvite(
+    userId: string,
+    email: string,
+    name: string,
+    papel: string,
+  ): Promise<void> {
     await this.prisma.passwordReset.updateMany({
       where: { userId, usedAt: null },
       data: { usedAt: new Date() },
@@ -315,6 +335,6 @@ export class EquipeUseCase {
       },
     });
 
-    await this.notifications.send(email, { kind: 'account-invite', token, name });
+    await this.notifications.send(email, { kind: 'team-invite', token, name, papel });
   }
 }

@@ -15,6 +15,20 @@ export type IdentityNotification =
    * chegou.
    */
   | { readonly kind: 'account-invite'; readonly token: string; readonly name: string }
+  /**
+   * Convite a um colaborador para o painel (tela Equipe), com o papel dado.
+   *
+   * Separado do convite de compra porque até 12/11/2026 os dois usavam o
+   * mesmo texto: o colaborador recebia "Obrigado pela sua compra!" e um token
+   * solto, sem link para a tela onde usá-lo, e não conseguia entrar.
+   * `papel` é o nome legível do papel (ex.: "Administrador").
+   */
+  | {
+      readonly kind: 'team-invite';
+      readonly token: string;
+      readonly name: string;
+      readonly papel: string;
+    }
   /** Código da verificação em duas etapas, pedido depois de a senha conferir. */
   | { readonly kind: 'two-factor'; readonly code: string; readonly name: string }
   /** Código que autoriza a troca dos dados de repasse do parceiro. */

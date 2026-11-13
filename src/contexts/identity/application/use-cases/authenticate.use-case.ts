@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 
-import { UnauthenticatedError } from '@shared/domain/domain-error';
+import { EmailNotVerifiedError, UnauthenticatedError } from '@shared/domain/domain-error';
 import { fail, ok, type Result } from '@shared/domain/result';
 import { HashService } from '@shared/crypto/hash.service';
 
@@ -101,7 +101,7 @@ export class AuthenticateUseCase {
     // errada, que é onde a enumeração aconteceria.
     if (user.status === 'PENDING') {
       return fail(
-        new UnauthenticatedError(
+        new EmailNotVerifiedError(
           'Sua conta ainda não foi verificada. Confirme o código enviado para o seu e-mail.',
         ),
       );

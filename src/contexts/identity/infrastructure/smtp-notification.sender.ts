@@ -71,6 +71,21 @@ export class SmtpNotificationSender implements NotificationSender {
     }
   }
 
+  /**
+   * O link da tela de convite, que é onde o token vale.
+   *
+   * Até 12/11/2026 o e-mail mandava só o token e dizia "use na tela de convite"
+   * — tela que não tem campo para digitar token nenhum: ela lê `?token=` do
+   * endereço. Sem o link, o convite não levava a lugar algum.
+   *
+   * Com `/#/`: o homolog roteia por hash e a produção converte o hash em
+   * caminho no `main.ts` do front, então o mesmo formato vale nos dois.
+   */
+  private linkDoConvite(token: string): string {
+    const app = this.config.get('APP_PUBLIC_URL', { infer: true }).replace(/\/+$/, '');
+    return `${app}/#/convite?token=${encodeURIComponent(token)}`;
+  }
+
   private montar(
     notification: IdentityNotification,
   ): { assunto: string; texto: string } | null {
@@ -142,11 +157,26 @@ export class SmtpNotificationSender implements NotificationSender {
             'Obrigado pela sua compra! Já guardamos seus dados para você não ' +
             'precisar digitar tudo de novo — falta só criar uma senha para ' +
             'acompanhar o pedido, ativar o kit quando ele chegar e ver o laudo.\n\n' +
-            'Use o código abaixo na tela de convite:\n\n' +
-            `${notification.token}\n\n` +
+            'Crie sua senha por este link:\n\n' +
+            `${this.linkDoConvite(notification.token)}\n\n` +
             'O convite vale por 7 dias. Se você preferir não criar conta agora, ' +
             'é só ignorar: seu pedido segue normalmente e chega no endereço que ' +
             'você informou.\n\n' +
+            'gene.code',
+        };
+
+      case 'team-invite':
+        return {
+          assunto: 'Seu acesso ao painel da gene.code',
+          texto:
+            `Olá, ${notification.name}.\n\n` +
+            'Você foi convidado para o painel da gene.code com o acesso de ' +
+            `${notification.papel}.\n\n` +
+            'Para entrar, crie sua senha por este link:\n\n' +
+            `${this.linkDoConvite(notification.token)}\n\n` +
+            'O convite vale por 7 dias. Depois, é só entrar no site com este ' +
+            'e-mail e a senha que você criar.\n\n' +
+            'Se você não esperava este convite, ignore esta mensagem.\n\n' +
             'gene.code',
         };
 
