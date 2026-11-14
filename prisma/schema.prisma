@@ -824,6 +824,10 @@ model Product {
   highlight String? @db.VarChar(40)
   position  Int     @default(0)
 
+  /// "Em breve" (GC-N14-15): aparece na vitrine, mas não vende. Pedido de
+  /// 13/11 para a Nutrigenética e o combo.
+  comingSoon Boolean @default(false)
+
   /// Foto principal — é sempre a primeira da galeria (`images`), mantida aqui
   /// porque a vitrine, o carrinho e a área do paciente leem só ela.
   imageUrl String? @db.VarChar(500)
@@ -1217,6 +1221,13 @@ model Coupon {
   /// Limite de usos. Nulo é ilimitado.
   maxUses     Int?
   usedCount   Int       @default(0)
+
+  /// Zera também o frete (GC-N14-02). É o cupom de cortesia, como o GC100:
+  /// com 100% de desconto e frete incluso, o pedido fecha em R$ 0,00.
+  freeShipping Boolean  @default(false)
+  /// Conta do master que criou o cupom pelo admin. Nulo nos cupons que nascem
+  /// com o parceiro ou pelo seed.
+  createdById  String?  @db.Char(36)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

@@ -240,6 +240,46 @@ export class CheckoutUseCase {
       return created;
     });
 
+    // Total zero: cortesia, sem adquirente (GC-N14-02).
+    //
+    // O cupom de cortesia (GC100) zera produto e frete. Mandar R$ 0,00 para a
+    // Afinz seria pedir uma cobrança que ela recusa — e o pedido ficaria
+    // pendente para sempre. O pedido nasce, passa direto a pago com um
+    // pagamento de valor zero, e segue a esteira como qualquer outro: aparece
+    // em Pedidos, no relatório, e o admin despacha o kit.
+    if (totals.totalCents === 0) {
+      await this.prisma.payment.create({
+        data: {
+          orderId: order.id,
+          method: input.payment.method,
+          status: 'PAID',
+          amountCents: 0,
+          installments: 1,
+          confirmedAt: new Date(),
+        },
+      });
+      await this.prisma.orderEvent.create({
+        data: {
+          orderId: order.id,
+          status: OrderStatus.PENDING_PAYMENT,
+          actor: 'system',
+          note: `Cortesia: cupom ${coupon.value?.code ?? ''} cobriu produto e frete. Total R$ 0,00, sem cobrança.`,
+        },
+      });
+      await this.confirmPayment.execute(order.id);
+      this.logger.log(`Pedido ${order.number}: cortesia (total zero, sem adquirente)`);
+      return ok({
+        orderNumber: order.number,
+        status: OrderStatus.PAID,
+        totalCents: 0,
+        paymentStatus: 'PAID',
+        redirectUrl: undefined,
+        expiresAt: undefined,
+        failureReason: undefined,
+        simulated: false,
+      });
+    }
+
     // A cobrança falhando não pode deixar pedido órfão.
     //
     // O pedido nasce ANTES da cobrança — precisa, porque a adquirente recebe o
@@ -433,6 +473,10 @@ export class CheckoutUseCase {
       if (!product) {
         return fail(new ValidationError(`Produto "${item.productSlug}" indisponível.`));
       }
+      if (product.comingSoon) {
+        // GC-N14-15: "em breve" aparece na vitrine, mas não vende.
+        return fail(new ValidationError(`"${product.name}" estará disponível em breve.`));
+      }
       if (item.quantity < 1 || item.quantity > 10) {
         return fail(new ValidationError('Quantidade inválida.', { field: 'quantity' }));
       }
@@ -594,7 +638,14 @@ export class CheckoutUseCase {
   /** Valida o cupom: ativo, dentro da validade e do limite de usos. */
   private async resolveCoupon(
     code: string | undefined,
-  ): Promise<Result<{ code: string; discountPercent: number; commissionPercent: number } | null>> {
+  ): Promise<
+    Result<{
+      code: string;
+      discountPercent: number;
+      commissionPercent: number;
+      freeShipping: boolean;
+    } | null>
+  > {
     if (!code) return ok(null);
 
     const coupon = await this.prisma.coupon.findUnique({
@@ -615,6 +666,7 @@ export class CheckoutUseCase {
       code: coupon.code,
       discountPercent: Number(coupon.discountPercent),
       commissionPercent: Number(coupon.commissionPercent),
+      freeShipping: coupon.freeShipping,
     });
   }
 

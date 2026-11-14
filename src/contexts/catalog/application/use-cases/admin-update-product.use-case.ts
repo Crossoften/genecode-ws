@@ -62,6 +62,7 @@ export class AdminUpdateProductUseCase {
             ? { maxInstallments: input.maxInstallments }
             : {}),
           highlight: input.highlight ?? null,
+          ...(input.comingSoon !== undefined ? { comingSoon: input.comingSoon } : {}),
           // A foto principal acompanha a galeria; sem galeria no corpo, vale o
           // campo antigo. Um PUT sem nenhum dos dois não apaga a foto.
           ...(input.images !== undefined

@@ -12,6 +12,8 @@ export interface ProductView {
   readonly promoPriceCents: number | null;
   readonly maxInstallments: number;
   readonly highlight: string | null;
+  /** Em breve: a vitrine mostra o card sem o botão de compra (GC-N14-15). */
+  readonly comingSoon: boolean;
   readonly imageUrl: string | null;
   /** Galeria da página do produto, na ordem (GC-AJ-032). */
   readonly images: readonly { readonly url: string; readonly alt: string | null }[];
@@ -50,6 +52,7 @@ export class ListProductsUseCase {
       promoPriceCents: product.promoPriceCents,
       maxInstallments: product.maxInstallments,
       highlight: product.highlight,
+      comingSoon: product.comingSoon,
       imageUrl: product.imageUrl,
       images: product.images.map((image) => ({ url: image.url, alt: image.alt })),
       features: product.features.map((feature) => feature.label),

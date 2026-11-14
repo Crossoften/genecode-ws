@@ -22,6 +22,7 @@ import { FlatRateShippingProvider } from './infrastructure/gateways/flat-rate.sh
 import { ManualShippingProvider } from './infrastructure/gateways/manual-shipping.provider';
 import { SandboxShippingProvider } from './infrastructure/gateways/sandbox-shipping.provider';
 import { AccountFeedController } from './presentation/controllers/account-feed.controller';
+import { AdminCouponsController } from './presentation/controllers/admin-coupons.controller';
 import { CheckoutController } from './presentation/controllers/checkout.controller';
 import {
   AdminLogisticsController,
@@ -49,6 +50,7 @@ import { PaymentWebhookController } from './presentation/controllers/payment-web
     PaymentWebhookController,
     AdminLogisticsController,
     PatientLogisticsController,
+    AdminCouponsController,
   ],
   providers: [
     AccountFeedUseCase,

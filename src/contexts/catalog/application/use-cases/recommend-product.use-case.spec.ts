@@ -13,6 +13,7 @@ function product(slug: string): ProductView {
     promoPriceCents: null,
     maxInstallments: 5,
     highlight: null,
+    comingSoon: false,
     imageUrl: null,
     images: [],
     features: [],

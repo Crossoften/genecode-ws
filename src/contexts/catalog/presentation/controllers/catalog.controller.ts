@@ -92,6 +92,11 @@ export class CatalogController {
     if (coupon.maxUses !== null && coupon.usedCount >= coupon.maxUses) {
       throw new NotFoundError('Cupom inválido.');
     }
-    return { code: coupon.code, discountPercent: Number(coupon.discountPercent) };
+    return {
+      code: coupon.code,
+      discountPercent: Number(coupon.discountPercent),
+      // Cortesia (GC-N14-02): o resumo do checkout zera o frete na hora.
+      freeShipping: coupon.freeShipping,
+    };
   }
 }

@@ -17,6 +17,8 @@ export interface CouponTerms {
   readonly code: string;
   readonly discountPercent: number;
   readonly commissionPercent: number;
+  /** Cupom de cortesia que zera também o frete (GC-N14-02). */
+  readonly freeShipping?: boolean;
 }
 
 export interface OrderTotals {
@@ -44,6 +46,10 @@ export interface OrderTotals {
  * **A comissão também não incide sobre o frete**, que é repasse à
  * transportadora, não receita.
  *
+ * **Exceção do frete: o cupom de cortesia** (GC-N14-02, reunião de 13/11). O
+ * GC100 zera o produto e o frete de R$ 29,90, para o kit presenteado entrar na
+ * esteira sem cobrança. Só o master cria esse cupom, e ele não tem parceiro.
+ *
  * @param items - Itens já com preço congelado.
  * @param shippingCents - Frete escolhido. O cliente paga (decisão F4).
  * @param coupon - Cupom aplicado, se houver.
@@ -62,7 +68,8 @@ export function calculateTotals(
     : 0;
 
   const productsAfterDiscount = subtotalCents - discountCents;
-  const totalCents = productsAfterDiscount + shippingCents;
+  const shippingCharged = coupon?.freeShipping ? 0 : shippingCents;
+  const totalCents = productsAfterDiscount + shippingCharged;
 
   const commissionCents = coupon
     ? Math.floor((productsAfterDiscount * coupon.commissionPercent) / 100)
@@ -71,7 +78,7 @@ export function calculateTotals(
   return {
     subtotalCents,
     discountCents,
-    shippingCents,
+    shippingCents: shippingCharged,
     totalCents,
     commissionCents,
     commissionRate: coupon?.commissionPercent ?? null,

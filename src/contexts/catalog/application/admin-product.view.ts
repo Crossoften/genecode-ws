@@ -30,6 +30,8 @@ export interface AdminProductView {
   readonly archived: boolean;
   readonly highlight: string | null;
   readonly position: number;
+  /** Em breve: aparece na vitrine sem vender (GC-N14-15). */
+  readonly comingSoon: boolean;
   readonly imageUrl: string | null;
   /** Galeria na ordem (GC-AJ-032); a primeira é a `imageUrl`. */
   readonly images: readonly ProductImageView[];
@@ -57,6 +59,7 @@ export function toAdminProductView(product: ProductWithFeatures): AdminProductVi
     archived: product.archived,
     highlight: product.highlight,
     position: product.position,
+    comingSoon: product.comingSoon,
     imageUrl: product.imageUrl,
     images: [...product.images]
       .sort((a, b) => a.position - b.position)

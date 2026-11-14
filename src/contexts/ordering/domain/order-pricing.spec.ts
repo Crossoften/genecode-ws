@@ -95,6 +95,28 @@ describe('Precificação do pedido', () => {
     // 48 780 / 7 = 6 968,57 → 6 969, e 6 969 × 7 = 48 783 ≥ 48 780
     expect(installmentCents(48_780, 7) * 7).toBeGreaterThanOrEqual(48_780);
   });
+
+  it('cupom de cortesia de 100% com frete incluso fecha o pedido em zero (GC-N14-02)', () => {
+    const totals = calculateTotals([{ productSlug: 'performance', productName: 'Performance', unitCents: 65000, quantity: 1 }], 2990, {
+      code: 'GC100',
+      discountPercent: 100,
+      commissionPercent: 0,
+      freeShipping: true,
+    });
+    expect(totals.discountCents).toBe(65000);
+    expect(totals.shippingCents).toBe(0);
+    expect(totals.totalCents).toBe(0);
+    expect(totals.commissionCents).toBe(0);
+  });
+
+  it('cupom sem frete incluso continua cobrando o frete', () => {
+    const totals = calculateTotals([{ productSlug: 'performance', productName: 'Performance', unitCents: 65000, quantity: 1 }], 2990, {
+      code: 'LANC26',
+      discountPercent: 100,
+      commissionPercent: 0,
+    });
+    expect(totals.totalCents).toBe(2990);
+  });
 });
 
 /**

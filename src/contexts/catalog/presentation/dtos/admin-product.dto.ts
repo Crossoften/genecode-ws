@@ -54,6 +54,10 @@ export class UpdateProductDto {
   @IsOptional() @IsString() @MaxLength(40)
   highlight?: string;
 
+  @ApiPropertyOptional({ description: 'Em breve: aparece na vitrine, mas não vende (GC-N14-15).' })
+  @IsOptional() @IsBoolean()
+  comingSoon?: boolean;
+
   @ApiPropertyOptional({ maxLength: 500, description: 'URL de imagem já hospedada.' })
   @IsOptional() @IsString() @MaxLength(500)
   imageUrl?: string;

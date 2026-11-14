@@ -22,6 +22,7 @@ export interface CreateProductInput {
   readonly promoPriceCents?: number;
   readonly maxInstallments?: number;
   readonly highlight?: string;
+  readonly comingSoon?: boolean;
   readonly imageUrl?: string;
   /** Galeria na ordem (GC-AJ-032); a primeira vira a foto principal. */
   readonly images?: readonly string[];
@@ -67,6 +68,7 @@ export class AdminCreateProductUseCase {
         published: false,
         archived: false,
         highlight: input.highlight ?? null,
+        comingSoon: input.comingSoon ?? false,
         position: (last._max.position ?? -1) + 1,
         imageUrl: input.images?.[0] ?? input.imageUrl ?? null,
         weightGrams: input.weightGrams ?? null,
