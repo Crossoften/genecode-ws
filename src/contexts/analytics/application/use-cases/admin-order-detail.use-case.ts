@@ -131,7 +131,7 @@ export class AdminOrderDetailUseCase {
       order.couponCode
         ? this.prisma.coupon.findUnique({
             where: { code: order.couponCode },
-            select: { partnerName: true },
+            select: { partnerName: true, createdById: true },
           })
         : Promise.resolve(null),
     ]);
@@ -182,7 +182,8 @@ export class AdminOrderDetailUseCase {
         quantity: item.quantity,
       })),
       payments: order.payments.map((payment) => ({
-        method: payment.method,
+        // Pagamento de valor zero é a cortesia, que não passou pela Afinz.
+        method: payment.amountCents === 0 ? 'CORTESIA' : payment.method,
         status: payment.status,
         amountCents: payment.amountCents,
         installments: payment.installments,
@@ -200,7 +201,9 @@ export class AdminOrderDetailUseCase {
       outboundTracking: order.outboundTracking,
       inboundTracking: order.inboundTracking,
       couponCode: order.couponCode,
-      partnerName: coupon?.partnerName ?? null,
+      // Cupom de cortesia do master (GC-N14-02) não tem parceiro: o campo
+      // guarda só a descrição interna, que não pode aparecer como repasse.
+      partnerName: coupon && !coupon.createdById ? coupon.partnerName : null,
       subtotalCents: order.subtotalCents,
       discountCents: order.discountCents,
       shippingCents: order.shippingCents,
