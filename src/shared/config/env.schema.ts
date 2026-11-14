@@ -88,10 +88,13 @@ export const envSchema = z.object({
    *
    * A conta da Genoa no sandbox da Afinz recusa boleto ("A opção de recebimento
    * selecionada não existe"). Com `NO`, o boleto some da tela e a API recusa o
-   * pedido com boleto antes de criar a ordem. Padrão `YES`, o comportamento de
-   * antes: desligar é decisão de quem confirma a conta com a Afinz.
+   * pedido com boleto antes de criar a ordem.
+   *
+   * Padrão `NO` desde 14/11 (GC-N14-06): o cliente pediu três vezes para tirar
+   * o boleto ("não existe boleto na Afinz", 10, 11 e 13/11), e a produção
+   * ainda o mostrava porque a variável não estava no `.env` de lá.
    */
-  PAGAMENTO_BOLETO: z.enum(['YES', 'NO']).default('YES'),
+  PAGAMENTO_BOLETO: z.enum(['YES', 'NO']).default('NO'),
   /**
    * Token esperado na query do webhook.
    *
