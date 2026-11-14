@@ -264,6 +264,82 @@ export class CoachingController {
     return result.value;
   }
 
+  // ── Escore ambientado pelo próprio cliente (GC-N14-14) ─────────────────────
+  //
+  // Decisão da reunião de 13/11: o cliente gera o escore ambientado dele direto
+  // no sistema, em todos os exames, sem passar pelo treinador. Mesmo
+  // questionário, mesmo ciclo de checkpoints e mesma conta do escore ajustado;
+  // muda só quem responde (a avaliação fica sem treinador).
+
+  /** Os exames da conta com laudo no ar, e onde cada um está no ciclo. */
+  @Get('meus-dados/escore-ambientado')
+  @ApiOperation({ summary: 'Exames da conta que aceitam o questionário do escore ambientado' })
+  async myAssessments(@CurrentUser() user: AuthenticatedPrincipal) {
+    const links = await this.prisma.subjectLink.findMany({
+      where: { userId: user.id },
+      select: { subjectId: true },
+    });
+    const subjectIds = links.map((link) => link.subjectId);
+    if (subjectIds.length === 0) return [];
+    const [reports, assessments, kits] = await Promise.all([
+      this.prisma.report.findMany({
+        where: { subjectId: { in: subjectIds }, status: 'PUBLISHED' },
+        orderBy: { publishedAt: 'desc' },
+        select: { id: true, subjectId: true, publishedAt: true, panel: { select: { name: true } } },
+      }),
+      this.prisma.assessment.groupBy({
+        by: ['subjectId'],
+        where: { subjectId: { in: subjectIds } },
+        _count: { _all: true },
+      }),
+      this.prisma.kit.findMany({
+        where: { subjectId: { in: subjectIds } },
+        select: { subjectId: true, code: true },
+      }),
+    ]);
+    const feitas = new Map(assessments.map((g) => [g.subjectId, g._count._all]));
+    const kitDo = new Map(kits.map((k) => [k.subjectId, k.code]));
+    const vistos = new Set<string>();
+    return reports
+      .filter((report) => !vistos.has(report.subjectId) && vistos.add(report.subjectId))
+      .map((report) => ({
+        subjectId: report.subjectId,
+        reportId: report.id,
+        panelName: report.panel.name,
+        kitCode: kitDo.get(report.subjectId) ?? null,
+        publishedAt: report.publishedAt,
+        assessmentsCompleted: feitas.get(report.subjectId) ?? 0,
+      }));
+  }
+
+  @Get('meus-dados/escore-ambientado/:subjectId')
+  @ApiOperation({ summary: 'Questionário do escore ambientado, respondido pelo próprio cliente' })
+  async myQuestionnaire(
+    @Param('subjectId') subjectId: string,
+    @CurrentUser() user: AuthenticatedPrincipal,
+  ) {
+    const result = await this.assessments.getQuestionnaireForOwner(subjectId, user.id);
+    if (result.isFail()) throw result.error;
+    return result.value;
+  }
+
+  @Post('meus-dados/escore-ambientado/:subjectId')
+  @ApiOperation({ summary: 'O cliente envia as respostas e recebe o escore ajustado' })
+  async submitMyAssessment(
+    @Param('subjectId') subjectId: string,
+    @Body() dto: SubmitAssessmentDto,
+    @CurrentUser() user: AuthenticatedPrincipal,
+  ) {
+    const result = await this.assessments.submitForOwner(
+      subjectId,
+      user.id,
+      dto.checkpoint as Checkpoint,
+      dto.answers,
+    );
+    if (result.isFail()) throw result.error;
+    return result.value;
+  }
+
   /** Titular vinculado à conta. Vem da ativação do kit. */
   private async resolveSubject(userId: string): Promise<string | null> {
     const link = await this.prisma.subjectLink.findFirst({

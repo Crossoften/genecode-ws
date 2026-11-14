@@ -1478,10 +1478,12 @@ enum SharingInitiator {
 /// *"Uma vez feito o primeiro, aquilo ali tá bloqueado. Não dá para ir em outro:
 /// 'ah, faz aí agora que agora eu aprendi a responder melhor'."*
 model Assessment {
-  id             String              @id @default(uuid()) @db.Char(36)
-  subjectId      String              @db.Char(36)
-  professionalId String              @db.Char(36)
-  professional   ProfessionalProfile @relation(fields: [professionalId], references: [id])
+  id             String               @id @default(uuid()) @db.Char(36)
+  subjectId      String               @db.Char(36)
+  /// Quem respondeu. Nulo quando foi o próprio titular, pela área do cliente
+  /// (GC-N14-14, decisão da reunião de 13/11).
+  professionalId String?              @db.Char(36)
+  professional   ProfessionalProfile? @relation(fields: [professionalId], references: [id])
 
   /// Q0 a Q4, sequenciais e espaçados por 3 meses.
   checkpoint Checkpoint

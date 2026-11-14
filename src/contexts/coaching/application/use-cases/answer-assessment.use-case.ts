@@ -118,7 +118,40 @@ export class AnswerAssessmentUseCase {
   ): Promise<Result<Questionnaire>> {
     const authorized = await this.assertAuthorized(subjectId, professionalId);
     if (authorized) return fail(authorized);
+    return this.questionnaireOf(subjectId, now);
+  }
 
+  /**
+   * O questionário respondido pelo próprio titular (GC-N14-14).
+   *
+   * Decisão da reunião de 13/11: o cliente gera o escore ambientado dele
+   * direto no sistema, em todos os exames, sem depender do treinador — "se vai
+   * fazer o primeiro, faz todos". É o mesmo ciclo de checkpoints: quem
+   * responder primeiro (cliente ou treinador) fecha o trimestre.
+   */
+  async getQuestionnaireForOwner(
+    subjectId: string,
+    userId: string,
+    now: Date = new Date(),
+  ): Promise<Result<Questionnaire>> {
+    const authorized = await this.assertOwner(subjectId, userId);
+    if (authorized) return fail(authorized);
+    return this.questionnaireOf(subjectId, now);
+  }
+
+  async submitForOwner(
+    subjectId: string,
+    userId: string,
+    checkpoint: Checkpoint,
+    answers: readonly AnswerInput[],
+    now: Date = new Date(),
+  ): Promise<Result<AssessmentResult>> {
+    const authorized = await this.assertOwner(subjectId, userId);
+    if (authorized) return fail(authorized);
+    return this.record(subjectId, null, checkpoint, answers, now);
+  }
+
+  private async questionnaireOf(subjectId: string, now: Date): Promise<Result<Questionnaire>> {
     const context = await this.loadContext(subjectId);
     if (context.isFail()) return fail(context.error);
     const { panelSlug, panelName, geneticByCategory, categories } = context.value;
@@ -201,7 +234,16 @@ export class AnswerAssessmentUseCase {
   ): Promise<Result<AssessmentResult>> {
     const authorized = await this.assertAuthorized(subjectId, professionalId);
     if (authorized) return fail(authorized);
+    return this.record(subjectId, professionalId, checkpoint, answers, now);
+  }
 
+  private async record(
+    subjectId: string,
+    professionalId: string | null,
+    checkpoint: Checkpoint,
+    answers: readonly AnswerInput[],
+    now: Date,
+  ): Promise<Result<AssessmentResult>> {
     const context = await this.loadContext(subjectId);
     if (context.isFail()) return fail(context.error);
     const { panelSlug, geneticByCategory } = context.value;
@@ -297,6 +339,12 @@ export class AnswerAssessmentUseCase {
         adjustedScore: valorExibido(categoria.slug, categoria.adjustedScore),
       })),
     });
+  }
+
+  /** O titular é da conta: o vínculo nasce na ativação do kit (SubjectLink). */
+  private async assertOwner(subjectId: string, userId: string): Promise<DomainError | null> {
+    const link = await this.prisma.subjectLink.findFirst({ where: { subjectId, userId } });
+    return link ? null : new ForbiddenError('Este exame não é da sua conta.');
   }
 
   /** Autorização por titular, além do papel — como no laudo consolidado. */
